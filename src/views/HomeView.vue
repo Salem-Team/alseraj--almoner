@@ -1,19 +1,12 @@
 <template>
-  <div class="home">
-    <h1>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae adipisci
-      corrupti vel dolorum sequi molestiae aperiam voluptatum iste voluptatibus
-      itaque illo sed repellendus provident inventore repellat, magnam, minus
-      tenetur accusamus?
-    </h1>
-  </div>
+    <div class="home"></div>
 </template>
 <script>
+// @ is an alias to /src
+
 export default {
-  name: "HomeView",
-  data() {
-    return {};
-  },
+    name: "HomeView",
+    components: {},
 };
 </script>
 
