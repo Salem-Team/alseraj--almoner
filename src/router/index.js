@@ -1,4 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
+
+import Home from "../views/HomeView.vue";
+import ClassRoom from "../views/Class_room.vue";
+import ClassPage from "../views/classs_page.vue";
+import TheAdministrator from "../views/TheAdministrator.vue";
 import HomeView from "../views/HomeView.vue";
 import UserLogin from "../views/USerLogin.vue";
 import Parent_Dashboard from "../views/Parent_Dashboard.vue";
@@ -9,17 +14,51 @@ import Edit_profile from "../views/Edit_profile.vue";
 const routes = [
   {
     path: "/",
-    name: "home",
-    component: HomeView,
+    name: "Home",
+    component: Home,
   },
   {
-    path: "/about",
-    name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+    path: "/ClassRoom",
+    name: "Class",
+    component: ClassRoom,
+    props: true,
+  },
+  {
+    path: "/class/:year",
+    name: "classPage",
+    component: ClassPage,
+    props: true,
+  },
+  {
+    path: "/admin",
+    name: "Admin",
+    component: TheAdministrator,
+  },
+  {
+    // يمكنك إضافة المزيد من المسارات هنا إذا لزم الأمر
+    path: "/UserLogin",
+    name: "UserLogin",
+    component: UserLogin,
+  },
+  {
+    path: "/Parent_Dashboard",
+    name: "Parent_Dashboard",
+    component: Parent_Dashboard,
+  },
+  {
+    path: "/Student_Dashboard",
+    name: "Student_Dashboard",
+    component: Student_Dashboard,
+  },
+  {
+    path: "/admin_Dashboard",
+    name: "admin_Dashboard",
+    component: admin_Dashboard,
+  },
+  {
+    path: "/Edit_profile",
+    name: "Edit_profile",
+    component: Edit_profile,
   },
   {
     path: "/UserLogin",
