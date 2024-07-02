@@ -4,7 +4,6 @@ import Home from "../views/HomeView.vue";
 import ClassRoom from "../views/Class_room.vue";
 import ClassPage from "../views/classs_page.vue";
 import TheAdministrator from "../views/TheAdministrator.vue";
-import HomeView from "../views/HomeView.vue";
 import UserLogin from "../views/USerLogin.vue";
 import Parent_Dashboard from "../views/Parent_Dashboard.vue";
 import Student_Dashboard from "../views/Student_Dashboard.vue";
