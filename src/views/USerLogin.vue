@@ -4,6 +4,12 @@
             <v-card-title class="text-center">Login</v-card-title>
             <v-card-text>
                 <v-form @submit.prevent="handleLogin">
+                    <v-select
+                        v-model="userType.type"
+                        :items="userType.types"
+                        label="User Type"
+                        required
+                    ></v-select>
                     <v-text-field
                         v-model="email"
                         label="Email"
@@ -16,12 +22,7 @@
                         type="password"
                         required
                     ></v-text-field>
-                    <v-select
-                        v-model="userType.type"
-                        :items="userType.types"
-                        label="User Type"
-                        required
-                    ></v-select>
+
                     <v-btn
                         type="submit"
                         :loading="loading"
@@ -42,25 +43,37 @@
 <script>
 import { mapActions, mapState } from "pinia";
 import { useAuthStore } from "../store/userStore";
-
+import Cookies from "js-cookie";
 export default {
     data() {
         return {
             email: "",
             password: "",
             userType: {
-                // كائن يحتوي على أنواع المستخدمين
-                type: "parent", // النوع الافتراضي
-                types: ["parent", "student", "admin"], // الأنواع المتاحة
+                type: "",
+                types: ["parent", "admin"],
             },
         };
     },
+    // علشان
+    watch: {
+        "userType.type"(newValue) {
+            if (newValue === "parent") {
+                this.email = "parent@gmail.com";
+                this.password = "123456";
+            } else if (newValue === "admin") {
+                this.email = "admin@gmail.com";
+                this.password = "123456";
+            }
+        },
+    },
     computed: {
-        ...mapState(useAuthStore, ["loading", "error"]),
+        ...mapState(useAuthStore, ["loading", "error", "user"]),
     },
     methods: {
         ...mapActions(useAuthStore, ["login"]),
         async handleLogin() {
+            Cookies.set("user", JSON.stringify(this.user), { expires: 7 });
             await this.login(this.email, this.password, this.userType.type);
             if (!this.error && this.userType.type === "parent") {
                 this.$router.push({ name: "Parent_Dashboard" });

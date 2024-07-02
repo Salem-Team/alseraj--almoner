@@ -2,10 +2,29 @@
     <nav class="ma-2">
         <router-link to="/">Home</router-link> |
         <router-link to="/Modifications">Modifications</router-link>|
-        <router-link to="/UserLogin">Sign In</router-link>
+        <span v-if="user">
+            <router-link @click="logout" to="/UserLogin">Sign Out</router-link>
+        </span>
+        <span v-else>
+            <router-link to="/UserLogin">Sign In</router-link>
+        </span>
     </nav>
     <router-view />
 </template>
+
+<script>
+import { useAuthStore } from "./store/userStore";
+import { mapActions, mapState } from "pinia";
+
+export default {
+    computed: {
+        ...mapState(useAuthStore, ["user"]),
+    },
+    methods: {
+        ...mapActions(useAuthStore, ["logout"]),
+    },
+};
+</script>
 
 <style lang="scss">
 * {

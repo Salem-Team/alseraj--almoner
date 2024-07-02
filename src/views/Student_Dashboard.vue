@@ -51,7 +51,7 @@
 
 <script>
 import { mapState, mapActions } from "pinia";
-import { useAuthStore } from "../store/userStore";
+import { useAuthStore } from "@/store/userStore";
 
 export default {
     data: () => ({
