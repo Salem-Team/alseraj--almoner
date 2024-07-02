@@ -1,10 +1,6 @@
 <template>
   <nav class="ma-2">
-    <router-link to="/">Home</router-link> |
-
-    <router-link to="/admin">admin</router-link>
-
-    <router-link to="/about">About</router-link>|
+    <router-link to="/admin">admin</router-link> |
     <router-link to="/UserLogin">Sign In</router-link>
   </nav>
   <router-view />
