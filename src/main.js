@@ -3,10 +3,9 @@ import App from "./App.vue";
 import router from "./router";
 // import store from "./store";
 import { createPinia } from "pinia";
-
 import { createVuetify } from "vuetify";
 import "vuetify/styles";
-import "@mdi/font/css/materialdesignicons.css"; // أو استيراد أيقونات أخرى إن كنت تفضل ذلك
+import "@mdi/font/css/materialdesignicons.css"; //
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
 
