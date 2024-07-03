@@ -17,7 +17,7 @@ import { useAuthStore } from "./store/userStore";
 import { mapActions, mapState } from "pinia";
 
 export default {
-        data() {
+    data() {
         return {
             Students: {
                 id: "jhuhce789394hfp",
