@@ -1,4 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
+
+import ClassRoom from "../views/Class_room.vue";
+import ClassPage from "../views/classs_page.vue";
+import TheAdministrator from "../views/TheAdministrator.vue";
 import HomeView from "../views/HomeView.vue";
 import UserLogin from "../views/USerLogin.vue";
 import Parent_Dashboard from "../views/Parent_Dashboard.vue";
@@ -55,6 +59,23 @@ const routes = [
         path: "/Photo_Gallery",
         name: "Photo_Gallery",
         component: Photo_Gallery,
+    },
+    {
+        path: "/ClassRoom",
+        name: "Class",
+        component: ClassRoom,
+        props: true,
+    },
+    {
+        path: "/class/:year",
+        name: "classPage",
+        component: ClassPage,
+        props: true,
+    },
+    {
+        path: "/admin",
+        name: "Admin",
+        component: TheAdministrator,
     },
 ];
 
