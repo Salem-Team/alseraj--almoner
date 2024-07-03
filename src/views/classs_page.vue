@@ -17,10 +17,6 @@
                             "
                         >
                             <font-awesome-icon
-                                :icon="['fas', 'magnifying-glass']"
-                                style="cursor: pointer"
-                            />
-                            <font-awesome-icon
                                 :icon="['fas', 'filter']"
                                 style="cursor: pointer"
                             />
@@ -53,10 +49,14 @@ export default {
         const showAddStudentDialog = () => {
             dialogStore.showAddStudentDialog();
         };
-        return { showAddStudentDialog };
+        const showSearchStudentDialog = () => {
+            dialogStore.showSearchStudentDialog();
+        };
+        return { showAddStudentDialog, showSearchStudentDialog };
     },
 };
 </script>
+
 <style>
 .ser {
     width: 100%;
