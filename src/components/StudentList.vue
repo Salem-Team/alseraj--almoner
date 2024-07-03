@@ -105,8 +105,24 @@
                     v-model="dialogStore.dialog_addstudent"
                 >
                     <template v-slot:default>
-                        <v-card>
-                            <v-toolbar title="بيانات الطالب"></v-toolbar>
+                        <v-card
+                            class="mx-auto text-white"
+                            style="
+                                background: #3875a5 !important;
+                                color: white !important;
+                                width: 100% !important;
+                            "
+                        >
+                            <v-toolbar title="بيانات الطالب">
+                                <v-btn
+                                    icon
+                                    @click="
+                                        dialogStore.dialog_addstudent = false
+                                    "
+                                >
+                                    <v-icon>mdi-close</v-icon>
+                                </v-btn>
+                            </v-toolbar>
                             <v-card-text class="text-h2 pa-6">
                                 <form @submit.prevent="submit">
                                     <v-text-field
@@ -126,16 +142,23 @@
                                         :error-messages="errors.email"
                                         label="البريد الإلكتروني"
                                     ></v-text-field>
-                                    <v-btn type="submit">إرسال</v-btn>
+                                    <div class="text-center">
+                                        <v-btn
+                                            append-icon="mdi-account-circle"
+                                            type="submit"
+                                            style="
+                                                background: #2a597d;
+                                                color: white;
+                                                font-size: 24px;
+                                                padding: 3px;
+                                                width: 42%;
+                                            "
+                                        >
+                                            اضافه طالب
+                                        </v-btn>
+                                    </div>
                                 </form>
                             </v-card-text>
-                            <v-card-actions class="justify-end">
-                                <v-btn
-                                    text="Close"
-                                    @click="dialogStore.hideAddStudentDialog"
-                                    >Close</v-btn
-                                >
-                            </v-card-actions>
                         </v-card>
                     </template>
                 </v-dialog>
