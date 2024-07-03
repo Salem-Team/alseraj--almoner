@@ -1,8 +1,7 @@
 <template>
     <v-container>
         <v-row>
-            <v-col cols="10">
-                <p>السنة الدراسية الحالية: {{ year }}</p>
+            <v-col cols="12">
                 <v-list>
                     <v-list-item
                         v-for="(student, index) in filteredStudents"
@@ -65,23 +64,9 @@
                 <v-dialog
                     transition="dialog-top-transition"
                     width="50%"
-                    v-model="this.dialog_addstudent"
+                    v-model="dialogStore.dialog_addstudent"
                 >
-                    <template v-slot:activator="{ props: activatorProps }">
-                        <v-btn
-                            v-bind="activatorProps"
-                            style="
-                                font-size: 29px;
-                                background: rgb(33, 150, 243);
-                                color: white;
-                                padding: 28px;
-                            "
-                            block
-                        >
-                            إضافة طالب
-                        </v-btn>
-                    </template>
-                    <template v-slot:default="{ isActive }">
+                    <template v-slot:default>
                         <v-card>
                             <v-toolbar title="بيانات الطالب"></v-toolbar>
                             <v-card-text class="text-h2 pa-6">
@@ -109,8 +94,9 @@
                             <v-card-actions class="justify-end">
                                 <v-btn
                                     text="Close"
-                                    @click="isActive.value = false"
-                                ></v-btn>
+                                    @click="dialogStore.hideAddStudentDialog"
+                                    >Close</v-btn
+                                >
                             </v-card-actions>
                         </v-card>
                     </template>
@@ -140,7 +126,7 @@ const firebaseConfig = {
 import { initializeApp } from "@firebase/app";
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
+import { useDialogStore } from "@/store/useDialogStore";
 export default {
     name: "StudentList",
     props: {
@@ -148,6 +134,10 @@ export default {
             type: Number,
             required: true,
         },
+    },
+    setup() {
+        const dialogStore = useDialogStore();
+        return { dialogStore };
     },
     data() {
         return {
@@ -204,6 +194,7 @@ export default {
                     this.dialog_addstudent = false;
                     this.handleReset();
                     await this.fetchStudents();
+                    this.dialogStore.hideAddStudentDialog();
                 } catch (error) {
                     console.error("Error adding document:", error);
                 }

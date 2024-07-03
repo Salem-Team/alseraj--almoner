@@ -1,5 +1,5 @@
 <template>
-    <nav class="ma-2">
+    <!-- <nav class="ma-2">
         <router-link to="/">Home</router-link> |
         <router-link to="/Modifications">Modifications</router-link>|
         <span v-if="user">
@@ -8,7 +8,7 @@
         <span v-else>
             <router-link to="/UserLogin">Sign In</router-link>
         </span>
-    </nav>
+    </nav> -->
     <router-view />
 </template>
 
