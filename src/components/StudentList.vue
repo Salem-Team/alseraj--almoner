@@ -1,5 +1,11 @@
 <template>
     <v-container>
+        <v-text-field
+            v-model="searchQuery"
+            @input="searchStudent"
+            label="ادخل اسم الطالب"
+        ></v-text-field>
+
         <v-row>
             <v-col cols="12">
                 <v-list>
@@ -56,6 +62,38 @@
                                     >
                                 </v-card-actions>
                             </v-card>
+                        </v-dialog>
+                        <!-- New Search Student Dialog -->
+                        <v-dialog
+                            transition="dialog-top-transition"
+                            width="50%"
+                            v-model="dialogStore.dialog_searchstudent"
+                        >
+                            <template v-slot:default>
+                                <v-card>
+                                    <v-toolbar
+                                        title="البحث عن طالب"
+                                    ></v-toolbar>
+                                    <v-card-text class="text-h2 pa-6">
+                                        <v-text-field
+                                            v-model="searchQuery"
+                                            label="ادخل اسم الطالب"
+                                        ></v-text-field>
+                                        <v-btn @click="searchStudent"
+                                            >بحث</v-btn
+                                        >
+                                    </v-card-text>
+                                    <v-card-actions class="justify-end">
+                                        <v-btn
+                                            text="Close"
+                                            @click="
+                                                dialogStore.hideSearchStudentDialog
+                                            "
+                                            >Close</v-btn
+                                        >
+                                    </v-card-actions>
+                                </v-card>
+                            </template>
                         </v-dialog>
                     </v-list-item>
                 </v-list>
@@ -143,6 +181,7 @@ export default {
         return {
             students_class: [],
             dialog_addstudent: false,
+            searchQuery: "",
             form: {
                 name: "",
                 phone: "",
@@ -252,6 +291,38 @@ export default {
         },
         showStudentDetails(student) {
             student.showDetails = true;
+        },
+        async searchStudent() {
+            try {
+                const trimmedQuery = this.searchQuery.trim().toLowerCase();
+                // Fetch all students if search query is empty
+                if (!trimmedQuery) {
+                    const querySnapshot = await getDocs(
+                        collection(db, "students")
+                    );
+                    this.students_class = querySnapshot.docs.map((doc) => ({
+                        id: doc.id,
+                        ...doc.data(),
+                        showDetails: false,
+                    }));
+                } else {
+                    // Perform search based on the trimmed search query
+                    const querySnapshot = await getDocs(
+                        collection(db, "students")
+                    );
+                    this.students_class = querySnapshot.docs
+                        .map((doc) => ({
+                            id: doc.id,
+                            ...doc.data(),
+                            showDetails: false,
+                        }))
+                        .filter((student) =>
+                            student.name.toLowerCase().includes(trimmedQuery)
+                        );
+                }
+            } catch (error) {
+                console.error("Error searching students:", error);
+            }
         },
     },
     computed: {
