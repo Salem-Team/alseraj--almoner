@@ -2,9 +2,25 @@
     <div class="use">
         <div class="title">
             <div class="right">
-                <v-breadcrumbs
-                    :items="['الاشراف', 'الاعدادات', 'معرض الصور']"
-                ></v-breadcrumbs>
+                <v-breadcrumbs>
+                    <v-breadcrumbs-item @click="$router.push('/admin')" link>
+                        الإشراف
+                    </v-breadcrumbs-item>
+                    <v-breadcrumbs-divider />
+                    <v-breadcrumbs-item
+                        @click="$router.push('/Modifications')"
+                        link
+                    >
+                        الإعدادات
+                    </v-breadcrumbs-item>
+                    <v-breadcrumbs-divider />
+                    <v-breadcrumbs-item
+                        @click="$router.push('/Photo_Gallery')"
+                        link
+                    >
+                        معرض الصور
+                    </v-breadcrumbs-item>
+                </v-breadcrumbs>
             </div>
         </div>
     </div>
@@ -24,7 +40,7 @@
                             justify-content: center;
                             align-items: center;
                             width: 90%;
-                            height: 450px;
+                            min-height: 450px;
                             border-radius: 20px;
                             border: 3px dashed #777;
                         "
@@ -40,6 +56,7 @@
                         >
                             <div>
                                 <font-awesome-icon
+                                    v-if="!photos.Photo.image"
                                     icon="image"
                                     size="2xl"
                                     style="
@@ -86,6 +103,8 @@
                                             prepend-icon=""
                                             width="100%"
                                             prepend-inner-icon="mdi-paperclip"
+                                            @change="photos.onFileChange"
+                                            required
                                         >
                                         </v-file-input>
                                         <span
@@ -98,18 +117,42 @@
                                         >
                                             تصفح صورك
                                         </span>
+                                        <!-- Show progress bar if New.image is truthy (assuming New is a data property) -->
+                                        <v-progress-linear
+                                            v-if="photos.Photo.image"
+                                            :value="progress"
+                                            color="blue-grey"
+                                            height="25"
+                                        >
+                                            <template
+                                                v-slot:default="{ value }"
+                                            >
+                                                <strong
+                                                    >{{
+                                                        Math.ceil(value)
+                                                    }}%</strong
+                                                >
+                                            </template>
+                                        </v-progress-linear>
+                                        <br />
                                     </label>
+                                    <v-img
+                                        v-if="photos.Photo.image"
+                                        :src="photos.Photo.image"
+                                        height="200"
+                                    ></v-img>
                                     <v-select
                                         style="width: 100%"
                                         v-model="photos.type"
                                         :items="photos.Types"
-                                        label="أختر صلاحية الدخول"
+                                        label="أختر نوع الصورة"
                                         variant="outlined"
                                         @blur="photos.handletypes"
                                         @click="photos.handletypes"
+                                        required
                                     ></v-select>
                                     <v-btn
-                                        class="mt-2"
+                                        class="mt-2 mb-2"
                                         type="submit"
                                         color="primary"
                                         @click="photos.Add_Photos"
@@ -144,22 +187,25 @@
                                         :key="photo.id"
                                         width="25%"
                                     >
+                                        <v-fab
+                                            icon="mdi-delete"
+                                            location="top right"
+                                            size="40"
+                                            absolute
+                                            style="bottom: -15px; left: 5px"
+                                            offset
+                                            @click="
+                                                photos.delete_Photo(
+                                                    photo.id,
+                                                    photo.image
+                                                )
+                                            "
+                                        ></v-fab>
                                         <v-img
                                             :src="photo.image"
                                             height="200"
                                             cover
                                         ></v-img>
-
-                                        <v-card-title>
-                                            <font-awesome-icon
-                                                @click="
-                                                    photos.delete_Photo(
-                                                        photo.id
-                                                    )
-                                                "
-                                                :icon="['fas', 'trash']"
-                                            />
-                                        </v-card-title>
                                     </v-card>
                                 </v-container>
                             </v-tabs-window-item>
@@ -174,21 +220,25 @@
                                         :key="photo.id"
                                         width="25%"
                                     >
+                                        <v-fab
+                                            icon="mdi-delete"
+                                            location="top right"
+                                            size="40"
+                                            absolute
+                                            style="bottom: -15px; left: 5px"
+                                            offset
+                                            @click="
+                                                photos.delete_Photo(
+                                                    photo.id,
+                                                    photo.image
+                                                )
+                                            "
+                                        ></v-fab>
                                         <v-img
                                             :src="photo.image"
                                             height="200"
+                                            cover
                                         ></v-img>
-
-                                        <v-card-title>
-                                            <font-awesome-icon
-                                                @click="
-                                                    photos.delete_Photo(
-                                                        photo.id
-                                                    )
-                                                "
-                                                :icon="['fas', 'trash']"
-                                            />
-                                        </v-card-title>
                                     </v-card>
                                 </v-container>
                             </v-tabs-window-item>
@@ -203,21 +253,25 @@
                                         :key="photo.id"
                                         width="25%"
                                     >
+                                        <v-fab
+                                            icon="mdi-delete"
+                                            location="top right"
+                                            size="40"
+                                            absolute
+                                            style="bottom: -15px; left: 5px"
+                                            offset
+                                            @click="
+                                                photos.delete_Photo(
+                                                    photo.id,
+                                                    photo.image
+                                                )
+                                            "
+                                        ></v-fab>
                                         <v-img
                                             :src="photo.image"
                                             height="200"
+                                            cover
                                         ></v-img>
-
-                                        <v-card-title>
-                                            <font-awesome-icon
-                                                @click="
-                                                    photos.delete_Photo(
-                                                        photo.id
-                                                    )
-                                                "
-                                                :icon="['fas', 'trash']"
-                                            />
-                                        </v-card-title>
                                     </v-card>
                                 </v-container>
                             </v-tabs-window-item>
@@ -268,7 +322,9 @@ export default defineComponent({
             Types,
             handletypes,
             tab,
+            onFileChange,
             trip,
+            progress,
             party,
             news,
         } = storeToRefs(photos);
@@ -276,10 +332,12 @@ export default defineComponent({
         // Return the necessary reactive properties and methods
         return {
             Photo,
+            onFileChange,
             handletypes,
             Add_Photos,
             delete_Photo,
             Get_data,
+            progress,
             upload_Image,
             photos,
             dialog,

@@ -1,6 +1,14 @@
 <template>
     <div class="right">
-        <v-breadcrumbs :items="['الاشراف', 'الاعدادات']"></v-breadcrumbs>
+        <v-breadcrumbs>
+            <v-breadcrumbs-item @click="$router.push('/admin')" link>
+                الإشراف
+            </v-breadcrumbs-item>
+            <v-breadcrumbs-divider />
+            <v-breadcrumbs-item @click="$router.push('/Modifications')" link>
+                الإعدادات
+            </v-breadcrumbs-item>
+        </v-breadcrumbs>
     </div>
     <v-container class="d-flex justify-space-evenly mb-4 mt-16">
         <v-card
@@ -8,8 +16,9 @@
             prepend-icon="mdi-account"
             link
             width="15%"
+            @click="$router.push('/Add_admin')"
         >
-            <v-card-title>إضافة أدمن</v-card-title>
+            <v-card-title>إدارة المشرف</v-card-title>
         </v-card>
         <v-card
             class="card text-center mt-3 bg-grey-lighten-3"
@@ -18,14 +27,6 @@
             width="15%"
         >
             <v-card-title> الأخبار</v-card-title>
-        </v-card>
-        <v-card
-            class="card text-center mt-3 bg-grey-lighten-3"
-            prepend-icon="mdi-frequently-asked-questions"
-            link
-            width="15%"
-        >
-            <v-card-title>أسئلة شائعة</v-card-title>
         </v-card>
         <v-card
             class="card text-center mt-3 bg-grey-lighten-3"

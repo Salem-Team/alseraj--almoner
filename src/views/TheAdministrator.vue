@@ -1,15 +1,11 @@
 <template>
     <div class="admin-container">
         <v-container>
-            <h1>الادمن</h1>
+            <h1>الإشراف</h1>
             <v-row
                 justify="center"
                 align="center"
-                style="
-                    display: flex;
-                    justify-content: center;
-                    margin-top: 200px;
-                "
+                style="display: flex; justify-content: center; margin-top: 20px"
             >
                 <v-col cols="4" md="4" style="">
                     <v-card
@@ -36,6 +32,7 @@
                             background: #2196f333;
                         "
                         class="admin-card p-5"
+                        @click="$router.push('/Modifications')"
                     >
                         <h2 class="admin-title">الإعدادات</h2>
                     </v-card>
@@ -50,6 +47,8 @@
                             background: #2196f333;
                         "
                         class="admin-card p-5"
+                        link
+                        @click="$router.push('/Add_job')"
                     >
                         <h2 class="admin-title">تقديم على وظائف</h2>
                     </v-card>

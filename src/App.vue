@@ -1,7 +1,7 @@
 <template>
     <nav class="ma-2">
         <router-link to="/">Home</router-link> |
-        <router-link to="/Modifications">Modifications</router-link>|
+        <router-link to="/admin">لوحة الاشراف</router-link>|
         <span v-if="user">
             <router-link @click="logout" to="/UserLogin">Sign Out</router-link>
         </span>
@@ -101,10 +101,7 @@ export default {
     direction: rtl !important;
 }
 body {
-    direction: rtl;
     font-family: "Cairo", sans-serif;
-    font-variation-settings: "slnt" 0;
-    font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
 }
