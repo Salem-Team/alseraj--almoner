@@ -14,7 +14,7 @@
                         الإعدادات
                     </v-breadcrumbs-item>
                     <v-breadcrumbs-divider />
-                    <v-breadcrumbs-item @click="$router.push('/Add_News')" link>
+                    <v-breadcrumbs-item @click="$router.push('/Add_Job')" link>
                         الأخبار
                     </v-breadcrumbs-item>
                 </v-breadcrumbs>
@@ -31,7 +31,7 @@
         <v-card width="100%" class="popup">
             <v-card-title class="d-flex justify-space-between align-center">
                 <div class="text-h4 ps-2" style="color: var(--main-color)">
-                    إضافة خبر
+                    إضافة وظيفة
                 </div>
                 <v-btn
                     style="color: var(--main-color)"
@@ -42,38 +42,15 @@
             </v-card-title>
             <form ref="form" @submit.prevent class="ma-auto">
                 <v-text-field
-                    v-model="New.title"
+                    v-model="Job.title"
                     type="text"
                     label="عنوان"
                     variant="outlined"
                     required
                 ></v-text-field>
 
-                <v-file-input
-                    v-model="New.image"
-                    label="صورة"
-                    accept="image/*"
-                    variant="outlined"
-                    prepend-icon=""
-                    required
-                    prepend-inner-icon="mdi-paperclip"
-                    @click="news.upload_Image"
-                >
-                </v-file-input>
-                <!-- Show progress bar if New.image is truthy (assuming New is a data property) -->
-                <v-progress-linear
-                    v-if="New.image"
-                    :value="news.progress"
-                    color="blue-grey"
-                    height="25"
-                >
-                    <template v-slot:default="{ value }">
-                        <strong>{{ Math.ceil(value) }}%</strong>
-                    </template>
-                </v-progress-linear>
-                <br />
                 <v-textarea
-                    v-model="New.description"
+                    v-model="Job.description"
                     label="وصف قصير"
                     :counter="150"
                     variant="outlined"
@@ -84,7 +61,7 @@
                     class="d-flex align-center mt-4 mb-10"
                     type="submit"
                     color="primary"
-                    @click="news.Add_News"
+                    @click="jobs.Add_Jobs"
                 >
                     نشر
                 </v-btn>
@@ -95,7 +72,7 @@
         <v-card width="100%" class="popup">
             <v-card-title class="d-flex justify-space-between align-center">
                 <div class="text-h4 ps-2" style="color: var(--main-color)">
-                    تعديل خبر
+                    تعديل الوظيفة
                 </div>
                 <v-btn
                     style="color: var(--main-color)"
@@ -106,17 +83,15 @@
             </v-card-title>
             <form ref="form" @submit.prevent class="ma-auto">
                 <v-text-field
-                    v-model="news.Title_Information"
+                    v-model="jobs.Title_Information"
                     type="text"
                     label="عنوان"
                     variant="outlined"
                     required
                 ></v-text-field>
-
-                <v-img :src="news.Image_Information" height="200"></v-img>
                 <br />
                 <v-textarea
-                    v-model="news.Description_Information"
+                    v-model="jobs.Description_Information"
                     label="وصف قصير"
                     :counter="150"
                     required
@@ -127,7 +102,7 @@
                     class="d-flex align-center mt-4 mb-10"
                     type="submit"
                     color="primary"
-                    @click="news.Update_News(news.Id_Information)"
+                    @click="jobs.Update_Jobs(Jobs.Id_Information)"
                 >
                     تعديل
                 </v-btn>
@@ -138,32 +113,116 @@
         class="box d-flex align-center justify-space-around"
         width="90%"
     >
-        <v-card v-for="New in News" :key="New.id" width="25%">
-            <v-img :src="New.image" height="200" cover></v-img>
-
+        <v-card v-for="Job in Jobs" :key="Job.id" width="25%">
             <v-card-title class="d-flex align-center justify-center flex-wrap">
-                <p>{{ New.title }}</p>
+                <p>{{ Job.title }}</p>
                 <v-spacer />
                 <div class="ma-2">
                     <font-awesome-icon
-                        @click="news.New_Information(New)"
+                        @click="jobs.Job_Information(Job)"
                         :icon="['fas', 'edit']"
                         @click.="dialog_1 = true"
                     />
                 </div>
                 <div>
                     <font-awesome-icon
-                        @click="news.delete_New(New.id, New.image)"
+                        @click="jobs.delete_Job(Job.id, Job.CV)"
                         :icon="['fas', 'trash']"
                     />
                 </div>
             </v-card-title>
 
             <v-card-subtitle>
-                {{ New.time }}
+                {{ Job.time }}
             </v-card-subtitle>
 
-            <v-card-text>{{ New.description }} </v-card-text>
+            <v-card-text
+                ><p>{{ Job.description }}</p>
+                <v-btn
+                    class="!m-auto !text-center mt-2 mb-4"
+                    color="primary"
+                    @click="(jobs.dialog_2 = true), jobs.Job_Information(Job)"
+                >
+                    التقديم على الوظيفة</v-btn
+                >
+                <v-dialog v-model="dialog_2" width="90%">
+                    <v-card width="100%" class="popup">
+                        <v-card-title
+                            class="d-flex justify-space-between align-center"
+                        >
+                            <div
+                                class="text-h4 ps-2"
+                                style="color: var(--main-color)"
+                            >
+                                التقديم على الوظيفة
+                            </div>
+                            <v-btn
+                                style="color: var(--main-color)"
+                                icon="mdi-close"
+                                variant="text"
+                                @click="dialog_2 = false"
+                            ></v-btn>
+                        </v-card-title>
+                        <form ref="form" @submit.prevent class="ma-auto">
+                            <v-text-field
+                                v-model="jobs.Apply.name"
+                                type="text"
+                                label="الاسم"
+                                variant="outlined"
+                                required
+                            ></v-text-field>
+                            <v-text-field
+                                v-model="jobs.Apply.email"
+                                type="email"
+                                label="البريد الالكتروني"
+                                variant="outlined"
+                                required
+                            ></v-text-field>
+                            <v-text-field
+                                v-model="jobs.Apply.phone"
+                                type="text"
+                                label="التليفون"
+                                variant="outlined"
+                                required
+                            ></v-text-field>
+                            <v-file-input
+                                v-model="jobs.Apply.CV"
+                                label="السيرة الذاتية"
+                                variant="outlined"
+                                prepend-icon=""
+                                required
+                                prepend-inner-icon="mdi-paperclip"
+                                @click="jobs.upload_CV"
+                            >
+                            </v-file-input>
+
+                            <v-btn
+                                class="d-flex align-center mt-4 mb-10"
+                                type="submit"
+                                color="primary"
+                                @click="jobs.Add_Apply(jobs.Id_Information)"
+                            >
+                                تقديم
+                            </v-btn>
+                        </form>
+                    </v-card></v-dialog
+                >
+                <v-expansion-panels>
+                    <v-expansion-panel
+                        v-for="Apply in applies"
+                        :key="Apply.id"
+                        :title="Apply.name"
+                        :text="Apply.email"
+                    >
+                        <v-expansion-panel-text>
+                            {{ Apply.phone }}
+                        </v-expansion-panel-text>
+                        <v-expansion-panel-text>
+                            <a :href="Apply.CV">CV</a>
+                        </v-expansion-panel-text>
+                    </v-expansion-panel>
+                </v-expansion-panels>
+            </v-card-text>
         </v-card>
     </v-container>
 </template>
@@ -171,38 +230,48 @@
 <script>
 import { storeToRefs } from "pinia";
 import { defineComponent } from "vue";
-import { useNews } from "@/store/News.js";
+import { useJobs } from "@/store/job.js";
 export default defineComponent({
     setup() {
-        const news = useNews();
-        news.Get_data();
-        // Destructure reactive references and methods from News store
+        const jobs = useJobs();
+        jobs.Get_data();
+        // Destructure reactive references and methods from Jobs store
         const {
-            New,
-            News,
-            Add_News,
+            Job,
+            Jobs,
+            applies,
+            Apply,
+            Get_Apply_data,
+            Add_Apply,
+            Add_Jobs,
             dialog,
             dialog_1,
-            delete_New,
+            dialog_2,
+            delete_Job,
             Get_data,
-            upload_Image,
-            New_Information,
+            upload_CV,
+            Job_Information,
             progress,
-        } = storeToRefs(news);
+        } = storeToRefs(jobs);
 
         // Return the necessary reactive properties and methods
         return {
-            New,
-            Add_News,
-            delete_New,
-            New_Information,
+            Job,
+            applies,
+            Apply,
+            dialog_2,
+            Get_Apply_data,
+            Add_Apply,
+            Add_Jobs,
+            delete_Job,
+            Job_Information,
             Get_data,
-            upload_Image,
-            news,
+            upload_CV,
+            Jobs,
+            jobs,
             dialog,
             dialog_1,
             progress,
-            News,
         };
     },
 });
