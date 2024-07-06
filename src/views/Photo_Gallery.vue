@@ -1,304 +1,314 @@
 <template>
-    <div class="use">
-        <div class="title">
-            <div class="right">
-                <v-breadcrumbs>
-                    <v-breadcrumbs-item @click="$router.push('/admin')" link>
-                        الإشراف
-                    </v-breadcrumbs-item>
-                    <v-breadcrumbs-divider />
-                    <v-breadcrumbs-item
-                        @click="$router.push('/Modifications')"
-                        link
-                    >
-                        الإعدادات
-                    </v-breadcrumbs-item>
-                    <v-breadcrumbs-divider />
-                    <v-breadcrumbs-item
-                        @click="$router.push('/Photo_Gallery')"
-                        link
-                    >
-                        معرض الصور
-                    </v-breadcrumbs-item>
-                </v-breadcrumbs>
+    <div>
+        <div class="use">
+            <div class="title">
+                <div class="right">
+                    <v-breadcrumbs>
+                        <v-breadcrumbs-item
+                            @click="$router.push('/admin')"
+                            link
+                        >
+                            الإشراف
+                        </v-breadcrumbs-item>
+                        <v-breadcrumbs-divider />
+                        <v-breadcrumbs-item
+                            @click="$router.push('/Modifications')"
+                            link
+                        >
+                            الإعدادات
+                        </v-breadcrumbs-item>
+                        <v-breadcrumbs-divider />
+                        <v-breadcrumbs-item
+                            @click="$router.push('/Photo_Gallery')"
+                            link
+                        >
+                            معرض الصور
+                        </v-breadcrumbs-item>
+                    </v-breadcrumbs>
+                </div>
             </div>
         </div>
-    </div>
-    <v-card rounded="0" flat>
-        <v-window v-model="onboarding">
-            <!-- Section 1: Add Photo -->
-            <v-window-item :value="1">
-                <div
-                    class="d-flex flex-column justify-center align-center"
-                    min-height="400"
-                >
+        <v-card rounded="0" flat>
+            <v-window v-model="onboarding">
+                <!-- Section 1: Add Photo -->
+                <v-window-item :value="1">
                     <div
-                        class="text-medium-emphasis mb-1 mt-4"
-                        style="
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: center;
-                            align-items: center;
-                            width: 90%;
-                            min-height: 450px;
-                            border-radius: 20px;
-                            border: 3px dashed #777;
-                        "
+                        class="d-flex flex-column justify-center align-center"
+                        min-height="400"
                     >
                         <div
-                            class="d-flex flex-column"
+                            class="text-medium-emphasis mb-1 mt-4"
                             style="
-                                flex-wrap: wrap;
-                                width: 100%;
-                                justify-content: center !important;
-                                align-items: center !important;
+                                display: flex;
+                                flex-direction: column;
+                                justify-content: center;
+                                align-items: center;
+                                width: 90%;
+                                min-height: 450px;
+                                border-radius: 20px;
+                                border: 3px dashed #777;
                             "
                         >
-                            <div>
-                                <font-awesome-icon
-                                    v-if="!photos.Photo.image"
-                                    icon="image"
-                                    size="2xl"
-                                    style="
-                                        color: var(--main-color);
-                                        width: 150px;
-                                        height: 150px;
-                                    "
-                                />
-                            </div>
                             <div
-                                class="mt-10 d-flex flex-column"
+                                class="d-flex flex-column"
                                 style="
-                                    width: 80%;
+                                    flex-wrap: wrap;
+                                    width: 100%;
                                     justify-content: center !important;
-                                    align-content: center !important;
                                     align-items: center !important;
                                 "
                             >
+                                <div>
+                                    <font-awesome-icon
+                                        v-if="!photos.Photo.image"
+                                        icon="image"
+                                        size="2xl"
+                                        style="
+                                            color: var(--main-color);
+                                            width: 150px;
+                                            height: 150px;
+                                        "
+                                    />
+                                </div>
                                 <div
+                                    class="mt-10 d-flex flex-column"
                                     style="
-                                        width: 50%;
-                                        text-align: center !important;
-                                        margin: auto !important;
+                                        width: 80%;
+                                        justify-content: center !important;
+                                        align-content: center !important;
+                                        align-items: center !important;
                                     "
                                 >
-                                    <label
-                                        class="custom_label"
+                                    <div
                                         style="
-                                            width: 200px;
-                                            position: relative;
-                                            background: #eee;
-                                            border-radius: 7px;
-                                            margin-top: 10px;
+                                            width: 50%;
                                             text-align: center !important;
                                             margin: auto !important;
                                         "
                                     >
-                                        <v-file-input
-                                            style="width: 100%"
-                                            v-model="photos.Photo.image"
-                                            label="صورة"
-                                            accept="image/*"
-                                            variant="outlined"
-                                            prepend-icon=""
-                                            width="100%"
-                                            prepend-inner-icon="mdi-paperclip"
-                                            @change="photos.onFileChange"
-                                            required
-                                        >
-                                        </v-file-input>
-                                        <span
+                                        <label
+                                            class="custom_label"
                                             style="
-                                                font-family: 'Cairo', sans-serif;
-                                                font-size: 18px;
-                                                margin-right: 15px;
+                                                width: 200px;
+                                                position: relative;
+                                                background: #eee;
+                                                border-radius: 7px;
+                                                margin-top: 10px;
                                                 text-align: center !important;
+                                                margin: auto !important;
                                             "
                                         >
-                                            تصفح صورك
-                                        </span>
-                                        <!-- Show progress bar if New.image is truthy (assuming New is a data property) -->
-                                        <v-progress-linear
-                                            v-if="photos.Photo.image"
-                                            :value="progress"
-                                            color="blue-grey"
-                                            height="25"
-                                        >
-                                            <template
-                                                v-slot:default="{ value }"
+                                            <v-file-input
+                                                style="width: 100%"
+                                                v-model="photos.Photo.image"
+                                                label="صورة"
+                                                accept="image/*"
+                                                variant="outlined"
+                                                prepend-icon=""
+                                                width="100%"
+                                                prepend-inner-icon="mdi-paperclip"
+                                                @change="photos.onFileChange"
+                                                required
                                             >
-                                                <strong
-                                                    >{{
-                                                        Math.ceil(value)
-                                                    }}%</strong
+                                            </v-file-input>
+                                            <span
+                                                style="
+                                                    font-family: 'Cairo',
+                                                        sans-serif;
+                                                    font-size: 18px;
+                                                    margin-right: 15px;
+                                                    text-align: center !important;
+                                                "
+                                            >
+                                                تصفح صورك
+                                            </span>
+                                            <!-- Show progress bar if New.image is truthy (assuming New is a data property) -->
+                                            <v-progress-linear
+                                                v-if="photos.Photo.image"
+                                                :value="progress"
+                                                color="blue-grey"
+                                                height="25"
+                                            >
+                                                <template
+                                                    v-slot:default="{ value }"
                                                 >
-                                            </template>
-                                        </v-progress-linear>
-                                        <br />
-                                    </label>
-                                    <v-img
-                                        v-if="photos.Photo.image"
-                                        :src="photos.Photo.image"
-                                        height="200"
-                                    ></v-img>
-                                    <v-select
-                                        style="width: 100%"
-                                        v-model="photos.type"
-                                        :items="photos.Types"
-                                        label="أختر نوع الصورة"
-                                        variant="outlined"
-                                        @blur="photos.handletypes"
-                                        @click="photos.handletypes"
-                                        required
-                                    ></v-select>
-                                    <v-btn
-                                        class="mt-2 mb-2"
-                                        type="submit"
-                                        color="primary"
-                                        @click="photos.Add_Photos"
-                                    >
-                                        إضافة
-                                    </v-btn>
+                                                    <strong
+                                                        >{{
+                                                            Math.ceil(value)
+                                                        }}%</strong
+                                                    >
+                                                </template>
+                                            </v-progress-linear>
+                                            <br />
+                                        </label>
+                                        <v-img
+                                            v-if="photos.Photo.image"
+                                            :src="photos.Photo.image"
+                                            height="200"
+                                        ></v-img>
+                                        <v-select
+                                            style="width: 100%"
+                                            v-model="photos.type"
+                                            :items="photos.Types"
+                                            label="أختر نوع الصورة"
+                                            variant="outlined"
+                                            @blur="photos.handletypes"
+                                            @click="photos.handletypes"
+                                            required
+                                        ></v-select>
+                                        <v-btn
+                                            class="mt-2 mb-2"
+                                            type="submit"
+                                            color="primary"
+                                            @click="photos.Add_Photos"
+                                        >
+                                            إضافة
+                                        </v-btn>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </v-window-item>
+                </v-window-item>
 
-            <!-- Section 2: Display Photos -->
-            <v-window-item :value="2">
-                <v-card min-height="400">
-                    <v-tabs v-model="tab" bg-color="primary">
-                        <v-tab value="party">Party</v-tab>
-                        <v-tab value="news">News</v-tab>
-                        <v-tab value="trip">Trip</v-tab>
-                    </v-tabs>
+                <!-- Section 2: Display Photos -->
+                <v-window-item :value="2">
+                    <v-card min-height="400">
+                        <v-tabs v-model="tab" bg-color="primary">
+                            <v-tab value="party">Party</v-tab>
+                            <v-tab value="news">News</v-tab>
+                            <v-tab value="trip">Trip</v-tab>
+                        </v-tabs>
 
-                    <v-card-text>
-                        <v-tabs-window v-model="tab">
-                            <v-tabs-window-item value="party">
-                                <v-container
-                                    class="box d-flex align-center justify-space-around"
-                                    width="90%"
-                                >
-                                    <v-card
-                                        v-for="photo in party"
-                                        :key="photo.id"
-                                        width="25%"
+                        <v-card-text>
+                            <v-tabs-window v-model="tab">
+                                <v-tabs-window-item value="party">
+                                    <v-container
+                                        class="box d-flex align-center justify-space-around"
+                                        width="90%"
                                     >
-                                        <v-fab
-                                            icon="mdi-delete"
-                                            location="top right"
-                                            size="40"
-                                            absolute
-                                            style="bottom: -15px; left: 5px"
-                                            offset
-                                            @click="
-                                                photos.delete_Photo(
-                                                    photo.id,
-                                                    photo.image
-                                                )
-                                            "
-                                        ></v-fab>
-                                        <v-img
-                                            :src="photo.image"
-                                            height="200"
-                                            cover
-                                        ></v-img>
-                                    </v-card>
-                                </v-container>
-                            </v-tabs-window-item>
+                                        <v-card
+                                            v-for="photo in party"
+                                            :key="photo.id"
+                                            width="25%"
+                                        >
+                                            <v-fab
+                                                icon="mdi-delete"
+                                                location="top right"
+                                                size="40"
+                                                absolute
+                                                style="bottom: -15px; left: 5px"
+                                                offset
+                                                @click="
+                                                    photos.delete_Photo(
+                                                        photo.id,
+                                                        photo.image
+                                                    )
+                                                "
+                                            ></v-fab>
+                                            <v-img
+                                                :src="photo.image"
+                                                height="200"
+                                                cover
+                                            ></v-img>
+                                        </v-card>
+                                    </v-container>
+                                </v-tabs-window-item>
 
-                            <v-tabs-window-item value="news">
-                                <v-container
-                                    class="box d-flex align-center justify-space-around"
-                                    width="90%"
-                                >
-                                    <v-card
-                                        v-for="photo in news"
-                                        :key="photo.id"
-                                        width="25%"
+                                <v-tabs-window-item value="news">
+                                    <v-container
+                                        class="box d-flex align-center justify-space-around"
+                                        width="90%"
                                     >
-                                        <v-fab
-                                            icon="mdi-delete"
-                                            location="top right"
-                                            size="40"
-                                            absolute
-                                            style="bottom: -15px; left: 5px"
-                                            offset
-                                            @click="
-                                                photos.delete_Photo(
-                                                    photo.id,
-                                                    photo.image
-                                                )
-                                            "
-                                        ></v-fab>
-                                        <v-img
-                                            :src="photo.image"
-                                            height="200"
-                                            cover
-                                        ></v-img>
-                                    </v-card>
-                                </v-container>
-                            </v-tabs-window-item>
+                                        <v-card
+                                            v-for="photo in news"
+                                            :key="photo.id"
+                                            width="25%"
+                                        >
+                                            <v-fab
+                                                icon="mdi-delete"
+                                                location="top right"
+                                                size="40"
+                                                absolute
+                                                style="bottom: -15px; left: 5px"
+                                                offset
+                                                @click="
+                                                    photos.delete_Photo(
+                                                        photo.id,
+                                                        photo.image
+                                                    )
+                                                "
+                                            ></v-fab>
+                                            <v-img
+                                                :src="photo.image"
+                                                height="200"
+                                                cover
+                                            ></v-img>
+                                        </v-card>
+                                    </v-container>
+                                </v-tabs-window-item>
 
-                            <v-tabs-window-item value="trip">
-                                <v-container
-                                    class="box d-flex align-center justify-space-around"
-                                    width="90%"
-                                >
-                                    <v-card
-                                        v-for="photo in trip"
-                                        :key="photo.id"
-                                        width="25%"
+                                <v-tabs-window-item value="trip">
+                                    <v-container
+                                        class="box d-flex align-center justify-space-around"
+                                        width="90%"
                                     >
-                                        <v-fab
-                                            icon="mdi-delete"
-                                            location="top right"
-                                            size="40"
-                                            absolute
-                                            style="bottom: -15px; left: 5px"
-                                            offset
-                                            @click="
-                                                photos.delete_Photo(
-                                                    photo.id,
-                                                    photo.image
-                                                )
-                                            "
-                                        ></v-fab>
-                                        <v-img
-                                            :src="photo.image"
-                                            height="200"
-                                            cover
-                                        ></v-img>
-                                    </v-card>
-                                </v-container>
-                            </v-tabs-window-item>
-                        </v-tabs-window>
-                    </v-card-text>
-                </v-card>
-            </v-window-item>
-        </v-window>
-        <!-- Navigation Buttons -->
+                                        <v-card
+                                            v-for="photo in trip"
+                                            :key="photo.id"
+                                            width="25%"
+                                        >
+                                            <v-fab
+                                                icon="mdi-delete"
+                                                location="top right"
+                                                size="40"
+                                                absolute
+                                                style="bottom: -15px; left: 5px"
+                                                offset
+                                                @click="
+                                                    photos.delete_Photo(
+                                                        photo.id,
+                                                        photo.image
+                                                    )
+                                                "
+                                            ></v-fab>
+                                            <v-img
+                                                :src="photo.image"
+                                                height="200"
+                                                cover
+                                            ></v-img>
+                                        </v-card>
+                                    </v-container>
+                                </v-tabs-window-item>
+                            </v-tabs-window>
+                        </v-card-text>
+                    </v-card>
+                </v-window-item>
+            </v-window>
+            <!-- Navigation Buttons -->
 
-        <v-card-actions class="justify-center">
-            <v-item-group v-model="onboarding" class="text-center" mandatory>
-                <v-item
-                    v-for="n in length"
-                    :key="`btn-${n}`"
-                    v-slot="{ isSelected, toggle }"
-                    :value="n"
+            <v-card-actions class="justify-center">
+                <v-item-group
+                    v-model="onboarding"
+                    class="text-center"
+                    mandatory
                 >
-                    <v-btn
-                        :variant="isSelected ? 'outlined' : 'text'"
-                        icon="mdi-record"
-                        @click="toggle"
-                    ></v-btn>
-                </v-item>
-            </v-item-group>
-        </v-card-actions>
-    </v-card>
+                    <v-item
+                        v-for="n in length"
+                        :key="`btn-${n}`"
+                        v-slot="{ isSelected, toggle }"
+                        :value="n"
+                    >
+                        <v-btn
+                            :variant="isSelected ? 'outlined' : 'text'"
+                            icon="mdi-record"
+                            @click="toggle"
+                        ></v-btn>
+                    </v-item>
+                </v-item-group>
+            </v-card-actions>
+        </v-card>
+    </div>
 </template>
 
 <script>

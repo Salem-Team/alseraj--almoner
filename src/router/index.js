@@ -14,6 +14,7 @@ import Add_News from "../views/Add_News.vue";
 import Add_job from "../views/Add_job.vue";
 import Photo_Gallery from "../views/Photo_Gallery.vue";
 import Add_admin from "../views/Add_admin.vue";
+import ChildDetails from "../views/ChildDetails.vue";
 const routes = [
     {
         path: "/",
@@ -30,6 +31,11 @@ const routes = [
         path: "/Parent_Dashboard",
         name: "Parent_Dashboard",
         component: Parent_Dashboard,
+    },
+    {
+        path: "/ChildDetails/:id",
+        name: "ChildDetails",
+        component: ChildDetails,
     },
     {
         path: "/Student_Dashboard",
