@@ -9,7 +9,6 @@
     </div>
 
     <v-toolbar color="primary" title="بياناتك"></v-toolbar>
-
     <div class="d-flex flex-row">
       <v-tabs v-model="tab" color="primary" direction="vertical">
         <v-tab prepend-icon="mdi-account" value="first-tab">عرض بياناتك</v-tab>
@@ -44,7 +43,7 @@
 
 <script>
 import { mapState, mapActions } from "pinia";
-import { useAuthStore } from "../stores/userStore";
+import { useAuthStore } from "@/store/userStore";
 
 export default {
   data: () => ({
