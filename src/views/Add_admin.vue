@@ -1,211 +1,204 @@
 <template>
-    <div class="use">
-        <div class="title">
-            <div class="right">
-                <v-breadcrumbs>
-                    <v-breadcrumbs-item @click="$router.push('/admin')" link>
-                        الإشراف
-                    </v-breadcrumbs-item>
-                    <v-breadcrumbs-divider />
-                    <v-breadcrumbs-item
-                        @click="$router.push('/Modifications')"
-                        link
-                    >
-                        الإعدادات
-                    </v-breadcrumbs-item>
-                    <v-breadcrumbs-divider />
-                    <v-breadcrumbs-item @click="$router.push('/Add_News')" link>
-                        الأخبار
-                    </v-breadcrumbs-item>
-                </v-breadcrumbs>
-            </div>
-            <div class="left">
-                <font-awesome-icon
-                    @click="dialog = true"
-                    :icon="['fas', 'plus']"
-                />
+    <div>
+        <div class="use">
+            <div class="title">
+                <div class="right">
+                    <v-breadcrumbs>
+                        <v-breadcrumbs-item
+                            @click="$router.push('/admin')"
+                            link
+                        >
+                            الإشراف
+                        </v-breadcrumbs-item>
+                        <v-breadcrumbs-divider />
+                        <v-breadcrumbs-item
+                            @click="$router.push('/Modifications')"
+                            link
+                        >
+                            الإعدادات
+                        </v-breadcrumbs-item>
+                        <v-breadcrumbs-divider />
+                        <v-breadcrumbs-item
+                            @click="$router.push('/Add_admin')"
+                            link
+                        >
+                            إدارة المشرف
+                        </v-breadcrumbs-item>
+                    </v-breadcrumbs>
+                </div>
+                <div class="left">
+                    <font-awesome-icon
+                        @click="admin.dialog = true"
+                        :icon="['fas', 'plus']"
+                    />
+                </div>
             </div>
         </div>
-
-        <v-dialog v-model="dialog" width="90%">
+        <v-dialog v-model="admin.dialog" width="90%">
             <v-card width="100%" class="popup">
                 <v-card-title class="d-flex justify-space-between align-center">
                     <div class="text-h4 ps-2" style="color: var(--main-color)">
-                        إضافة خبر
+                        إضافة مشرف
                     </div>
                     <v-btn
                         style="color: var(--main-color)"
                         icon="mdi-close"
                         variant="text"
-                        @click="dialog = false"
+                        @click="admin.dialog = false"
                     ></v-btn>
                 </v-card-title>
                 <form ref="form" @submit.prevent class="ma-auto">
                     <v-text-field
-                        v-model="New.title"
+                        v-model="user.name"
                         type="text"
-                        label="عنوان"
+                        label=" الاسم"
                         variant="outlined"
                         required
                     ></v-text-field>
-
-                    <v-file-input
-                        v-model="New.image"
-                        label="صورة"
-                        accept="image/*"
-                        variant="outlined"
-                        prepend-icon=""
-                        required
-                        prepend-inner-icon="mdi-paperclip"
-                        @click="news.upload_Image"
-                    >
-                    </v-file-input>
-                    <!-- Show progress bar if New.image is truthy (assuming New is a data property) -->
-                    <v-progress-linear
-                        v-if="New.image"
-                        :value="news.progress"
-                        color="blue-grey"
-                        height="25"
-                    >
-                        <template v-slot:default="{ value }">
-                            <strong>{{ Math.ceil(value) }}%</strong>
-                        </template>
-                    </v-progress-linear>
-                    <br />
-                    <v-textarea
-                        v-model="New.description"
-                        label="وصف قصير"
-                        :counter="150"
+                    <v-text-field
+                        v-model="user.email"
+                        type="email"
+                        label="بريد الكتروني"
                         variant="outlined"
                         required
-                    ></v-textarea>
+                    ></v-text-field>
+                    <v-select
+                        style="width: 100%"
+                        v-model="user.roles"
+                        :items="admin.role"
+                        label="أختر نوع الصلاحية"
+                        variant="outlined"
+                        multiple
+                        required
+                    ></v-select>
+                    <v-text-field
+                        v-model="user.password"
+                        type="password"
+                        label="كلمة مرور"
+                        variant="outlined"
+                        required
+                    ></v-text-field>
 
                     <v-btn
                         class="d-flex align-center mt-4 mb-10"
                         type="submit"
                         color="primary"
-                        @click="news.Add_News"
+                        @click="admin.add_admin"
                     >
-                        نشر
+                        إضافة
                     </v-btn>
                 </form>
             </v-card></v-dialog
         >
-        <v-dialog v-model="dialog_1" width="90%">
+
+        <v-dialog v-model="admin.dialog_1" width="90%">
             <v-card width="100%" class="popup">
                 <v-card-title class="d-flex justify-space-between align-center">
                     <div class="text-h4 ps-2" style="color: var(--main-color)">
-                        تعديل خبر
+                        إضافة مشرف
                     </div>
                     <v-btn
                         style="color: var(--main-color)"
                         icon="mdi-close"
                         variant="text"
-                        @click="dialog_1 = false"
+                        @click="admin.dialog_1 = false"
                     ></v-btn>
                 </v-card-title>
                 <form ref="form" @submit.prevent class="ma-auto">
                     <v-text-field
-                        v-model="news.Title_Information"
+                        v-model="admin.name_Information"
                         type="text"
-                        label="عنوان"
+                        label=" الاسم"
                         variant="outlined"
                         required
                     ></v-text-field>
-
-                    <v-img :src="news.Image_Information" height="200"></v-img>
-                    <br />
-                    <v-textarea
-                        v-model="news.Description_Information"
-                        label="وصف قصير"
-                        :counter="150"
-                        required
+                    <v-text-field
+                        v-model="admin.email_Information"
+                        type="email"
+                        label="بريد الكتروني"
                         variant="outlined"
-                    ></v-textarea>
-
+                        required
+                    ></v-text-field>
                     <v-btn
                         class="d-flex align-center mt-4 mb-10"
                         type="submit"
                         color="primary"
-                        @click="news.Update_News(news.Id_Information)"
+                        @click="admin.Update_admin"
                     >
                         تعديل
                     </v-btn>
                 </form>
-            </v-card>
-        </v-dialog>
+            </v-card></v-dialog
+        >
         <v-container
             class="box d-flex align-center justify-space-around"
             width="90%"
         >
-            <v-card v-for="New in News" :key="New.id" width="25%">
-                <v-img :src="New.image" height="200" cover></v-img>
-
+            <v-card v-for="user in users" :key="user.id" width="25%">
                 <v-card-title
                     class="d-flex align-center justify-center flex-wrap"
                 >
-                    <p>{{ New.title }}</p>
+                    <p>{{ user.name }}</p>
                     <v-spacer />
                     <div class="ma-2">
                         <font-awesome-icon
-                            @click="news.New_Information(New)"
+                            @click="admin.user_Information(user)"
                             :icon="['fas', 'edit']"
                             @click.="dialog_1 = true"
                         />
                     </div>
                     <div>
                         <font-awesome-icon
-                            @click="news.delete_New(New.id, New.image)"
+                            @click="admin.delete_user(user.id)"
                             :icon="['fas', 'trash']"
                         />
                     </div>
                 </v-card-title>
 
-                <v-card-subtitle>
-                    {{ New.time }}
+                <v-card-subtitle v-for="index in user.roles" :key="index">
+                    {{ index }}
                 </v-card-subtitle>
 
-                <v-card-text>{{ New.description }} </v-card-text>
+                <v-card-text>{{ user.email }} </v-card-text>
             </v-card>
         </v-container>
     </div>
 </template>
 
-<script>
+<script scoped>
 import { storeToRefs } from "pinia";
 import { defineComponent } from "vue";
-import { useNews } from "@/store/News.js";
+import { useadmin } from "@/store/admin.js";
 export default defineComponent({
     setup() {
-        const news = useNews();
-        news.Get_data();
-        // Destructure reactive references and methods from News store
+        const admin = useadmin();
+        admin.Get_data();
+        admin.generate_Random_Password();
         const {
-            New,
-            News,
-            Add_News,
+            user,
+            add_admin,
             dialog,
-            dialog_1,
-            delete_New,
+            delete_user,
             Get_data,
-            upload_Image,
-            New_Information,
-            progress,
-        } = storeToRefs(news);
-
+            users,
+            role,
+            dialog_1,
+            generate_Random_Password,
+            user_Information,
+        } = storeToRefs(admin);
         // Return the necessary reactive properties and methods
         return {
-            New,
-            Add_News,
-            delete_New,
-            New_Information,
+            admin,
+            generate_Random_Password,
+            user,
+            role,
+            delete_user,
             Get_data,
-            upload_Image,
-            news,
+            user_Information,
+            users,
+            add_admin,
             dialog,
             dialog_1,
-            progress,
-            News,
         };
     },
 });

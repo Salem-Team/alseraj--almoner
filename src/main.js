@@ -25,14 +25,14 @@ import { fas } from "@fortawesome/free-solid-svg-icons";
 library.add(fas);
 
 const vuetify = createVuetify({
-  components,
-  directives,
+    components,
+    directives,
 });
 createApp(App)
-  .use(ref)
-  .use(pinia)
-  .use(store)
-  .use(vuetify)
-  .use(router)
-  .component("font-awesome-icon", FontAwesomeIcon)
-  .mount("#app");
+    .use(ref)
+    .use(pinia)
+    .use(store)
+    .use(vuetify)
+    .use(router)
+    .component("font-awesome-icon", FontAwesomeIcon)
+    .mount("#app");
