@@ -11,9 +11,11 @@ import { initializeApp } from "@firebase/app";
 import { getFirestore } from "firebase/firestore";
 import {
     getStorage,
-    ref as storageRef,
+    ref,
     uploadBytes,
     getDownloadURL,
+    deleteObject,
+    ref as storageRef,
 } from "firebase/storage";
 
 const firebaseConfig = {
@@ -37,19 +39,43 @@ export const useNews = defineStore("News", {
         Description_Information: "",
         Image_Information: null,
         Time_Condition: "",
+        progress: 0,
         News: [],
         New: {
             title: "",
             image: null,
             description: "",
         },
+        random: 0,
     }),
     actions: {
         async upload_Image(file) {
-            const storageReference = storageRef(storage, "images/" + file.name);
+            this.random = Math.random();
+            const storageReference = storageRef(
+                storage,
+                "images/" + this.random + file.name
+            );
+            // Upload the file bytes to the storage reference and get a snapshot of the upload
             const snapshot = await uploadBytes(storageReference, file);
+
+            // Calculate the progress percentage
+            this.progress =
+                parseInt(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log("the progress" + this.progress);
+            // Log a message indicating the upload is complete, along with the snapshot details
             console.log("Uploaded a blob or file!", snapshot);
+
+            // Return a promise that resolves with the download URL of the uploaded file
             return getDownloadURL(snapshot.ref);
+        },
+        async delete_photo(image) {
+            const storage = getStorage();
+
+            // Create a reference to the file to delete
+            const desertRef = ref(storage, image);
+
+            // Delete the file
+            deleteObject(desertRef);
         },
         async Add_News() {
             try {
@@ -89,13 +115,13 @@ export const useNews = defineStore("News", {
                 console.error("Error adding document: ", error);
             }
         },
-        async delete_New(NewId) {
+        async delete_New(NewId, image) {
             try {
                 // Log before attempting to delete
                 console.log("Deleting New from Firestore:", NewId);
-
                 // Delete the document from Firestore
                 await deleteDoc(doc(db, "News", NewId));
+                this.delete_photo(image);
                 // Log after successful deletion
                 console.log("New deleted from Firestore successfully:", NewId);
                 // Find the index of the New in the News array

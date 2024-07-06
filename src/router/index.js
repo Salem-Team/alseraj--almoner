@@ -11,8 +11,10 @@ import admin_Dashboard from "../views/admin_Dashboard.vue";
 import Edit_profile from "../views/Edit_profile.vue";
 import Modifications from "../views/Modifications_admin.vue";
 import Add_News from "../views/Add_News.vue";
+import Add_job from "../views/Add_job.vue";
 import Photo_Gallery from "../views/Photo_Gallery.vue";
-
+import Add_admin from "../views/Add_admin.vue";
+import ChildDetails from "../views/ChildDetails.vue";
 const routes = [
     {
         path: "/",
@@ -31,6 +33,11 @@ const routes = [
         component: Parent_Dashboard,
     },
     {
+        path: "/ChildDetails/:id",
+        name: "ChildDetails",
+        component: ChildDetails,
+    },
+    {
         path: "/Student_Dashboard",
         name: "Student_Dashboard",
         component: Student_Dashboard,
@@ -44,6 +51,11 @@ const routes = [
         path: "/Add_News",
         name: "Add_News",
         component: Add_News,
+    },
+    {
+        path: "/Add_job",
+        name: "Add_job",
+        component: Add_job,
     },
     {
         path: "/admin_Dashboard",
@@ -76,6 +88,11 @@ const routes = [
         path: "/admin",
         name: "Admin",
         component: TheAdministrator,
+    },
+    {
+        path: "/Add_admin",
+        name: "Add_admin",
+        component: Add_admin,
     },
 ];
 

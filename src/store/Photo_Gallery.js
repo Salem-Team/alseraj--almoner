@@ -11,6 +11,8 @@ import { initializeApp } from "@firebase/app";
 import { getFirestore } from "firebase/firestore";
 import {
     getStorage,
+    ref,
+    deleteObject,
     ref as storageRef,
     uploadBytes,
     getDownloadURL,
@@ -39,10 +41,12 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
         party: [],
         news: [],
         tab: null,
+        progress: 0,
         Types: ["trip", "party", "news"],
         Photo: {
             image: null,
         },
+        random: 0,
     }),
     actions: {
         handletypes() {
@@ -56,13 +60,27 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
             }
         },
         async upload_Image(file) {
+            this.random = Math.random();
+            // Set File_Name to this.type (assuming this.type is defined elsewhere in your code)
             this.File_Name = this.type;
+
+            // Create a storage reference with the file name
             const storageReference = storageRef(
                 storage,
-                this.File_Name + "/" + file.name
+                this.File_Name + "/" + this.random + file.name
             );
+
+            // Upload the file bytes to the storage reference and get a snapshot of the upload
             const snapshot = await uploadBytes(storageReference, file);
+
+            // Calculate the progress percentage
+            this.progress =
+                parseInt(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log("the progress" + this.progress);
+            // Log a message indicating the upload is complete, along with the snapshot details
             console.log("Uploaded a blob or file!", snapshot);
+
+            // Return a promise that resolves with the download URL of the uploaded file
             return getDownloadURL(snapshot.ref);
         },
         async Add_Photos() {
@@ -103,13 +121,22 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
                 console.error("Error adding document: ", error);
             }
         },
-        async delete_Photo(PhotoId) {
+        async delete_photo(image) {
+            const storage = getStorage();
+
+            // Create a reference to the file to delete
+            const desertRef = ref(storage, image);
+
+            // Delete the file
+            deleteObject(desertRef);
+        },
+        async delete_Photo(PhotoId, image) {
             try {
                 // Log before attempting to delete
                 console.log("Deleting Photo from Firestore:", PhotoId);
-
                 // Delete the document from Firestore
                 await deleteDoc(doc(db, "Photos", PhotoId));
+                this.delete_photo(image);
                 // Log after successful deletion
                 console.log(
                     "Photo deleted from Firestore successfully:",
@@ -149,6 +176,15 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
                     this.news.push(Photo);
                 }
             });
+        },
+        onFileChange(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Convert file to a URL that can be used as an image source
+                this.Photo.image = URL.createObjectURL(file);
+            } else {
+                this.Photo.image = null;
+            }
         },
     },
 });
