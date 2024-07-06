@@ -9,7 +9,7 @@
                             :key="index"
                             :to="{
                                 name: 'classPage',
-                                params: { year: clas.id },
+                                params: { year: clas.fullName },
                             }"
                         >
                             <v-list-item-content
@@ -68,19 +68,20 @@ export default {
         return {
             students_class: [],
             classes: [
-                { id: 1, fullName: "ثالثه ثانوي" },
-                { id: 2, fullName: "ثانية ثانوي" },
-                { id: 3, fullName: "أولى ثانوي" },
-                { id: 4, fullName: "ثالثة إعدادي" },
-                { id: 5, fullName: "ثانية إعدادي" },
-                { id: 6, fullName: "أولى إعدادي" },
-                { id: 7, fullName: "سادس ابتدائي" },
-                { id: 8, fullName: "خامس ابتدائي" },
-                { id: 9, fullName: "رابع ابتدائي" },
-                { id: 10, fullName: "ثالث ابتدائي" },
-                { id: 11, fullName: "ثاني ابتدائي" },
-                { id: 12, fullName: "أولى ابتدائي" },
-                { id: 13, fullName: "روضة أولى" },
+                { id: 1, fullName: "الصف الثالث الثانوي" },
+                { id: 2, fullName: "الصف الثاني الثانوي" },
+                { id: 3, fullName: " الصف أولى ثانوي" },
+                { id: 4, fullName: "الصف الثالث الاعدادي" },
+                { id: 5, fullName: "الصف الثاني الاعدادي" },
+                { id: 6, fullName: "الصف الاول الاعدادي" },
+                { id: 7, fullName: "الصف السادس الابتدائي" },
+                { id: 8, fullName: "الصف الخامس الابتدائي" },
+                { id: 9, fullName: "الصف الرابع الابتدائي" },
+                { id: 10, fullName: "الصف الثالث الابتدائي" },
+                { id: 11, fullName: "الصف الثاني الابتدائي" },
+                { id: 12, fullName: "الصف الاول الابتدائي" },
+                { id: 13, fullName: "ثانيه روضه" },
+                { id: 14, fullName: " اولي روضه" },
             ],
             dialog_addstudent: false,
             form: {

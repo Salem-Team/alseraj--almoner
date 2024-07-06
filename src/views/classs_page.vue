@@ -5,7 +5,7 @@
                 <v-col>
                     <div class="ser">
                         <div class="right">
-                            <div>الطلاب</div>
+                            <div>{{ year }}</div>
                         </div>
                         <div
                             class="left"
@@ -27,6 +27,33 @@
                             />
                         </div>
                     </div>
+                </v-col>
+            </v-row>
+            <v-row>
+                <v-col cols="12" md="4" sm="6">
+                    <v-btn
+                        style="background: #54aef5; color: white"
+                        rounded="xl"
+                        size="x-large"
+                        block
+                        >الكل</v-btn
+                    > </v-col
+                ><v-col cols="12" md="4" sm="6">
+                    <v-btn
+                        style="background: #54aef5; color: white"
+                        rounded="xl"
+                        size="x-large"
+                        block
+                        >عربي</v-btn
+                    > </v-col
+                ><v-col cols="12" md="4" sm="6">
+                    <v-btn
+                        style="background: #54aef5; color: white"
+                        rounded="xl"
+                        size="x-large"
+                        block
+                        >لغات</v-btn
+                    >
                 </v-col>
             </v-row>
         </v-container>
