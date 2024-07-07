@@ -12,21 +12,34 @@
                         </v-breadcrumbs-item>
                         <v-breadcrumbs-divider />
                         <v-breadcrumbs-item
-                            @click="$router.push('/Modifications')"
-                            link
-                        >
-                            الإعدادات
-                        </v-breadcrumbs-item>
-                        <v-breadcrumbs-divider />
-                        <v-breadcrumbs-item
                             @click="$router.push('/Add_Job')"
                             link
                         >
-                            الأخبار
+                            الوظائف
                         </v-breadcrumbs-item>
                     </v-breadcrumbs>
                 </div>
                 <div class="left">
+                    <v-menu>
+                        <template v-slot:activator="{ props }">
+                            <v-badge color="error" :content="jobs.counter">
+                                <v-icon class="icon" v-bind="props"
+                                    >mdi-bell-outline</v-icon
+                                >
+                            </v-badge>
+                        </template>
+                        <v-list>
+                            <v-list-item
+                                v-for="index in jobs.counter"
+                                :key="index"
+                                @click="jobs.counter = 0"
+                            >
+                                <v-list-item-title
+                                    >{{ jobs.text }}
+                                </v-list-item-title>
+                            </v-list-item>
+                        </v-list>
+                    </v-menu>
                     <font-awesome-icon
                         @click="dialog = true"
                         :icon="['fas', 'plus']"
@@ -68,6 +81,8 @@
                         class="d-flex align-center mt-4 mb-10"
                         type="submit"
                         color="primary"
+                        :loading="loading"
+                        :disabled="loading"
                         @click="jobs.Add_Jobs"
                     >
                         نشر
@@ -109,7 +124,9 @@
                         class="d-flex align-center mt-4 mb-10"
                         type="submit"
                         color="primary"
-                        @click="jobs.Update_Jobs(Jobs.Id_Information)"
+                        :loading="loading"
+                        :disabled="loading"
+                        @click="jobs.Update_Jobs(jobs.Id_Information)"
                     >
                         تعديل
                     </v-btn>
@@ -176,6 +193,13 @@
                             </v-card-title>
                             <form ref="form" @submit.prevent class="ma-auto">
                                 <v-text-field
+                                    v-model="jobs.Apply.title"
+                                    type="text"
+                                    label="الوظيفة"
+                                    variant="outlined"
+                                    required
+                                ></v-text-field>
+                                <v-text-field
                                     v-model="jobs.Apply.name"
                                     type="text"
                                     label="الاسم"
@@ -206,12 +230,26 @@
                                     @click="jobs.upload_CV"
                                 >
                                 </v-file-input>
+                                <v-textarea
+                                    v-model="jobs.Apply.description"
+                                    label="وصف قصير"
+                                    variant="outlined"
+                                    required
+                                    :maxlength="150"
+                                ></v-textarea>
 
+                                <v-slider
+                                    v-model="jobs.Apply.description.length"
+                                    :max="150"
+                                    thumb-label="always"
+                                ></v-slider>
                                 <v-btn
                                     class="d-flex align-center mt-4 mb-10"
                                     type="submit"
                                     color="primary"
-                                    @click="jobs.Add_Apply(jobs.Id_Information)"
+                                    :loading="loading"
+                                    :disabled="loading"
+                                    @click="jobs.Add_Apply()"
                                 >
                                     تقديم
                                 </v-btn>
@@ -220,16 +258,28 @@
                     >
                     <v-expansion-panels>
                         <v-expansion-panel
-                            v-for="Apply in applies"
-                            :key="Apply.id"
-                            :title="Apply.name"
-                            :text="Apply.email"
+                            title="التقديمات"
+                            @click="
+                                jobs.Job_Information(Job),
+                                    jobs.Get_applies(jobs.Title_Information)
+                            "
                         >
                             <v-expansion-panel-text>
-                                {{ Apply.phone }}
-                            </v-expansion-panel-text>
-                            <v-expansion-panel-text>
-                                <a :href="Apply.CV">CV</a>
+                                <v-expansion-panels>
+                                    <v-expansion-panel
+                                        v-for="Apply in apply"
+                                        :key="Apply.id"
+                                        :title="Apply.name"
+                                        :text="Apply.email"
+                                    >
+                                        <v-expansion-panel-text>
+                                            {{ Apply.phone }}
+                                        </v-expansion-panel-text>
+                                        <v-expansion-panel-text>
+                                            <a :href="Apply.CV">CV</a>
+                                        </v-expansion-panel-text>
+                                    </v-expansion-panel>
+                                </v-expansion-panels>
                             </v-expansion-panel-text>
                         </v-expansion-panel>
                     </v-expansion-panels>
@@ -247,12 +297,14 @@ export default defineComponent({
     setup() {
         const jobs = useJobs();
         jobs.Get_data();
+        jobs.Get_Apply_data();
         // Destructure reactive references and methods from Jobs store
         const {
             Job,
             Jobs,
             applies,
             Apply,
+            loading,
             Get_Apply_data,
             Add_Apply,
             Add_Jobs,
@@ -261,16 +313,27 @@ export default defineComponent({
             dialog_2,
             delete_Job,
             Get_data,
+            text,
             upload_CV,
             Job_Information,
             progress,
+            Get_applies,
+            slider_Value,
+            apply,
+            counter,
+            description_Length,
         } = storeToRefs(jobs);
 
         // Return the necessary reactive properties and methods
         return {
             Job,
+            loading,
             applies,
             Apply,
+            counter,
+            text,
+            Get_applies,
+            slider_Value,
             dialog_2,
             Get_Apply_data,
             Add_Apply,
@@ -281,10 +344,22 @@ export default defineComponent({
             upload_CV,
             Jobs,
             jobs,
+            apply,
             dialog,
             dialog_1,
             progress,
+            description_Length,
         };
+    },
+    watch: {
+        // Watch for changes in description length and update sliderValue
+        description_Length(new_Length) {
+            this.jobs.sliderValue = new_Length;
+        },
+        // Watch for changes in sliderValue and update description length
+        slider_Value(new_Value) {
+            this.jobs.Apply.description = new_Value;
+        },
     },
 });
 </script>
@@ -312,6 +387,7 @@ form {
             align-items: center;
             gap: 4px;
             &.left {
+                .icon,
                 svg {
                     cursor: pointer;
                     transition: 0.3s;
@@ -321,6 +397,9 @@ form {
                     &:hover {
                         color: var(--therd-color);
                     }
+                }
+                .icon {
+                    padding: 20px;
                 }
             }
         }

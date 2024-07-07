@@ -47,6 +47,7 @@ export const useNews = defineStore("News", {
             description: "",
         },
         random: 0,
+        loading: false,
     }),
     actions: {
         async upload_Image(file) {
@@ -79,6 +80,7 @@ export const useNews = defineStore("News", {
         },
         async Add_News() {
             try {
+                this.loading = true;
                 if (this.New.image) {
                     const imageUrl = await this.upload_Image(this.New.image);
                     // Get current local time
@@ -95,9 +97,11 @@ export const useNews = defineStore("News", {
                     });
                     console.log("Document written with ID: ", docRef.id);
                     this.Get_data();
+                    this.loading = false;
                     this.dialog = false;
                 } else {
                     console.error("No image selected.");
+                    this.loading = false;
                 }
             } catch (error) {
                 console.error("Error adding document: ", error);
@@ -150,6 +154,7 @@ export const useNews = defineStore("News", {
         },
         async Update_News(NewId) {
             try {
+                this.loading = true;
                 const currentTime = new Date().toLocaleString();
                 const docRef = doc(db, "News", NewId);
                 updateDoc(docRef, {
@@ -158,6 +163,7 @@ export const useNews = defineStore("News", {
                     time: currentTime,
                 });
                 this.Get_data();
+                this.loading = false;
                 this.dialog_1 = false;
             } catch (error) {
                 console.error("Error updating the New:", error);

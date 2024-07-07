@@ -160,6 +160,8 @@
                                             class="mt-2 mb-2"
                                             type="submit"
                                             color="primary"
+                                            :loading="loading"
+                                            :disabled="loading"
                                             @click="photos.Add_Photos"
                                         >
                                             إضافة
@@ -322,6 +324,7 @@ export default defineComponent({
         // Destructure reactive references and methods from Photos store
         const {
             Photo,
+            loading,
             Photos,
             Add_Photos,
             dialog,
@@ -342,6 +345,7 @@ export default defineComponent({
         // Return the necessary reactive properties and methods
         return {
             Photo,
+            loading,
             onFileChange,
             handletypes,
             Add_Photos,
