@@ -73,16 +73,22 @@
                     ></v-select>
                     <v-text-field
                         v-model="user.password"
-                        type="password"
+                        :type="admin.show_Password ? 'text' : 'password'"
                         label="كلمة مرور"
                         variant="outlined"
                         required
+                        :append-inner-icon="
+                            admin.show_Password ? 'mdi-eye' : 'mdi-eye-off'
+                        "
+                        @click:append-inner="admin.toggle_Show_Password"
                     ></v-text-field>
 
                     <v-btn
                         class="d-flex align-center mt-4 mb-10"
                         type="submit"
                         color="primary"
+                        :loading="loading"
+                        :disabled="loading"
                         @click="admin.add_admin"
                     >
                         إضافة
@@ -95,7 +101,7 @@
             <v-card width="100%" class="popup">
                 <v-card-title class="d-flex justify-space-between align-center">
                     <div class="text-h4 ps-2" style="color: var(--main-color)">
-                        إضافة مشرف
+                        تعديل بيانات مشرف
                     </div>
                     <v-btn
                         style="color: var(--main-color)"
@@ -123,7 +129,9 @@
                         class="d-flex align-center mt-4 mb-10"
                         type="submit"
                         color="primary"
-                        @click="admin.Update_admin"
+                        :loading="loading"
+                        :disabled="loading"
+                        @click="admin.Update_Admin(admin.Id_Information)"
                     >
                         تعديل
                     </v-btn>
@@ -177,21 +185,31 @@ export default defineComponent({
         const {
             user,
             add_admin,
+            toggle_Show_Password,
             dialog,
             delete_user,
             Get_data,
             users,
             role,
+            show_Password,
             dialog_1,
+            loading,
+            Update_Admin,
+            copy_Password,
             generate_Random_Password,
             user_Information,
         } = storeToRefs(admin);
         // Return the necessary reactive properties and methods
         return {
             admin,
+            loading,
             generate_Random_Password,
             user,
+            toggle_Show_Password,
             role,
+            copy_Password,
+            show_Password,
+            Update_Admin,
             delete_user,
             Get_data,
             user_Information,
