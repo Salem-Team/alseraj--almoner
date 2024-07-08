@@ -14,7 +14,7 @@ import {
     ref,
     deleteObject,
     ref as storageRef,
-    uploadBytes,
+    uploadBytesResumable,
     getDownloadURL,
 } from "firebase/storage";
 
@@ -72,11 +72,13 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
             );
 
             // Upload the file bytes to the storage reference and get a snapshot of the upload
-            const snapshot = await uploadBytes(storageReference, file);
+            const snapshot = await uploadBytesResumable(storageReference, file);
 
             // Calculate the progress percentage
-            this.progress =
-                parseInt(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            this.progress = (
+                (snapshot.bytesTransferred / snapshot.totalBytes) *
+                100
+            ).toFixed(2);
             console.log("the progress" + this.progress);
             // Log a message indicating the upload is complete, along with the snapshot details
             console.log("Uploaded a blob or file!", snapshot);
@@ -114,12 +116,14 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
         },
         async Get_data() {
             try {
+                this.loading = true;
                 this.Photos = [];
                 const querySnapshot = await getDocs(collection(db, "Photos"));
                 querySnapshot.forEach((doc) => {
                     this.Photos.push(doc.data());
                 });
                 console.log("this.Photos", this.Photos);
+                this.loading = false;
                 this.Type_Data();
             } catch (error) {
                 console.error("Error adding document: ", error);

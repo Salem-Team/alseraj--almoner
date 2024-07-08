@@ -1,5 +1,17 @@
 <template>
-    <div>
+    <img
+        style="
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 245px;
+        "
+        v-if="loading"
+        src="../assets/Spinner@1x-1.0s-200px-200px.svg"
+        alt=""
+    />
+    <div v-if="!loading">
         <div class="use">
             <div class="title">
                 <div class="right">
@@ -142,9 +154,16 @@
             class="box d-flex align-center justify-space-around"
             width="90%"
         >
-            <v-card v-for="user in users" :key="user.id" width="25%">
+            <v-card
+                v-for="user in users"
+                :key="user.id"
+                width="25%"
+                min-height="120"
+                class="job"
+                style="background-color: var(--secound-color)"
+            >
                 <v-card-title
-                    class="d-flex align-center justify-center flex-wrap"
+                    class="title d-flex align-center justify-center flex-wrap"
                 >
                     <p>{{ user.name }}</p>
                     <v-spacer />
@@ -162,7 +181,7 @@
                         />
                     </div>
                 </v-card-title>
-
+                <br />
                 <v-card-subtitle v-for="index in user.roles" :key="index">
                     {{ index }}
                 </v-card-subtitle>
@@ -228,6 +247,8 @@ form {
 }
 
 .use {
+    width: 95% !important;
+    margin: auto;
     .title {
         margin-top: 40px;
         background: var(--secound-color);
@@ -262,5 +283,38 @@ form {
 .box {
     flex-wrap: wrap;
     gap: 10px;
+}
+.job {
+    width: 25% !important;
+    margin-bottom: 10px;
+    .title {
+        background: var(--main-color);
+        padding: 10px 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 5px;
+        color: white;
+        font-weight: bold;
+        font-size: 20px;
+        & > div {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            &.left {
+                svg {
+                    color: var(--main-color);
+                    cursor: pointer;
+                    transition: 0.3s;
+                    background: #fff;
+                    padding: 10px;
+                    border-radius: 5px;
+                    &:hover {
+                        color: var(--therd-color);
+                    }
+                }
+            }
+        }
+    }
 }
 </style>

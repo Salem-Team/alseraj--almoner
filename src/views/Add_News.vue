@@ -1,5 +1,17 @@
 <template>
-    <div class="use">
+    <img
+        style="
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 245px;
+        "
+        v-if="loading"
+        src="../assets/Spinner@1x-1.0s-200px-200px.svg"
+        alt=""
+    />
+    <div class="use" v-if="!loading">
         <div class="title">
             <div class="right">
                 <v-breadcrumbs>
@@ -57,7 +69,7 @@
                         prepend-icon=""
                         required
                         prepend-inner-icon="mdi-paperclip"
-                        @click="news.upload_Image"
+                        @input="news.upload_Image"
                     >
                     </v-file-input>
                     <!-- Show progress bar if New.image is truthy (assuming New is a data property) -->
@@ -142,15 +154,20 @@
             class="box d-flex align-center justify-space-around"
             width="90%"
         >
-            <v-card v-for="New in News" :key="New.id" width="25%">
+            <v-card
+                v-for="New in News"
+                :key="New.id"
+                width="200"
+                max-width="25%"
+            >
                 <v-img :src="New.image" height="200" cover></v-img>
 
                 <v-card-title
-                    class="d-flex align-center justify-center flex-wrap"
+                    class="card_title d-flex justify-center flex-wrap"
                 >
                     <p>{{ New.title }}</p>
                     <v-spacer />
-                    <div class="ma-2">
+                    <div>
                         <font-awesome-icon
                             @click="news.New_Information(New)"
                             :icon="['fas', 'edit']"
@@ -169,7 +186,9 @@
                     {{ New.time }}
                 </v-card-subtitle>
 
-                <v-card-text>{{ New.description }} </v-card-text>
+                <v-card-text style="color: var(--main-color)"
+                    >{{ New.description }}
+                </v-card-text>
             </v-card>
         </v-container>
     </div>
@@ -223,6 +242,8 @@ form {
 }
 
 .use {
+    width: 95% !important;
+    margin: auto;
     .title {
         margin-top: 40px;
         background: var(--secound-color);
@@ -257,5 +278,26 @@ form {
 .box {
     flex-wrap: wrap;
     gap: 10px;
+}
+.card_title {
+    background: var(--secound-color);
+    margin-bottom: 15px;
+    color: var(--main-color);
+    p {
+        font-weight: bold;
+        font-size: 20px;
+    }
+    div {
+        padding-right: 5px;
+        svg {
+            padding: 5px 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 5px;
+            &:hover {
+                color: var(--therd-color);
+            }
+        }
+    }
 }
 </style>

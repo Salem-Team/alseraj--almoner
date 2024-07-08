@@ -114,12 +114,16 @@ export const useadmin = defineStore("admin", {
         },
         async Get_data() {
             try {
+                this.loading = true;
                 this.users = [];
                 const querySnapshot = await getDocs(collection(db, "users"));
                 querySnapshot.forEach((doc) => {
-                    this.users.push(doc.data());
+                    if (doc.data().userType == "admin") {
+                        this.users.push(doc.data());
+                    }
                 });
                 console.log("this.Users", this.users);
+                this.loading = false;
             } catch (error) {
                 console.error("Error adding document: ", error);
             }
