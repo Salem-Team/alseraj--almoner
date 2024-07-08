@@ -1,5 +1,17 @@
 <template>
-    <div>
+    <img
+        style="
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 245px;
+        "
+        v-if="loading"
+        src="../assets/Spinner@1x-1.0s-200px-200px.svg"
+        alt=""
+    />
+    <div v-if="!loading">
         <div class="use">
             <div class="title">
                 <div class="right">
@@ -108,6 +120,7 @@
                                                 width="100%"
                                                 prepend-inner-icon="mdi-paperclip"
                                                 @change="photos.onFileChange"
+                                                @input="photos.upload_Image"
                                                 required
                                             >
                                             </v-file-input>
@@ -159,7 +172,12 @@
                                         <v-btn
                                             class="mt-2 mb-2"
                                             type="submit"
-                                            color="primary"
+                                            style="
+                                                background-color: var(
+                                                    --main-color
+                                                );
+                                                color: white;
+                                            "
                                             :loading="loading"
                                             :disabled="loading"
                                             @click="photos.Add_Photos"
@@ -175,11 +193,21 @@
 
                 <!-- Section 2: Display Photos -->
                 <v-window-item :value="2">
-                    <v-card min-height="400">
-                        <v-tabs v-model="tab" bg-color="primary">
-                            <v-tab value="party">Party</v-tab>
-                            <v-tab value="news">News</v-tab>
-                            <v-tab value="trip">Trip</v-tab>
+                    <v-card
+                        min-height="400"
+                        width="95% !important"
+                        style="margin: auto; margin-top: 20px"
+                    >
+                        <v-tabs
+                            v-model="tab"
+                            style="
+                                background-color: var(--main-color);
+                                color: white;
+                            "
+                        >
+                            <v-tab value="party">حفلات</v-tab>
+                            <v-tab value="news">أخبار</v-tab>
+                            <v-tab value="trip">رحلات</v-tab>
                         </v-tabs>
 
                         <v-card-text>
@@ -192,7 +220,8 @@
                                         <v-card
                                             v-for="photo in party"
                                             :key="photo.id"
-                                            width="25%"
+                                            width="200px"
+                                            max-width="25%"
                                         >
                                             <v-fab
                                                 icon="mdi-delete"
@@ -225,7 +254,8 @@
                                         <v-card
                                             v-for="photo in news"
                                             :key="photo.id"
-                                            width="25%"
+                                            width="200px"
+                                            max-width="25%"
                                         >
                                             <v-fab
                                                 icon="mdi-delete"
@@ -258,7 +288,8 @@
                                         <v-card
                                             v-for="photo in trip"
                                             :key="photo.id"
-                                            width="25%"
+                                            width="200px"
+                                            max-width="25%"
                                         >
                                             <v-fab
                                                 icon="mdi-delete"
@@ -408,6 +439,8 @@ form {
 }
 
 .use {
+    width: 95% !important;
+    margin: auto;
     .title {
         margin-top: 40px;
         background: var(--secound-color);
@@ -438,5 +471,9 @@ form {
             }
         }
     }
+}
+.box {
+    flex-wrap: wrap;
+    gap: 10px;
 }
 </style>

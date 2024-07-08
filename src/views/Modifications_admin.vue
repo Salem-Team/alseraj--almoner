@@ -52,6 +52,8 @@ export default {
 </script>
 <style scoped>
 .right {
+    width: 95% !important;
+    margin: auto;
     margin-top: 40px;
     background: var(--secound-color);
     padding: 15px 20px;

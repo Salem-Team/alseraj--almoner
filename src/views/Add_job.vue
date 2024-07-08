@@ -1,5 +1,17 @@
 <template>
-    <div>
+    <img
+        style="
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 245px;
+        "
+        v-if="jobs.loading"
+        src="../assets/Spinner@1x-1.0s-200px-200px.svg"
+        alt=""
+    />
+    <div v-if="!jobs.loading">
         <div class="use">
             <div class="title">
                 <div class="right">
@@ -22,20 +34,28 @@
                 <div class="left">
                     <v-menu>
                         <template v-slot:activator="{ props }">
-                            <v-badge color="error" :content="jobs.counter">
-                                <v-icon class="icon" v-bind="props"
+                            <v-badge
+                                color="error"
+                                :content="jobs.counter.counter"
+                            >
+                                <v-icon
+                                    class="icon"
+                                    v-bind="props"
+                                    @click="jobs.Update_counter"
                                     >mdi-bell-outline</v-icon
                                 >
                             </v-badge>
                         </template>
                         <v-list>
                             <v-list-item
-                                v-for="index in jobs.counter"
-                                :key="index"
-                                @click="jobs.counter = 0"
+                                v-for="notification in notifications"
+                                :key="notification.id"
+                                @click="
+                                    jobs.delete_notifications(notification.id)
+                                "
                             >
                                 <v-list-item-title
-                                    >{{ jobs.text }}
+                                    >{{ notification.text }}
                                 </v-list-item-title>
                             </v-list-item>
                         </v-list>
@@ -133,132 +153,49 @@
                 </form>
             </v-card></v-dialog
         >
-        <v-container
-            class="box d-flex align-center justify-space-around"
-            width="90%"
-        >
-            <v-card v-for="Job in Jobs" :key="Job.id" width="25%">
+        <div class="box">
+            <v-card v-for="Job in Jobs" :key="Job.id" width="100%" class="job">
                 <v-card-title
-                    class="d-flex align-center justify-center flex-wrap"
+                    class="title d-flex align-center justify-center flex-wrap"
                 >
                     <p>{{ Job.title }}</p>
                     <v-spacer />
-                    <div class="ma-2">
+                    <div class="left">
                         <font-awesome-icon
                             @click="jobs.Job_Information(Job)"
                             :icon="['fas', 'edit']"
                             @click.="dialog_1 = true"
                         />
                     </div>
-                    <div>
+                    <div class="left">
                         <font-awesome-icon
                             @click="jobs.delete_Job(Job.id, Job.CV)"
                             :icon="['fas', 'trash']"
                         />
                     </div>
                 </v-card-title>
-
+                <br />
                 <v-card-subtitle>
                     {{ Job.time }}
                 </v-card-subtitle>
 
-                <v-card-text
-                    ><p>{{ Job.description }}</p>
-                    <v-btn
-                        class="!m-auto !text-center mt-2 mb-4"
-                        color="primary"
-                        @click="
-                            (jobs.dialog_2 = true), jobs.Job_Information(Job)
-                        "
-                    >
-                        التقديم على الوظيفة</v-btn
-                    >
-                    <v-dialog v-model="dialog_2" width="90%">
-                        <v-card width="100%" class="popup">
-                            <v-card-title
-                                class="d-flex justify-space-between align-center"
-                            >
-                                <div
-                                    class="text-h4 ps-2"
-                                    style="color: var(--main-color)"
-                                >
-                                    التقديم على الوظيفة
-                                </div>
-                                <v-btn
-                                    style="color: var(--main-color)"
-                                    icon="mdi-close"
-                                    variant="text"
-                                    @click="dialog_2 = false"
-                                ></v-btn>
-                            </v-card-title>
-                            <form ref="form" @submit.prevent class="ma-auto">
-                                <v-text-field
-                                    v-model="jobs.Apply.title"
-                                    type="text"
-                                    label="الوظيفة"
-                                    variant="outlined"
-                                    required
-                                ></v-text-field>
-                                <v-text-field
-                                    v-model="jobs.Apply.name"
-                                    type="text"
-                                    label="الاسم"
-                                    variant="outlined"
-                                    required
-                                ></v-text-field>
-                                <v-text-field
-                                    v-model="jobs.Apply.email"
-                                    type="email"
-                                    label="البريد الالكتروني"
-                                    variant="outlined"
-                                    required
-                                ></v-text-field>
-                                <v-text-field
-                                    v-model="jobs.Apply.phone"
-                                    type="text"
-                                    label="التليفون"
-                                    variant="outlined"
-                                    required
-                                ></v-text-field>
-                                <v-file-input
-                                    v-model="jobs.Apply.CV"
-                                    label="السيرة الذاتية"
-                                    variant="outlined"
-                                    prepend-icon=""
-                                    required
-                                    prepend-inner-icon="mdi-paperclip"
-                                    @click="jobs.upload_CV"
-                                >
-                                </v-file-input>
-                                <v-textarea
-                                    v-model="jobs.Apply.description"
-                                    label="وصف قصير"
-                                    variant="outlined"
-                                    required
-                                    :maxlength="150"
-                                ></v-textarea>
+                <v-card-text>
+                    <p class="mb-2" style="color: var(--therd-color)">
+                        متطلبات العمل :
+                    </p>
+                    <p class="mb-4">{{ Job.description }}</p>
 
-                                <v-slider
-                                    v-model="jobs.Apply.description.length"
-                                    :max="150"
-                                    thumb-label="always"
-                                ></v-slider>
-                                <v-btn
-                                    class="d-flex align-center mt-4 mb-10"
-                                    type="submit"
-                                    color="primary"
-                                    :loading="loading"
-                                    :disabled="loading"
-                                    @click="jobs.Add_Apply()"
-                                >
-                                    تقديم
-                                </v-btn>
-                            </form>
-                        </v-card></v-dialog
-                    >
                     <v-expansion-panels>
                         <v-expansion-panel
                             title="التقديمات"
+                            style="
+                                background-color: var(
+                                    --secound-color
+                                ) !important;
+                                color: var(--main-color);
+                                font-weight: bold;
+                                font-size: 20px;
+                            "
                             @click="
                                 jobs.Job_Information(Job),
                                     jobs.Get_applies(jobs.Title_Information)
@@ -285,7 +222,7 @@
                     </v-expansion-panels>
                 </v-card-text>
             </v-card>
-        </v-container>
+        </div>
     </div>
 </template>
 
@@ -298,6 +235,7 @@ export default defineComponent({
         const jobs = useJobs();
         jobs.Get_data();
         jobs.Get_Apply_data();
+        jobs.Get_notifications_data();
         // Destructure reactive references and methods from Jobs store
         const {
             Job,
@@ -310,18 +248,18 @@ export default defineComponent({
             Add_Jobs,
             dialog,
             dialog_1,
-            dialog_2,
             delete_Job,
             Get_data,
+            notifications,
             text,
-            upload_CV,
+            Update_counter,
             Job_Information,
             progress,
             Get_applies,
-            slider_Value,
             apply,
             counter,
-            description_Length,
+            delete_notifications,
+            Get_notifications_data,
         } = storeToRefs(jobs);
 
         // Return the necessary reactive properties and methods
@@ -329,37 +267,27 @@ export default defineComponent({
             Job,
             loading,
             applies,
+            Update_counter,
+            delete_notifications,
+            Get_notifications_data,
             Apply,
             counter,
+            notifications,
             text,
             Get_applies,
-            slider_Value,
-            dialog_2,
             Get_Apply_data,
             Add_Apply,
             Add_Jobs,
             delete_Job,
             Job_Information,
             Get_data,
-            upload_CV,
             Jobs,
             jobs,
             apply,
             dialog,
             dialog_1,
             progress,
-            description_Length,
         };
-    },
-    watch: {
-        // Watch for changes in description length and update sliderValue
-        description_Length(new_Length) {
-            this.jobs.sliderValue = new_Length;
-        },
-        // Watch for changes in sliderValue and update description length
-        slider_Value(new_Value) {
-            this.jobs.Apply.description = new_Value;
-        },
     },
 });
 </script>
@@ -370,6 +298,8 @@ form {
 }
 
 .use {
+    width: 95% !important;
+    margin: auto;
     .title {
         margin-top: 40px;
         background: var(--secound-color);
@@ -405,8 +335,43 @@ form {
         }
     }
 }
+.job {
+    width: 100% !important;
+    margin-bottom: 10px;
+    .title {
+        background: var(--main-color);
+        padding: 10px 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 5px;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
+        font-size: 20px;
+        & > div {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            &.left {
+                svg {
+                    color: var(--main-color);
+                    cursor: pointer;
+                    transition: 0.3s;
+                    background: #fff;
+                    padding: 10px;
+                    border-radius: 5px;
+                    &:hover {
+                        color: var(--therd-color);
+                    }
+                }
+            }
+        }
+    }
+}
 .box {
-    flex-wrap: wrap;
-    gap: 10px;
+    width: 95% !important;
+    margin: 0 auto;
+    padding: 10px 0px;
 }
 </style>
