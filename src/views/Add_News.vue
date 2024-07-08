@@ -84,6 +84,8 @@
                         class="d-flex align-center mt-4 mb-10"
                         type="submit"
                         color="primary"
+                        :loading="loading"
+                        :disabled="loading"
                         @click="news.Add_News"
                     >
                         نشر
@@ -127,6 +129,8 @@
                         class="d-flex align-center mt-4 mb-10"
                         type="submit"
                         color="primary"
+                        :loading="loading"
+                        :disabled="loading"
                         @click="news.Update_News(news.Id_Information)"
                     >
                         تعديل
@@ -185,6 +189,7 @@ export default defineComponent({
             News,
             Add_News,
             dialog,
+            loading,
             dialog_1,
             delete_New,
             Get_data,
@@ -197,6 +202,7 @@ export default defineComponent({
         return {
             New,
             Add_News,
+            loading,
             delete_New,
             New_Information,
             Get_data,

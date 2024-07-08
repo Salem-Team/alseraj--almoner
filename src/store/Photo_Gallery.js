@@ -47,6 +47,7 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
             image: null,
         },
         random: 0,
+        loading: false,
     }),
     actions: {
         handletypes() {
@@ -85,6 +86,7 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
         },
         async Add_Photos() {
             try {
+                this.loading = true;
                 if (this.Photo.image) {
                     const imageUrl = await this.upload_Image(this.Photo.image);
                     // Get current local time
@@ -100,9 +102,11 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
                     });
                     console.log("Document written with ID: ", docRef.id);
                     this.Get_data();
+                    this.loading = false;
                     this.dialog = false;
                 } else {
                     console.error("No image selected.");
+                    this.loading = false;
                 }
             } catch (error) {
                 console.error("Error adding document: ", error);
