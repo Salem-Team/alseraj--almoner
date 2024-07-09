@@ -7,11 +7,11 @@
             transform: translate(-50%, -50%);
             width: 245px;
         "
-        v-if="loading"
+        v-if="loading1"
         src="../assets/Spinner@1x-1.0s-200px-200px.svg"
         alt=""
     />
-    <div v-if="!loading">
+    <div v-if="!loading1">
         <div class="use">
             <div class="title">
                 <div class="right">
@@ -120,7 +120,6 @@
                                                 width="100%"
                                                 prepend-inner-icon="mdi-paperclip"
                                                 @change="photos.onFileChange"
-                                                @input="photos.upload_Image"
                                                 required
                                             >
                                             </v-file-input>
@@ -156,7 +155,7 @@
                                         </label>
                                         <v-img
                                             v-if="photos.Photo.image"
-                                            :src="photos.Photo.image"
+                                            :src="photos.image"
                                             height="200"
                                         ></v-img>
                                         <v-select
@@ -230,12 +229,7 @@
                                                 absolute
                                                 style="bottom: -15px; left: 5px"
                                                 offset
-                                                @click="
-                                                    photos.delete_Photo(
-                                                        photo.id,
-                                                        photo.image
-                                                    )
-                                                "
+                                                @click="photos.dailog_3 = true"
                                             ></v-fab>
                                             <v-img
                                                 :src="photo.image"
@@ -264,12 +258,7 @@
                                                 absolute
                                                 style="bottom: -15px; left: 5px"
                                                 offset
-                                                @click="
-                                                    photos.delete_Photo(
-                                                        photo.id,
-                                                        photo.image
-                                                    )
-                                                "
+                                                @click="photos.dailog_3 = true"
                                             ></v-fab>
                                             <v-img
                                                 :src="photo.image"
@@ -298,12 +287,7 @@
                                                 absolute
                                                 style="bottom: -15px; left: 5px"
                                                 offset
-                                                @click="
-                                                    photos.delete_Photo(
-                                                        photo.id,
-                                                        photo.image
-                                                    )
-                                                "
+                                                @click="photos.dailog_3 = true"
                                             ></v-fab>
                                             <v-img
                                                 :src="photo.image"
@@ -342,6 +326,45 @@
             </v-card-actions>
         </v-card>
     </div>
+    <v-dialog v-model="photos.dailog_3" width="90%">
+        <v-card width="100%" class="popup">
+            <v-card-title class="d-flex justify-space-between align-center">
+                <div class="text-h4 ps-2" style="color: var(--main-color)">
+                    حذف
+                </div>
+                <v-btn
+                    style="color: var(--main-color)"
+                    icon="mdi-close"
+                    variant="text"
+                    @click="photos.dailog_3 = false"
+                ></v-btn>
+            </v-card-title>
+            <v-card-text>
+                <p>تأكيد الحذف</p>
+                <div class="d-flex align-center mt-4">
+                    <v-btn
+                        type="submit"
+                        color="primary"
+                        :loading="loading"
+                        :disabled="loading"
+                        @click="photos.dailog_3 = false"
+                    >
+                        إلغاء
+                    </v-btn>
+                    <v-spacer />
+                    <v-btn
+                        type="submit"
+                        color="error"
+                        :loading="loading"
+                        :disabled="loading"
+                        @click="photos.delete_Photo(photo.id, photo.image)"
+                    >
+                        تأكيد
+                    </v-btn>
+                </div>
+            </v-card-text>
+        </v-card></v-dialog
+    >
 </template>
 
 <script>
@@ -355,6 +378,7 @@ export default defineComponent({
         // Destructure reactive references and methods from Photos store
         const {
             Photo,
+            dialog_3,
             loading,
             Photos,
             Add_Photos,
@@ -365,7 +389,9 @@ export default defineComponent({
             type,
             Types,
             handletypes,
+            loading1,
             tab,
+            image,
             onFileChange,
             trip,
             progress,
@@ -376,8 +402,11 @@ export default defineComponent({
         // Return the necessary reactive properties and methods
         return {
             Photo,
+            dialog_3,
             loading,
             onFileChange,
+            loading1,
+            image,
             handletypes,
             Add_Photos,
             delete_Photo,

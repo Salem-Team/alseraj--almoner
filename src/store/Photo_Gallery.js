@@ -14,7 +14,7 @@ import {
     ref,
     deleteObject,
     ref as storageRef,
-    uploadBytesResumable,
+    uploadBytes,
     getDownloadURL,
 } from "firebase/storage";
 
@@ -34,12 +34,14 @@ const storage = getStorage(app);
 export const usePhoto_Gallery = defineStore("Photo_Gallery", {
     state: () => ({
         dialog: false,
+        dialog_3: false,
         File_Name: "",
         type: "",
         Photos: [],
         trip: [],
         party: [],
         news: [],
+        image: null,
         tab: null,
         progress: 0,
         Types: ["trip", "party", "news"],
@@ -48,6 +50,7 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
         },
         random: 0,
         loading: false,
+        loading1: false,
     }),
     actions: {
         handletypes() {
@@ -62,24 +65,16 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
         },
         async upload_Image(file) {
             this.random = Math.random();
-            // Set File_Name to this.type (assuming this.type is defined elsewhere in your code)
-            this.File_Name = this.type;
-
             // Create a storage reference with the file name
             const storageReference = storageRef(
                 storage,
                 this.File_Name + "/" + this.random + file.name
             );
-
             // Upload the file bytes to the storage reference and get a snapshot of the upload
-            const snapshot = await uploadBytesResumable(storageReference, file);
-
+            const snapshot = await uploadBytes(storageReference, file);
             // Calculate the progress percentage
-            this.progress = (
-                (snapshot.bytesTransferred / snapshot.totalBytes) *
-                100
-            ).toFixed(2);
-            console.log("the progress" + this.progress);
+            this.progress =
+                parseInt(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             // Log a message indicating the upload is complete, along with the snapshot details
             console.log("Uploaded a blob or file!", snapshot);
 
@@ -116,14 +111,14 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
         },
         async Get_data() {
             try {
-                this.loading = true;
+                this.loading1 = true;
                 this.Photos = [];
                 const querySnapshot = await getDocs(collection(db, "Photos"));
                 querySnapshot.forEach((doc) => {
                     this.Photos.push(doc.data());
                 });
                 console.log("this.Photos", this.Photos);
-                this.loading = false;
+                this.loading1 = false;
                 this.Type_Data();
             } catch (error) {
                 console.error("Error adding document: ", error);
@@ -189,9 +184,9 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
             const file = event.target.files[0];
             if (file) {
                 // Convert file to a URL that can be used as an image source
-                this.Photo.image = URL.createObjectURL(file);
+                this.image = URL.createObjectURL(file);
             } else {
-                this.Photo.image = null;
+                this.image = null;
             }
         },
     },

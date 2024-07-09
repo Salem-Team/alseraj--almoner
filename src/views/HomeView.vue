@@ -7,11 +7,11 @@
             transform: translate(-50%, -50%);
             width: 245px;
         "
-        v-if="loading"
+        v-if="loading1"
         src="../assets/Spinner@1x-1.0s-200px-200px.svg"
         alt=""
     />
-    <div v-if="!loading">
+    <div v-if="!loading1">
         <div class="use">
             <div class="title">
                 <div class="right">الوظائف</div>
@@ -133,7 +133,7 @@
                                     color="primary"
                                     :loading="loading"
                                     :disabled="loading"
-                                    @click="jobs.Add_Apply()"
+                                    @click="jobs.Add_Apply(jobs.Id_Information)"
                                 >
                                     تقديم
                                 </v-btn>
@@ -171,6 +171,7 @@ export default defineComponent({
             Get_data,
             Jobs,
             apply,
+            loading1,
         } = storeToRefs(jobs);
 
         // Return the necessary reactive properties and methods
@@ -190,6 +191,7 @@ export default defineComponent({
             Jobs,
             jobs,
             apply,
+            loading1,
         };
     },
 });

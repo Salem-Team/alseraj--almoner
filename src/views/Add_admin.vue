@@ -7,11 +7,11 @@
             transform: translate(-50%, -50%);
             width: 245px;
         "
-        v-if="loading"
+        v-if="loading1"
         src="../assets/Spinner@1x-1.0s-200px-200px.svg"
         alt=""
     />
-    <div v-if="!loading">
+    <div v-if="!loading1">
         <div class="use">
             <div class="title">
                 <div class="right">
@@ -137,6 +137,15 @@
                         variant="outlined"
                         required
                     ></v-text-field>
+                    <v-select
+                        style="width: 100%"
+                        v-model="admin.roles_Information"
+                        :items="admin.role"
+                        label="أختر نوع الصلاحية"
+                        variant="outlined"
+                        multiple
+                        required
+                    ></v-select>
                     <v-btn
                         class="d-flex align-center mt-4 mb-10"
                         type="submit"
@@ -176,7 +185,7 @@
                     </div>
                     <div>
                         <font-awesome-icon
-                            @click="admin.delete_user(user.id)"
+                            @click="admin.dailog_3 = true"
                             :icon="['fas', 'trash']"
                         />
                     </div>
@@ -190,6 +199,45 @@
             </v-card>
         </v-container>
     </div>
+    <v-dialog v-model="admin.dailog_3" width="90%">
+        <v-card width="100%" class="popup">
+            <v-card-title class="d-flex justify-space-between align-center">
+                <div class="text-h4 ps-2" style="color: var(--main-color)">
+                    حذف
+                </div>
+                <v-btn
+                    style="color: var(--main-color)"
+                    icon="mdi-close"
+                    variant="text"
+                    @click="admin.dailog_3 = false"
+                ></v-btn>
+            </v-card-title>
+            <v-card-text>
+                <p>تأكيد الحذف</p>
+                <div class="d-flex align-center mt-4">
+                    <v-btn
+                        type="submit"
+                        color="primary"
+                        :loading="loading"
+                        :disabled="loading"
+                        @click="admin.dailog_3 = false"
+                    >
+                        إلغاء
+                    </v-btn>
+                    <v-spacer />
+                    <v-btn
+                        type="submit"
+                        color="error"
+                        :loading="loading"
+                        :disabled="loading"
+                        @click="admin.delete_user(user.id)"
+                    >
+                        تأكيد
+                    </v-btn>
+                </div>
+            </v-card-text>
+        </v-card></v-dialog
+    >
 </template>
 
 <script scoped>
@@ -206,12 +254,14 @@ export default defineComponent({
             add_admin,
             toggle_Show_Password,
             dialog,
+            dialog_3,
             delete_user,
             Get_data,
             users,
             role,
             show_Password,
             dialog_1,
+            loading1,
             loading,
             Update_Admin,
             copy_Password,
@@ -222,6 +272,8 @@ export default defineComponent({
         return {
             admin,
             loading,
+            loading1,
+            dialog_3,
             generate_Random_Password,
             user,
             toggle_Show_Password,
