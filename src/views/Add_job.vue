@@ -7,11 +7,11 @@
             transform: translate(-50%, -50%);
             width: 245px;
         "
-        v-if="jobs.loading"
+        v-if="jobs.loading1"
         src="../assets/Spinner@1x-1.0s-200px-200px.svg"
         alt=""
     />
-    <div v-if="!jobs.loading">
+    <div v-if="!jobs.loading1">
         <div class="use">
             <div class="title">
                 <div class="right">
@@ -169,7 +169,7 @@
                     </div>
                     <div class="left">
                         <font-awesome-icon
-                            @click="jobs.delete_Job(Job.id, Job.CV)"
+                            @click="jobs.dailog_3 = true"
                             :icon="['fas', 'trash']"
                         />
                     </div>
@@ -185,9 +185,13 @@
                     </p>
                     <p class="mb-4">{{ Job.description }}</p>
 
-                    <v-expansion-panels>
+                    <v-expansion-panels
+                        @click="
+                            jobs.Job_Information(Job),
+                                jobs.Get_applies(jobs.Title_Information)
+                        "
+                    >
                         <v-expansion-panel
-                            title="التقديمات"
                             style="
                                 background-color: var(
                                     --secound-color
@@ -196,11 +200,9 @@
                                 font-weight: bold;
                                 font-size: 20px;
                             "
-                            @click="
-                                jobs.Job_Information(Job),
-                                    jobs.Get_applies(jobs.Title_Information)
-                            "
-                        >
+                            ><v-expansion-panel-title>
+                                التقديمات({{ Job.applies.length || 0 }})
+                            </v-expansion-panel-title>
                             <v-expansion-panel-text>
                                 <v-expansion-panels>
                                     <v-expansion-panel
@@ -224,6 +226,45 @@
             </v-card>
         </div>
     </div>
+    <v-dialog v-model="jobs.dailog_3" width="90%">
+        <v-card width="100%" class="popup">
+            <v-card-title class="d-flex justify-space-between align-center">
+                <div class="text-h4 ps-2" style="color: var(--main-color)">
+                    حذف
+                </div>
+                <v-btn
+                    style="color: var(--main-color)"
+                    icon="mdi-close"
+                    variant="text"
+                    @click="jobs.dailog_3 = false"
+                ></v-btn>
+            </v-card-title>
+            <v-card-text>
+                <p>تأكيد الحذف</p>
+                <div class="d-flex align-center mt-4">
+                    <v-btn
+                        type="submit"
+                        color="primary"
+                        :loading="loading"
+                        :disabled="loading"
+                        @click="jobs.dailog_3 = false"
+                    >
+                        إلغاء
+                    </v-btn>
+                    <v-spacer />
+                    <v-btn
+                        type="submit"
+                        color="error"
+                        :loading="loading"
+                        :disabled="loading"
+                        @click="jobs.delete_Job(Job.id, Job.CV)"
+                    >
+                        تأكيد
+                    </v-btn>
+                </div>
+            </v-card-text>
+        </v-card></v-dialog
+    >
 </template>
 
 <script>
@@ -240,6 +281,7 @@ export default defineComponent({
         const {
             Job,
             Jobs,
+            dialog_3,
             applies,
             Apply,
             loading,
@@ -256,6 +298,7 @@ export default defineComponent({
             Job_Information,
             progress,
             Get_applies,
+            loading1,
             apply,
             counter,
             delete_notifications,
@@ -265,6 +308,8 @@ export default defineComponent({
         // Return the necessary reactive properties and methods
         return {
             Job,
+            dialog_3,
+            loading1,
             loading,
             applies,
             Update_counter,

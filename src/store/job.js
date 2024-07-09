@@ -5,6 +5,7 @@ import {
     getDocs,
     updateDoc,
     deleteDoc,
+    arrayUnion,
     doc,
 } from "@firebase/firestore";
 import { initializeApp } from "@firebase/app";
@@ -36,15 +37,18 @@ export const useJobs = defineStore("job", {
         dialog: false,
         dialog_1: false,
         dialog_2: false,
+        dialog_3: false,
         name_Information: "",
         email_Information: "",
         phone_Information: "",
         CV_Information: null,
+        applies_Information: [],
         progress: 0,
         Jobs: [],
         Job: {
             title: "",
             description: "",
+            applies: [],
         },
         Apply: {
             name: "",
@@ -61,6 +65,7 @@ export const useJobs = defineStore("job", {
         text: "",
         counter: [],
         loading: false,
+        loading1: false,
     }),
     actions: {
         async upload_CV(file) {
@@ -93,7 +98,7 @@ export const useJobs = defineStore("job", {
             // Delete the file
             deleteObject(desertRef);
         },
-        async Add_Apply() {
+        async Add_Apply(JobId) {
             try {
                 this.loading = true;
                 if (this.Apply.CV) {
@@ -116,6 +121,13 @@ export const useJobs = defineStore("job", {
                         applyData
                     );
                     console.log("Document written with ID: ", docRef.id);
+                    // Step 4: Update the corresponding "Jobs" document with the new apply information
+                    const jobRef = doc(db, "Jobs", JobId);
+                    await updateDoc(jobRef, {
+                        applies: arrayUnion(docRef.id),
+                        // Assuming you want to store apply document IDs in the "Jobs" document
+                    });
+                    console.log("Updated Job document with apply information.");
                     // Step 5: Update the Apply document with its own ID (optional)
                     await updateDoc(docRef, {
                         id: docRef.id,
@@ -169,7 +181,9 @@ export const useJobs = defineStore("job", {
                     title: this.Job.title,
                     description: this.Job.description,
                     time: currentTime,
+                    applies: this.Job.applies,
                 });
+                console.log("Apply document updated with ID: ", docRef.id);
                 await updateDoc(docRef, {
                     id: docRef.id,
                 });
@@ -183,14 +197,14 @@ export const useJobs = defineStore("job", {
         },
         async Get_Apply_data() {
             try {
-                this.loading = true;
+                this.loading1 = true;
                 this.applies = []; // Initialize applies array
                 const querySnapshot = await getDocs(collection(db, "Apply"));
                 querySnapshot.forEach((doc) => {
                     this.applies.push(doc.data());
                 });
                 console.log("applies", this.applies);
-                this.loading = false;
+                this.loading1 = false;
             } catch (error) {
                 console.error("Error retrieving data:", error);
             }
@@ -242,14 +256,14 @@ export const useJobs = defineStore("job", {
         },
         async Get_data() {
             try {
-                this.loading = true;
+                this.loading1 = true;
                 this.Jobs = [];
                 const querySnapshot = await getDocs(collection(db, "Jobs"));
                 querySnapshot.forEach((doc) => {
                     this.Jobs.push(doc.data());
                 });
                 console.log("this.Jobs", this.Jobs);
-                this.loading = false;
+                this.loading1 = false;
             } catch (error) {
                 console.error("Error adding document: ", error);
             }
@@ -316,10 +330,16 @@ export const useJobs = defineStore("job", {
         },
         //get the data for each Job
         Job_Information(Job) {
+            this.name_Information = "";
+            this.email_Information = "";
+            this.phone_Information = "";
+            this.CV_Information = null;
+            this.applies_Information = [];
             this.Title_Information = Job.title;
             this.Id_Information = Job.id;
             console.log(Job.id);
             this.Description_Information = Job.description;
+            this.applies_Information = Job.applies;
         },
         async Update_Jobs(JobId) {
             try {

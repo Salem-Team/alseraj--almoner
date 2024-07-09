@@ -7,11 +7,11 @@
             transform: translate(-50%, -50%);
             width: 245px;
         "
-        v-if="loading"
+        v-if="loading1"
         src="../assets/Spinner@1x-1.0s-200px-200px.svg"
         alt=""
     />
-    <div class="use" v-if="!loading">
+    <div class="use" v-if="!loading1">
         <div class="title">
             <div class="right">
                 <v-breadcrumbs>
@@ -176,7 +176,7 @@
                     </div>
                     <div>
                         <font-awesome-icon
-                            @click="news.delete_New(New.id, New.image)"
+                            @click="news.dailog_3 = true"
                             :icon="['fas', 'trash']"
                         />
                     </div>
@@ -192,6 +192,45 @@
             </v-card>
         </v-container>
     </div>
+    <v-dialog v-model="news.dailog_3" width="90%">
+        <v-card width="100%" class="popup">
+            <v-card-title class="d-flex justify-space-between align-center">
+                <div class="text-h4 ps-2" style="color: var(--main-color)">
+                    حذف
+                </div>
+                <v-btn
+                    style="color: var(--main-color)"
+                    icon="mdi-close"
+                    variant="text"
+                    @click="news.dailog_3 = false"
+                ></v-btn>
+            </v-card-title>
+            <v-card-text>
+                <p>تأكيد الحذف</p>
+                <div class="d-flex align-center mt-4">
+                    <v-btn
+                        type="submit"
+                        color="primary"
+                        :loading="loading"
+                        :disabled="loading"
+                        @click="news.dailog_3 = false"
+                    >
+                        إلغاء
+                    </v-btn>
+                    <v-spacer />
+                    <v-btn
+                        type="submit"
+                        color="error"
+                        :loading="loading"
+                        :disabled="loading"
+                        @click="news.delete_New(New.id, New.image)"
+                    >
+                        تأكيد
+                    </v-btn>
+                </div>
+            </v-card-text>
+        </v-card></v-dialog
+    >
 </template>
 
 <script>
@@ -206,9 +245,11 @@ export default defineComponent({
         const {
             New,
             News,
+            dialog_3,
             Add_News,
             dialog,
             loading,
+            loading1,
             dialog_1,
             delete_New,
             Get_data,
@@ -222,6 +263,8 @@ export default defineComponent({
             New,
             Add_News,
             loading,
+            dialog_3,
+            loading1,
             delete_New,
             New_Information,
             Get_data,

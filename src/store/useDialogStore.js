@@ -4,6 +4,7 @@ export const useDialogStore = defineStore("dialog", {
     state: () => ({
         dialog_addstudent: false,
         dialog_searchstudent: false,
+        dialog: false,
     }),
     actions: {
         showAddStudentDialog() {

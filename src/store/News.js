@@ -12,7 +12,7 @@ import { getFirestore } from "firebase/firestore";
 import {
     getStorage,
     ref,
-    uploadBytesResumable,
+    uploadBytes,
     getDownloadURL,
     deleteObject,
     ref as storageRef,
@@ -35,6 +35,7 @@ export const useNews = defineStore("News", {
     state: () => ({
         dialog: false,
         dialog_1: false,
+        dialog_3: false,
         Title_Information: "",
         Description_Information: "",
         Image_Information: null,
@@ -48,6 +49,7 @@ export const useNews = defineStore("News", {
         },
         random: 0,
         loading: false,
+        loading1: false,
     }),
     actions: {
         async upload_Image(file) {
@@ -57,23 +59,15 @@ export const useNews = defineStore("News", {
                 "images/" + this.random + file.name
             );
             // Upload the file bytes to the storage reference and get a snapshot of the upload
-            const snapshots = await uploadBytesResumable(
-                storageReference,
-                file
-            );
-            snapshots.on("state_changed", (snapshot) => {
-                this.progress = (
-                    (snapshot.bytesTransferred / snapshot.totalBytes) *
-                    100
-                ).toFixed(2);
-            });
+            const snapshot = await uploadBytes(storageReference, file);
             // Calculate the progress percentage
-            console.log("the progress" + this.progress);
+            this.progress =
+                parseInt(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             // Log a message indicating the upload is complete, along with the snapshot details
-            console.log("Uploaded a blob or file!", snapshots);
+            console.log("Uploaded a blob or file!", snapshot);
 
             // Return a promise that resolves with the download URL of the uploaded file
-            return getDownloadURL(snapshots.ref);
+            return getDownloadURL(snapshot.ref);
         },
         async delete_photo(image) {
             const storage = getStorage();
@@ -116,13 +110,13 @@ export const useNews = defineStore("News", {
         async Get_data() {
             try {
                 this.News = [];
-                this.loading = true;
+                this.loading1 = true;
                 const querySnapshot = await getDocs(collection(db, "News"));
                 querySnapshot.forEach((doc) => {
                     this.News.push(doc.data());
                 });
                 console.log("this.News", this.News);
-                this.loading = false;
+                this.loading1 = false;
             } catch (error) {
                 console.error("Error adding document: ", error);
             }

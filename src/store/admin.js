@@ -9,7 +9,6 @@ import {
     updateDoc,
     getDocs,
 } from "@firebase/firestore";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 const firebaseConfig = {
     apiKey: "AIzaSyBdk3sqIHjXvB2C-O-lvkRgMFpg8pemkno",
     authDomain: "alseraj--almoner.firebaseapp.com",
@@ -26,6 +25,7 @@ export const useadmin = defineStore("admin", {
     state: () => ({
         dialog: false,
         dialog_1: false,
+        dialog_3: false,
         user: {
             name: "",
             email: "",
@@ -53,6 +53,7 @@ export const useadmin = defineStore("admin", {
         users: [],
         loading: false,
         show_Password: false,
+        loading1: false,
     }),
     actions: {
         toggle_Show_Password() {
@@ -85,27 +86,22 @@ export const useadmin = defineStore("admin", {
             }
         },*/
         async add_admin() {
-            const auth = getAuth();
             try {
                 this.loading = true;
-                const userCredential = await createUserWithEmailAndPassword(
-                    auth,
-                    this.user.email,
-                    this.user.password,
-                    this.user.roles
-                );
-                // Signed in
-                console.log(...userCredential.user.uid);
-                this.user.id = userCredential.user.uid;
-                console.log(this.user.id);
-                await addDoc(collection(db, "users"), {
+                const docRef = await addDoc(collection(db, "users"), {
                     name: this.user.name,
                     email: this.user.email,
                     userType: this.user.expectedUserType,
                     password: this.user.password,
                     roles: this.user.roles,
-                    id: this.user.id,
                 });
+                await updateDoc(docRef, {
+                    id: docRef.id,
+                });
+                console.log("Document written with ID: ", docRef.id);
+                console.log("this.Users", this.users);
+                this.Get_data();
+                this.dialog = false;
                 this.loading = false;
             } catch (error) {
                 // ..
@@ -114,7 +110,7 @@ export const useadmin = defineStore("admin", {
         },
         async Get_data() {
             try {
-                this.loading = true;
+                this.loading1 = true;
                 this.users = [];
                 const querySnapshot = await getDocs(collection(db, "users"));
                 querySnapshot.forEach((doc) => {
@@ -123,37 +119,37 @@ export const useadmin = defineStore("admin", {
                     }
                 });
                 console.log("this.Users", this.users);
-                this.loading = false;
+                this.loading1 = false;
             } catch (error) {
                 console.error("Error adding document: ", error);
             }
         },
-        async delete_user(userId) {
+        async delete_user(user_Id) {
             try {
                 // Log before attempting to delete
-                console.log("Deleting User from Firestore:", userId);
-                // Assuming deleteUser is an async function, await its completion
+                console.log("Deleting user from Firestore:", user_Id);
                 // Delete the document from Firestore
-                await deleteDoc(doc(db, "users", userId));
+                await deleteDoc(doc(db, "users", user_Id));
                 // Log after successful deletion
                 console.log(
                     "user deleted from Firestore successfully:",
-                    userId
+                    user_Id
                 );
-                // Find the index of the New in the News array
+                // Find the index of the user in the users array
                 const index = this.users.findIndex(
-                    (user) => user.id === userId
+                    (user) => user.id === user_Id
                 );
-                // If the New is found in the News array, remove it
+
+                // If the user is found in the users array, remove it
                 if (index !== -1) {
                     this.users.splice(index, 1);
-                    console.log("New deleted successfully from Users array");
+                    console.log("user deleted successfully from users array");
                 } else {
-                    console.log("New not found in users array");
+                    console.log("user not found in users array");
                 }
                 this.Get_data();
             } catch (error) {
-                console.error("Error deleting user:", error);
+                console.error("Error deleting Job:", error);
             }
         },
         //get the data for each user
@@ -162,25 +158,22 @@ export const useadmin = defineStore("admin", {
             this.Id_Information = user.id;
             console.log(user.id);
             this.email_Information = user.email;
+            this.roles_Information = user.roles;
         },
         async Update_Admin(userId) {
             try {
                 this.loading = true;
                 const docRef = doc(db, "users", userId);
-                // Update user data in Firestore
-                await updateDoc(docRef, {
-                    name: this.user.name,
-                    email: this.user.email,
+                updateDoc(docRef, {
+                    name: this.name_Information,
+                    email: this.email_Information,
+                    roles: this.roles_Information,
                 });
-                // Refresh data after updates
-                await this.Get_data();
+                this.Get_data();
                 this.loading = false;
-                // Close dialog_1 after update
                 this.dialog_1 = false;
-                console.log("User updated successfully.");
             } catch (error) {
-                console.error("Error updating the user:", error);
-                // Handle error appropriately, e.g., show error message to the user
+                console.error("Error updating the Job:", error);
             }
         },
     },
