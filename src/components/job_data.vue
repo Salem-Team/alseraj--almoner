@@ -242,8 +242,8 @@ form {
 }
 .box {
     width: 100% !important;
-    margin: 0 auto;
-    padding: 10px 0px;
+    margin: 0 auto !important;
+    padding: 10px 0px !important;
     justify-content: space-evenly !important;
     flew-flow: row wrap !important;
 }

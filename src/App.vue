@@ -1,13 +1,13 @@
 <template>
     <div class="main_header">
         <nav class="ma-2">
-            <router-link to="/">Home</router-link> |
-            <router-link to="/admin">لوحة الاشراف</router-link>|
+            <router-link class="a" to="/">Home</router-link>
+            <router-link class="a" to="/admin">لوحة الاشراف</router-link>
 
-            <router-link v-if="user" @click="logout" to="/UserLogin"
+            <router-link class="a" v-if="user" @click="logout" to="/UserLogin"
                 >Sign Out</router-link
             >
-            <router-link v-else to="/UserLogin">Sign In</router-link>
+            <router-link class="a" v-else to="/UserLogin">Sign In</router-link>
         </nav>
         <router-view />
     </div>

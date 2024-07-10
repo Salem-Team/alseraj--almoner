@@ -19,6 +19,10 @@
 
                 <v-card-title
                     class="card_title d-flex justify-center flex-wrap"
+                    style="
+                        bacground-color: transparent !important;
+                        border: none !important;
+                    "
                 >
                     <p style="z-index: 100">
                         {{ New.title }}
@@ -80,8 +84,8 @@ export default defineComponent({
     }
 }
 .box {
-    flex-wrap: wrap;
-    gap: 10px;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
 }
 .card_title {
     margin-bottom: 15px;
@@ -97,12 +101,12 @@ export default defineComponent({
     bottom: 0;
     right: 0;
     border-style: solid;
-    border-width: 0px 0px 130px 350px;
+    border-width: 0px 0px 130px 300px;
     border-color: transparent transparent white transparent;
     transition: 0.3s;
 }
 .v-card:hover .v-img::before {
-    border-width: 170px 500px 170px 0;
+    border-width: 0px 580px 270px 0;
 }
 .v-card {
     text-align: center !important;
