@@ -7,7 +7,7 @@
         </div>
         <v-container
             class="box d-flex align-center justify-space-around"
-            width="90% !important"
+            style="width: 94% !important; margin: auto"
         >
             <v-card
                 class="card"
@@ -56,8 +56,8 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 .box {
-    flex-wrap: wrap;
-    gap: 10px;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
     background: var(--secound-color);
 }
 .use {
@@ -99,7 +99,6 @@ export default defineComponent({
         animation: flashing 0.7s;
     }
     .v-img {
-        max-width: 100%;
         transition: 0.3s;
     }
     &:hover .v-img {
