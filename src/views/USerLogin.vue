@@ -41,9 +41,8 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "pinia";
-import { useAuthStore } from "../store/userStore";
 import Cookies from "js-cookie";
+
 export default {
     data() {
         return {
@@ -53,9 +52,11 @@ export default {
                 type: "",
                 types: ["parent", "admin"],
             },
+            loading: false,
+            error: null,
+            user: null,
         };
     },
-    // علشان
     watch: {
         "userType.type"(newValue) {
             if (newValue === "parent") {
@@ -67,23 +68,33 @@ export default {
             }
         },
     },
-    computed: {
-        ...mapState(useAuthStore, ["loading", "error", "user"]),
-    },
     methods: {
-        ...mapActions(useAuthStore, ["login"]),
         async handleLogin() {
-            Cookies.set("user", JSON.stringify(this.user), { expires: 7 });
-            await this.login(this.email, this.password, this.userType.type);
-            if (!this.error && this.userType.type === "parent") {
-                this.$router.push({ name: "Parent_Dashboard" });
+            this.loading = true;
+            this.error = null;
+
+            // تحقق من البريد الإلكتروني وكلمة المرور
+            if (
+                (this.userType.type === "parent" &&
+                    this.email === "parent@gmail.com" &&
+                    this.password === "123456") ||
+                (this.userType.type === "admin" &&
+                    this.email === "admin@gmail.com" &&
+                    this.password === "123456")
+            ) {
+                this.user = { email: this.email, type: this.userType.type };
+                Cookies.set("user", JSON.stringify(this.user), { expires: 7 });
+
+                if (this.userType.type === "parent") {
+                    this.$router.push({ name: "Parent_Dashboard" });
+                } else if (this.userType.type === "admin") {
+                    this.$router.push({ name: "admin_Dashboard" });
+                }
+            } else {
+                this.error = "Invalid email or password";
             }
-            if (!this.error && this.userType.type === "student") {
-                this.$router.push({ name: "Student_Dashboard" });
-            }
-            if (!this.error && this.userType.type === "admin") {
-                this.$router.push({ name: "admin_Dashboard" });
-            }
+
+            this.loading = false;
         },
     },
 };

@@ -3,14 +3,11 @@
         <nav class="ma-2">
             <router-link to="/">Home</router-link> |
             <router-link to="/admin">لوحة الاشراف</router-link>|
-            <span v-if="user">
-                <router-link @click="logout" to="/UserLogin"
-                    >Sign Out</router-link
-                >
-            </span>
-            <span v-else>
-                <router-link to="/UserLogin">Sign In</router-link>
-            </span>
+
+            <router-link v-if="user" @click="logout" to="/UserLogin"
+                >Sign Out</router-link
+            >
+            <router-link v-else to="/UserLogin">Sign In</router-link>
         </nav>
         <router-view />
     </div>
