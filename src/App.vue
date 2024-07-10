@@ -1,15 +1,15 @@
 <template>
-    <div>
+    <div class="main_header">
         <nav class="ma-2">
-            <router-link to="/">Home</router-link> |
-            <router-link to="/admin">لوحة الاشراف</router-link>|
+            <router-link class="a" to="/">Home</router-link>
+            <router-link class="a" to="/admin">لوحة الاشراف</router-link>
             <span v-if="user">
-                <router-link @click="logout" to="/UserLogin"
+                <router-link class="a" @click="logout" to="/UserLogin"
                     >Sign Out</router-link
                 >
             </span>
             <span v-else>
-                <router-link to="/UserLogin">Sign In</router-link>
+                <router-link class="a" to="/UserLogin">Sign In</router-link>
             </span>
         </nav>
         <router-view />
@@ -44,19 +44,43 @@ body {
     font-style: normal;
 }
 :root {
-    --main-color: #0088ff;
+    --main-color: #336699;
     --secound-color: #eee;
-    --therd-color: #7a7a7a;
+    --therd-color: #d8588c;
 }
 nav {
     padding: 30px;
-
-    a {
-        font-weight: bold;
-        color: #2c3e50;
-
-        &.router-link-exact-active {
-            color: #42b983;
+    background-color: white;
+    -webkit-box-shadow: 0 0 10px #ddd;
+    -moz-box-shadow: 0 0 10px #ddd;
+    box-shadow: 0 0 10px #ddd;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    flex-flow: wrap;
+    &:hover {
+        opacity: 1;
+        z-index: 100;
+        top: calc(100% + 1px);
+    }
+    .a {
+        text-decoration: none;
+        &::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background-color: var(--main-color);
+            top: 0;
+            left: -100%;
+            transition: 0.3s;
+        }
+        &:hover {
+            color: var(--main-color);
+            background-color: #fafafa;
+        }
+        &:hover::before {
+            left: 0;
         }
     }
 }
