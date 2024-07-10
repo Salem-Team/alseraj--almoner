@@ -1,5 +1,17 @@
 <template>
-    <div>
+    <img
+        style="
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 245px;
+        "
+        v-if="jobs.loading1"
+        src="../assets/Spinner@1x-1.0s-200px-200px.svg"
+        alt=""
+    />
+    <div v-if="!jobs.loading1">
         <div class="use">
             <div class="title">
                 <div class="right">
@@ -12,21 +24,42 @@
                         </v-breadcrumbs-item>
                         <v-breadcrumbs-divider />
                         <v-breadcrumbs-item
-                            @click="$router.push('/Modifications')"
-                            link
-                        >
-                            الإعدادات
-                        </v-breadcrumbs-item>
-                        <v-breadcrumbs-divider />
-                        <v-breadcrumbs-item
                             @click="$router.push('/Add_Job')"
                             link
                         >
-                            الأخبار
+                            الوظائف
                         </v-breadcrumbs-item>
                     </v-breadcrumbs>
                 </div>
                 <div class="left">
+                    <v-menu>
+                        <template v-slot:activator="{ props }">
+                            <v-badge
+                                color="error"
+                                :content="jobs.counter.counter"
+                            >
+                                <v-icon
+                                    class="icon"
+                                    v-bind="props"
+                                    @click="jobs.Update_counter"
+                                    >mdi-bell-outline</v-icon
+                                >
+                            </v-badge>
+                        </template>
+                        <v-list>
+                            <v-list-item
+                                v-for="notification in notifications"
+                                :key="notification.id"
+                                @click="
+                                    jobs.delete_notifications(notification.id)
+                                "
+                            >
+                                <v-list-item-title
+                                    >{{ notification.text }}
+                                </v-list-item-title>
+                            </v-list-item>
+                        </v-list>
+                    </v-menu>
                     <font-awesome-icon
                         @click="dialog = true"
                         :icon="['fas', 'plus']"
@@ -68,6 +101,8 @@
                         class="d-flex align-center mt-4 mb-10"
                         type="submit"
                         color="primary"
+                        :loading="loading"
+                        :disabled="loading"
                         @click="jobs.Add_Jobs"
                     >
                         نشر
@@ -109,134 +144,127 @@
                         class="d-flex align-center mt-4 mb-10"
                         type="submit"
                         color="primary"
-                        @click="jobs.Update_Jobs(Jobs.Id_Information)"
+                        :loading="loading"
+                        :disabled="loading"
+                        @click="jobs.Update_Jobs(jobs.Id_Information)"
                     >
                         تعديل
                     </v-btn>
                 </form>
             </v-card></v-dialog
         >
-        <v-container
-            class="box d-flex align-center justify-space-around"
-            width="90%"
-        >
-            <v-card v-for="Job in Jobs" :key="Job.id" width="25%">
+        <div class="box">
+            <v-card v-for="Job in Jobs" :key="Job.id" width="100%" class="job">
                 <v-card-title
-                    class="d-flex align-center justify-center flex-wrap"
+                    class="title d-flex align-center justify-center flex-wrap"
                 >
                     <p>{{ Job.title }}</p>
                     <v-spacer />
-                    <div class="ma-2">
+                    <div class="left">
                         <font-awesome-icon
                             @click="jobs.Job_Information(Job)"
                             :icon="['fas', 'edit']"
                             @click.="dialog_1 = true"
                         />
                     </div>
-                    <div>
+                    <div class="left">
                         <font-awesome-icon
-                            @click="jobs.delete_Job(Job.id, Job.CV)"
+                            @click="jobs.dailog_3 = true"
                             :icon="['fas', 'trash']"
                         />
                     </div>
                 </v-card-title>
-
+                <br />
                 <v-card-subtitle>
                     {{ Job.time }}
                 </v-card-subtitle>
 
-                <v-card-text
-                    ><p>{{ Job.description }}</p>
-                    <v-btn
-                        class="!m-auto !text-center mt-2 mb-4"
-                        color="primary"
+                <v-card-text>
+                    <p class="mb-2" style="color: var(--therd-color)">
+                        متطلبات العمل :
+                    </p>
+                    <p class="mb-4">{{ Job.description }}</p>
+
+                    <v-expansion-panels
                         @click="
-                            (jobs.dialog_2 = true), jobs.Job_Information(Job)
+                            jobs.Job_Information(Job),
+                                jobs.Get_applies(jobs.Title_Information)
                         "
                     >
-                        التقديم على الوظيفة</v-btn
-                    >
-                    <v-dialog v-model="dialog_2" width="90%">
-                        <v-card width="100%" class="popup">
-                            <v-card-title
-                                class="d-flex justify-space-between align-center"
-                            >
-                                <div
-                                    class="text-h4 ps-2"
-                                    style="color: var(--main-color)"
-                                >
-                                    التقديم على الوظيفة
-                                </div>
-                                <v-btn
-                                    style="color: var(--main-color)"
-                                    icon="mdi-close"
-                                    variant="text"
-                                    @click="dialog_2 = false"
-                                ></v-btn>
-                            </v-card-title>
-                            <form ref="form" @submit.prevent class="ma-auto">
-                                <v-text-field
-                                    v-model="jobs.Apply.name"
-                                    type="text"
-                                    label="الاسم"
-                                    variant="outlined"
-                                    required
-                                ></v-text-field>
-                                <v-text-field
-                                    v-model="jobs.Apply.email"
-                                    type="email"
-                                    label="البريد الالكتروني"
-                                    variant="outlined"
-                                    required
-                                ></v-text-field>
-                                <v-text-field
-                                    v-model="jobs.Apply.phone"
-                                    type="text"
-                                    label="التليفون"
-                                    variant="outlined"
-                                    required
-                                ></v-text-field>
-                                <v-file-input
-                                    v-model="jobs.Apply.CV"
-                                    label="السيرة الذاتية"
-                                    variant="outlined"
-                                    prepend-icon=""
-                                    required
-                                    prepend-inner-icon="mdi-paperclip"
-                                    @click="jobs.upload_CV"
-                                >
-                                </v-file-input>
-
-                                <v-btn
-                                    class="d-flex align-center mt-4 mb-10"
-                                    type="submit"
-                                    color="primary"
-                                    @click="jobs.Add_Apply(jobs.Id_Information)"
-                                >
-                                    تقديم
-                                </v-btn>
-                            </form>
-                        </v-card></v-dialog
-                    >
-                    <v-expansion-panels>
                         <v-expansion-panel
-                            v-for="Apply in applies"
-                            :key="Apply.id"
-                            :title="Apply.name"
-                            :text="Apply.email"
-                        >
+                            style="
+                                background-color: var(
+                                    --secound-color
+                                ) !important;
+                                color: var(--main-color);
+                                font-weight: bold;
+                                font-size: 20px;
+                            "
+                            ><v-expansion-panel-title>
+                                التقديمات({{ Job.applies.length || 0 }})
+                            </v-expansion-panel-title>
                             <v-expansion-panel-text>
-                                {{ Apply.phone }}
-                            </v-expansion-panel-text>
-                            <v-expansion-panel-text>
-                                <a :href="Apply.CV">CV</a>
+                                <v-expansion-panels>
+                                    <v-expansion-panel
+                                        v-for="Apply in apply"
+                                        :key="Apply.id"
+                                        :title="Apply.name"
+                                        :text="Apply.email"
+                                    >
+                                        <v-expansion-panel-text>
+                                            {{ Apply.phone }}
+                                        </v-expansion-panel-text>
+                                        <v-expansion-panel-text>
+                                            <a :href="Apply.CV">CV</a>
+                                        </v-expansion-panel-text>
+                                    </v-expansion-panel>
+                                </v-expansion-panels>
                             </v-expansion-panel-text>
                         </v-expansion-panel>
                     </v-expansion-panels>
                 </v-card-text>
             </v-card>
-        </v-container>
+        </div>
     </div>
+    <v-dialog v-model="jobs.dailog_3" width="90%">
+        <v-card width="100%" class="popup">
+            <v-card-title class="d-flex justify-space-between align-center">
+                <div class="text-h4 ps-2" style="color: var(--main-color)">
+                    حذف
+                </div>
+                <v-btn
+                    style="color: var(--main-color)"
+                    icon="mdi-close"
+                    variant="text"
+                    @click="jobs.dailog_3 = false"
+                ></v-btn>
+            </v-card-title>
+            <v-card-text>
+                <p>تأكيد الحذف</p>
+                <div class="d-flex align-center mt-4">
+                    <v-btn
+                        type="submit"
+                        color="primary"
+                        :loading="loading"
+                        :disabled="loading"
+                        @click="jobs.dailog_3 = false"
+                    >
+                        إلغاء
+                    </v-btn>
+                    <v-spacer />
+                    <v-btn
+                        type="submit"
+                        color="error"
+                        :loading="loading"
+                        :disabled="loading"
+                        @click="jobs.delete_Job(Job.id, Job.CV)"
+                    >
+                        تأكيد
+                    </v-btn>
+                </div>
+            </v-card-text>
+        </v-card></v-dialog
+    >
 </template>
 
 <script>
@@ -247,40 +275,60 @@ export default defineComponent({
     setup() {
         const jobs = useJobs();
         jobs.Get_data();
+        jobs.Get_Apply_data();
+        jobs.Get_notifications_data();
         // Destructure reactive references and methods from Jobs store
         const {
             Job,
             Jobs,
+            dialog_3,
             applies,
             Apply,
+            loading,
             Get_Apply_data,
             Add_Apply,
             Add_Jobs,
             dialog,
             dialog_1,
-            dialog_2,
             delete_Job,
             Get_data,
-            upload_CV,
+            notifications,
+            text,
+            Update_counter,
             Job_Information,
             progress,
+            Get_applies,
+            loading1,
+            apply,
+            counter,
+            delete_notifications,
+            Get_notifications_data,
         } = storeToRefs(jobs);
 
         // Return the necessary reactive properties and methods
         return {
             Job,
+            dialog_3,
+            loading1,
+            loading,
             applies,
+            Update_counter,
+            delete_notifications,
+            Get_notifications_data,
             Apply,
-            dialog_2,
+            counter,
+            notifications,
+            text,
+            Get_applies,
             Get_Apply_data,
             Add_Apply,
             Add_Jobs,
             delete_Job,
             Job_Information,
             Get_data,
-            upload_CV,
             Jobs,
             jobs,
+            apply,
             dialog,
             dialog_1,
             progress,
@@ -295,6 +343,8 @@ form {
 }
 
 .use {
+    width: 95% !important;
+    margin: auto;
     .title {
         margin-top: 40px;
         background: var(--secound-color);
@@ -312,7 +362,45 @@ form {
             align-items: center;
             gap: 4px;
             &.left {
+                .icon,
                 svg {
+                    cursor: pointer;
+                    transition: 0.3s;
+                    background: #fff;
+                    padding: 10px;
+                    border-radius: 5px;
+                    &:hover {
+                        color: var(--therd-color);
+                    }
+                }
+                .icon {
+                    padding: 20px;
+                }
+            }
+        }
+    }
+}
+.job {
+    width: 100% !important;
+    margin-bottom: 10px;
+    .title {
+        background: var(--main-color);
+        padding: 10px 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 5px;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
+        font-size: 20px;
+        & > div {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            &.left {
+                svg {
+                    color: var(--main-color);
                     cursor: pointer;
                     transition: 0.3s;
                     background: #fff;
@@ -327,7 +415,8 @@ form {
     }
 }
 .box {
-    flex-wrap: wrap;
-    gap: 10px;
+    width: 95% !important;
+    margin: 0 auto;
+    padding: 10px 0px;
 }
 </style>

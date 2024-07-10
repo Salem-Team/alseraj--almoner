@@ -1,5 +1,17 @@
 <template>
-    <div class="use">
+    <img
+        style="
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 245px;
+        "
+        v-if="loading1"
+        src="../assets/Spinner@1x-1.0s-200px-200px.svg"
+        alt=""
+    />
+    <div class="use" v-if="!loading1">
         <div class="title">
             <div class="right">
                 <v-breadcrumbs>
@@ -57,7 +69,7 @@
                         prepend-icon=""
                         required
                         prepend-inner-icon="mdi-paperclip"
-                        @click="news.upload_Image"
+                        @input="news.upload_Image"
                     >
                     </v-file-input>
                     <!-- Show progress bar if New.image is truthy (assuming New is a data property) -->
@@ -84,6 +96,8 @@
                         class="d-flex align-center mt-4 mb-10"
                         type="submit"
                         color="primary"
+                        :loading="loading"
+                        :disabled="loading"
                         @click="news.Add_News"
                     >
                         نشر
@@ -127,6 +141,8 @@
                         class="d-flex align-center mt-4 mb-10"
                         type="submit"
                         color="primary"
+                        :loading="loading"
+                        :disabled="loading"
                         @click="news.Update_News(news.Id_Information)"
                     >
                         تعديل
@@ -138,15 +154,20 @@
             class="box d-flex align-center justify-space-around"
             width="90%"
         >
-            <v-card v-for="New in News" :key="New.id" width="25%">
+            <v-card
+                v-for="New in News"
+                :key="New.id"
+                width="200"
+                max-width="25%"
+            >
                 <v-img :src="New.image" height="200" cover></v-img>
 
                 <v-card-title
-                    class="d-flex align-center justify-center flex-wrap"
+                    class="card_title d-flex justify-center flex-wrap"
                 >
                     <p>{{ New.title }}</p>
                     <v-spacer />
-                    <div class="ma-2">
+                    <div>
                         <font-awesome-icon
                             @click="news.New_Information(New)"
                             :icon="['fas', 'edit']"
@@ -155,7 +176,7 @@
                     </div>
                     <div>
                         <font-awesome-icon
-                            @click="news.delete_New(New.id, New.image)"
+                            @click="news.dailog_3 = true"
                             :icon="['fas', 'trash']"
                         />
                     </div>
@@ -165,10 +186,51 @@
                     {{ New.time }}
                 </v-card-subtitle>
 
-                <v-card-text>{{ New.description }} </v-card-text>
+                <v-card-text style="color: var(--main-color)"
+                    >{{ New.description }}
+                </v-card-text>
             </v-card>
         </v-container>
     </div>
+    <v-dialog v-model="news.dailog_3" width="90%">
+        <v-card width="100%" class="popup">
+            <v-card-title class="d-flex justify-space-between align-center">
+                <div class="text-h4 ps-2" style="color: var(--main-color)">
+                    حذف
+                </div>
+                <v-btn
+                    style="color: var(--main-color)"
+                    icon="mdi-close"
+                    variant="text"
+                    @click="news.dailog_3 = false"
+                ></v-btn>
+            </v-card-title>
+            <v-card-text>
+                <p>تأكيد الحذف</p>
+                <div class="d-flex align-center mt-4">
+                    <v-btn
+                        type="submit"
+                        color="primary"
+                        :loading="loading"
+                        :disabled="loading"
+                        @click="news.dailog_3 = false"
+                    >
+                        إلغاء
+                    </v-btn>
+                    <v-spacer />
+                    <v-btn
+                        type="submit"
+                        color="error"
+                        :loading="loading"
+                        :disabled="loading"
+                        @click="news.delete_New(New.id, New.image)"
+                    >
+                        تأكيد
+                    </v-btn>
+                </div>
+            </v-card-text>
+        </v-card></v-dialog
+    >
 </template>
 
 <script>
@@ -183,8 +245,11 @@ export default defineComponent({
         const {
             New,
             News,
+            dialog_3,
             Add_News,
             dialog,
+            loading,
+            loading1,
             dialog_1,
             delete_New,
             Get_data,
@@ -197,6 +262,9 @@ export default defineComponent({
         return {
             New,
             Add_News,
+            loading,
+            dialog_3,
+            loading1,
             delete_New,
             New_Information,
             Get_data,
@@ -217,6 +285,8 @@ form {
 }
 
 .use {
+    width: 95% !important;
+    margin: auto;
     .title {
         margin-top: 40px;
         background: var(--secound-color);
@@ -251,5 +321,26 @@ form {
 .box {
     flex-wrap: wrap;
     gap: 10px;
+}
+.card_title {
+    background: var(--secound-color);
+    margin-bottom: 15px;
+    color: var(--main-color);
+    p {
+        font-weight: bold;
+        font-size: 20px;
+    }
+    div {
+        padding-right: 5px;
+        svg {
+            padding: 5px 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 5px;
+            &:hover {
+                color: var(--therd-color);
+            }
+        }
+    }
 }
 </style>

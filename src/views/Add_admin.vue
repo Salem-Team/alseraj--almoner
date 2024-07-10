@@ -1,5 +1,17 @@
 <template>
-    <div>
+    <img
+        style="
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 245px;
+        "
+        v-if="loading1"
+        src="../assets/Spinner@1x-1.0s-200px-200px.svg"
+        alt=""
+    />
+    <div v-if="!loading1">
         <div class="use">
             <div class="title">
                 <div class="right">
@@ -73,16 +85,22 @@
                     ></v-select>
                     <v-text-field
                         v-model="user.password"
-                        type="password"
+                        :type="admin.show_Password ? 'text' : 'password'"
                         label="كلمة مرور"
                         variant="outlined"
                         required
+                        :append-inner-icon="
+                            admin.show_Password ? 'mdi-eye' : 'mdi-eye-off'
+                        "
+                        @click:append-inner="admin.toggle_Show_Password"
                     ></v-text-field>
 
                     <v-btn
                         class="d-flex align-center mt-4 mb-10"
                         type="submit"
                         color="primary"
+                        :loading="loading"
+                        :disabled="loading"
                         @click="admin.add_admin"
                     >
                         إضافة
@@ -95,7 +113,7 @@
             <v-card width="100%" class="popup">
                 <v-card-title class="d-flex justify-space-between align-center">
                     <div class="text-h4 ps-2" style="color: var(--main-color)">
-                        إضافة مشرف
+                        تعديل بيانات مشرف
                     </div>
                     <v-btn
                         style="color: var(--main-color)"
@@ -119,11 +137,22 @@
                         variant="outlined"
                         required
                     ></v-text-field>
+                    <v-select
+                        style="width: 100%"
+                        v-model="admin.roles_Information"
+                        :items="admin.role"
+                        label="أختر نوع الصلاحية"
+                        variant="outlined"
+                        multiple
+                        required
+                    ></v-select>
                     <v-btn
                         class="d-flex align-center mt-4 mb-10"
                         type="submit"
                         color="primary"
-                        @click="admin.Update_admin"
+                        :loading="loading"
+                        :disabled="loading"
+                        @click="admin.Update_Admin(admin.Id_Information)"
                     >
                         تعديل
                     </v-btn>
@@ -134,9 +163,16 @@
             class="box d-flex align-center justify-space-around"
             width="90%"
         >
-            <v-card v-for="user in users" :key="user.id" width="25%">
+            <v-card
+                v-for="user in users"
+                :key="user.id"
+                width="25%"
+                min-height="120"
+                class="job"
+                style="background-color: var(--secound-color)"
+            >
                 <v-card-title
-                    class="d-flex align-center justify-center flex-wrap"
+                    class="title d-flex align-center justify-center flex-wrap"
                 >
                     <p>{{ user.name }}</p>
                     <v-spacer />
@@ -149,12 +185,12 @@
                     </div>
                     <div>
                         <font-awesome-icon
-                            @click="admin.delete_user(user.id)"
+                            @click="admin.dailog_3 = true"
                             :icon="['fas', 'trash']"
                         />
                     </div>
                 </v-card-title>
-
+                <br />
                 <v-card-subtitle v-for="index in user.roles" :key="index">
                     {{ index }}
                 </v-card-subtitle>
@@ -163,6 +199,45 @@
             </v-card>
         </v-container>
     </div>
+    <v-dialog v-model="admin.dailog_3" width="90%">
+        <v-card width="100%" class="popup">
+            <v-card-title class="d-flex justify-space-between align-center">
+                <div class="text-h4 ps-2" style="color: var(--main-color)">
+                    حذف
+                </div>
+                <v-btn
+                    style="color: var(--main-color)"
+                    icon="mdi-close"
+                    variant="text"
+                    @click="admin.dailog_3 = false"
+                ></v-btn>
+            </v-card-title>
+            <v-card-text>
+                <p>تأكيد الحذف</p>
+                <div class="d-flex align-center mt-4">
+                    <v-btn
+                        type="submit"
+                        color="primary"
+                        :loading="loading"
+                        :disabled="loading"
+                        @click="admin.dailog_3 = false"
+                    >
+                        إلغاء
+                    </v-btn>
+                    <v-spacer />
+                    <v-btn
+                        type="submit"
+                        color="error"
+                        :loading="loading"
+                        :disabled="loading"
+                        @click="admin.delete_user(user.id)"
+                    >
+                        تأكيد
+                    </v-btn>
+                </div>
+            </v-card-text>
+        </v-card></v-dialog
+    >
 </template>
 
 <script scoped>
@@ -177,21 +252,35 @@ export default defineComponent({
         const {
             user,
             add_admin,
+            toggle_Show_Password,
             dialog,
+            dialog_3,
             delete_user,
             Get_data,
             users,
             role,
+            show_Password,
             dialog_1,
+            loading1,
+            loading,
+            Update_Admin,
+            copy_Password,
             generate_Random_Password,
             user_Information,
         } = storeToRefs(admin);
         // Return the necessary reactive properties and methods
         return {
             admin,
+            loading,
+            loading1,
+            dialog_3,
             generate_Random_Password,
             user,
+            toggle_Show_Password,
             role,
+            copy_Password,
+            show_Password,
+            Update_Admin,
             delete_user,
             Get_data,
             user_Information,
@@ -210,6 +299,8 @@ form {
 }
 
 .use {
+    width: 95% !important;
+    margin: auto;
     .title {
         margin-top: 40px;
         background: var(--secound-color);
@@ -244,5 +335,38 @@ form {
 .box {
     flex-wrap: wrap;
     gap: 10px;
+}
+.job {
+    width: 25% !important;
+    margin-bottom: 10px;
+    .title {
+        background: var(--main-color);
+        padding: 10px 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 5px;
+        color: white;
+        font-weight: bold;
+        font-size: 20px;
+        & > div {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            &.left {
+                svg {
+                    color: var(--main-color);
+                    cursor: pointer;
+                    transition: 0.3s;
+                    background: #fff;
+                    padding: 10px;
+                    border-radius: 5px;
+                    &:hover {
+                        color: var(--therd-color);
+                    }
+                }
+            }
+        }
+    }
 }
 </style>

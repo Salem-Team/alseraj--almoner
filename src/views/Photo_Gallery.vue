@@ -1,5 +1,17 @@
 <template>
-    <div>
+    <img
+        style="
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 245px;
+        "
+        v-if="loading1"
+        src="../assets/Spinner@1x-1.0s-200px-200px.svg"
+        alt=""
+    />
+    <div v-if="!loading1">
         <div class="use">
             <div class="title">
                 <div class="right">
@@ -143,7 +155,7 @@
                                         </label>
                                         <v-img
                                             v-if="photos.Photo.image"
-                                            :src="photos.Photo.image"
+                                            :src="photos.image"
                                             height="200"
                                         ></v-img>
                                         <v-select
@@ -159,7 +171,14 @@
                                         <v-btn
                                             class="mt-2 mb-2"
                                             type="submit"
-                                            color="primary"
+                                            style="
+                                                background-color: var(
+                                                    --main-color
+                                                );
+                                                color: white;
+                                            "
+                                            :loading="loading"
+                                            :disabled="loading"
                                             @click="photos.Add_Photos"
                                         >
                                             إضافة
@@ -173,11 +192,21 @@
 
                 <!-- Section 2: Display Photos -->
                 <v-window-item :value="2">
-                    <v-card min-height="400">
-                        <v-tabs v-model="tab" bg-color="primary">
-                            <v-tab value="party">Party</v-tab>
-                            <v-tab value="news">News</v-tab>
-                            <v-tab value="trip">Trip</v-tab>
+                    <v-card
+                        min-height="400"
+                        width="95% !important"
+                        style="margin: auto; margin-top: 20px"
+                    >
+                        <v-tabs
+                            v-model="tab"
+                            style="
+                                background-color: var(--main-color);
+                                color: white;
+                            "
+                        >
+                            <v-tab value="party">حفلات</v-tab>
+                            <v-tab value="news">أخبار</v-tab>
+                            <v-tab value="trip">رحلات</v-tab>
                         </v-tabs>
 
                         <v-card-text>
@@ -190,7 +219,8 @@
                                         <v-card
                                             v-for="photo in party"
                                             :key="photo.id"
-                                            width="25%"
+                                            width="200px"
+                                            max-width="25%"
                                         >
                                             <v-fab
                                                 icon="mdi-delete"
@@ -199,12 +229,7 @@
                                                 absolute
                                                 style="bottom: -15px; left: 5px"
                                                 offset
-                                                @click="
-                                                    photos.delete_Photo(
-                                                        photo.id,
-                                                        photo.image
-                                                    )
-                                                "
+                                                @click="photos.dailog_3 = true"
                                             ></v-fab>
                                             <v-img
                                                 :src="photo.image"
@@ -223,7 +248,8 @@
                                         <v-card
                                             v-for="photo in news"
                                             :key="photo.id"
-                                            width="25%"
+                                            width="200px"
+                                            max-width="25%"
                                         >
                                             <v-fab
                                                 icon="mdi-delete"
@@ -232,12 +258,7 @@
                                                 absolute
                                                 style="bottom: -15px; left: 5px"
                                                 offset
-                                                @click="
-                                                    photos.delete_Photo(
-                                                        photo.id,
-                                                        photo.image
-                                                    )
-                                                "
+                                                @click="photos.dailog_3 = true"
                                             ></v-fab>
                                             <v-img
                                                 :src="photo.image"
@@ -256,7 +277,8 @@
                                         <v-card
                                             v-for="photo in trip"
                                             :key="photo.id"
-                                            width="25%"
+                                            width="200px"
+                                            max-width="25%"
                                         >
                                             <v-fab
                                                 icon="mdi-delete"
@@ -265,12 +287,7 @@
                                                 absolute
                                                 style="bottom: -15px; left: 5px"
                                                 offset
-                                                @click="
-                                                    photos.delete_Photo(
-                                                        photo.id,
-                                                        photo.image
-                                                    )
-                                                "
+                                                @click="photos.dailog_3 = true"
                                             ></v-fab>
                                             <v-img
                                                 :src="photo.image"
@@ -309,6 +326,45 @@
             </v-card-actions>
         </v-card>
     </div>
+    <v-dialog v-model="photos.dailog_3" width="90%">
+        <v-card width="100%" class="popup">
+            <v-card-title class="d-flex justify-space-between align-center">
+                <div class="text-h4 ps-2" style="color: var(--main-color)">
+                    حذف
+                </div>
+                <v-btn
+                    style="color: var(--main-color)"
+                    icon="mdi-close"
+                    variant="text"
+                    @click="photos.dailog_3 = false"
+                ></v-btn>
+            </v-card-title>
+            <v-card-text>
+                <p>تأكيد الحذف</p>
+                <div class="d-flex align-center mt-4">
+                    <v-btn
+                        type="submit"
+                        color="primary"
+                        :loading="loading"
+                        :disabled="loading"
+                        @click="photos.dailog_3 = false"
+                    >
+                        إلغاء
+                    </v-btn>
+                    <v-spacer />
+                    <v-btn
+                        type="submit"
+                        color="error"
+                        :loading="loading"
+                        :disabled="loading"
+                        @click="photos.delete_Photo(photo.id, photo.image)"
+                    >
+                        تأكيد
+                    </v-btn>
+                </div>
+            </v-card-text>
+        </v-card></v-dialog
+    >
 </template>
 
 <script>
@@ -322,6 +378,8 @@ export default defineComponent({
         // Destructure reactive references and methods from Photos store
         const {
             Photo,
+            dialog_3,
+            loading,
             Photos,
             Add_Photos,
             dialog,
@@ -331,7 +389,9 @@ export default defineComponent({
             type,
             Types,
             handletypes,
+            loading1,
             tab,
+            image,
             onFileChange,
             trip,
             progress,
@@ -342,7 +402,11 @@ export default defineComponent({
         // Return the necessary reactive properties and methods
         return {
             Photo,
+            dialog_3,
+            loading,
             onFileChange,
+            loading1,
+            image,
             handletypes,
             Add_Photos,
             delete_Photo,
@@ -404,6 +468,8 @@ form {
 }
 
 .use {
+    width: 95% !important;
+    margin: auto;
     .title {
         margin-top: 40px;
         background: var(--secound-color);
@@ -434,5 +500,9 @@ form {
             }
         }
     }
+}
+.box {
+    flex-wrap: wrap;
+    gap: 10px;
 }
 </style>

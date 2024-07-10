@@ -35,6 +35,7 @@ export const useNews = defineStore("News", {
     state: () => ({
         dialog: false,
         dialog_1: false,
+        dialog_3: false,
         Title_Information: "",
         Description_Information: "",
         Image_Information: null,
@@ -47,6 +48,8 @@ export const useNews = defineStore("News", {
             description: "",
         },
         random: 0,
+        loading: false,
+        loading1: false,
     }),
     actions: {
         async upload_Image(file) {
@@ -57,11 +60,9 @@ export const useNews = defineStore("News", {
             );
             // Upload the file bytes to the storage reference and get a snapshot of the upload
             const snapshot = await uploadBytes(storageReference, file);
-
             // Calculate the progress percentage
             this.progress =
                 parseInt(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log("the progress" + this.progress);
             // Log a message indicating the upload is complete, along with the snapshot details
             console.log("Uploaded a blob or file!", snapshot);
 
@@ -79,6 +80,7 @@ export const useNews = defineStore("News", {
         },
         async Add_News() {
             try {
+                this.loading = true;
                 if (this.New.image) {
                     const imageUrl = await this.upload_Image(this.New.image);
                     // Get current local time
@@ -95,9 +97,11 @@ export const useNews = defineStore("News", {
                     });
                     console.log("Document written with ID: ", docRef.id);
                     this.Get_data();
+                    this.loading = false;
                     this.dialog = false;
                 } else {
                     console.error("No image selected.");
+                    this.loading = false;
                 }
             } catch (error) {
                 console.error("Error adding document: ", error);
@@ -106,11 +110,13 @@ export const useNews = defineStore("News", {
         async Get_data() {
             try {
                 this.News = [];
+                this.loading1 = true;
                 const querySnapshot = await getDocs(collection(db, "News"));
                 querySnapshot.forEach((doc) => {
                     this.News.push(doc.data());
                 });
                 console.log("this.News", this.News);
+                this.loading1 = false;
             } catch (error) {
                 console.error("Error adding document: ", error);
             }
@@ -150,6 +156,7 @@ export const useNews = defineStore("News", {
         },
         async Update_News(NewId) {
             try {
+                this.loading = true;
                 const currentTime = new Date().toLocaleString();
                 const docRef = doc(db, "News", NewId);
                 updateDoc(docRef, {
@@ -158,6 +165,7 @@ export const useNews = defineStore("News", {
                     time: currentTime,
                 });
                 this.Get_data();
+                this.loading = false;
                 this.dialog_1 = false;
             } catch (error) {
                 console.error("Error updating the New:", error);

@@ -13,60 +13,1480 @@
                         v-for="(student, index) in filteredStudents"
                         :key="student.id"
                     >
-                        <v-list-item-content
-                            style="padding: 10px; direction: rtl"
-                            class="student-item"
-                        >
-                            <h2>
-                                <v-avatar
-                                    color="info"
-                                    style="margin-left: 20px"
-                                >
-                                    {{ index + 1 }}
-                                </v-avatar>
-                                {{ student.name }}
-                            </h2>
-                            <div>
-                                <v-avatar color="info ml-2">
-                                    <v-icon
-                                        @click.stop="student.showDetails = true"
-                                        icon="mdi-information-outline"
-                                    ></v-icon>
-                                </v-avatar>
-                                <v-avatar color="info">
-                                    <v-icon
-                                        @click.stop="deleteStudent(student.id)"
-                                        icon="mdi-delete"
-                                    ></v-icon>
-                                </v-avatar>
-                            </div>
-                        </v-list-item-content>
-
-                        <v-dialog
-                            v-model="student.showDetails"
-                            max-width="500px"
-                        >
-                            <v-card>
-                                <v-card-title>{{ student.name }}</v-card-title>
-                                <v-card-text>
-                                    <div>رقم الهاتف: {{ student.phone }}</div>
-                                    <div>
-                                        البريد الإلكتروني: {{ student.email }}
-                                    </div>
-                                </v-card-text>
-                                <v-card-actions>
-                                    <v-btn
-                                        text
-                                        @click="student.showDetails = false"
-                                        >إغلاق</v-btn
+                        <v-list-item-content class="student-item">
+                            <v-row>
+                                <v-col>
+                                    <div
+                                        style="
+                                            padding: 10px;
+                                            display: flex;
+                                            justify-content: space-between;
+                                            align-items: center;
+                                        "
                                     >
-                                </v-card-actions>
-                            </v-card>
+                                        <h2>
+                                            <v-avatar
+                                                color="info"
+                                                style="margin-left: 20px"
+                                            >
+                                                {{ index + 1 }}
+                                            </v-avatar>
+                                            {{
+                                                student.student_information[0]
+                                                    .student_name
+                                            }}
+                                        </h2>
+                                        <div>
+                                            <v-avatar color="info">
+                                                <v-icon
+                                                    @click.stop="
+                                                        deleteStudent(
+                                                            student.id
+                                                        )
+                                                    "
+                                                    icon="mdi-delete"
+                                                ></v-icon>
+                                            </v-avatar>
+                                        </div>
+                                    </div>
+                                </v-col>
+                            </v-row>
+                            <v-row style="margin-right: 70px; margin-top: 0px">
+                                <v-col cols="12">
+                                    <div>
+                                        <h3 style="color: #2196f3">فصل 2/1</h3>
+                                    </div>
+                                </v-col>
+                                <v-col cols="2">
+                                    <v-card
+                                        style="
+                                            display: flex;
+                                            justify-content: center;
+                                            flex-direction: column;
+                                            align-items: center;
+                                            padding: 10px;
+                                            background: rgb(33, 150, 243);
+                                            color: #fff;
+                                        "
+                                    >
+                                        <h3>93%</h3>
+                                        <p>الشهر الاول</p>
+                                    </v-card> </v-col
+                                ><v-col cols="2">
+                                    <v-card
+                                        style="
+                                            display: flex;
+                                            justify-content: center;
+                                            flex-direction: column;
+                                            align-items: center;
+                                            padding: 10px;
+                                            background: rgb(33, 150, 243);
+                                            color: #fff;
+                                        "
+                                    >
+                                        <h3>99%</h3>
+                                        <p>الشهر الثاني</p>
+                                    </v-card> </v-col
+                                ><v-col cols="2">
+                                    <v-card
+                                        style="
+                                            display: flex;
+                                            justify-content: center;
+                                            flex-direction: column;
+                                            align-items: center;
+                                            padding: 10px;
+                                            background: rgb(33, 150, 243);
+                                            color: #fff;
+                                        "
+                                    >
+                                        <h3>90%</h3>
+                                        <p>امتحان الترم</p>
+                                    </v-card> </v-col
+                                ><v-col cols="2">
+                                    <v-card
+                                        style="
+                                            display: flex;
+                                            justify-content: center;
+                                            flex-direction: column;
+                                            align-items: center;
+                                            padding: 10px;
+                                            background: rgb(33, 150, 243);
+                                            color: #fff;
+                                        "
+                                    >
+                                        <h3>93%</h3>
+                                        <p>الشهر الاول</p>
+                                    </v-card> </v-col
+                                ><v-col cols="2">
+                                    <v-card
+                                        style="
+                                            display: flex;
+                                            justify-content: center;
+                                            flex-direction: column;
+                                            align-items: center;
+                                            padding: 10px;
+                                            background: rgb(33, 150, 243);
+                                            color: #fff;
+                                        "
+                                    >
+                                        <h3>93%</h3>
+                                        <p>الشهر الثاني</p>
+                                    </v-card>
+                                </v-col>
+                                <v-col cols="2">
+                                    <v-card
+                                        style="
+                                            display: flex;
+                                            justify-content: center;
+                                            flex-direction: column;
+                                            align-items: center;
+                                            padding: 10px;
+                                            background: rgb(33, 150, 243);
+                                            color: #fff;
+                                        "
+                                    >
+                                        <h3>95%</h3>
+                                        <p>امتحان اخر العام</p>
+                                    </v-card>
+                                </v-col>
+                            </v-row>
+                            <v-row
+                                style="
+                                    margin-right: 70px;
+                                    margin-top: 20px;
+                                    margin-bottom: 20px;
+                                "
+                            >
+                                <v-col>
+                                    <div
+                                        style="
+                                            display: flex;
+                                            justify-content: space-between;
+                                            align-items: center;
+                                        "
+                                    >
+                                        <h3
+                                            style="
+                                                color: #2196f3;
+                                                margin-bottom: 20px;
+                                            "
+                                        >
+                                            المصروفات
+                                        </h3>
+                                        <h3
+                                            style="
+                                                color: #2196f3;
+                                                margin-bottom: 20px;
+                                            "
+                                        >
+                                            1000/1500
+                                        </h3>
+                                    </div>
+                                    <div>
+                                        <v-progress-linear
+                                            v-model="progress"
+                                            height="25"
+                                            color="blue"
+                                            reverse
+                                        >
+                                            <template
+                                                v-slot:default="{ value }"
+                                            >
+                                                <div
+                                                    :style="{
+                                                        color: 'white',
+                                                        position: 'absolute',
+                                                        right: `calc(${value}% - 5%)`,
+                                                        transform:
+                                                            'translateX(-50%)',
+                                                        marginTop: '-70px',
+                                                    }"
+                                                    class="progress-label"
+                                                >
+                                                    <div
+                                                        class="label-container"
+                                                    >
+                                                        {{ Math.ceil(value) }}%
+                                                        <div
+                                                            class="arrow-down"
+                                                        ></div>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </v-progress-linear>
+                                        <div
+                                            style="
+                                                display: flex;
+                                                justify-content: space-between;
+                                                margin-top: 10px;
+                                            "
+                                        >
+                                            <span>بداية الدراسة</span>
+                                            <span>شهر 11</span>
+                                            <span>شهر 12</span>
+                                        </div>
+                                    </div>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col>
+                                    <v-card
+                                        @click.stop="this.hhhh = true"
+                                        style="
+                                            padding: 10px;
+                                            display: flex;
+                                            justify-content: center;
+                                            align-items: center;
+                                            background: #e3f1fd;
+                                        "
+                                    >
+                                        <v-icon
+                                            style="margin-left: 6px"
+                                            icon="mdi-information-outline"
+                                        ></v-icon
+                                        >التفاصيل</v-card
+                                    >
+                                </v-col>
+                            </v-row>
+                        </v-list-item-content>
+                        <v-dialog v-model="this.hhhh">
+                            <v-stepper
+                                v-model="e1"
+                                alt-labels
+                                editable
+                                style="padding: 5px"
+                            >
+                                <v-stepper-header class="stepper_head">
+                                    <template
+                                        v-for="n in steps"
+                                        :key="`${n}-step`"
+                                    >
+                                        <v-stepper-item
+                                            class="stepper-width"
+                                            style="
+                                                font-size: 13px;
+                                                font-weight: bold;
+                                            "
+                                            :complete="e1 > n"
+                                            :step="`Step ${n}`"
+                                            :value="n"
+                                            ref="stepperItems"
+                                        >
+                                        </v-stepper-item>
+                                    </template>
+                                </v-stepper-header>
+
+                                <v-stepper-window class="m-3">
+                                    <form @submit.prevent="submit">
+                                        <div v-if="e1 === 1" ref="slide1">
+                                            <div style="padding: 20px">
+                                                <div
+                                                    style="
+                                                        display: flex;
+                                                        margin-bottom: 20px;
+                                                        align-items: center;
+                                                    "
+                                                >
+                                                    <v-avatar
+                                                        color="info"
+                                                        style="
+                                                            margin-left: 20px;
+                                                        "
+                                                    >
+                                                        {{ index + 1 }}
+                                                    </v-avatar>
+                                                    <h2 style="color: #2196f3">
+                                                        معلومات الطالب
+                                                    </h2>
+                                                </div>
+                                                <div
+                                                    style="
+                                                        width: 100%;
+                                                        display: flex;
+                                                        gap: 20px;
+                                                    "
+                                                >
+                                                    <v-text-field
+                                                        v-model="
+                                                            student
+                                                                .student_information[0]
+                                                                .student_name
+                                                        "
+                                                        style="width: 50%"
+                                                        :error-messages="
+                                                            errors.student_name
+                                                        "
+                                                        required
+                                                        label="اسم الطالب"
+                                                    ></v-text-field>
+
+                                                    <v-select
+                                                        :items="[
+                                                            '1/1',
+                                                            '1/2',
+                                                            '2/1',
+                                                            '2/2',
+                                                            '3/1',
+                                                            '3/2',
+                                                        ]"
+                                                        variant="outlined"
+                                                        style="width: 50%"
+                                                        v-model="
+                                                            student
+                                                                .student_information[1]
+                                                                .class
+                                                        "
+                                                        :error-messages="
+                                                            errors.class
+                                                        "
+                                                        label="الفصل"
+                                                        required
+                                                    ></v-select>
+                                                </div>
+                                                <div
+                                                    style="
+                                                        width: 100%;
+                                                        display: flex;
+                                                        gap: 20px;
+                                                    "
+                                                >
+                                                    <v-select
+                                                        :items="classes"
+                                                        v-model="
+                                                            student
+                                                                .student_information[2]
+                                                                .educational_level
+                                                        "
+                                                        variant="outlined"
+                                                        style="width: 50%"
+                                                        :error-messages="
+                                                            errors.educational_level
+                                                        "
+                                                        label="المرحله التعليميه"
+                                                        required
+                                                    ></v-select>
+                                                    <v-select
+                                                        v-model="
+                                                            student
+                                                                .student_information[3]
+                                                                .gender
+                                                        "
+                                                        style="width: 50%"
+                                                        :error-messages="
+                                                            errors.gender
+                                                        "
+                                                        label="الجنس"
+                                                        required
+                                                        :items="['انثي', 'ذكر']"
+                                                        variant="outlined"
+                                                    ></v-select>
+                                                </div>
+
+                                                <v-select
+                                                    v-model="
+                                                        student
+                                                            .student_information[4]
+                                                            .section
+                                                    "
+                                                    :error-messages="
+                                                        errors.section
+                                                    "
+                                                    label="القسم"
+                                                    required
+                                                    :items="['عربي', 'لغات']"
+                                                    variant="outlined"
+                                                ></v-select>
+
+                                                <v-menu
+                                                    ref="menu"
+                                                    v-model="menu"
+                                                    :close-on-content-click="
+                                                        false
+                                                    "
+                                                    transition="scale-transition"
+                                                    offset-y
+                                                    min-width="290px"
+                                                    @open="initializeTempDate"
+                                                >
+                                                    <template
+                                                        v-slot:activator="{
+                                                            on,
+                                                            attrs,
+                                                        }"
+                                                    >
+                                                        <v-text-field
+                                                            v-model="
+                                                                student
+                                                                    .student_information[5]
+                                                                    .birthday
+                                                            "
+                                                            label="تاريخ الميلاد"
+                                                            append-icon="mdi-calendar"
+                                                            readonly
+                                                            @click="menu = true"
+                                                            :error-messages="
+                                                                errors.birthday
+                                                            "
+                                                            required
+                                                            v-bind="attrs"
+                                                            v-on="on"
+                                                        ></v-text-field>
+                                                    </template>
+                                                    <v-card>
+                                                        <v-date-picker
+                                                            v-model="tempDate"
+                                                            locale="ar"
+                                                            scrollable
+                                                            :first-day-of-week="
+                                                                1
+                                                            "
+                                                        ></v-date-picker>
+                                                        <v-card-actions>
+                                                            <v-spacer></v-spacer>
+                                                            <v-btn
+                                                                text
+                                                                @click="
+                                                                    menu = false
+                                                                "
+                                                                >إلغاء</v-btn
+                                                            >
+                                                            <v-btn
+                                                                text
+                                                                @click="
+                                                                    confirmDate
+                                                                "
+                                                                >تأكيد</v-btn
+                                                            >
+                                                        </v-card-actions>
+                                                    </v-card>
+                                                </v-menu>
+                                            </div>
+                                        </div>
+                                        <div v-if="e1 === 2" ref="slide2">
+                                            <div style="padding: 20px">
+                                                <div
+                                                    style="
+                                                        display: flex;
+                                                        margin-bottom: 20px;
+                                                        align-items: center;
+                                                    "
+                                                >
+                                                    <v-avatar
+                                                        color="info"
+                                                        style="
+                                                            margin-left: 20px;
+                                                        "
+                                                        >{{
+                                                            index + 2
+                                                        }}</v-avatar
+                                                    >
+                                                    <h2 style="color: #2196f3">
+                                                        ولي الامر
+                                                    </h2>
+                                                </div>
+                                                <v-text-field
+                                                    v-model="
+                                                        Guardian[0]
+                                                            .Guardian_name
+                                                    "
+                                                    :error-messages="
+                                                        errors.Guardian_name
+                                                    "
+                                                    label="الاسم"
+                                                    required
+                                                ></v-text-field>
+                                                <v-text-field
+                                                    v-model="
+                                                        Guardian[1]
+                                                            .Guardian_phone
+                                                    "
+                                                    :error-messages="
+                                                        errors.Guardian_phone
+                                                    "
+                                                    label="رقم التليفون"
+                                                    required
+                                                ></v-text-field>
+                                                <v-text-field
+                                                    v-model="
+                                                        Guardian[2]
+                                                            .Guardian_email
+                                                    "
+                                                    :error-messages="
+                                                        errors.Guardian_email
+                                                    "
+                                                    label="الايميل"
+                                                    required
+                                                ></v-text-field>
+                                                <v-text-field
+                                                    v-model="randomPassword"
+                                                    :error-messages="
+                                                        errors.Guardian_password
+                                                    "
+                                                    label="باسورد"
+                                                    placeholder="باسورد"
+                                                    :append-inner-icon="
+                                                        visible
+                                                            ? 'mdi-eye-off'
+                                                            : 'mdi-eye'
+                                                    "
+                                                    :type="
+                                                        visible
+                                                            ? 'text'
+                                                            : 'password'
+                                                    "
+                                                    density="compact"
+                                                    prepend-inner-icon="mdi-content-copy"
+                                                    variant="outlined"
+                                                    @click:prepend-inner="
+                                                        copyPassword
+                                                    "
+                                                    @click:append-inner="
+                                                        toggleVisibility
+                                                    "
+                                                ></v-text-field>
+                                                <v-select
+                                                    v-model="
+                                                        Guardian[4]
+                                                            .Brothers_in_school
+                                                    "
+                                                    :error-messages="
+                                                        errors.Brothers_in_school
+                                                    "
+                                                    label="هل يوجد اخوه في المدرسه"
+                                                    required
+                                                    :items="['لا', 'نعم']"
+                                                    variant="outlined"
+                                                ></v-select>
+                                                <div
+                                                    v-if="
+                                                        Guardian[4]
+                                                            .Brothers_in_school ===
+                                                        'نعم'
+                                                    "
+                                                >
+                                                    <div
+                                                        v-for="(
+                                                            bor, index
+                                                        ) in Guardian[5]
+                                                            .brother"
+                                                        :key="index"
+                                                    >
+                                                        <v-text-field
+                                                            v-model="
+                                                                Guardian[5]
+                                                                    .brother[
+                                                                    index
+                                                                ]
+                                                            "
+                                                            :error-messages="
+                                                                errors.brother
+                                                            "
+                                                            label="اسم الاخ"
+                                                            :append-icon="
+                                                                index == 0
+                                                                    ? 'mdi-plus'
+                                                                    : ''
+                                                            "
+                                                            @click:append="
+                                                                addBrother
+                                                            "
+                                                            required
+                                                        ></v-text-field>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div v-if="e1 === 3" ref="slide3">
+                                            <div style="padding: 20px">
+                                                <div
+                                                    style="
+                                                        display: flex;
+                                                        justify-content: space-between;
+                                                        align-items: center;
+                                                        margin-bottom: 20px;
+                                                    "
+                                                >
+                                                    <div
+                                                        style="
+                                                            display: flex;
+
+                                                            align-items: center;
+                                                        "
+                                                    >
+                                                        <v-avatar
+                                                            color="info"
+                                                            style="
+                                                                margin-left: 20px;
+                                                            "
+                                                        >
+                                                            {{ index + 3 }}
+                                                        </v-avatar>
+                                                        <h2
+                                                            style="
+                                                                color: #2196f3;
+                                                            "
+                                                        >
+                                                            النتائج الاسبوعيه
+                                                        </h2>
+                                                    </div>
+                                                    <v-btn
+                                                        color="blue"
+                                                        @click="
+                                                            dialogAddSubject = true
+                                                        "
+                                                        >إضافة مادة جديدة</v-btn
+                                                    >
+                                                </div>
+
+                                                <v-row>
+                                                    <v-col
+                                                        cols="4"
+                                                        v-for="(
+                                                            week, index
+                                                        ) in student.Results[0]
+                                                            .weekly"
+                                                        :key="index"
+                                                    >
+                                                        <v-card
+                                                            style="
+                                                                padding: 17px;
+                                                            "
+                                                        >
+                                                            <div
+                                                                style="
+                                                                    display: flex;
+                                                                    justify-content: space-between;
+                                                                    align-items: center;
+                                                                    margin-bottom: 20px;
+                                                                "
+                                                            >
+                                                                <div
+                                                                    style="
+                                                                        display: flex;
+                                                                        align-items: center;
+                                                                    "
+                                                                >
+                                                                    <v-avatar
+                                                                        color="info"
+                                                                        style="
+                                                                            margin-left: 20px;
+                                                                        "
+                                                                    >
+                                                                        {{
+                                                                            index +
+                                                                            1
+                                                                        }}
+                                                                    </v-avatar>
+                                                                    <h2>
+                                                                        {{
+                                                                            week.Subject_Name
+                                                                        }}
+                                                                    </h2>
+                                                                </div>
+                                                                <div>
+                                                                    <v-icon
+                                                                        color="primary"
+                                                                        @click="
+                                                                            editSubject(
+                                                                                student.id,
+                                                                                index
+                                                                            )
+                                                                        "
+                                                                    >
+                                                                        mdi-pencil
+                                                                    </v-icon>
+                                                                    <v-icon
+                                                                        color="red"
+                                                                        @click="
+                                                                            deleteSubject(
+                                                                                student.id,
+                                                                                index
+                                                                            )
+                                                                        "
+                                                                    >
+                                                                        mdi-delete
+                                                                    </v-icon>
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <table
+                                                                    class="styled-table"
+                                                                >
+                                                                    <tr>
+                                                                        <td>
+                                                                            درجة
+                                                                            الطالب
+                                                                        </td>
+                                                                        <td>
+                                                                            {{
+                                                                                week.Student_degree
+                                                                            }}
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>
+                                                                            الدرجة
+                                                                            الكلية
+                                                                        </td>
+                                                                        <td>
+                                                                            {{
+                                                                                week.Major_degree
+                                                                            }}
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </div>
+                                                        </v-card>
+                                                    </v-col>
+                                                </v-row>
+                                                <!-- Add Subject Dialog -->
+                                                <v-dialog
+                                                    v-model="dialogAddSubject"
+                                                    max-width="500px"
+                                                >
+                                                    <v-card>
+                                                        <v-card-title>
+                                                            <span
+                                                                class="headline"
+                                                                >إضافة مادة
+                                                                جديدة</span
+                                                            >
+                                                        </v-card-title>
+                                                        <v-card-text>
+                                                            <v-form
+                                                                ref="addForm"
+                                                            >
+                                                                <v-text-field
+                                                                    v-model="
+                                                                        newSubject.Subject_Name
+                                                                    "
+                                                                    label="اسم المادة"
+                                                                    required
+                                                                ></v-text-field>
+                                                                <v-text-field
+                                                                    v-model="
+                                                                        newSubject.Major_degree
+                                                                    "
+                                                                    label="الدرجة الكلية"
+                                                                    type="number"
+                                                                    required
+                                                                ></v-text-field>
+                                                                <v-text-field
+                                                                    v-model="
+                                                                        newSubject.Student_degree
+                                                                    "
+                                                                    label="درجة الطالب"
+                                                                    type="number"
+                                                                    required
+                                                                ></v-text-field>
+                                                            </v-form>
+                                                        </v-card-text>
+                                                        <v-card-actions>
+                                                            <v-spacer></v-spacer>
+                                                            <v-btn
+                                                                color="blue darken-1"
+                                                                text
+                                                                @click="
+                                                                    dialogAddSubject = false
+                                                                "
+                                                                >إلغاء</v-btn
+                                                            >
+                                                            <v-btn
+                                                                color="blue darken-1"
+                                                                text
+                                                                @click="
+                                                                    addSubject(
+                                                                        student.id
+                                                                    )
+                                                                "
+                                                                >حفظ</v-btn
+                                                            >
+                                                        </v-card-actions>
+                                                    </v-card>
+                                                </v-dialog>
+
+                                                <!-- Edit Subject Dialog -->
+                                                <v-dialog
+                                                    v-model="editDialog"
+                                                    max-width="500px"
+                                                >
+                                                    <v-card>
+                                                        <v-card-title>
+                                                            <span
+                                                                class="headline"
+                                                                >تعديل
+                                                                المادة</span
+                                                            >
+                                                        </v-card-title>
+                                                        <v-card-text>
+                                                            <v-form
+                                                                ref="editForm"
+                                                            >
+                                                                <v-text-field
+                                                                    v-model="
+                                                                        editedSubject.Subject_Name
+                                                                    "
+                                                                    label="اسم المادة"
+                                                                    required
+                                                                ></v-text-field>
+                                                                <v-text-field
+                                                                    v-model="
+                                                                        editedSubject.Major_degree
+                                                                    "
+                                                                    label="الدرجة الكلية"
+                                                                    type="number"
+                                                                    required
+                                                                ></v-text-field>
+                                                                <v-text-field
+                                                                    v-model="
+                                                                        editedSubject.Student_degree
+                                                                    "
+                                                                    label="درجة الطالب"
+                                                                    type="number"
+                                                                    required
+                                                                ></v-text-field>
+                                                            </v-form>
+                                                        </v-card-text>
+                                                        <v-card-actions>
+                                                            <v-spacer></v-spacer>
+                                                            <v-btn
+                                                                color="blue darken-1"
+                                                                text
+                                                                @click="
+                                                                    closeDialog
+                                                                "
+                                                                >إلغاء</v-btn
+                                                            >
+                                                            <v-btn
+                                                                color="blue darken-1"
+                                                                text
+                                                                @click="
+                                                                    saveEdit
+                                                                "
+                                                                >حفظ</v-btn
+                                                            >
+                                                        </v-card-actions>
+                                                    </v-card>
+                                                </v-dialog>
+                                            </div>
+                                        </div>
+                                        <div v-if="e1 === 4" ref="slide4">
+                                            <div style="padding: 20px">
+                                                <div
+                                                    style="
+                                                        display: flex;
+                                                        margin-bottom: 20px;
+                                                        align-items: center;
+                                                    "
+                                                >
+                                                    <v-avatar
+                                                        color="info"
+                                                        style="
+                                                            margin-left: 20px;
+                                                        "
+                                                    >
+                                                        {{ index + 4 }}
+                                                    </v-avatar>
+                                                    <h2 style="color: #2196f3">
+                                                        النتائج الشهريه
+                                                    </h2>
+                                                </div>
+                                                <v-card flat>
+                                                    <v-row>
+                                                        <v-col
+                                                            cols="12"
+                                                            class="d-flex justify-center ma-3"
+                                                        >
+                                                            <v-btn
+                                                                rounded="xs"
+                                                                size="large"
+                                                                @click="
+                                                                    selectMonth(
+                                                                        'شهر يناير'
+                                                                    )
+                                                                "
+                                                                >شهر
+                                                                يناير</v-btn
+                                                            >
+                                                            <v-btn
+                                                                rounded="xs"
+                                                                size="large"
+                                                                @click="
+                                                                    selectMonth(
+                                                                        'شهر فبراير'
+                                                                    )
+                                                                "
+                                                                >شهر
+                                                                فبراير</v-btn
+                                                            >
+                                                            <v-btn
+                                                                rounded="xs"
+                                                                size="large"
+                                                                @click="
+                                                                    selectMonth(
+                                                                        'شهر مارس'
+                                                                    )
+                                                                "
+                                                                >شهر مارس</v-btn
+                                                            >
+                                                            <v-btn
+                                                                rounded="xs"
+                                                                size="large"
+                                                                @click="
+                                                                    selectMonth(
+                                                                        'شهر ابرايل'
+                                                                    )
+                                                                "
+                                                                >شهر
+                                                                ابرايل</v-btn
+                                                            >
+                                                        </v-col>
+                                                    </v-row>
+
+                                                    <!-- بيانات الطالب -->
+                                                    <v-row
+                                                        class="d-flex flex-row align-center justify-space-between ma-5"
+                                                    >
+                                                        <v-col>
+                                                            <v-col>
+                                                                <v-text-title
+                                                                    >الاسم:</v-text-title
+                                                                >
+                                                                <v-text-title>{{
+                                                                    student
+                                                                        .student_information[0]
+                                                                        .student_name
+                                                                }}</v-text-title>
+                                                            </v-col>
+                                                            <v-col>
+                                                                <v-text-title
+                                                                    >المرحلة
+                                                                    الدراسية:</v-text-title
+                                                                >
+                                                                <v-text-title>{{
+                                                                    year
+                                                                }}</v-text-title>
+                                                            </v-col>
+                                                            <v-col>
+                                                                <v-text-title
+                                                                    >امتحان:</v-text-title
+                                                                >
+                                                                <v-text-title>{{
+                                                                    this
+                                                                        .selectedMonth
+                                                                }}</v-text-title>
+                                                            </v-col>
+                                                        </v-col>
+                                                        <v-col
+                                                            class="d-flex flex-column align-end"
+                                                        >
+                                                            <div
+                                                                class="par d-flex flex-column justify-center"
+                                                                style="
+                                                                    width: 200px;
+                                                                    height: 200px;
+                                                                "
+                                                            >
+                                                                <img
+                                                                    src="../assets/images.jpeg"
+                                                                    alt="School Logo"
+                                                                />
+                                                                <p class="ma-2">
+                                                                    معهد السراج
+                                                                    المنير
+                                                                    الأزهري
+                                                                </p>
+                                                            </div>
+                                                        </v-col>
+                                                    </v-row>
+
+                                                    <!-- جدول النتائج -->
+                                                    <div class="table">
+                                                        <v-table>
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>
+                                                                        اسم
+                                                                        المادة
+                                                                    </th>
+                                                                    <th>
+                                                                        اسم
+                                                                        المعلم
+                                                                    </th>
+                                                                    <th>
+                                                                        تقييم
+                                                                        السلوك
+                                                                    </th>
+                                                                    <th>
+                                                                        الدرجة
+                                                                        الصغرى
+                                                                    </th>
+                                                                    <th>
+                                                                        الدرجة
+                                                                        الكبرى
+                                                                    </th>
+                                                                    <th>
+                                                                        الدرجة
+                                                                        النهائية
+                                                                        للطالب
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr
+                                                                    v-for="(
+                                                                        degree,
+                                                                        index
+                                                                    ) in selectedMonthlyDegrees"
+                                                                    :key="index"
+                                                                >
+                                                                    <td>
+                                                                        {{
+                                                                            degree.Subject_Name
+                                                                        }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{
+                                                                            degree.Teacher_Name
+                                                                        }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{
+                                                                            degree.Behavior_assessment
+                                                                        }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{
+                                                                            degree.Minor_degree
+                                                                        }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{
+                                                                            degree.Major_degree
+                                                                        }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{
+                                                                            degree.Student_degree
+                                                                        }}
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </v-table>
+                                                    </div>
+                                                </v-card>
+                                            </div>
+                                        </div>
+                                        <div v-if="e1 === 5" ref="slide5">
+                                            <div
+                                                style="
+                                                    display: flex;
+
+                                                    align-items: center;
+                                                "
+                                            >
+                                                <v-avatar
+                                                    color="info"
+                                                    style="margin-left: 20px"
+                                                >
+                                                    {{ index + 4 }}
+                                                </v-avatar>
+                                                <h2 style="color: #2196f3">
+                                                    المدفوعات
+                                                </h2>
+                                            </div>
+                                            <v-card
+                                                flat
+                                                class="mx-auto my-4"
+                                                max-width="90%"
+                                            >
+                                                <v-container fluid>
+                                                    <v-row class="ma-10">
+                                                        <v-col
+                                                            cols="12"
+                                                            sm="4"
+                                                            class="d-flex justify-center"
+                                                        >
+                                                            <v-card
+                                                                class="pa-3 fixed-card mb-3"
+                                                                outlined
+                                                            >
+                                                                <v-card-title
+                                                                    class="custom-title custom-font text-center"
+                                                                    style="
+                                                                        font-size: 20px;
+                                                                    "
+                                                                >
+                                                                    المستحق
+                                                                </v-card-title>
+                                                                <v-card-subtitle
+                                                                    class="custom-font centered-subtitle"
+                                                                    style="
+                                                                        font-size: 16px;
+                                                                    "
+                                                                >
+                                                                    <v-text-field
+                                                                        v-model="
+                                                                            student
+                                                                                .payments
+                                                                                .Requird
+                                                                        "
+                                                                        style="
+                                                                            text-align: center;
+                                                                        "
+                                                                        class="payments_input"
+                                                                        required
+                                                                        @input="
+                                                                            updateFirebase(
+                                                                                student.id,
+                                                                                student.payments
+                                                                            )
+                                                                        "
+                                                                    ></v-text-field>
+                                                                </v-card-subtitle>
+                                                            </v-card>
+                                                        </v-col>
+                                                        <v-col
+                                                            cols="12"
+                                                            sm="4"
+                                                            class="d-flex justify-center"
+                                                        >
+                                                            <v-card
+                                                                class="pa-3 fixed-card mb-3"
+                                                                outlined
+                                                            >
+                                                                <v-card-title
+                                                                    class="custom-title custom-font text-center"
+                                                                    style="
+                                                                        font-size: 20px;
+                                                                    "
+                                                                >
+                                                                    المدفوع
+                                                                </v-card-title>
+                                                                <v-card-subtitle
+                                                                    class="custom-font centered-subtitle"
+                                                                    style="
+                                                                        font-size: 16px;
+                                                                    "
+                                                                >
+                                                                    <v-text-field
+                                                                        v-model="
+                                                                            student
+                                                                                .payments
+                                                                                .paid_up
+                                                                        "
+                                                                        style="
+                                                                            text-align: center;
+                                                                        "
+                                                                        class="payments_input"
+                                                                        required
+                                                                        @input="
+                                                                            updateFirebase(
+                                                                                student.id,
+                                                                                student.payments
+                                                                            )
+                                                                        "
+                                                                    ></v-text-field>
+                                                                </v-card-subtitle>
+                                                            </v-card>
+                                                        </v-col>
+                                                        <v-col
+                                                            cols="12"
+                                                            sm="4"
+                                                            class="d-flex justify-center"
+                                                        >
+                                                            <v-card
+                                                                class="pa-3 fixed-card mb-3"
+                                                                outlined
+                                                            >
+                                                                <v-card-title
+                                                                    class="custom-title custom-font text-center"
+                                                                    style="
+                                                                        font-size: 20px;
+                                                                    "
+                                                                >
+                                                                    نظام التقسيط
+                                                                </v-card-title>
+                                                                <v-card-subtitle
+                                                                    class="custom-font centered-subtitle"
+                                                                    style="
+                                                                        font-size: 16px;
+                                                                    "
+                                                                >
+                                                                    <v-select
+                                                                        v-model="
+                                                                            student
+                                                                                .payments
+                                                                                .installment_system
+                                                                        "
+                                                                        :items="[
+                                                                            'مره واحده',
+                                                                            'مرتين',
+                                                                            'ثلاث مرات',
+                                                                            'اربع مرات',
+                                                                            'خمس مرات',
+                                                                        ]"
+                                                                        style="
+                                                                            text-align: center;
+                                                                        "
+                                                                        class="payments_input"
+                                                                        required
+                                                                        @blur="
+                                                                            updateFirebase(
+                                                                                student.id,
+                                                                                student.payments
+                                                                            )
+                                                                        "
+                                                                    ></v-select>
+                                                                </v-card-subtitle>
+                                                            </v-card>
+                                                        </v-col>
+                                                    </v-row>
+                                                </v-container>
+                                            </v-card>
+                                        </div>
+                                        <div v-if="e1 === 6" ref="slide6">
+                                            <div
+                                                style="
+                                                    display: flex;
+                                                    justify-content: space-between;
+                                                    align-items: center;
+                                                    margin-bottom: 20px;
+                                                "
+                                            >
+                                                <div
+                                                    style="
+                                                        display: flex;
+
+                                                        align-items: center;
+                                                    "
+                                                >
+                                                    <v-avatar
+                                                        color="info"
+                                                        style="
+                                                            margin-left: 20px;
+                                                        "
+                                                    >
+                                                        {{ index + 5 }}
+                                                    </v-avatar>
+                                                    <h2 style="color: #2196f3">
+                                                        الاشعارات
+                                                    </h2>
+                                                </div>
+                                                <v-btn
+                                                    color="blue"
+                                                    @click="
+                                                        dialogAddNotice = true
+                                                    "
+                                                    >إضافةاشعار</v-btn
+                                                >
+                                            </div>
+                                            <v-row>
+                                                <v-col
+                                                    v-for="(
+                                                        note, index
+                                                    ) in student.Notifications"
+                                                    :key="index"
+                                                    cols="12"
+                                                    md="4"
+                                                >
+                                                    <v-card
+                                                        class="pa-3 mb-3 notification-card"
+                                                        outlined
+                                                    >
+                                                        <v-card-title
+                                                            class="d-flex justify-space-between align-center"
+                                                        >
+                                                            {{
+                                                                note.NoticeTitle
+                                                            }}
+                                                            <div>
+                                                                <v-icon
+                                                                    small
+                                                                    class="mr-2"
+                                                                    @click="
+                                                                        editNotifications(
+                                                                            student.id,
+                                                                            index
+                                                                        )
+                                                                    "
+                                                                    >mdi-pencil</v-icon
+                                                                >
+                                                                <v-icon
+                                                                    small
+                                                                    class="mr-2"
+                                                                    @click="
+                                                                        deleteNotification(
+                                                                            student.id,
+                                                                            index
+                                                                        )
+                                                                    "
+                                                                    >mdi-delete</v-icon
+                                                                >
+                                                            </div>
+                                                        </v-card-title>
+                                                        <v-card-text>
+                                                            {{
+                                                                note.theDescription
+                                                            }}
+                                                        </v-card-text>
+                                                    </v-card>
+                                                </v-col>
+                                            </v-row>
+                                            <v-dialog
+                                                v-model="dialogAddNotice"
+                                                max-width="500px"
+                                            >
+                                                <v-card>
+                                                    <v-card-title>
+                                                        <span class="headline"
+                                                            >إضافة اشعار
+                                                            جديدة</span
+                                                        >
+                                                    </v-card-title>
+                                                    <v-card-text>
+                                                        <v-form ref="addForm">
+                                                            <v-text-field
+                                                                v-model="
+                                                                    AddNotice.NoticeTitle
+                                                                "
+                                                                label="عنوان الاشعار"
+                                                                required
+                                                            ></v-text-field>
+                                                            <v-textarea
+                                                                v-model="
+                                                                    AddNotice.theDescription
+                                                                "
+                                                                label="الوصف"
+                                                                required
+                                                            ></v-textarea>
+                                                            <v-select
+                                                                v-model="
+                                                                    AddNotice.NotificationType
+                                                                "
+                                                                label=" نوع الاشعار"
+                                                                required
+                                                                :items="[
+                                                                    'سئ',
+                                                                    'جيد',
+                                                                ]"
+                                                            ></v-select>
+                                                        </v-form>
+                                                    </v-card-text>
+                                                    <v-card-actions>
+                                                        <v-spacer></v-spacer>
+                                                        <v-btn
+                                                            color="blue darken-1"
+                                                            text
+                                                            @click="
+                                                                dialogAddNotice = false
+                                                            "
+                                                            >إلغاء</v-btn
+                                                        >
+                                                        <v-btn
+                                                            color="blue darken-1"
+                                                            text
+                                                            @click="
+                                                                addNotifications(
+                                                                    student.id
+                                                                )
+                                                            "
+                                                            >حفظ</v-btn
+                                                        >
+                                                    </v-card-actions>
+                                                </v-card>
+                                            </v-dialog>
+                                            <v-dialog
+                                                v-model="
+                                                    editNotificationsDialog
+                                                "
+                                                max-width="500px"
+                                            >
+                                                <v-card>
+                                                    <v-card-title>
+                                                        <span class="headline"
+                                                            >تعديل الاشعار</span
+                                                        >
+                                                    </v-card-title>
+                                                    <v-card-text>
+                                                        <v-form ref="editForm">
+                                                            <v-text-field
+                                                                v-model="
+                                                                    editedNotifications.NoticeTitle
+                                                                "
+                                                                label="عنوان الاشعار"
+                                                                required
+                                                            ></v-text-field>
+                                                            <v-textarea
+                                                                v-model="
+                                                                    editedNotifications.theDescription
+                                                                "
+                                                                label="الوصف"
+                                                                required
+                                                            ></v-textarea>
+
+                                                            <v-select
+                                                                v-model="
+                                                                    editedNotifications.NotificationType
+                                                                "
+                                                                label=" نوع الاشعار"
+                                                                required
+                                                                :items="[
+                                                                    'سئ',
+                                                                    'جيد',
+                                                                ]"
+                                                            ></v-select>
+                                                        </v-form>
+                                                    </v-card-text>
+                                                    <v-card-actions>
+                                                        <v-spacer></v-spacer>
+                                                        <v-btn
+                                                            color="blue darken-1"
+                                                            text
+                                                            @click="
+                                                                closeNotificationsDialogs
+                                                            "
+                                                            >إلغاء</v-btn
+                                                        >
+                                                        <v-btn
+                                                            color="blue darken-1"
+                                                            text
+                                                            @click="
+                                                                saveNotificationsEdit
+                                                            "
+                                                            >حفظ</v-btn
+                                                        >
+                                                    </v-card-actions>
+                                                </v-card>
+                                            </v-dialog>
+                                        </div>
+                                        <div v-if="e1 === 7" ref="slide7">
+                                            <div
+                                                style="
+                                                    display: flex;
+
+                                                    align-items: center;
+                                                "
+                                            >
+                                                <v-avatar
+                                                    color="info"
+                                                    style="margin-left: 20px"
+                                                >
+                                                    {{ index + 6 }}
+                                                </v-avatar>
+                                                <h2 style="color: #2196f3">
+                                                    الصور
+                                                </h2>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </v-stepper-window>
+                            </v-stepper>
                         </v-dialog>
                         <!-- New Search Student Dialog -->
                         <v-dialog
                             transition="dialog-top-transition"
-                            width="50%"
+                            width="90%"
                             v-model="dialogStore.dialog_searchstudent"
                         >
                             <template v-slot:default>
@@ -101,7 +1521,7 @@
             <v-col cols="2">
                 <v-dialog
                     transition="dialog-top-transition"
-                    width="50%"
+                    width="90%"
                     v-model="dialogStore.dialog_addstudent"
                 >
                     <template v-slot:default>
@@ -113,7 +1533,7 @@
                                 width: 100% !important;
                             "
                         >
-                            <v-toolbar title="بيانات الطالب">
+                            <v-toolbar title="معلومات الطالب">
                                 <v-btn
                                     icon
                                     @click="
@@ -123,31 +1543,146 @@
                                     <v-icon>mdi-close</v-icon>
                                 </v-btn>
                             </v-toolbar>
-                            <v-card-text class="text-h2 pa-6">
-                                <form @submit.prevent="submit">
-                                    <v-text-field
-                                        v-model="form.name"
-                                        :counter="10"
-                                        :error-messages="errors.name"
-                                        label="الاسم"
-                                    ></v-text-field>
-                                    <v-text-field
-                                        v-model="form.phone"
-                                        :counter="7"
-                                        :error-messages="errors.phone"
-                                        label="رقم الهاتف"
-                                    ></v-text-field>
-                                    <v-text-field
-                                        v-model="form.email"
-                                        :error-messages="errors.email"
-                                        label="البريد الإلكتروني"
-                                    ></v-text-field>
+                            <form @submit.prevent="submit">
+                                <div style="padding: 20px">
+                                    <div
+                                        style="
+                                            width: 100%;
+                                            display: flex;
+                                            gap: 20px;
+                                        "
+                                    >
+                                        <v-text-field
+                                            v-model="
+                                                form.student_information[0]
+                                                    .student_name
+                                            "
+                                            style="width: 50%"
+                                            :error-messages="
+                                                errors.student_name
+                                            "
+                                            required
+                                            label="اسم الطالب"
+                                        ></v-text-field>
+
+                                        <v-select
+                                            :items="[
+                                                '1/1',
+                                                '1/2',
+                                                '2/1',
+                                                '2/2',
+                                                '3/1',
+                                                '3/2',
+                                            ]"
+                                            variant="outlined"
+                                            style="width: 50%"
+                                            v-model="
+                                                form.student_information[1]
+                                                    .class
+                                            "
+                                            :error-messages="errors.class"
+                                            label="الفصل"
+                                            required
+                                        ></v-select>
+                                    </div>
+                                    <div
+                                        style="
+                                            width: 100%;
+                                            display: flex;
+                                            gap: 20px;
+                                        "
+                                    >
+                                        <v-select
+                                            :items="classes"
+                                            v-model="
+                                                form.student_information[2]
+                                                    .educational_level
+                                            "
+                                            variant="outlined"
+                                            style="width: 50%"
+                                            :error-messages="
+                                                errors.educational_level
+                                            "
+                                            label="المستوى التعليمي"
+                                            required
+                                        ></v-select>
+                                        <v-select
+                                            v-model="
+                                                form.student_information[3]
+                                                    .gender
+                                            "
+                                            style="width: 50%"
+                                            :error-messages="errors.gender"
+                                            label="الجنس"
+                                            required
+                                            :items="['انثي', 'ذكر']"
+                                            variant="outlined"
+                                        ></v-select>
+                                    </div>
+
+                                    <v-select
+                                        v-model="
+                                            form.student_information[4].section
+                                        "
+                                        :error-messages="errors.section"
+                                        label="القسم"
+                                        required
+                                        :items="['عربي', 'لغات']"
+                                        variant="outlined"
+                                    ></v-select>
+
+                                    <v-menu
+                                        ref="menu"
+                                        v-model="menu"
+                                        :close-on-content-click="false"
+                                        transition="scale-transition"
+                                        offset-y
+                                        min-width="290px"
+                                        @open="initializeTempDate"
+                                    >
+                                        <template
+                                            v-slot:activator="{ on, attrs }"
+                                        >
+                                            <v-text-field
+                                                v-model="formattedDate"
+                                                label="تاريخ الميلاد"
+                                                prepend-icon="mdi-calendar"
+                                                readonly
+                                                @click="menu = true"
+                                                :error-messages="
+                                                    errors.birthday
+                                                "
+                                                required
+                                                v-bind="attrs"
+                                                v-on="on"
+                                            ></v-text-field>
+                                        </template>
+                                        <v-card>
+                                            <v-date-picker
+                                                v-model="tempDate"
+                                                locale="ar"
+                                                scrollable
+                                                :first-day-of-week="1"
+                                            ></v-date-picker>
+                                            <v-card-actions>
+                                                <v-spacer></v-spacer>
+                                                <v-btn
+                                                    text
+                                                    @click="menu = false"
+                                                    >إلغاء</v-btn
+                                                >
+                                                <v-btn text @click="confirmDate"
+                                                    >تأكيد</v-btn
+                                                >
+                                            </v-card-actions>
+                                        </v-card>
+                                    </v-menu>
                                     <div class="text-center">
                                         <v-btn
                                             append-icon="mdi-account-circle"
                                             type="submit"
                                             style="
-                                                background: #2a597d;
+                                                background: rgb(70, 122, 164);
                                                 color: white;
                                                 font-size: 24px;
                                                 padding: 3px;
@@ -157,8 +1692,8 @@
                                             اضافه طالب
                                         </v-btn>
                                     </div>
-                                </form>
-                            </v-card-text>
+                                </div>
+                            </form>
                         </v-card>
                     </template>
                 </v-dialog>
@@ -175,6 +1710,8 @@ import {
     getDocs,
     doc,
     getFirestore,
+    getDoc,
+    updateDoc,
 } from "firebase/firestore";
 const firebaseConfig = {
     apiKey: "AIzaSyBdk3sqIHjXvB2C-O-lvkRgMFpg8pemkno",
@@ -184,6 +1721,9 @@ const firebaseConfig = {
     messagingSenderId: "462211256149",
     appId: "1:462211256149:web:a03ace3c70b306620169dc",
 };
+import { gsap } from "gsap";
+import { useToast } from "vue-toastification";
+import "vue-toastification/dist/index.css"; // Import the CSS file
 import { initializeApp } from "@firebase/app";
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -197,23 +1737,235 @@ export default {
         },
     },
     setup() {
+        const toast = useToast();
+
+        // Example usage of toast
+        // toast.success("This is a success message!");
+
         const dialogStore = useDialogStore();
-        return { dialogStore };
+        return { dialogStore, toast };
     },
     data() {
         return {
+            editNotificationsDialog: false,
+            dialogAddNotice: false,
+            dialogs: false,
+            editedField: "",
+            editedValue: "",
+            randomPassword: "",
+            selectedMonth: "شهر يناير",
+            dialogAddSubject: false,
+            newSubject: {
+                Subject_Name: "",
+                Major_degree: null,
+                Student_degree: null,
+            },
+            AddNotice: {
+                NoticeTitle: "",
+                theDescription: "",
+                NotificationType: "",
+            },
+            visible: false,
+            menu: false,
+            e1: 1,
+            steps: 7,
             students_class: [],
             dialog_addstudent: false,
             searchQuery: "",
+            Guardian: [
+                { Guardian_name: "" },
+                { Guardian_phone: "" },
+                { Guardian_email: "" },
+                { Guardian_password: "" },
+                { Brothers_in_school: "" },
+                { brother: [""] },
+            ],
             form: {
-                name: "",
-                phone: "",
-                email: "",
+                student_information: [
+                    { student_name: "" },
+                    { class: "" },
+                    { educational_level: "" },
+                    { gender: "" },
+                    { section: "" },
+                    { birthday: null },
+                ],
+                Results: [
+                    {
+                        weekly: [
+                            {
+                                Subject_Name: "",
+                                Major_degree: 0,
+                                Student_degree: 0,
+                            },
+                        ],
+                    },
+                    {
+                        Monthly: [
+                            {
+                                Certificate_title: "شهر يناير",
+                                Degrees: [
+                                    {
+                                        Subject_Name: "عربي",
+                                        Teacher_Name: "عماد عمر",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 99,
+                                    },
+                                    {
+                                        Subject_Name: "قرآن كريم",
+                                        Teacher_Name: "نور محمود",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 95,
+                                    },
+                                    {
+                                        Subject_Name: " جغرافيا",
+                                        Teacher_Name: "علاء محمود",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 80,
+                                    },
+                                    {
+                                        Subject_Name: " تاريخ",
+                                        Teacher_Name: "خالد محمد",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 77,
+                                    },
+                                ],
+                            },
+                            // أضف المزيد من الأشهر هنا
+                            {
+                                Certificate_title: "شهر فبراير",
+                                Degrees: [
+                                    {
+                                        Subject_Name: "انجليزى",
+                                        Teacher_Name: "كريم عمر",
+                                        Behavior_assessment: "جيد",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 98,
+                                    },
+                                    {
+                                        Subject_Name: " جغرافيا",
+                                        Teacher_Name: "كمال محمود",
+                                        Behavior_assessment: "جيد جدا",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 94,
+                                    },
+                                    {
+                                        Subject_Name: " جغرافيا",
+                                        Teacher_Name: "علاء محمود",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 82,
+                                    },
+                                    {
+                                        Subject_Name: " تاريخ",
+                                        Teacher_Name: "خالد محمد",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 79,
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+                payments: {
+                    Requird: 100,
+                    paid_up: 120,
+                    installment_system: "شهريا",
+                },
+                Notifications: [
+                    {
+                        NoticeTitle: "",
+                        theDescription: "",
+                        NotificationType: "",
+                    },
+                ],
             },
+
             errors: {
-                name: [],
-                phone: [],
-                email: [],
+                student_name: [],
+                class: [],
+                educational_level: [],
+                gender: [],
+                section: [],
+                birthday: [],
+                Guardian_name: [],
+                Guardian_phone: [],
+                Guardian_email: [],
+                Guardian_password: [],
+                Brothers_in_school: [],
+                brother: [],
+                weekly_Subject_Name: [],
+                weekly_Degree: [],
+                weekly_Data: [],
+                monthly_Certifications_title: [],
+                monthly_Subject_Name: [],
+                monthly_Teacher_Name: [],
+                monthly_Behavior_assessment: [],
+                monthly_Minor_degree: [],
+                monthly_Major_degree: [],
+                monthly_Student_degree: [],
+                payments_Required: [],
+                payments_paid_up: [],
+                payments_installment_system: [],
+                Notifications_Title: [],
+                Notifications_Details: [],
+            },
+            currentStep: "Step 1",
+            progress: 75,
+            classes: [
+                "الصف الثالث الثانوي",
+                "الصف الثاني الثانوي",
+                " الصف أولى ثانوي",
+                "الصف الثالث الاعدادي",
+                "الصف الثاني الاعدادي",
+                "الصف الاول الاعدادي",
+                "الصف السادس الابتدائي",
+                "الصف الخامس الابتدائي",
+                "الصف الرابع الابتدائي",
+                "الصف الثالث الابتدائي",
+                "الصف الثاني الابتدائي",
+                "الصف الاول الابتدائي",
+                "ثانيه روضه",
+                " اولي روضه",
+            ],
+            tempDate: null,
+            formattedDate: "",
+            editDialog: false,
+            editedIndex: -1,
+            editedSubject: {
+                Subject_Name: "",
+                Major_degree: 0,
+                Student_degree: 0,
+            },
+            editedNotifications: {
+                NoticeTitle: "",
+                theDescription: "",
+                NotificationType: "",
+            },
+            currentStudentId: null,
+            valid: false,
+            editedmony: {
+                Requird: 0,
+                paid_up: 0,
+                installment_system: "",
+            },
+            hhhh: false,
+            editednas: {
+                Requird: 100,
+                paid_up: 120,
+                installment_system: "شهريا",
             },
         };
     },
@@ -221,6 +1973,246 @@ export default {
         await this.fetchStudents();
     },
     methods: {
+        async saveNotificationsEdit() {
+            try {
+                const studentRef = doc(db, "students", this.editedStudentId);
+                const studentDoc = await getDoc(studentRef);
+                if (studentDoc.exists()) {
+                    const studentData = studentDoc.data();
+                    Object.assign(
+                        studentData.Notifications[this.editedIndex],
+                        this.editedNotifications
+                    );
+                    await updateDoc(studentRef, studentData);
+                    this.closeNotificationsDialogs();
+                    await this.fetchStudents();
+                }
+            } catch (error) {
+                console.error("Error editing subject:", error);
+            }
+        },
+        editNotifications(studentId, index) {
+            this.editedStudentId = studentId;
+            this.editedIndex = index;
+            const student = this.students_class.find(
+                (student) => student.id === studentId
+            );
+            if (student) {
+                this.editedNotifications = { ...student.Notifications };
+                this.editNotificationsDialog = true;
+            }
+        },
+        async addNotifications(studentId) {
+            try {
+                const studentRef = doc(db, "students", studentId);
+                const studentDoc = await getDoc(studentRef);
+                if (studentDoc.exists()) {
+                    const studentData = studentDoc.data();
+                    studentData.Notifications.push({
+                        NoticeTitle: this.AddNotice.NoticeTitle,
+                        theDescription: this.AddNotice.theDescription,
+                        NotificationType: this.AddNotice.NotificationType,
+                    });
+                    await updateDoc(studentRef, studentData);
+                    this.dialogAddNotice = false;
+                    this.AddNotice = {
+                        NoticeTitle: "",
+                        theDescription: "",
+                        NotificationType: "",
+                    };
+                    await this.fetchStudents();
+                }
+            } catch (error) {
+                console.error("Error adding subject:", error);
+            }
+        },
+
+        async deleteNotification(studentId, NotificatIndex) {
+            try {
+                const studentRef = doc(db, "students", studentId);
+                const studentDoc = await getDoc(studentRef);
+                if (studentDoc.exists()) {
+                    const studentData = studentDoc.data();
+                    studentData.Notifications.splice(NotificatIndex, 1);
+                    await updateDoc(studentRef, studentData);
+                    await this.fetchStudents();
+                    // this.dilog_ss = true;
+                }
+            } catch (error) {
+                console.error("Error deleting subject:", error);
+            }
+        },
+        async updateFirebase(studentId, payments) {
+            try {
+                const studentDoc = doc(db, "students", studentId);
+                await updateDoc(studentDoc, { payments });
+                console.log("Document updated successfully");
+            } catch (error) {
+                console.error("Error updating document:", error);
+            }
+        },
+        selectMonth(month) {
+            this.selectedMonth = month;
+        },
+        async updateGuardian() {
+            try {
+                if (this.currentStudentId) {
+                    const studentRef = doc(
+                        db,
+                        "students",
+                        this.currentStudentId
+                    );
+
+                    await updateDoc(studentRef, {
+                        Guardian: this.Guardian,
+                    });
+
+                    console.log("Guardian information updated successfully");
+                } else {
+                    console.error(
+                        "No student ID is set for updating guardian information."
+                    );
+                }
+            } catch (error) {
+                console.error("Error updating guardian information:", error);
+            }
+        },
+        addBrother() {
+            this.Guardian[5].brother.push("");
+        },
+        async addSubject(studentId) {
+            try {
+                const studentRef = doc(db, "students", studentId);
+                const studentDoc = await getDoc(studentRef);
+                if (studentDoc.exists()) {
+                    const studentData = studentDoc.data();
+                    studentData.Results[0].weekly.push({
+                        Subject_Name: this.newSubject.Subject_Name,
+                        Major_degree: this.newSubject.Major_degree,
+                        Student_degree: this.newSubject.Student_degree,
+                    });
+                    await updateDoc(studentRef, studentData);
+                    this.dialogAddSubject = false;
+                    this.newSubject = {
+                        Subject_Name: "",
+                        Major_degree: null,
+                        Student_degree: null,
+                    };
+                    await this.fetchStudents();
+                }
+            } catch (error) {
+                console.error("Error adding subject:", error);
+            }
+        },
+
+        editSubject(studentId, index) {
+            this.editedStudentId = studentId;
+            this.editedIndex = index;
+            const student = this.students_class.find(
+                (student) => student.id === studentId
+            );
+            if (student) {
+                this.editedSubject = { ...student.Results[0].weekly[index] };
+                this.editDialog = true;
+            }
+        },
+        async saveEdit() {
+            try {
+                const studentRef = doc(db, "students", this.editedStudentId);
+                const studentDoc = await getDoc(studentRef);
+                if (studentDoc.exists()) {
+                    const studentData = studentDoc.data();
+                    Object.assign(
+                        studentData.Results[0].weekly[this.editedIndex],
+                        this.editedSubject
+                    );
+                    await updateDoc(studentRef, studentData);
+                    this.closeDialog();
+                    await this.fetchStudents();
+                }
+            } catch (error) {
+                console.error("Error editing subject:", error);
+            }
+        },
+        closeDialog() {
+            this.editDialog = false;
+            this.editedIndex = -1;
+            this.editedSubject = {
+                Subject_Name: "",
+                Major_degree: 0,
+                Student_degree: 0,
+            };
+        },
+        closeNotificationsDialogs() {
+            this.editNotificationsDialog = false;
+            this.editedIndex = -1;
+            this.editedNotifications = {
+                NoticeTitle: "",
+                theDescription: "",
+                NotificationType: "",
+            };
+        },
+        async deleteSubject(studentId, subjectIndex) {
+            try {
+                const studentRef = doc(db, "students", studentId);
+                const studentDoc = await getDoc(studentRef);
+                if (studentDoc.exists()) {
+                    const studentData = studentDoc.data();
+                    studentData.Results[0].weekly.splice(subjectIndex, 1);
+                    await updateDoc(studentRef, studentData);
+                    await this.fetchStudents();
+                    // this.dilog_ss = true;
+                }
+            } catch (error) {
+                console.error("Error deleting subject:", error);
+            }
+        },
+
+        initializeTempDate() {
+            this.tempDate = this.form.student_information[5].birthday;
+        },
+        confirmDate() {
+            this.form.student_information[5].birthday = this.tempDate;
+            this.formattedDate = this.formatDate(this.tempDate);
+            this.menu = false;
+        },
+        formatDate(date) {
+            if (!date) return "";
+            const options = {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+            };
+            return new Date(date).toLocaleDateString("ar-EG", options);
+        },
+
+        animateSlideChange() {
+            const slides = [
+                this.$refs.slide1,
+                this.$refs.slide2,
+                this.$refs.slide3,
+                this.$refs.slide4,
+                this.$refs.slide5,
+                this.$refs.slide6,
+                this.$refs.slide7,
+            ];
+
+            slides.forEach((slide, index) => {
+                gsap.fromTo(
+                    slide,
+                    {
+                        opacity: 0.5, // البداية من opacity 0.5
+                        x: 100 * (index + 1), // الوضع الأولي للإحداثي y (من الأعلى)
+                    },
+                    {
+                        duration: 0.7,
+                        opacity: 1,
+                        x: 0,
+                        ease: "power2.out", // نوع الانتقال
+                    }
+                );
+            });
+        },
         async fetchStudents() {
             try {
                 const querySnapshot = await getDocs(collection(db, "students"));
@@ -228,8 +2220,9 @@ export default {
                     const student = {
                         id: doc.id,
                         ...doc.data(),
-                        showDetails: false,
+                        // showDetails: false,
                     };
+                    // student.showDetails = this.dilog_ss;
                     return student;
                 });
                 console.log("Fetched students:", this.students_class);
@@ -239,24 +2232,33 @@ export default {
         },
         async submit() {
             if (this.validateForm()) {
+                console.log(this.errors);
+
                 try {
                     console.log(
                         "Adding student:",
-                        this.form.name,
-                        this.form.phone,
-                        this.form.email,
+                        this.form.student_information,
+                        this.form.Results,
+                        this.form.payments,
+                        this.form.Notifications,
                         this.year
                     );
+
                     await addDoc(collection(db, "students"), {
-                        name: this.form.name,
-                        phone: this.form.phone,
-                        email: this.form.email,
+                        student_information: this.form.student_information,
+                        Results: this.form.Results,
+                        payments: this.form.payments,
+                        Notifications: this.form.Notifications,
                         year: this.year,
                     });
+
                     this.dialog_addstudent = false;
                     this.handleReset();
                     await this.fetchStudents();
                     this.dialogStore.hideAddStudentDialog();
+                    console.log(this.formattedDate);
+                    this.form.student_information[5].birthday =
+                        this.formattedDate;
                 } catch (error) {
                     console.error("Error adding document:", error);
                 }
@@ -274,41 +2276,72 @@ export default {
             }
         },
         handleReset() {
-            this.form.name = "";
-            this.form.phone = "";
-            this.form.email = "";
-            this.errors.name = [];
-            this.errors.phone = [];
-            this.errors.email = [];
-        },
-        validateForm() {
-            this.errors = {
-                name: [],
-                phone: [],
-                email: [],
+            this.form = {
+                student_information: [
+                    { student_name: "" },
+                    { class: "" },
+                    { educational_level: "" },
+                    { gender: "" },
+                    { section: "" },
+                    { birthday: "" },
+                ],
+
+                Results: [
+                    {
+                        weekly: [
+                            { Subject_Name: "" },
+                            { Degree: "" },
+                            { Data: "" },
+                        ],
+                    },
+                    {
+                        monthly: [
+                            { Certifications_title: "" },
+                            {
+                                Degree: [
+                                    { Subject_Name: "" },
+                                    { Teacher_Name: "" },
+                                    { Behavior_assessment: "" },
+                                    { Minor_degree: "" },
+                                    { Major_degree: "" },
+                                    { Student_degree: "" },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+                payments: [
+                    { Required: "" },
+                    { paid_up: "" },
+                    { installment_system: "" },
+                ],
+                Notifications: [{ Title: "" }, { Details: "" }],
             };
+        },
 
+        validateForm() {
             let isValid = true;
-
-            if (this.form.name.length < 2) {
-                this.errors.name.push("الاسم يجب أن يكون على الأقل حرفين.");
+            // Clear previous error messages
+            // Validation rules
+            if (!this.form.student_information[0].student_name) {
+                this.errors.student_name.push("اسم الطالب مطلوب.");
                 isValid = false;
             }
-
-            if (this.form.phone.length < 9) {
-                this.errors.phone.push(
-                    "رقم الهاتف يجب أن يكون على الأقل 9 أرقام."
-                );
-                isValid = false;
+            if (!this.form.student_information[1].class) {
+                this.errors.class.push("الفصل مطلوب.");
             }
-
-            const emailRegex = /^[a-z.-]+@[a-z.-]+\.[a-z]+$/i;
-            if (!emailRegex.test(this.form.email)) {
-                this.errors.email.push("يجب أن يكون بريدًا إلكترونيًا صالحًا.");
-                isValid = false;
+            if (!this.form.student_information[2].educational_level) {
+                this.errors.educational_level.push("المستوى التعليمي مطلوب.");
             }
-
-            console.log("Form validation result:", isValid, this.errors);
+            if (!this.form.student_information[3].gender) {
+                this.errors.gender.push("الجنس مطلوب.");
+            }
+            if (!this.form.student_information[4].section) {
+                this.errors.section.push("القسم مطلوب.");
+            }
+            if (!this.form.student_information[5].birthday) {
+                this.errors.birthday.push("تاريخ الميلاد مطلوب.");
+            }
 
             return isValid;
         },
@@ -340,12 +2373,74 @@ export default {
                             showDetails: false,
                         }))
                         .filter((student) =>
-                            student.name.toLowerCase().includes(trimmedQuery)
+                            student.student_information[0].student_name
+                                .toLowerCase()
+                                .includes(trimmedQuery)
                         );
                 }
             } catch (error) {
                 console.error("Error searching students:", error);
             }
+        },
+        removeItem(index) {
+            this.testform4.splice(index, 1);
+        },
+        generateRandomPassword() {
+            // توليد كلمة مرور عشوائية
+            const characters =
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            let password = "";
+            for (let i = 0; i < 8; i++) {
+                password += characters.charAt(
+                    Math.floor(Math.random() * characters.length)
+                );
+            }
+            // تحديث حالة المكون لعرض الكلمة المرور الجديدةة
+            this.randomPassword = password;
+            return this.randomPassword;
+        },
+        toggleVisibility() {
+            this.visible = !this.visible;
+        },
+        async copyPassword() {
+            const toast = useToast();
+            try {
+                await navigator.clipboard.writeText(this.randomPassword);
+                toast.success("تم نسخ الباسورد!");
+            } catch (err) {
+                console.error("Failed to copy text: ", err);
+                toast.error("فشل في نسخ الباسورد", {
+                    className: "custom-toast-error",
+                });
+            }
+        },
+        // async updateGuardian() {
+        //     try {
+        //         const studentId = this.currentStudentId; // Assuming you have the student's ID stored
+        //         const studentRef = doc(db, "students", studentId);
+
+        //         await updateDoc(studentRef, {
+        //             Guardian: this.Guardian,
+        //         });
+
+        //         console.log("Guardian information updated successfully");
+        //     } catch (error) {
+        //         console.error("Error updating guardian information:", error);
+        //     }
+        // },
+    },
+    watch: {
+        "form.student_information[5].birthday"(newVal) {
+            this.formattedDate = this.formatDate(newVal);
+        },
+        "Guardian[0].Guardian_name": "updateGuardian",
+        "Guardian[1].Guardian_phone": "updateGuardian",
+        "Guardian[2].Guardian_email": "updateGuardian",
+        "Guardian[3].Guardian_password": "updateGuardian",
+        "Guardian[4].Brothers_in_school": "updateGuardian",
+        "Guardian[5].brother": {
+            handler: "updateGuardian",
+            deep: true, // To detect changes in nested array elements
         },
     },
     computed: {
@@ -354,21 +2449,143 @@ export default {
                 (student) => student.year === this.year
             );
         },
+        selectedMonthlyDegrees() {
+            // اختر الشهر المحدد
+            return (
+                this.form.Results[1].Monthly.find(
+                    (month) => month.Certificate_title === this.selectedMonth
+                )?.Degrees || []
+            );
+        },
+    },
+    mounted() {
+        this.searchStudent(); // Fetch all students initially
+        this.generateRandomPassword();
+        // this.currentStudentId = "9QOVmJbJNRK3NVUhuThC";
+        console.log(this.editedmony);
     },
 };
 </script>
 
-<style scoped>
+<style>
 .student-item {
     padding: 10px;
     direction: rtl;
 }
 .student-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    padding: 10px !important;
 }
 .student-item:hover {
-    background-color: #2196f333;
+    background-color: #2196f333 !important;
+}
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+.v-progress-linear {
+    position: relative;
+    overflow: visible;
+}
+.progress-label .label-container {
+    background-color: #3875a5;
+    padding: 5px 10px;
+    border-radius: 5px;
+    position: relative;
+    color: white;
+}
+.progress-label .arrow-down {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #3875a5;
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 18px;
+    text-align: right; /* لتنسيق النص من اليمين لليسار */
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+    border: 1px solid #dddddd;
+}
+
+.styled-table th {
+    background-color: #f3f3f3;
+}
+
+.styled-table tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+.custom-font {
+    font-family: "Cairo", sans-serif;
+    font-size: 22px;
+    font-weight: bold;
+}
+.custom-title {
+    font-size: 20px;
+    font-weight: 500;
+    color: #333;
+    font-weight: bold;
+}
+.v-card-title {
+    padding: 16px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #eee;
+}
+.v-card-text {
+    padding: 16px;
+}
+.fixed-card {
+    width: 250px;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.centered-subtitle {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.fixed_img {
+    width: 100%;
+    max-width: 300px;
+}
+
+.center_subtitle {
+    text-align: center;
+}
+.payments_input input {
+    text-align: center;
+    font-size: 26px;
+}
+.notification-card {
+    position: relative;
+}
+.notification-card .v-card-title {
+    font-weight: bold;
+}
+.notification-card .v-card-text {
+    margin-top: 10px;
+}
+.notification-card .v-icon {
+    cursor: pointer;
+    color: #42a5f5;
+}
+.notification-card .v-icon:hover {
+    color: #1e88e5;
 }
 </style>
