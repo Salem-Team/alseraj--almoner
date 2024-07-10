@@ -239,7 +239,6 @@
         </v-card></v-dialog
     >
 </template>
-
 <script scoped>
 import { storeToRefs } from "pinia";
 import { defineComponent } from "vue";
