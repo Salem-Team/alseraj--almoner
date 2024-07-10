@@ -22,17 +22,54 @@
                     <v-col cols="12" sm="4">
                         <v-card class="info-card" style="height: 100%">
                             <v-card-title class="info-card-title text-center"
-                                >بياناتك الشخصيه</v-card-title
+                                >بياناتك الشخصية</v-card-title
                             >
                             <v-divider></v-divider>
                             <v-card-text class="info-card-text">
-                                <strong>الاسم:</strong>
-                                <div>{{ parent.name }}</div>
-                                <strong>الايميل:</strong>
-                                <div>{{ parent.email }}</div>
-                                <strong>رقم الهاتف:</strong>
-                                <div>{{ parent.phoneNumber }}</div>
+                                <div
+                                    class="d-flex flex-column ga-5"
+                                    v-if="!editingMode"
+                                >
+                                    <strong>{{ parent.name }}</strong>
+                                    <strong>{{ parent.email }}</strong>
+                                    <strong>{{ parent.phoneNumber }}</strong>
+                                </div>
+                                <div class="d-flex flex-column" v-else>
+                                    <!-- Input fields for editing -->
+
+                                    <v-text-field
+                                        v-model="editedParent.email"
+                                        label="البريد الإلكتروني"
+                                    ></v-text-field>
+                                    <v-text-field
+                                        v-model="editedParent.phoneNumber"
+                                        label="رقم الهاتف"
+                                    ></v-text-field>
+                                </div>
                             </v-card-text>
+                            <v-card-actions class="ma-5 d-flex justify-right">
+                                <v-btn
+                                    style="
+                                        background-color: #0088ff;
+                                        color: #fff;
+                                    "
+                                    size="large"
+                                    outlined
+                                    v-if="!editingMode"
+                                    @click="startEditing"
+                                    >تعديل بياناتك</v-btn
+                                >
+                                <v-btn
+                                    v-else
+                                    @click="saveChanges"
+                                    style="
+                                        background-color: #0088ff;
+                                        color: #fff;
+                                    "
+                                    size="large"
+                                    >حفظ التعديلات</v-btn
+                                >
+                            </v-card-actions>
                         </v-card>
                     </v-col>
 
@@ -50,7 +87,7 @@
                                 >
                                     <v-col
                                         cols="12"
-                                        sm="4"
+                                        sm="3"
                                         class="d-flex flex-column align-center"
                                     >
                                         <strong class="text-h6">الاسم:</strong>
@@ -58,7 +95,7 @@
                                     </v-col>
                                     <v-col
                                         cols="12"
-                                        sm="4"
+                                        sm="3"
                                         class="d-flex flex-column align-center"
                                     >
                                         <strong class="text-h6"
@@ -68,7 +105,17 @@
                                     </v-col>
                                     <v-col
                                         cols="12"
-                                        sm="4"
+                                        sm="3"
+                                        class="d-flex flex-column align-center"
+                                    >
+                                        <strong class="text-h6"
+                                            >المرحله الدراسية:</strong
+                                        >
+                                        <div>{{ child.schoolYear }}</div>
+                                    </v-col>
+                                    <v-col
+                                        cols="12"
+                                        sm="3"
                                         class="d-flex align-center justify-center"
                                     >
                                         <v-btn
@@ -95,18 +142,25 @@ import { useAuthStore } from "../store/userStore";
 
 export default {
     data: () => ({
+        editingMode: false,
         items: ["بياناتك الشخصيه", "اطفالى"],
         children: [
             {
                 id: 1,
                 name: "أحمد",
                 gradeLevel: "الابتدائية",
+                schoolYear: "2023-2024",
             },
         ],
         parent: {
             name: "على احمد عبدالله",
             email: "parent@gmail.com",
             phoneNumber: "0105245841",
+        },
+        editedParent: {
+            name: "",
+            email: "",
+            phoneNumber: "",
         },
     }),
     computed: {
@@ -117,25 +171,30 @@ export default {
         Edit() {
             this.$router.push({ name: "Edit_profile" });
         },
-        methods: {
-            ...mapActions(useAuthStore, ["logout"]),
-            Edit() {
-                this.$router.push({ name: "Edit_profile" });
-            },
-            async My_Logout() {
-                try {
-                    await this.logout();
-                    this.$router.push({ name: "home" });
-                } catch (error) {
-                    console.error("حدث خطأ أثناء تسجيل الخروج:", error.message);
-                }
-            },
+
+        async My_Logout() {
+            try {
+                await this.logout();
+                this.$router.push({ name: "home" });
+            } catch (error) {
+                console.error("حدث خطأ أثناء تسجيل الخروج:", error.message);
+            }
         },
         goToChildDetails(childId) {
             this.$router.push({
                 name: "ChildDetails",
                 params: { id: childId },
             });
+        },
+        startEditing() {
+            // نسخ بيانات الوالد للتعديل
+            this.editedParent = { ...this.parent };
+            this.editingMode = true;
+        },
+        saveChanges() {
+            // حفظ التعديلات وتحديث البيانات
+            this.parent = { ...this.editedParent };
+            this.editingMode = false;
         },
     },
 };
