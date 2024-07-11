@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
     <div class="main_header">
         <nav class="ma-2">
             <router-link class="a" to="/">Home</router-link>
@@ -8,6 +9,20 @@
                 >Sign Out</router-link
             >
             <router-link class="a" v-else to="/UserLogin">Sign In</router-link>
+=======
+    <div>
+        <nav class="ma-2">
+            <router-link to="/">Home</router-link> |
+            <router-link to="/admin">لوحة الاشراف</router-link>|
+            <span v-if="user">
+                <router-link @click="logout" to="/UserLogin"
+                    >Sign Out</router-link
+                >
+            </span>
+            <span v-else>
+                <router-link to="/UserLogin">Sign In</router-link>
+            </span>
+>>>>>>> ca7a465 (add Add_admin , admin , img)
         </nav>
         <router-view />
     </div>
@@ -31,6 +46,8 @@ export default {
 @import url("https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap");
 * {
     direction: rtl !important;
+    transition: 0.3s;
+    letter-spacing: normal !important;
 }
 body {
     direction: rtl;
@@ -43,7 +60,12 @@ body {
 :root {
     --main-color: #336699;
     --secound-color: #eee;
+<<<<<<< HEAD
     --therd-color: #d8588c;
+=======
+    --therd-color: #7a7a7a;
+    --pink-color: #d8588c;
+>>>>>>> ca7a465 (add Add_admin , admin , img)
 }
 nav {
     padding: 30px;
@@ -80,5 +102,9 @@ nav {
             left: 0;
         }
     }
+}
+.v-container {
+    width: 90% !important;
+    max-width: 90% !important;
 }
 </style>

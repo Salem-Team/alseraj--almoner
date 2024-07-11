@@ -22,6 +22,7 @@
                     <v-col cols="12" sm="4">
                         <v-card class="info-card" style="height: 100%">
                             <v-card-title class="info-card-title text-center"
+<<<<<<< HEAD
                                 >بياناتك الشخصية</v-card-title
                             >
                             <v-divider></v-divider>
@@ -73,6 +74,22 @@
                         </v-card>
                     </v-col>
 
+=======
+                                >بياناتك الشخصيه</v-card-title
+                            >
+                            <v-divider></v-divider>
+                            <v-card-text class="info-card-text">
+                                <strong>الاسم:</strong>
+                                <div>{{ parent.name }}</div>
+                                <strong>الايميل:</strong>
+                                <div>{{ parent.email }}</div>
+                                <strong>رقم الهاتف:</strong>
+                                <div>{{ parent.phoneNumber }}</div>
+                            </v-card-text>
+                        </v-card>
+                    </v-col>
+
+>>>>>>> ca7a465 (add Add_admin , admin , img)
                     <v-col cols="12" sm="8">
                         <v-card class="info-card" style="height: 100%">
                             <v-card-title class="info-card-title text-center">
@@ -87,7 +104,11 @@
                                 >
                                     <v-col
                                         cols="12"
+<<<<<<< HEAD
                                         sm="3"
+=======
+                                        sm="4"
+>>>>>>> ca7a465 (add Add_admin , admin , img)
                                         class="d-flex flex-column align-center"
                                     >
                                         <strong class="text-h6">الاسم:</strong>
@@ -95,7 +116,11 @@
                                     </v-col>
                                     <v-col
                                         cols="12"
+<<<<<<< HEAD
                                         sm="3"
+=======
+                                        sm="4"
+>>>>>>> ca7a465 (add Add_admin , admin , img)
                                         class="d-flex flex-column align-center"
                                     >
                                         <strong class="text-h6"
@@ -105,6 +130,7 @@
                                     </v-col>
                                     <v-col
                                         cols="12"
+<<<<<<< HEAD
                                         sm="3"
                                         class="d-flex flex-column align-center"
                                     >
@@ -116,6 +142,9 @@
                                     <v-col
                                         cols="12"
                                         sm="3"
+=======
+                                        sm="4"
+>>>>>>> ca7a465 (add Add_admin , admin , img)
                                         class="d-flex align-center justify-center"
                                     >
                                         <v-btn
@@ -142,14 +171,20 @@ import { useAuthStore } from "../store/userStore";
 
 export default {
     data: () => ({
+<<<<<<< HEAD
         editingMode: false,
+=======
+>>>>>>> ca7a465 (add Add_admin , admin , img)
         items: ["بياناتك الشخصيه", "اطفالى"],
         children: [
             {
                 id: 1,
                 name: "أحمد",
                 gradeLevel: "الابتدائية",
+<<<<<<< HEAD
                 schoolYear: "2023-2024",
+=======
+>>>>>>> ca7a465 (add Add_admin , admin , img)
             },
         ],
         parent: {
@@ -157,11 +192,14 @@ export default {
             email: "parent@gmail.com",
             phoneNumber: "0105245841",
         },
+<<<<<<< HEAD
         editedParent: {
             name: "",
             email: "",
             phoneNumber: "",
         },
+=======
+>>>>>>> ca7a465 (add Add_admin , admin , img)
     }),
     computed: {
         ...mapState(useAuthStore, ["user"]),
@@ -171,6 +209,7 @@ export default {
         Edit() {
             this.$router.push({ name: "Edit_profile" });
         },
+<<<<<<< HEAD
 
         async My_Logout() {
             try {
@@ -179,6 +218,27 @@ export default {
             } catch (error) {
                 console.error("حدث خطأ أثناء تسجيل الخروج:", error.message);
             }
+=======
+        methods: {
+            ...mapActions(useAuthStore, ["logout"]),
+            Edit() {
+                this.$router.push({ name: "Edit_profile" });
+            },
+            async My_Logout() {
+                try {
+                    await this.logout();
+                    this.$router.push({ name: "home" });
+                } catch (error) {
+                    console.error("حدث خطأ أثناء تسجيل الخروج:", error.message);
+                }
+            },
+        },
+        goToChildDetails(childId) {
+            this.$router.push({
+                name: "ChildDetails",
+                params: { id: childId },
+            });
+>>>>>>> ca7a465 (add Add_admin , admin , img)
         },
         goToChildDetails(childId) {
             this.$router.push({

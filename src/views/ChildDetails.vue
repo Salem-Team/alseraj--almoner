@@ -3,7 +3,11 @@
         <v-card>
             <v-toolbar color="#fff" title="تفاصيل الطالب"> </v-toolbar>
 
+<<<<<<< HEAD
             <div class="d-flex flex-row" style="width: 100%; height: auto">
+=======
+            <div class="d-flex flex-row" style="width: 100%; height: 100vh">
+>>>>>>> ca7a465 (add Add_admin , admin , img)
                 <v-tabs v-model="tab" color="primary" direction="vertical">
                     <v-tab
                         prepend-icon="mdi-account"
@@ -289,19 +293,35 @@
                             >
                                 <v-col>
                                     <v-col>
+<<<<<<< HEAD
                                         <v-text-title></v-text-title>
+=======
+                                        <v-text-title>الاسم:</v-text-title>
+>>>>>>> ca7a465 (add Add_admin , admin , img)
                                         <v-text-title>{{
                                             student.name
                                         }}</v-text-title>
                                     </v-col>
                                     <v-col>
+<<<<<<< HEAD
                                         <v-text-title> </v-text-title>
+=======
+                                        <v-text-title
+                                            >المرحلة الدراسية:</v-text-title
+                                        >
+>>>>>>> ca7a465 (add Add_admin , admin , img)
                                         <v-text-title>{{
                                             student.gradeLevel
                                         }}</v-text-title>
                                     </v-col>
                                     <v-col>
+<<<<<<< HEAD
                                         <v-text-title> </v-text-title>
+=======
+                                        <v-text-title
+                                            >السنة الدراسية:</v-text-title
+                                        >
+>>>>>>> ca7a465 (add Add_admin , admin , img)
                                         <v-text-title>{{
                                             student.schoolYear
                                         }}</v-text-title>
@@ -364,6 +384,7 @@
                             v-if="student"
                             class="mx-auto my-4"
                             max-width="90%"
+<<<<<<< HEAD
                             style="height: auto"
                         >
                             <h2 class="ma-3">المدفوعات</h2>
@@ -496,11 +517,92 @@
                                     </v-row>
                                 </v-col>
                             </v-row>
+=======
+                        >
+                            <h2 class="ma-3 text-center">المدفوعات</h2>
+                            <v-container fluid>
+                                <v-row class="ma-10">
+                                    <v-col
+                                        cols="12"
+                                        sm="4"
+                                        class="d-flex justify-center"
+                                    >
+                                        <v-card
+                                            class="pa-3 fixed-card mb-3"
+                                            outlined
+                                        >
+                                            <v-card-title
+                                                class="custom-title custom-font text-center"
+                                                style="font-size: 20px"
+                                            >
+                                                المستحق
+                                            </v-card-title>
+                                            <v-card-subtitle
+                                                class="custom-font centered-subtitle"
+                                                style="font-size: 16px"
+                                            >
+                                                {{ student.payments.Requird }}
+                                            </v-card-subtitle>
+                                        </v-card>
+                                    </v-col>
+                                    <v-col
+                                        cols="12"
+                                        sm="4"
+                                        class="d-flex justify-center"
+                                    >
+                                        <v-card
+                                            class="pa-3 fixed-card mb-3"
+                                            outlined
+                                        >
+                                            <v-card-title
+                                                class="custom-title custom-font text-center"
+                                                style="font-size: 20px"
+                                            >
+                                                المدفوع
+                                            </v-card-title>
+                                            <v-card-subtitle
+                                                class="custom-font centered-subtitle"
+                                                style="font-size: 16px"
+                                            >
+                                                {{ student.payments.paid_up }}
+                                            </v-card-subtitle>
+                                        </v-card>
+                                    </v-col>
+                                    <v-col
+                                        cols="12"
+                                        sm="4"
+                                        class="d-flex justify-center"
+                                    >
+                                        <v-card
+                                            class="pa-3 fixed-card mb-3"
+                                            outlined
+                                        >
+                                            <v-card-title
+                                                class="custom-title custom-font text-center"
+                                                style="font-size: 20px"
+                                            >
+                                                نظام التقسيط
+                                            </v-card-title>
+                                            <v-card-subtitle
+                                                class="custom-font centered-subtitle"
+                                                style="font-size: 16px"
+                                            >
+                                                {{
+                                                    student.payments
+                                                        .installment_system
+                                                }}
+                                            </v-card-subtitle>
+                                        </v-card>
+                                    </v-col>
+                                </v-row>
+                            </v-container>
+>>>>>>> ca7a465 (add Add_admin , admin , img)
                         </v-card>
                     </v-tabs-window-item>
 
                     <v-tabs-window-item value="option-5">
                         <v-card flat v-if="student">
+<<<<<<< HEAD
                             <h2 class="ma-3">الإشعارات المخصصة لولي الأمر:</h2>
                             <v-alert
                                 class="ma-3"
@@ -524,6 +626,24 @@
                                 <h3>{{ notification.Title }}</h3>
                                 <p>{{ notification.Details }}</p>
                             </v-alert>
+=======
+                            <h2 class="ma-5">الاشعارات</h2>
+                            <v-list-item
+                                height="200"
+                                v-for="notification in student.Notifications"
+                                :key="notification.id"
+                            >
+                                <v-alert
+                                    class="ma-2"
+                                    :title="notification.Title"
+                                    type="info"
+                                    variant="tonal"
+                                    ><p class="mt-3 rounded-md">
+                                        {{ notification.Details }}
+                                    </p></v-alert
+                                >
+                            </v-list-item>
+>>>>>>> ca7a465 (add Add_admin , admin , img)
                         </v-card>
                     </v-tabs-window-item>
 
@@ -601,6 +721,7 @@ import Amiri_Regular from "@/assets/fonts/Amiri-Regular.js";
 export default {
     data() {
         return {
+<<<<<<< HEAD
             totalAmount: 50000,
             paidAmount: 0,
             progress: 0,
@@ -617,6 +738,12 @@ export default {
 
             // خاص بالبروحريس بار وتقسيم القسط
 
+=======
+            tab: "option-1", // تحديد التاب الافتراضي
+            selectedGrade: null,
+            gradeLevels: ["الصف الأول", "الصف الثاني", "الصف الثالث"],
+            selectedMonth: "شهر يناير",
+>>>>>>> ca7a465 (add Add_admin , admin , img)
             student: {
                 name: "أحمد محمد",
                 gender: "ذكر",
@@ -723,6 +850,7 @@ export default {
                     paid_up: 120,
                     installment_system: "شهريا",
                 },
+<<<<<<< HEAD
                 Notifications: {
                     special: [
                         {
@@ -739,6 +867,15 @@ export default {
                         },
                     ],
                 },
+=======
+                Notifications: [
+                    {
+                        Title: "جواب الفصل لولي الأمر",
+                        Details:
+                            "السيد/السيدة [اسم ولي الأمر]، نود إعلامكم بقرار فصل ابنكم/ابنتكم [اسم الطالب] من معهد السراج المنير الأزهري بسبب تكرار المخالفات للوائح والانضباط المدرسي، وذلك اعتبارًا من تاريخ هذا الخطاب.",
+                    },
+                ],
+>>>>>>> ca7a465 (add Add_admin , admin , img)
 
                 photos: [
                     {
@@ -803,6 +940,7 @@ export default {
                 )?.Degrees || []
             );
         },
+<<<<<<< HEAD
         numberOfMonths() {
             if (!this.selectedPlan) return [];
             const monthsMap = {
@@ -859,6 +997,10 @@ export default {
         updateProgress() {
             this.progress = (this.paidAmount / this.totalAmount) * 100;
         },
+=======
+    },
+    methods: {
+>>>>>>> ca7a465 (add Add_admin , admin , img)
         selectMonth(month) {
             this.selectedMonth = month;
         },
@@ -890,12 +1032,20 @@ export default {
             doc.setFontSize(14);
             doc.text("معهد السراج المنير الأزهرى", 16, 70);
 
+<<<<<<< HEAD
             doc.text(" " + this.student.name, 250, 30);
             doc.text("  " + this.student.gradeLevel, 245, 40);
             doc.text("" + this.student.schoolYear, 250, 50);
             // doc.text(" " + this.student.Monthly[0].Certificate_title, 253, 60);
             doc.setFontSize(30);
             doc.text(this.student.Monthly[0].Certificate_title, 130, 84);
+=======
+            doc.text("الاسم:  " + this.student.name, 248, 30);
+            doc.text("المرحله الدراسيه:  " + this.student.gradeLevel, 225, 40);
+            doc.text("السنه الدراسيه:  " + this.student.schoolYear, 232, 50);
+            doc.setFontSize(30);
+            doc.text("شهادة", 130, 84);
+>>>>>>> ca7a465 (add Add_admin , admin , img)
 
             const tableColumn = [
                 "الدرجة النهائية للطالب",
@@ -995,6 +1145,7 @@ export default {
 .center_subtitle {
     text-align: center;
 }
+<<<<<<< HEAD
 .v-progress-linear {
     transition: 0.5s;
     margin-top: 20px;
@@ -1019,4 +1170,6 @@ export default {
     top: -10px; /* قم بتعديل هذه القيمة لتتناسب مع التصميم */
     transform: translateX(-50%);
 }
+=======
+>>>>>>> ca7a465 (add Add_admin , admin , img)
 </style>
