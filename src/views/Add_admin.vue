@@ -131,12 +131,13 @@
                         :disabled="loading"
                         @click="admin.add_admin"
                         style="
-                            width: 100%;
-                            padding: 20px;
-                            color: var(--main-color);
-                            letter-spacing: normal;
-                            font-weight: bold;
-                            font-size: 19px;
+                          width: 100%;
+    padding: 20px;
+    letter-spacing: normal;
+    font-weight: bold;
+    font-size: 19px;
+    background: var(--main-color);
+    color: #fff;
                         "
                     >
                         إضافة
@@ -187,12 +188,13 @@
                         @click="admin.Update_Admin(admin.Id_Information)"
                         class="d-flex align-center mt-4"
                         style="
-                            width: 100%;
-                            padding: 20px;
-                            color: var(--main-color);
-                            letter-spacing: normal;
-                            font-weight: bold;
-                            font-size: 19px;
+                          width: 100%;
+    padding: 20px;
+    letter-spacing: normal;
+    font-weight: bold;
+    font-size: 19px;
+    background: var(--main-color);
+    color: #fff;
                         "
                     >
                         تعديل
