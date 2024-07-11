@@ -68,7 +68,7 @@
                         الإشراف
                     </v-breadcrumbs-item>
                     <v-breadcrumbs-divider />
-                    <v-breadcrumbs-item> إدارة المشرفين </v-breadcrumbs-item>
+                    <v-breadcrumbs-item>الأخبار</v-breadcrumbs-item>
                 </v-breadcrumbs>
             </div>
             <div class="left">
