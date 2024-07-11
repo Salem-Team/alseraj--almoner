@@ -290,8 +290,6 @@
                                 <v-col>
                                     <v-col>
                                         <v-text-title>الاسم:</v-text-title>
-                                        >>>>>>> ca7a465 (add Add_admin , admin ,
-                                        img)
                                         <v-text-title>{{
                                             student.name
                                         }}</v-text-title>
@@ -300,8 +298,6 @@
                                         <v-text-title
                                             >المرحلة الدراسية:</v-text-title
                                         >
-                                        >>>>>>> ca7a465 (add Add_admin , admin ,
-                                        img)
                                         <v-text-title>{{
                                             student.gradeLevel
                                         }}</v-text-title>
@@ -310,8 +306,6 @@
                                         <v-text-title
                                             >السنة الدراسية:</v-text-title
                                         >
-                                        >>>>>>> ca7a465 (add Add_admin , admin ,
-                                        img)
                                         <v-text-title>{{
                                             student.schoolYear
                                         }}</v-text-title>
@@ -374,140 +368,7 @@
                             v-if="student"
                             class="mx-auto my-4"
                             max-width="90%"
-                            HEAD
-                            style="height: auto"
                         >
-                            <h2 class="ma-3">المدفوعات</h2>
-                            <v-row>
-                                <v-col cols="12" sm="12" md="12">
-                                    <v-select
-                                        v-model="selectedPlan"
-                                        :items="selectPaid"
-                                        label="اختر نظام التقسيط"
-                                    ></v-select>
-
-                                    <!-- Timeline to display the selected plan months -->
-                                    <v-timeline
-                                        v-if="selectedPlan"
-                                        style="height: auto"
-                                    >
-                                        <v-timeline-item
-                                            v-for="month in numberOfMonths"
-                                            :key="month"
-                                            :color="'primary'"
-                                        >
-                                            <v-card>
-                                                <v-card-title
-                                                    >شهر
-                                                    {{ month }}</v-card-title
-                                                >
-                                                <v-card-text>
-                                                    القسط الشهري:
-                                                    {{ installmentAmount }} جنيه
-                                                </v-card-text>
-                                            </v-card>
-                                        </v-timeline-item>
-                                    </v-timeline>
-                                </v-col>
-                                <v-col>
-                                    <v-row
-                                        v-if="selectedPlan"
-                                        class="d-flex flex-column mt-16"
-                                    >
-                                        <v-col>
-                                            <h2 class="mb-5">أذهب للدفع</h2>
-                                        </v-col>
-                                        <v-col
-                                            cols="12"
-                                            sm="8"
-                                            class="d-flex flex-row ga-5"
-                                        >
-                                            <v-text-field
-                                                v-model="amount"
-                                                label="المبلغ المدفوع"
-                                                outlined
-                                            ></v-text-field>
-                                            <v-btn
-                                                color="primary"
-                                                size="large"
-                                                @click="payAmount"
-                                                style="
-                                                    height: 60px;
-                                                    width: 150px;
-                                                "
-                                                >دفع</v-btn
-                                            >
-                                        </v-col>
-                                        <v-col cols="12" sm="6"></v-col>
-                                    </v-row>
-
-                                    <v-row v-if="paidAmount > 0">
-                                        <v-col cols="12">
-                                            <v-progress-linear
-                                                :value="progress"
-                                                color="primary"
-                                                height="20"
-                                                style="position: relative"
-                                            >
-                                                <v-tooltip bottom>
-                                                    <template
-                                                        v-slot:activator="{
-                                                            on,
-                                                            attrs,
-                                                        }"
-                                                    >
-                                                        <div
-                                                            class="tooltip"
-                                                            :style="{
-                                                                left:
-                                                                    progress +
-                                                                    '%',
-                                                            }"
-                                                            v-bind="attrs"
-                                                            v-on="on"
-                                                        >
-                                                            <v-icon small
-                                                                >mdi-circle</v-icon
-                                                            >
-                                                        </div>
-                                                    </template>
-                                                    <span>{{ progress }}%</span>
-                                                </v-tooltip>
-                                            </v-progress-linear>
-                                        </v-col>
-                                        <v-col cols="12">
-                                            <div
-                                                class="cont ma-16 d-flex justify-space-around align-center"
-                                            >
-                                                <div
-                                                    class="d-flex flex-column align-center ga-3"
-                                                >
-                                                    <h3>المبلغ المستحق</h3>
-                                                    <p>{{ totalAmount }}</p>
-                                                </div>
-                                                <div
-                                                    class="cont d-flex flex-column align-center ga-3"
-                                                >
-                                                    <h3>المبلغ المدفوع</h3>
-                                                    <p>{{ paidAmount }}</p>
-                                                </div>
-                                                <div
-                                                    class="cont d-flex flex-column align-center ga-3"
-                                                >
-                                                    <h3>الباقي من القسط</h3>
-                                                    <p>
-                                                        {{
-                                                            totalAmount -
-                                                            paidAmount
-                                                        }}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </v-col>
-                                    </v-row>
-                                </v-col>
-                            </v-row>
-                            ======= >
                             <h2 class="ma-3 text-center">المدفوعات</h2>
                             <v-container fluid>
                                 <v-row class="ma-10">
@@ -793,7 +654,6 @@ export default {
                     paid_up: 120,
                     installment_system: "شهريا",
                 },
-
                 Notifications: [
                     {
                         Title: "جواب الفصل لولي الأمر",

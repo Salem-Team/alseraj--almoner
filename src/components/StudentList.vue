@@ -231,7 +231,9 @@
                             <v-row>
                                 <v-col>
                                     <v-card
-                                        @click.stop="this.hhhh = true"
+                                        @click.stop="
+                                            openStudentDetails(student)
+                                        "
                                         style="
                                             padding: 10px;
                                             display: flex;
@@ -249,7 +251,7 @@
                                 </v-col>
                             </v-row>
                         </v-list-item-content>
-                        <v-dialog v-model="this.hhhh">
+                        <v-dialog v-model="dialogStudentDetails">
                             <v-stepper
                                 v-model="e1"
                                 alt-labels
@@ -308,7 +310,7 @@
                                                 >
                                                     <v-text-field
                                                         v-model="
-                                                            student
+                                                            selectedStudent
                                                                 .student_information[0]
                                                                 .student_name
                                                         "
@@ -332,7 +334,7 @@
                                                         variant="outlined"
                                                         style="width: 50%"
                                                         v-model="
-                                                            student
+                                                            selectedStudent
                                                                 .student_information[1]
                                                                 .class
                                                         "
@@ -353,7 +355,7 @@
                                                     <v-select
                                                         :items="classes"
                                                         v-model="
-                                                            student
+                                                            selectedStudent
                                                                 .student_information[2]
                                                                 .educational_level
                                                         "
@@ -367,7 +369,7 @@
                                                     ></v-select>
                                                     <v-select
                                                         v-model="
-                                                            student
+                                                            selectedStudent
                                                                 .student_information[3]
                                                                 .gender
                                                         "
@@ -384,7 +386,7 @@
 
                                                 <v-select
                                                     v-model="
-                                                        student
+                                                        selectedStudent
                                                             .student_information[4]
                                                             .section
                                                     "
@@ -416,7 +418,7 @@
                                                     >
                                                         <v-text-field
                                                             v-model="
-                                                                student
+                                                                selectedStudent
                                                                     .student_information[5]
                                                                     .birthday
                                                             "
@@ -643,8 +645,8 @@
                                                         cols="4"
                                                         v-for="(
                                                             week, index
-                                                        ) in student.Results[0]
-                                                            .weekly"
+                                                        ) in selectedStudent
+                                                            .Results[0].weekly"
                                                         :key="index"
                                                     >
                                                         <v-card
@@ -688,7 +690,7 @@
                                                                         color="primary"
                                                                         @click="
                                                                             editSubject(
-                                                                                student.id,
+                                                                                selectedStudent.id,
                                                                                 index
                                                                             )
                                                                         "
@@ -699,7 +701,7 @@
                                                                         color="red"
                                                                         @click="
                                                                             deleteSubject(
-                                                                                student.id,
+                                                                                selectedStudent.id,
                                                                                 index
                                                                             )
                                                                         "
@@ -796,7 +798,7 @@
                                                                 text
                                                                 @click="
                                                                     addSubject(
-                                                                        student.id
+                                                                        selectedStudent.id
                                                                     )
                                                                 "
                                                                 >حفظ</v-btn
@@ -953,7 +955,7 @@
                                                                     >الاسم:</v-text-title
                                                                 >
                                                                 <v-text-title>{{
-                                                                    student
+                                                                    selectedStudent
                                                                         .student_information[0]
                                                                         .student_name
                                                                 }}</v-text-title>
@@ -1127,7 +1129,7 @@
                                                                 >
                                                                     <v-text-field
                                                                         v-model="
-                                                                            student
+                                                                            selectedStudent
                                                                                 .payments
                                                                                 .Requird
                                                                         "
@@ -1138,8 +1140,8 @@
                                                                         required
                                                                         @input="
                                                                             updateFirebase(
-                                                                                student.id,
-                                                                                student.payments
+                                                                                selectedStudent.id,
+                                                                                selectedStudent.payments
                                                                             )
                                                                         "
                                                                     ></v-text-field>
@@ -1171,7 +1173,7 @@
                                                                 >
                                                                     <v-text-field
                                                                         v-model="
-                                                                            student
+                                                                            selectedStudent
                                                                                 .payments
                                                                                 .paid_up
                                                                         "
@@ -1182,8 +1184,8 @@
                                                                         required
                                                                         @input="
                                                                             updateFirebase(
-                                                                                student.id,
-                                                                                student.payments
+                                                                                selectedStudent.id,
+                                                                                selectedStudent.payments
                                                                             )
                                                                         "
                                                                     ></v-text-field>
@@ -1215,7 +1217,7 @@
                                                                 >
                                                                     <v-select
                                                                         v-model="
-                                                                            student
+                                                                            selectedStudent
                                                                                 .payments
                                                                                 .installment_system
                                                                         "
@@ -1233,8 +1235,8 @@
                                                                         required
                                                                         @blur="
                                                                             updateFirebase(
-                                                                                student.id,
-                                                                                student.payments
+                                                                                selectedStudent.id,
+                                                                                selectedStudent.payments
                                                                             )
                                                                         "
                                                                     ></v-select>
@@ -1285,7 +1287,7 @@
                                                 <v-col
                                                     v-for="(
                                                         note, index
-                                                    ) in student.Notifications"
+                                                    ) in selectedStudent.Notifications"
                                                     :key="index"
                                                     cols="12"
                                                     md="4"
@@ -1306,7 +1308,7 @@
                                                                     class="mr-2"
                                                                     @click="
                                                                         editNotifications(
-                                                                            student.id,
+                                                                            selectedStudent.id,
                                                                             index
                                                                         )
                                                                     "
@@ -1317,7 +1319,7 @@
                                                                     class="mr-2"
                                                                     @click="
                                                                         deleteNotification(
-                                                                            student.id,
+                                                                            selectedStudent.id,
                                                                             index
                                                                         )
                                                                     "
@@ -1388,7 +1390,7 @@
                                                             text
                                                             @click="
                                                                 addNotifications(
-                                                                    student.id
+                                                                    selectedStudent.id
                                                                 )
                                                             "
                                                             >حفظ</v-btn
@@ -1464,20 +1466,208 @@
                                             <div
                                                 style="
                                                     display: flex;
-
+                                                    justify-content: space-between;
                                                     align-items: center;
+                                                    margin-bottom: 20px;
                                                 "
                                             >
-                                                <v-avatar
-                                                    color="info"
-                                                    style="margin-left: 20px"
+                                                <div
+                                                    style="
+                                                        display: flex;
+
+                                                        align-items: center;
+                                                    "
                                                 >
-                                                    {{ index + 6 }}
-                                                </v-avatar>
-                                                <h2 style="color: #2196f3">
-                                                    الصور
-                                                </h2>
+                                                    <v-avatar
+                                                        color="info"
+                                                        style="
+                                                            margin-left: 20px;
+                                                        "
+                                                    >
+                                                        {{ index + 6 }}
+                                                    </v-avatar>
+                                                    <h2 style="color: #2196f3">
+                                                        الصور
+                                                    </h2>
+                                                </div>
+                                                <v-btn
+                                                    color="blue"
+                                                    @click="
+                                                        dialogAddPhoto = true
+                                                    "
+                                                    >اضافه صوره</v-btn
+                                                >
                                             </div>
+                                            <v-row>
+                                                <v-col
+                                                    v-for="(
+                                                        photo, index
+                                                    ) in selectedStudent.photos"
+                                                    :key="index"
+                                                    cols="12"
+                                                    md="4"
+                                                >
+                                                    <v-card
+                                                        class="pa-3 mb-3 notification-card"
+                                                        outlined
+                                                    >
+                                                        <v-card-title
+                                                            class="d-flex justify-space-between align-center"
+                                                        >
+                                                            <div>
+                                                                <v-icon
+                                                                    small
+                                                                    class="mr-2"
+                                                                    @click="
+                                                                        editPhotos(
+                                                                            selectedStudent.id,
+                                                                            index
+                                                                        )
+                                                                    "
+                                                                    >mdi-pencil</v-icon
+                                                                >
+                                                                <v-icon
+                                                                    small
+                                                                    class="mr-2"
+                                                                    @click="
+                                                                        deletePhotos(
+                                                                            selectedStudent.id,
+                                                                            index
+                                                                        )
+                                                                    "
+                                                                    >mdi-delete</v-icon
+                                                                >
+                                                            </div>
+                                                        </v-card-title>
+                                                        <v-card-text>
+                                                            <v-img
+                                                                :src="
+                                                                    photo.linkphoto
+                                                                "
+                                                                aspect-ratio="1"
+                                                                class="mb-2"
+                                                            ></v-img>
+                                                        </v-card-text>
+                                                    </v-card>
+                                                </v-col>
+                                            </v-row>
+                                            <v-dialog
+                                                v-model="editPhotosDialog"
+                                                max-width="500px"
+                                            >
+                                                <v-card>
+                                                    <v-card-title>
+                                                        <span class="headline"
+                                                            >تعديل الصورة</span
+                                                        >
+                                                    </v-card-title>
+                                                    <v-card-text>
+                                                        <v-form ref="editForm">
+                                                            <v-file-input
+                                                                style="
+                                                                    width: 100%;
+                                                                "
+                                                                v-model="
+                                                                    editedPhotos.file
+                                                                "
+                                                                label="صورة"
+                                                                accept="image/*"
+                                                                variant="outlined"
+                                                                prepend-icon=""
+                                                                width="100%"
+                                                                prepend-inner-icon="mdi-paperclip"
+                                                                required
+                                                            ></v-file-input>
+                                                            <v-textarea
+                                                                v-model="
+                                                                    editedPhotos.grade
+                                                                "
+                                                                label="وصف الصورة"
+                                                                required
+                                                            ></v-textarea>
+                                                        </v-form>
+                                                    </v-card-text>
+                                                    <v-card-actions>
+                                                        <v-spacer></v-spacer>
+                                                        <v-btn
+                                                            color="blue darken-1"
+                                                            text
+                                                            @click="
+                                                                closePhotoDialogs
+                                                            "
+                                                            >إلغاء</v-btn
+                                                        >
+                                                        <v-btn
+                                                            color="blue darken-1"
+                                                            text
+                                                            @click="
+                                                                savePhotosEdit
+                                                            "
+                                                            >حفظ</v-btn
+                                                        >
+                                                    </v-card-actions>
+                                                </v-card>
+                                            </v-dialog>
+                                            <v-dialog
+                                                v-model="dialogAddPhoto"
+                                                max-width="500px"
+                                            >
+                                                <v-card>
+                                                    <v-card-title>
+                                                        <span class="headline"
+                                                            >إضافة صوره
+                                                            جديدة</span
+                                                        >
+                                                    </v-card-title>
+                                                    <v-card-text>
+                                                        <v-form ref="addForm">
+                                                            <v-file-input
+                                                                style="
+                                                                    width: 100%;
+                                                                "
+                                                                v-model="
+                                                                    AddPhoto.file
+                                                                "
+                                                                label="صورة"
+                                                                accept="image/*"
+                                                                variant="outlined"
+                                                                prepend-icon=""
+                                                                width="100%"
+                                                                prepend-inner-icon="mdi-paperclip"
+                                                                required
+                                                            ></v-file-input>
+                                                            <v-textarea
+                                                                v-model="
+                                                                    AddPhoto.grade
+                                                                "
+                                                                label="وصف الصوره"
+                                                                required
+                                                            ></v-textarea>
+                                                        </v-form>
+                                                    </v-card-text>
+                                                    <v-card-actions>
+                                                        <v-spacer></v-spacer>
+                                                        <v-btn
+                                                            color="blue darken-1"
+                                                            text
+                                                            @click="
+                                                                dialogAddPhoto = false
+                                                            "
+                                                            >إلغاء</v-btn
+                                                        >
+                                                        <v-btn
+                                                            color="blue darken-1"
+                                                            text
+                                                            @click="
+                                                                addPhoto(
+                                                                    selectedStudent.id
+                                                                )
+                                                            "
+                                                            >حفظ</v-btn
+                                                        >
+                                                    </v-card-actions>
+                                                </v-card>
+                                            </v-dialog>
                                         </div>
                                     </form>
                                 </v-stepper-window>
@@ -1703,6 +1893,7 @@
 </template>
 
 <script>
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import {
     collection,
     addDoc,
@@ -1721,12 +1912,17 @@ const firebaseConfig = {
     messagingSenderId: "462211256149",
     appId: "1:462211256149:web:a03ace3c70b306620169dc",
 };
+import { getStorage } from "firebase/storage";
 import { gsap } from "gsap";
 import { useToast } from "vue-toastification";
 import "vue-toastification/dist/index.css"; // Import the CSS file
 import { initializeApp } from "@firebase/app";
 const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
+const storage = getStorage(app);
+
+export { db, storage };
 import { useDialogStore } from "@/store/useDialogStore";
 export default {
     name: "StudentList",
@@ -1748,7 +1944,9 @@ export default {
     data() {
         return {
             editNotificationsDialog: false,
+            editPhotosDialog: false,
             dialogAddNotice: false,
+            dialogAddPhoto: false,
             dialogs: false,
             editedField: "",
             editedValue: "",
@@ -1765,6 +1963,10 @@ export default {
                 theDescription: "",
                 NotificationType: "",
             },
+            AddPhoto: {
+                Date: "",
+                link: "",
+            },
             visible: false,
             menu: false,
             e1: 1,
@@ -1772,14 +1974,7 @@ export default {
             students_class: [],
             dialog_addstudent: false,
             searchQuery: "",
-            Guardian: [
-                { Guardian_name: "" },
-                { Guardian_phone: "" },
-                { Guardian_email: "" },
-                { Guardian_password: "" },
-                { Brothers_in_school: "" },
-                { brother: [""] },
-            ],
+
             form: {
                 student_information: [
                     { student_name: "" },
@@ -1788,6 +1983,14 @@ export default {
                     { gender: "" },
                     { section: "" },
                     { birthday: null },
+                ],
+                Guardian: [
+                    { Guardian_name: "" },
+                    { Guardian_phone: "" },
+                    { Guardian_email: "" },
+                    { Guardian_password: "" },
+                    { Brothers_in_school: "" },
+                    { brother: [""] },
                 ],
                 Results: [
                     {
@@ -1891,6 +2094,12 @@ export default {
                         NotificationType: "",
                     },
                 ],
+                photos: [
+                    {
+                        Date: "",
+                        link: "",
+                    },
+                ],
             },
 
             errors: {
@@ -1954,6 +2163,10 @@ export default {
                 theDescription: "",
                 NotificationType: "",
             },
+            editedPhotos: {
+                Date: "",
+                link: "",
+            },
             currentStudentId: null,
             valid: false,
             editedmony: {
@@ -1967,12 +2180,64 @@ export default {
                 paid_up: 120,
                 installment_system: "شهريا",
             },
+            selectedStudent: null, // To track the selected student
+            dialogStudentDetails: false,
         };
     },
     async created() {
         await this.fetchStudents();
     },
     methods: {
+        editPhotos(studentId, index) {
+            this.editedStudentId = studentId;
+            this.editedIndex = index;
+            const selectedStudent = this.students_class.find(
+                (student) => student.id === studentId
+            );
+            if (selectedStudent) {
+                this.editedPhotos = { ...selectedStudent.photos[index] };
+                this.editPhotosDialog = true;
+            }
+        },
+        async savePhotosEdit() {
+            try {
+                let downloadURL = this.editedPhotos.linkphoto;
+                if (this.editedPhotos.file) {
+                    const storageRef = ref(
+                        storage,
+                        `photos/${this.editedPhotos.file.name}`
+                    );
+                    await uploadBytes(storageRef, this.editedPhotos.file);
+                    downloadURL = await getDownloadURL(storageRef);
+                }
+
+                const studentRef = doc(db, "students", this.editedStudentId);
+                const studentDoc = await getDoc(studentRef);
+                if (studentDoc.exists()) {
+                    const studentData = studentDoc.data();
+                    studentData.photos[this.editedIndex] = {
+                        linkphoto: downloadURL,
+                        grade: this.editedPhotos.grade || "",
+                    };
+
+                    // Log the data before updating
+                    console.log("Updating student data:", studentData);
+
+                    // Ensure no undefined values
+                    Object.keys(studentData).forEach((key) => {
+                        if (studentData[key] === undefined) {
+                            delete studentData[key];
+                        }
+                    });
+
+                    await updateDoc(studentRef, { photos: studentData.photos });
+                    this.closePhotoDialogs();
+                    await this.fetchStudents();
+                }
+            } catch (error) {
+                console.error("Error editing subject:", error);
+            }
+        },
         async saveNotificationsEdit() {
             try {
                 const studentRef = doc(db, "students", this.editedStudentId);
@@ -1991,17 +2256,19 @@ export default {
                 console.error("Error editing subject:", error);
             }
         },
+
         editNotifications(studentId, index) {
             this.editedStudentId = studentId;
             this.editedIndex = index;
-            const student = this.students_class.find(
-                (student) => student.id === studentId
+            const selectedStudent = this.students_class.find(
+                (selectedStudent) => selectedStudent.id === studentId
             );
-            if (student) {
-                this.editedNotifications = { ...student.Notifications };
+            if (selectedStudent) {
+                this.editedNotifications = { ...selectedStudent.Notifications };
                 this.editNotificationsDialog = true;
             }
         },
+
         async addNotifications(studentId) {
             try {
                 const studentRef = doc(db, "students", studentId);
@@ -2026,7 +2293,37 @@ export default {
                 console.error("Error adding subject:", error);
             }
         },
+        async addPhoto(studentId) {
+            try {
+                if (this.AddPhoto.file) {
+                    const storageRef = ref(
+                        storage,
+                        `photos/${this.AddPhoto.file.name}`
+                    );
+                    await uploadBytes(storageRef, this.AddPhoto.file);
+                    const downloadURL = await getDownloadURL(storageRef);
 
+                    const studentRef = doc(db, "students", studentId);
+                    const studentDoc = await getDoc(studentRef);
+                    if (studentDoc.exists()) {
+                        const studentData = studentDoc.data();
+                        studentData.photos.push({
+                            DatePhoto: this.AddPhoto.Date,
+                            linkphoto: downloadURL,
+                        });
+                        await updateDoc(studentRef, studentData);
+                        this.dialogAddPhoto = false;
+                        this.AddPhoto = {
+                            file: null,
+                            grade: "",
+                        };
+                        await this.fetchStudents();
+                    }
+                }
+            } catch (error) {
+                console.error("Error adding photo:", error);
+            }
+        },
         async deleteNotification(studentId, NotificatIndex) {
             try {
                 const studentRef = doc(db, "students", studentId);
@@ -2034,6 +2331,21 @@ export default {
                 if (studentDoc.exists()) {
                     const studentData = studentDoc.data();
                     studentData.Notifications.splice(NotificatIndex, 1);
+                    await updateDoc(studentRef, studentData);
+                    await this.fetchStudents();
+                    // this.dilog_ss = true;
+                }
+            } catch (error) {
+                console.error("Error deleting subject:", error);
+            }
+        },
+        async deletePhotos(studentId, PhotosIndex) {
+            try {
+                const studentRef = doc(db, "students", studentId);
+                const studentDoc = await getDoc(studentRef);
+                if (studentDoc.exists()) {
+                    const studentData = studentDoc.data();
+                    studentData.photos.splice(PhotosIndex, 1);
                     await updateDoc(studentRef, studentData);
                     await this.fetchStudents();
                     // this.dilog_ss = true;
@@ -2104,7 +2416,6 @@ export default {
                 console.error("Error adding subject:", error);
             }
         },
-
         editSubject(studentId, index) {
             this.editedStudentId = studentId;
             this.editedIndex = index;
@@ -2112,7 +2423,9 @@ export default {
                 (student) => student.id === studentId
             );
             if (student) {
-                this.editedSubject = { ...student.Results[0].weekly[index] };
+                this.editedSubject = {
+                    ...student.Results[0].weekly[index],
+                };
                 this.editDialog = true;
             }
         },
@@ -2152,6 +2465,28 @@ export default {
                 NotificationType: "",
             };
         },
+        closePhotoDialogs() {
+            this.editPhotosDialog = false;
+            this.editedIndex = -1;
+            this.editedPhotos = {
+                NoticeTitle: "",
+                theDescription: "",
+                NotificationType: "",
+            };
+        },
+        async saveStudentDetails() {
+            if (this.selectedStudent) {
+                try {
+                    const studentRef = doc(db, "students", this.student.id);
+                    await updateDoc(studentRef, this.student);
+                    await this.fetchStudents(); // Optionally refetch students to update the list
+                    this.dialogStudentDetails = false;
+                    console.log("Student details updated successfully");
+                } catch (error) {
+                    console.error("Error updating student details:", error);
+                }
+            }
+        },
         async deleteSubject(studentId, subjectIndex) {
             try {
                 const studentRef = doc(db, "students", studentId);
@@ -2161,6 +2496,7 @@ export default {
                     studentData.Results[0].weekly.splice(subjectIndex, 1);
                     await updateDoc(studentRef, studentData);
                     await this.fetchStudents();
+                    // await this.openStudentDetails();
                     // this.dilog_ss = true;
                 }
             } catch (error) {
@@ -2241,6 +2577,7 @@ export default {
                         this.form.Results,
                         this.form.payments,
                         this.form.Notifications,
+                        this.form.photos,
                         this.year
                     );
 
@@ -2249,6 +2586,7 @@ export default {
                         Results: this.form.Results,
                         payments: this.form.payments,
                         Notifications: this.form.Notifications,
+                        photos: this.form.photos,
                         year: this.year,
                     });
 
@@ -2345,9 +2683,9 @@ export default {
 
             return isValid;
         },
-        showStudentDetails(student) {
-            student.showDetails = true;
-        },
+        // showStudentDetails(student) {
+        //     student.showDetails = true;
+        // },
         async searchStudent() {
             try {
                 const trimmedQuery = this.searchQuery.trim().toLowerCase();
@@ -2414,20 +2752,10 @@ export default {
                 });
             }
         },
-        // async updateGuardian() {
-        //     try {
-        //         const studentId = this.currentStudentId; // Assuming you have the student's ID stored
-        //         const studentRef = doc(db, "students", studentId);
-
-        //         await updateDoc(studentRef, {
-        //             Guardian: this.Guardian,
-        //         });
-
-        //         console.log("Guardian information updated successfully");
-        //     } catch (error) {
-        //         console.error("Error updating guardian information:", error);
-        //     }
-        // },
+        async openStudentDetails(student) {
+            this.selectedStudent = student;
+            this.dialogStudentDetails = true;
+        },
     },
     watch: {
         "form.student_information[5].birthday"(newVal) {
@@ -2485,7 +2813,7 @@ export default {
     margin-bottom: 10px;
 }
 .v-progress-linear {
-    position: relative;
+    position: static;
     overflow: visible;
 }
 .progress-label .label-container {
