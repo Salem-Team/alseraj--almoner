@@ -75,7 +75,7 @@ export default {
     padding: 0;
     justify-content: space-between !important;
     flex-direction: column;
-    gap: 20px;
+    gap: 40px;
 }
 .card {
     display: flex;
