@@ -1,40 +1,82 @@
 <template>
-    <img
-        style="
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 245px;
-        "
-        v-if="loading1"
-        src="../assets/Spinner@1x-1.0s-200px-200px.svg"
-        alt=""
-    />
-    <div class="use" v-if="!loading1">
-        <div class="title">
-            <div class="right">
+    <div class="visible">
+        <svg
+            style="
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 245px;
+            "
+            v-if="loading1"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 200 200"
+        >
+            <radialGradient
+                id="a12"
+                cx=".66"
+                fx=".66"
+                cy=".3125"
+                fy=".3125"
+                gradientTransform="scale(1.5)"
+            >
+                <stop offset="0" stop-color="#336699"></stop>
+                <stop offset=".3" stop-color="#336699" stop-opacity=".9"></stop>
+                <stop offset=".6" stop-color="#336699" stop-opacity=".6"></stop>
+                <stop offset=".8" stop-color="#336699" stop-opacity=".3"></stop>
+                <stop offset="1" stop-color="#336699" stop-opacity="0"></stop>
+            </radialGradient>
+            <circle
+                transform-origin="center"
+                fill="none"
+                stroke="url(#a12)"
+                stroke-width="15"
+                stroke-linecap="round"
+                stroke-dasharray="200 1000"
+                stroke-dashoffset="0"
+                cx="100"
+                cy="100"
+                r="70"
+            >
+                <animateTransform
+                    type="rotate"
+                    attributeName="transform"
+                    calcMode="spline"
+                    dur="2"
+                    values="360;0"
+                    keyTimes="0;1"
+                    keySplines="0 0 1 1"
+                    repeatCount="indefinite"
+                ></animateTransform>
+            </circle>
+            <circle
+                transform-origin="center"
+                fill="none"
+                opacity=".2"
+                stroke="#336699"
+                stroke-width="15"
+                stroke-linecap="round"
+                cx="100"
+                cy="100"
+                r="70"
+            ></circle>
+        </svg>
+        <div class="right">
+            <div>
                 <v-breadcrumbs>
                     <v-breadcrumbs-item @click="$router.push('/admin')" link>
                         الإشراف
                     </v-breadcrumbs-item>
                     <v-breadcrumbs-divider />
-                    <v-breadcrumbs-item
-                        @click="$router.push('/Modifications')"
-                        link
-                    >
-                        الإعدادات
-                    </v-breadcrumbs-item>
-                    <v-breadcrumbs-divider />
-                    <v-breadcrumbs-item @click="$router.push('/Add_News')" link>
-                        الأخبار
-                    </v-breadcrumbs-item>
+                    <v-breadcrumbs-item> إدارة المشرفين </v-breadcrumbs-item>
                 </v-breadcrumbs>
             </div>
             <div class="left">
-                <font-awesome-icon
+                <img
+                    src="../assets/news/plus.png"
+                    alt=""
                     @click="dialog = true"
-                    :icon="['fas', 'plus']"
+                    class="pluse"
                 />
             </div>
         </div>
@@ -150,46 +192,31 @@
                 </form>
             </v-card>
         </v-dialog>
-        <v-container
-            class="box d-flex align-center justify-space-around"
-            width="90%"
-        >
-            <v-card
-                v-for="New in News"
-                :key="New.id"
-                width="200"
-                max-width="25%"
-            >
-                <v-img :src="New.image" height="200" cover></v-img>
-
-                <v-card-title
-                    class="card_title d-flex justify-center flex-wrap"
-                >
-                    <p>{{ New.title }}</p>
-                    <v-spacer />
-                    <div>
-                        <font-awesome-icon
-                            @click="news.New_Information(New)"
-                            :icon="['fas', 'edit']"
-                            @click.="dialog_1 = true"
-                        />
+        <v-container class="box d-flex align-center justify-space-around">
+            <div class="feat" v-for="New in News" :key="New.id">
+                <div class="Top">
+                    <font-awesome-icon
+                        :icon="['fas', 'pen-to-square']"
+                        @click="news.New_Information(New)"
+                        @click.="dialog_1 = true"
+                    />
+                    <font-awesome-icon
+                        :icon="['fas', 'trash']"
+                        @click="news.dailog_3 = true"
+                    />
+                    <img :src="New.image" alt="" />
+                </div>
+                <div class="Bottom">
+                    <div class="title">فتح باب القبول</div>
+                    <div class="time">
+                        <font-awesome-icon :icon="['fas', 'clock']" />
+                        <div>{{ New.time }}</div>
                     </div>
-                    <div>
-                        <font-awesome-icon
-                            @click="news.dailog_3 = true"
-                            :icon="['fas', 'trash']"
-                        />
+                    <div class="description">
+                        {{ New.description }}
                     </div>
-                </v-card-title>
-
-                <v-card-subtitle>
-                    {{ New.time }}
-                </v-card-subtitle>
-
-                <v-card-text style="color: var(--main-color)"
-                    >{{ New.description }}
-                </v-card-text>
-            </v-card>
+                </div>
+            </div>
         </v-container>
     </div>
     <v-dialog v-model="news.dailog_3" width="90%">
@@ -341,6 +368,285 @@ form {
                 color: var(--therd-color);
             }
         }
+    }
+}
+
+.admin-card {
+    padding: 68px;
+    background-color: #2196f333;
+}
+.right {
+    width: 90% !important;
+    margin: auto;
+    font-weight: bold;
+    font-size: 20px;
+    border-bottom: 5px solid var(--secound-color);
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .v-breadcrumbs-item:first-child {
+        color: var(--main-color);
+        cursor: pointer;
+        font-size: 24px;
+    }
+    .v-breadcrumbs {
+        padding: 16px 0;
+    }
+}
+.v-container {
+    margin: 20px auto !important;
+    flex-wrap: wrap;
+    padding: 0;
+    justify-content: flex-start !important;
+    flex-direction: column;
+    gap: 20px;
+}
+.card {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    font-size: 20px;
+    color: var(--main-color);
+    font-weight: bold;
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+}
+.feat {
+    width: 100%;
+    box-shadow: 0 0 10px #ddd;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+    & > div {
+        width: 100%;
+
+        position: relative;
+    }
+    .Top {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 250px;
+        img {
+            border-top-right-radius: 5px;
+            border-top-left-radius: 5px;
+            height: 100%;
+            object-fit: cover;
+            width: 100%;
+        }
+        svg {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            width: 15px;
+            height: 15px;
+            padding: 6px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: #fff;
+            background: var(--main-color);
+            &:first-child {
+                left: 40px;
+            }
+        }
+    }
+    .Bottom {
+        padding: 10px;
+        .title {
+            font-size: 20px;
+            color: var(--main-color);
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        .time {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--therd-color);
+            font-weight: bold;
+            margin-bottom: 20px;
+            position: relative;
+            font-size: 14px;
+            &::before {
+                content: "";
+                position: absolute;
+                bottom: -10px;
+                left: 0;
+                width: 100%;
+                height: 4px;
+                background: var(--secound-color);
+            }
+        }
+        .description {
+            font-weight: bold;
+            color: var(--therd-color);
+        }
+    }
+    .head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        margin-bottom: 15px;
+        &::before {
+            content: "";
+            position: absolute;
+            bottom: -15px;
+            height: 3px;
+            width: 100%;
+            background: var(--secound-color);
+        }
+        & > div {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            .number {
+                background: var(--main-color);
+                color: #fff;
+                border-radius: 5px;
+                font-weight: bold;
+                font-size: 18px;
+                width: 30px;
+                height: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .name {
+                font-size: 20px;
+                color: var(--main-color);
+                font-weight: bold;
+            }
+            svg {
+                color: var(--main-color);
+                font-size: 20px;
+                cursor: pointer;
+
+                &:hover {
+                    color: var(--therd-color);
+                }
+            }
+        }
+    }
+    .body {
+        & > div {
+            font-weight: bold;
+            font-size: 19px;
+            color: var(--therd-color);
+            margin: 20px 0 5px;
+        }
+        ul {
+            color: var(--therd-color);
+            font-weight: bold;
+            font-size: 16px;
+            li {
+                list-style-type: square;
+                list-style-position: inside;
+            }
+        }
+    }
+    .footer {
+        .show_password {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            background: var(--main-color);
+            width: 100%;
+            padding: 10px;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            &:hover {
+                background-color: var(--therd-color);
+            }
+        }
+    }
+}
+.v-card.v-theme--light.v-card--density-default.v-card--variant-elevated {
+    .head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 10px 0;
+        font-size: 23px;
+        color: var(--main-color);
+        font-weight: bold;
+        position: relative;
+        margin-bottom: 20px;
+        svg {
+            cursor: pointer;
+            padding: 10px;
+        }
+        &::before {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            height: 4px;
+            width: 95%;
+            background: var(--secound-color);
+            transform: translateX(-50%);
+        }
+    }
+    .body {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        color: var(--therd-color);
+        background: var(--secound-color);
+        margin: 0 10px 10px;
+        border-radius: 5px;
+        svg {
+            color: var(--main-color);
+            font-size: 18px;
+            cursor: pointer;
+        }
+    }
+}
+@media (max-width: 599px) {
+}
+@media (min-width: 600px) and (max-width: 768px) {
+}
+@media (min-width: 769px) {
+    .v-container {
+        flex-direction: row;
+        gap: 15px;
+        align-items: stretch !important;
+    }
+    .card {
+        width: 32%;
+    }
+    .feat {
+        width: 32%;
+        justify-content: flex-start;
+    }
+}
+
+img.pluse {
+    width: 40px;
+    cursor: pointer;
+    &:hover {
+        opacity: 0.7;
+    }
+}
+.visible {
+    opacity: 0;
+    animation: fadeIn 1s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
     }
 }
 </style>
