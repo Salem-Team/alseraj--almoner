@@ -1,51 +1,4 @@
 <template>
-<<<<<<< HEAD
-    <img
-        style="
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 245px;
-        "
-        v-if="loading1"
-        src="../assets/Spinner@1x-1.0s-200px-200px.svg"
-        alt=""
-    />
-    <div v-if="!loading1">
-        <div class="use">
-            <div class="title">
-                <div class="right">
-                    <v-breadcrumbs>
-                        <v-breadcrumbs-item
-                            @click="$router.push('/admin')"
-                            link
-                        >
-                            الإشراف
-                        </v-breadcrumbs-item>
-                        <v-breadcrumbs-divider />
-                        <v-breadcrumbs-item
-                            @click="$router.push('/Modifications')"
-                            link
-                        >
-                            الإعدادات
-                        </v-breadcrumbs-item>
-                        <v-breadcrumbs-divider />
-                        <v-breadcrumbs-item
-                            @click="$router.push('/Add_admin')"
-                            link
-                        >
-                            إدارة المشرف
-                        </v-breadcrumbs-item>
-                    </v-breadcrumbs>
-                </div>
-                <div class="left">
-                    <font-awesome-icon
-                        @click="admin.dialog = true"
-                        :icon="['fas', 'plus']"
-                    />
-                </div>
-=======
     <div class="visible">
         <svg
             style="
@@ -125,24 +78,10 @@
                     @click="admin.dialog = true"
                     class="pluse"
                 />
->>>>>>> ca7a465 (add Add_admin , admin , img)
             </div>
         </div>
         <v-dialog v-model="admin.dialog" width="90%">
             <v-card width="100%" class="popup">
-<<<<<<< HEAD
-                <v-card-title class="d-flex justify-space-between align-center">
-                    <div class="text-h4 ps-2" style="color: var(--main-color)">
-                        إضافة مشرف
-                    </div>
-                    <v-btn
-                        style="color: var(--main-color)"
-                        icon="mdi-close"
-                        variant="text"
-                        @click="admin.dialog = false"
-                    ></v-btn>
-                </v-card-title>
-=======
                 <div class="d-flex justify-space-between align-center title">
                     <div style="color: var(--main-color)">إضافة مشرف</div>
                     <v-btn
@@ -150,7 +89,6 @@
                         @click="admin.dialog = false"
                     ></v-btn>
                 </div>
->>>>>>> ca7a465 (add Add_admin , admin , img)
                 <form ref="form" @submit.prevent class="ma-auto">
                     <v-text-field
                         v-model="user.name"
@@ -186,16 +124,6 @@
                         "
                         @click:append-inner="admin.toggle_Show_Password"
                     ></v-text-field>
-<<<<<<< HEAD
-
-                    <v-btn
-                        class="d-flex align-center mt-4 mb-10"
-                        type="submit"
-                        color="primary"
-                        :loading="loading"
-                        :disabled="loading"
-                        @click="admin.add_admin"
-=======
                     <v-btn
                         class="d-flex align-center mt-4"
                         type="submit"
@@ -205,13 +133,11 @@
                         style="
                             width: 100%;
                             padding: 20px;
-                            color: #fff;
+                            color: var(--main-color);
                             letter-spacing: normal;
                             font-weight: bold;
                             font-size: 19px;
-                            background: var(--main-color);
                         "
->>>>>>> ca7a465 (add Add_admin , admin , img)
                     >
                         إضافة
                     </v-btn>
@@ -221,19 +147,6 @@
 
         <v-dialog v-model="admin.dialog_1" width="90%">
             <v-card width="100%" class="popup">
-<<<<<<< HEAD
-                <v-card-title class="d-flex justify-space-between align-center">
-                    <div class="text-h4 ps-2" style="color: var(--main-color)">
-                        تعديل بيانات مشرف
-                    </div>
-                    <v-btn
-                        style="color: var(--main-color)"
-                        icon="mdi-close"
-                        variant="text"
-                        @click="admin.dialog_1 = false"
-                    ></v-btn>
-                </v-card-title>
-=======
                 <div class="d-flex justify-space-between align-center title">
                     <div style="color: var(--main-color)">
                         تعديل بينات المشرف
@@ -243,7 +156,6 @@
                         @click="admin.dialog_1 = false"
                     ></v-btn>
                 </div>
->>>>>>> ca7a465 (add Add_admin , admin , img)
                 <form ref="form" @submit.prevent class="ma-auto">
                     <v-text-field
                         v-model="admin.name_Information"
@@ -269,14 +181,6 @@
                         required
                     ></v-select>
                     <v-btn
-<<<<<<< HEAD
-                        class="d-flex align-center mt-4 mb-10"
-                        type="submit"
-                        color="primary"
-                        :loading="loading"
-                        :disabled="loading"
-                        @click="admin.Update_Admin(admin.Id_Information)"
-=======
                         type="submit"
                         :loading="loading"
                         :disabled="loading"
@@ -285,13 +189,11 @@
                         style="
                             width: 100%;
                             padding: 20px;
-                            color: #fff;
+                            color: var(--main-color);
                             letter-spacing: normal;
                             font-weight: bold;
                             font-size: 19px;
-                            background: var(--main-color);
                         "
->>>>>>> ca7a465 (add Add_admin , admin , img)
                     >
                         تعديل
                     </v-btn>
@@ -301,67 +203,6 @@
         <v-container
             class="box d-flex align-center justify-space-around"
             width="90%"
-<<<<<<< HEAD
-        >
-            <v-card
-                v-for="user in users"
-                :key="user.id"
-                width="25%"
-                min-height="120"
-                class="job"
-                style="background-color: var(--secound-color)"
-            >
-                <v-card-title
-                    class="title d-flex align-center justify-center flex-wrap"
-                >
-                    <p>{{ user.name }}</p>
-                    <v-spacer />
-                    <div class="ma-2">
-                        <font-awesome-icon
-                            @click="admin.user_Information(user)"
-                            :icon="['fas', 'edit']"
-                            @click.="dialog_1 = true"
-                        />
-                    </div>
-                    <div>
-                        <font-awesome-icon
-                            @click="admin.dailog_3 = true"
-                            :icon="['fas', 'trash']"
-                        />
-                    </div>
-                </v-card-title>
-                <br />
-                <v-card-subtitle v-for="index in user.roles" :key="index">
-                    {{ index }}
-                </v-card-subtitle>
-
-                <v-card-text>{{ user.email }} </v-card-text>
-            </v-card>
-        </v-container>
-    </div>
-    <v-dialog v-model="admin.dailog_3" width="90%">
-        <v-card width="100%" class="popup">
-            <v-card-title class="d-flex justify-space-between align-center">
-                <div class="text-h4 ps-2" style="color: var(--main-color)">
-                    حذف
-                </div>
-                <v-btn
-                    style="color: var(--main-color)"
-                    icon="mdi-close"
-                    variant="text"
-                    @click="admin.dailog_3 = false"
-                ></v-btn>
-            </v-card-title>
-            <v-card-text>
-                <p>تأكيد الحذف</p>
-                <div class="d-flex align-center mt-4">
-                    <v-btn
-                        type="submit"
-                        color="primary"
-                        :loading="loading"
-                        :disabled="loading"
-                        @click="admin.dailog_3 = false"
-=======
             v-if="!loading1"
         >
             <div class="feat" v-for="user in users" :key="user.id">
@@ -475,19 +316,12 @@
                             width: 48%;
                             height: 45px;
                         "
->>>>>>> ca7a465 (add Add_admin , admin , img)
                     >
                         إلغاء
                     </v-btn>
                     <v-spacer />
                     <v-btn
                         type="submit"
-<<<<<<< HEAD
-                        color="error"
-                        :loading="loading"
-                        :disabled="loading"
-                        @click="admin.delete_user(user.id)"
-=======
                         color="var(--pink-color)"
                         :loading="loading"
                         :disabled="loading"
@@ -498,7 +332,6 @@
                             width: 48%;
                             height: 45px;
                         "
->>>>>>> ca7a465 (add Add_admin , admin , img)
                     >
                         تأكيد
                     </v-btn>
@@ -507,20 +340,12 @@
         </v-card></v-dialog
     >
 </template>
-<<<<<<< HEAD
-<script scoped>
-import { storeToRefs } from "pinia";
-import { defineComponent } from "vue";
-import { useadmin } from "@/store/admin.js";
-export default defineComponent({
-=======
 
 <script scoped>
 import { storeToRefs } from "pinia";
 // import { defineComponent } from "vue";
 import { useadmin } from "@/store/admin.js";
 export default {
->>>>>>> ca7a465 (add Add_admin , admin , img)
     setup() {
         const admin = useadmin();
         admin.Get_data();
@@ -566,48 +391,6 @@ export default {
             dialog_1,
         };
     },
-<<<<<<< HEAD
-});
-</script>
-<style lang="scss" scoped>
-form {
-    width: 90%;
-    margin: auto;
-}
-
-.use {
-    width: 95% !important;
-    margin: auto;
-    .title {
-        margin-top: 40px;
-        background: var(--secound-color);
-        padding: 15px 20px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 3px;
-        border-radius: 5px;
-        color: var(--main-color);
-        font-weight: bold;
-        font-size: 20px;
-        & > div {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            &.left {
-                svg {
-                    cursor: pointer;
-                    transition: 0.3s;
-                    background: #fff;
-                    padding: 10px;
-                    border-radius: 5px;
-                    &:hover {
-                        color: var(--therd-color);
-                    }
-                }
-            }
-        }
-=======
 
     data: () => ({
         snackbar: false,
@@ -663,7 +446,6 @@ form {
     box-shadow: none;
     &:hover {
         background: #fff;
->>>>>>> ca7a465 (add Add_admin , admin , img)
     }
 }
 .box {
@@ -703,8 +485,6 @@ form {
         }
     }
 }
-<<<<<<< HEAD
-=======
 
 .admin-card {
     padding: 68px;
@@ -922,5 +702,4 @@ img.pluse {
         opacity: 1;
     }
 }
->>>>>>> ca7a465 (add Add_admin , admin , img)
 </style>

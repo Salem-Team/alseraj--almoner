@@ -22,59 +22,6 @@
                     <v-col cols="12" sm="4">
                         <v-card class="info-card" style="height: 100%">
                             <v-card-title class="info-card-title text-center"
-<<<<<<< HEAD
-                                >بياناتك الشخصية</v-card-title
-                            >
-                            <v-divider></v-divider>
-                            <v-card-text class="info-card-text">
-                                <div
-                                    class="d-flex flex-column ga-5"
-                                    v-if="!editingMode"
-                                >
-                                    <strong>{{ parent.name }}</strong>
-                                    <strong>{{ parent.email }}</strong>
-                                    <strong>{{ parent.phoneNumber }}</strong>
-                                </div>
-                                <div class="d-flex flex-column" v-else>
-                                    <!-- Input fields for editing -->
-
-                                    <v-text-field
-                                        v-model="editedParent.email"
-                                        label="البريد الإلكتروني"
-                                    ></v-text-field>
-                                    <v-text-field
-                                        v-model="editedParent.phoneNumber"
-                                        label="رقم الهاتف"
-                                    ></v-text-field>
-                                </div>
-                            </v-card-text>
-                            <v-card-actions class="ma-5 d-flex justify-right">
-                                <v-btn
-                                    style="
-                                        background-color: #0088ff;
-                                        color: #fff;
-                                    "
-                                    size="large"
-                                    outlined
-                                    v-if="!editingMode"
-                                    @click="startEditing"
-                                    >تعديل بياناتك</v-btn
-                                >
-                                <v-btn
-                                    v-else
-                                    @click="saveChanges"
-                                    style="
-                                        background-color: #0088ff;
-                                        color: #fff;
-                                    "
-                                    size="large"
-                                    >حفظ التعديلات</v-btn
-                                >
-                            </v-card-actions>
-                        </v-card>
-                    </v-col>
-
-=======
                                 >بياناتك الشخصيه</v-card-title
                             >
                             <v-divider></v-divider>
@@ -89,7 +36,6 @@
                         </v-card>
                     </v-col>
 
->>>>>>> ca7a465 (add Add_admin , admin , img)
                     <v-col cols="12" sm="8">
                         <v-card class="info-card" style="height: 100%">
                             <v-card-title class="info-card-title text-center">
@@ -104,11 +50,7 @@
                                 >
                                     <v-col
                                         cols="12"
-<<<<<<< HEAD
-                                        sm="3"
-=======
                                         sm="4"
->>>>>>> ca7a465 (add Add_admin , admin , img)
                                         class="d-flex flex-column align-center"
                                     >
                                         <strong class="text-h6">الاسم:</strong>
@@ -116,11 +58,7 @@
                                     </v-col>
                                     <v-col
                                         cols="12"
-<<<<<<< HEAD
-                                        sm="3"
-=======
                                         sm="4"
->>>>>>> ca7a465 (add Add_admin , admin , img)
                                         class="d-flex flex-column align-center"
                                     >
                                         <strong class="text-h6"
@@ -130,21 +68,7 @@
                                     </v-col>
                                     <v-col
                                         cols="12"
-<<<<<<< HEAD
-                                        sm="3"
-                                        class="d-flex flex-column align-center"
-                                    >
-                                        <strong class="text-h6"
-                                            >المرحله الدراسية:</strong
-                                        >
-                                        <div>{{ child.schoolYear }}</div>
-                                    </v-col>
-                                    <v-col
-                                        cols="12"
-                                        sm="3"
-=======
                                         sm="4"
->>>>>>> ca7a465 (add Add_admin , admin , img)
                                         class="d-flex align-center justify-center"
                                     >
                                         <v-btn
@@ -171,20 +95,12 @@ import { useAuthStore } from "../store/userStore";
 
 export default {
     data: () => ({
-<<<<<<< HEAD
-        editingMode: false,
-=======
->>>>>>> ca7a465 (add Add_admin , admin , img)
         items: ["بياناتك الشخصيه", "اطفالى"],
         children: [
             {
                 id: 1,
                 name: "أحمد",
                 gradeLevel: "الابتدائية",
-<<<<<<< HEAD
-                schoolYear: "2023-2024",
-=======
->>>>>>> ca7a465 (add Add_admin , admin , img)
             },
         ],
         parent: {
@@ -192,14 +108,6 @@ export default {
             email: "parent@gmail.com",
             phoneNumber: "0105245841",
         },
-<<<<<<< HEAD
-        editedParent: {
-            name: "",
-            email: "",
-            phoneNumber: "",
-        },
-=======
->>>>>>> ca7a465 (add Add_admin , admin , img)
     }),
     computed: {
         ...mapState(useAuthStore, ["user"]),
@@ -209,16 +117,7 @@ export default {
         Edit() {
             this.$router.push({ name: "Edit_profile" });
         },
-<<<<<<< HEAD
 
-        async My_Logout() {
-            try {
-                await this.logout();
-                this.$router.push({ name: "home" });
-            } catch (error) {
-                console.error("حدث خطأ أثناء تسجيل الخروج:", error.message);
-            }
-=======
         methods: {
             ...mapActions(useAuthStore, ["logout"]),
             Edit() {
@@ -233,13 +132,7 @@ export default {
                 }
             },
         },
-        goToChildDetails(childId) {
-            this.$router.push({
-                name: "ChildDetails",
-                params: { id: childId },
-            });
->>>>>>> ca7a465 (add Add_admin , admin , img)
-        },
+
         goToChildDetails(childId) {
             this.$router.push({
                 name: "ChildDetails",

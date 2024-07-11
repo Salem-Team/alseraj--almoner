@@ -231,11 +231,7 @@
                             <v-row>
                                 <v-col>
                                     <v-card
-<<<<<<< HEAD
                                         @click.stop="this.hhhh = true"
-=======
-                                        @click.stop="student.showDetails = true"
->>>>>>> ca7a465 (add Add_admin , admin , img)
                                         style="
                                             padding: 10px;
                                             display: flex;
@@ -253,11 +249,7 @@
                                 </v-col>
                             </v-row>
                         </v-list-item-content>
-<<<<<<< HEAD
                         <v-dialog v-model="this.hhhh">
-=======
-                        <v-dialog v-model="student.showDetails">
->>>>>>> ca7a465 (add Add_admin , admin , img)
                             <v-stepper
                                 v-model="e1"
                                 alt-labels
@@ -484,41 +476,25 @@
                                                         style="
                                                             margin-left: 20px;
                                                         "
-<<<<<<< HEAD
                                                         >{{
                                                             index + 2
                                                         }}</v-avatar
                                                     >
-=======
-                                                    >
-                                                        {{ index + 2 }}
-                                                    </v-avatar>
->>>>>>> ca7a465 (add Add_admin , admin , img)
                                                     <h2 style="color: #2196f3">
                                                         ولي الامر
                                                     </h2>
                                                 </div>
                                                 <v-text-field
                                                     v-model="
-<<<<<<< HEAD
                                                         Guardian[0]
                                                             .Guardian_name
                                                     "
                                                     :error-messages="
                                                         errors.Guardian_name
-=======
-                                                        student.Guardian[0]
-                                                            .Guardian_name
-                                                    "
-                                                    :error-messages="
-                                                        this.errors
-                                                            .Guardian_name
->>>>>>> ca7a465 (add Add_admin , admin , img)
                                                     "
                                                     label="الاسم"
                                                     required
                                                 ></v-text-field>
-<<<<<<< HEAD
                                                 <v-text-field
                                                     v-model="
                                                         Guardian[1]
@@ -571,11 +547,6 @@
                                                 <v-select
                                                     v-model="
                                                         Guardian[4]
-=======
-                                                <v-select
-                                                    v-model="
-                                                        student.Guardian[1]
->>>>>>> ca7a465 (add Add_admin , admin , img)
                                                             .Brothers_in_school
                                                     "
                                                     :error-messages="
@@ -588,11 +559,7 @@
                                                 ></v-select>
                                                 <div
                                                     v-if="
-<<<<<<< HEAD
                                                         Guardian[4]
-=======
-                                                        student.Guardian[1]
->>>>>>> ca7a465 (add Add_admin , admin , img)
                                                             .Brothers_in_school ===
                                                         'نعم'
                                                     "
@@ -600,33 +567,19 @@
                                                     <div
                                                         v-for="(
                                                             bor, index
-<<<<<<< HEAD
                                                         ) in Guardian[5]
-=======
-                                                        ) in form.Guardian[2]
->>>>>>> ca7a465 (add Add_admin , admin , img)
                                                             .brother"
                                                         :key="index"
                                                     >
                                                         <v-text-field
                                                             v-model="
-<<<<<<< HEAD
                                                                 Guardian[5]
-=======
-                                                                student
-                                                                    .Guardian[2]
->>>>>>> ca7a465 (add Add_admin , admin , img)
                                                                     .brother[
                                                                     index
                                                                 ]
                                                             "
                                                             :error-messages="
-<<<<<<< HEAD
                                                                 errors.brother
-=======
-                                                                this.errors
-                                                                    .brother
->>>>>>> ca7a465 (add Add_admin , admin , img)
                                                             "
                                                             label="اسم الاخ"
                                                             :append-icon="
@@ -918,7 +871,6 @@
                                             </div>
                                         </div>
                                         <div v-if="e1 === 4" ref="slide4">
-<<<<<<< HEAD
                                             <div style="padding: 20px">
                                                 <div
                                                     style="
@@ -1525,56 +1477,6 @@
                                                 <h2 style="color: #2196f3">
                                                     الصور
                                                 </h2>
-=======
-                                            <v-text-field
-                                                v-model="
-                                                    form.payments[0].Required
-                                                "
-                                                :error-messages="
-                                                    this.errors
-                                                        .payments_Required
-                                                "
-                                                label="المطلوب دفعه"
-                                                required
-                                            ></v-text-field>
-                                            <v-text-field
-                                                v-model="
-                                                    form.payments[1].paid_up
-                                                "
-                                                :error-messages="
-                                                    errors.payments_paid_up
-                                                "
-                                                label="المبلغ المدفوع"
-                                                required
-                                            ></v-text-field>
-                                            <v-text-field
-                                                v-model="
-                                                    form.payments[2]
-                                                        .installment_system
-                                                "
-                                                :error-messages="
-                                                    errors.payments_installment_system
-                                                "
-                                                label="نظام الأقساط"
-                                                required
-                                            ></v-text-field>
-                                        </div>
-                                        <div v-if="e1 === 5" ref="slide5">
-                                            <div class="text-center">
-                                                <v-btn
-                                                    append-icon="mdi-account-circle"
-                                                    type="submit"
-                                                    style="
-                                                        background: #2a597d;
-                                                        color: white;
-                                                        font-size: 24px;
-                                                        padding: 3px;
-                                                        width: 42%;
-                                                    "
-                                                >
-                                                    اضافه طالب
-                                                </v-btn>
->>>>>>> ca7a465 (add Add_admin , admin , img)
                                             </div>
                                         </div>
                                     </form>
@@ -1820,12 +1722,8 @@ const firebaseConfig = {
     appId: "1:462211256149:web:a03ace3c70b306620169dc",
 };
 import { gsap } from "gsap";
-<<<<<<< HEAD
 import { useToast } from "vue-toastification";
 import "vue-toastification/dist/index.css"; // Import the CSS file
-=======
-
->>>>>>> ca7a465 (add Add_admin , admin , img)
 import { initializeApp } from "@firebase/app";
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -1849,7 +1747,6 @@ export default {
     },
     data() {
         return {
-<<<<<<< HEAD
             editNotificationsDialog: false,
             dialogAddNotice: false,
             dialogs: false,
@@ -1857,15 +1754,12 @@ export default {
             editedValue: "",
             randomPassword: "",
             selectedMonth: "شهر يناير",
-=======
->>>>>>> ca7a465 (add Add_admin , admin , img)
             dialogAddSubject: false,
             newSubject: {
                 Subject_Name: "",
                 Major_degree: null,
                 Student_degree: null,
             },
-<<<<<<< HEAD
             AddNotice: {
                 NoticeTitle: "",
                 theDescription: "",
@@ -1875,11 +1769,6 @@ export default {
             menu: false,
             e1: 1,
             steps: 7,
-=======
-            menu: false,
-            e1: 1,
-            steps: 5,
->>>>>>> ca7a465 (add Add_admin , admin , img)
             students_class: [],
             dialog_addstudent: false,
             searchQuery: "",
@@ -1900,14 +1789,6 @@ export default {
                     { section: "" },
                     { birthday: null },
                 ],
-<<<<<<< HEAD
-=======
-                Guardian: [
-                    { Guardian_name: "" },
-                    { Brothers_in_school: "" },
-                    { brother: [""] },
-                ],
->>>>>>> ca7a465 (add Add_admin , admin , img)
                 Results: [
                     {
                         weekly: [
@@ -1919,7 +1800,6 @@ export default {
                         ],
                     },
                     {
-<<<<<<< HEAD
                         Monthly: [
                             {
                                 Certificate_title: "شهر يناير",
@@ -1994,26 +1874,11 @@ export default {
                                         Major_degree: 100,
                                         Student_degree: 79,
                                     },
-=======
-                        monthly: [
-                            { Certifications_title: "" },
-                            {
-                                Degree: [
-                                    { Subject_Name: "" },
-                                    { Teacher_Name: "" },
-                                    { Behavior_assessment: "" },
-                                    { Minor_degree: "" },
-                                    { Major_degree: "" },
-                                    { Student_degree: "" },
-                                    { Major_degree: "" },
-                                    { Major_degree: "" },
->>>>>>> ca7a465 (add Add_admin , admin , img)
                                 ],
                             },
                         ],
                     },
                 ],
-<<<<<<< HEAD
                 payments: {
                     Requird: 100,
                     paid_up: 120,
@@ -2026,14 +1891,6 @@ export default {
                         NotificationType: "",
                     },
                 ],
-=======
-                payments: [
-                    { Required: "" },
-                    { paid_up: "" },
-                    { installment_system: "" },
-                ],
-                Notifications: [{ Title: "" }, { Details: "" }],
->>>>>>> ca7a465 (add Add_admin , admin , img)
             },
 
             errors: {
@@ -2044,12 +1901,9 @@ export default {
                 section: [],
                 birthday: [],
                 Guardian_name: [],
-<<<<<<< HEAD
                 Guardian_phone: [],
                 Guardian_email: [],
                 Guardian_password: [],
-=======
->>>>>>> ca7a465 (add Add_admin , admin , img)
                 Brothers_in_school: [],
                 brother: [],
                 weekly_Subject_Name: [],
@@ -2067,7 +1921,6 @@ export default {
                 payments_installment_system: [],
                 Notifications_Title: [],
                 Notifications_Details: [],
-<<<<<<< HEAD
             },
             currentStep: "Step 1",
             progress: 75,
@@ -2113,44 +1966,13 @@ export default {
                 Requird: 100,
                 paid_up: 120,
                 installment_system: "شهريا",
-=======
->>>>>>> ca7a465 (add Add_admin , admin , img)
             },
-            currentStep: "Step 1",
-            progress: 75,
-            classes: [
-                "الصف الثالث الثانوي",
-                "الصف الثاني الثانوي",
-                " الصف أولى ثانوي",
-                "الصف الثالث الاعدادي",
-                "الصف الثاني الاعدادي",
-                "الصف الاول الاعدادي",
-                "الصف السادس الابتدائي",
-                "الصف الخامس الابتدائي",
-                "الصف الرابع الابتدائي",
-                "الصف الثالث الابتدائي",
-                "الصف الثاني الابتدائي",
-                "الصف الاول الابتدائي",
-                "ثانيه روضه",
-                " اولي روضه",
-            ],
-            tempDate: null,
-            formattedDate: "",
-            editDialog: false,
-            editedIndex: -1,
-            editedSubject: {
-                Subject_Name: "",
-                Major_degree: 0,
-                Student_degree: 0,
-            },
-            valid: false,
         };
     },
     async created() {
         await this.fetchStudents();
     },
     methods: {
-<<<<<<< HEAD
         async saveNotificationsEdit() {
             try {
                 const studentRef = doc(db, "students", this.editedStudentId);
@@ -2258,8 +2080,6 @@ export default {
         addBrother() {
             this.Guardian[5].brother.push("");
         },
-=======
->>>>>>> ca7a465 (add Add_admin , admin , img)
         async addSubject(studentId) {
             try {
                 const studentRef = doc(db, "students", studentId);
@@ -2323,7 +2143,6 @@ export default {
                 Student_degree: 0,
             };
         },
-<<<<<<< HEAD
         closeNotificationsDialogs() {
             this.editNotificationsDialog = false;
             this.editedIndex = -1;
@@ -2333,8 +2152,6 @@ export default {
                 NotificationType: "",
             };
         },
-=======
->>>>>>> ca7a465 (add Add_admin , admin , img)
         async deleteSubject(studentId, subjectIndex) {
             try {
                 const studentRef = doc(db, "students", studentId);
@@ -2344,22 +2161,13 @@ export default {
                     studentData.Results[0].weekly.splice(subjectIndex, 1);
                     await updateDoc(studentRef, studentData);
                     await this.fetchStudents();
-<<<<<<< HEAD
                     // this.dilog_ss = true;
-=======
->>>>>>> ca7a465 (add Add_admin , admin , img)
                 }
             } catch (error) {
                 console.error("Error deleting subject:", error);
             }
         },
-<<<<<<< HEAD
 
-=======
-        addBrother() {
-            this.form.Guardian[2].brother.push("");
-        },
->>>>>>> ca7a465 (add Add_admin , admin , img)
         initializeTempDate() {
             this.tempDate = this.form.student_information[5].birthday;
         },
@@ -2385,11 +2193,8 @@ export default {
                 this.$refs.slide3,
                 this.$refs.slide4,
                 this.$refs.slide5,
-<<<<<<< HEAD
                 this.$refs.slide6,
                 this.$refs.slide7,
-=======
->>>>>>> ca7a465 (add Add_admin , admin , img)
             ];
 
             slides.forEach((slide, index) => {
@@ -2433,10 +2238,6 @@ export default {
                     console.log(
                         "Adding student:",
                         this.form.student_information,
-<<<<<<< HEAD
-=======
-                        this.form.Guardian,
->>>>>>> ca7a465 (add Add_admin , admin , img)
                         this.form.Results,
                         this.form.payments,
                         this.form.Notifications,
@@ -2446,10 +2247,6 @@ export default {
                     await addDoc(collection(db, "students"), {
                         student_information: this.form.student_information,
                         Results: this.form.Results,
-<<<<<<< HEAD
-=======
-                        Guardian: this.form.Guardian,
->>>>>>> ca7a465 (add Add_admin , admin , img)
                         payments: this.form.payments,
                         Notifications: this.form.Notifications,
                         year: this.year,
@@ -2462,11 +2259,6 @@ export default {
                     console.log(this.formattedDate);
                     this.form.student_information[5].birthday =
                         this.formattedDate;
-<<<<<<< HEAD
-=======
-
-                    // this.formattedDate = "";
->>>>>>> ca7a465 (add Add_admin , admin , img)
                 } catch (error) {
                     console.error("Error adding document:", error);
                 }
@@ -2493,15 +2285,7 @@ export default {
                     { section: "" },
                     { birthday: "" },
                 ],
-<<<<<<< HEAD
 
-=======
-                Guardian: [
-                    { Guardian_name: "" },
-                    { Brothers_in_school: "" },
-                    { brother: "" },
-                ],
->>>>>>> ca7a465 (add Add_admin , admin , img)
                 Results: [
                     {
                         weekly: [
@@ -2659,11 +2443,6 @@ export default {
             deep: true, // To detect changes in nested array elements
         },
     },
-    watch: {
-        "form.student_information[5].birthday"(newVal) {
-            this.formattedDate = this.formatDate(newVal);
-        },
-    },
     computed: {
         filteredStudents() {
             return this.students_class.filter(
@@ -2684,9 +2463,6 @@ export default {
         this.generateRandomPassword();
         // this.currentStudentId = "9QOVmJbJNRK3NVUhuThC";
         console.log(this.editedmony);
-    },
-    mounted() {
-        this.searchStudent(); // Fetch all students initially
     },
 };
 </script>
@@ -2750,7 +2526,6 @@ export default {
 
 .styled-table tr:nth-of-type(even) {
     background-color: #f3f3f3;
-<<<<<<< HEAD
 }
 .custom-font {
     font-family: "Cairo", sans-serif;
@@ -2812,7 +2587,5 @@ export default {
 }
 .notification-card .v-icon:hover {
     color: #1e88e5;
-=======
->>>>>>> ca7a465 (add Add_admin , admin , img)
 }
 </style>

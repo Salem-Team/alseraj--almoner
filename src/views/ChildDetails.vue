@@ -3,11 +3,7 @@
         <v-card>
             <v-toolbar color="#fff" title="تفاصيل الطالب"> </v-toolbar>
 
-<<<<<<< HEAD
-            <div class="d-flex flex-row" style="width: 100%; height: auto">
-=======
             <div class="d-flex flex-row" style="width: 100%; height: 100vh">
->>>>>>> ca7a465 (add Add_admin , admin , img)
                 <v-tabs v-model="tab" color="primary" direction="vertical">
                     <v-tab
                         prepend-icon="mdi-account"
@@ -293,35 +289,29 @@
                             >
                                 <v-col>
                                     <v-col>
-<<<<<<< HEAD
-                                        <v-text-title></v-text-title>
-=======
                                         <v-text-title>الاسم:</v-text-title>
->>>>>>> ca7a465 (add Add_admin , admin , img)
+                                        >>>>>>> ca7a465 (add Add_admin , admin ,
+                                        img)
                                         <v-text-title>{{
                                             student.name
                                         }}</v-text-title>
                                     </v-col>
                                     <v-col>
-<<<<<<< HEAD
-                                        <v-text-title> </v-text-title>
-=======
                                         <v-text-title
                                             >المرحلة الدراسية:</v-text-title
                                         >
->>>>>>> ca7a465 (add Add_admin , admin , img)
+                                        >>>>>>> ca7a465 (add Add_admin , admin ,
+                                        img)
                                         <v-text-title>{{
                                             student.gradeLevel
                                         }}</v-text-title>
                                     </v-col>
                                     <v-col>
-<<<<<<< HEAD
-                                        <v-text-title> </v-text-title>
-=======
                                         <v-text-title
                                             >السنة الدراسية:</v-text-title
                                         >
->>>>>>> ca7a465 (add Add_admin , admin , img)
+                                        >>>>>>> ca7a465 (add Add_admin , admin ,
+                                        img)
                                         <v-text-title>{{
                                             student.schoolYear
                                         }}</v-text-title>
@@ -384,7 +374,7 @@
                             v-if="student"
                             class="mx-auto my-4"
                             max-width="90%"
-<<<<<<< HEAD
+                            HEAD
                             style="height: auto"
                         >
                             <h2 class="ma-3">المدفوعات</h2>
@@ -517,8 +507,7 @@
                                     </v-row>
                                 </v-col>
                             </v-row>
-=======
-                        >
+                            ======= >
                             <h2 class="ma-3 text-center">المدفوعات</h2>
                             <v-container fluid>
                                 <v-row class="ma-10">
@@ -596,37 +585,11 @@
                                     </v-col>
                                 </v-row>
                             </v-container>
->>>>>>> ca7a465 (add Add_admin , admin , img)
                         </v-card>
                     </v-tabs-window-item>
 
                     <v-tabs-window-item value="option-5">
                         <v-card flat v-if="student">
-<<<<<<< HEAD
-                            <h2 class="ma-3">الإشعارات المخصصة لولي الأمر:</h2>
-                            <v-alert
-                                class="ma-3"
-                                v-for="(notification, index) in student
-                                    .Notifications.special"
-                                :key="index"
-                                type="warning"
-                            >
-                                <h3>{{ notification.Title }}</h3>
-                                <p>{{ notification.Details }}</p>
-                            </v-alert>
-
-                            <h2 class="ma-3">الإشعارات العامة:</h2>
-                            <v-alert
-                                class="ma-3"
-                                v-for="(notification, index) in student
-                                    .Notifications.global"
-                                :key="index"
-                                type="info"
-                            >
-                                <h3>{{ notification.Title }}</h3>
-                                <p>{{ notification.Details }}</p>
-                            </v-alert>
-=======
                             <h2 class="ma-5">الاشعارات</h2>
                             <v-list-item
                                 height="200"
@@ -643,7 +606,6 @@
                                     </p></v-alert
                                 >
                             </v-list-item>
->>>>>>> ca7a465 (add Add_admin , admin , img)
                         </v-card>
                     </v-tabs-window-item>
 
@@ -721,29 +683,10 @@ import Amiri_Regular from "@/assets/fonts/Amiri-Regular.js";
 export default {
     data() {
         return {
-<<<<<<< HEAD
-            totalAmount: 50000,
-            paidAmount: 0,
-            progress: 0,
-            tab: "option-1", // تحديد التاب الافتراضي
-            // خاص بالصور وعرضها
-            selectedGrade: null, //تحديد السنه الدراسيه فى الصور
-            gradeLevels: ["الصف الأول", "الصف الثاني", "الصف الثالث"],
-            selectedMonth: "شهر يناير",
-            selectedPlan: null,
-            selectPaid: ["شهر", "شهرين", "3 شهر", "4 شهر", "5 شهر"],
-            amount: 0,
-            selectedPaymentPlan: null,
-            paymentPlans: ["شهر", "شهرين", "3 شهر", "4 شهر", "5 شهر"],
-
-            // خاص بالبروحريس بار وتقسيم القسط
-
-=======
             tab: "option-1", // تحديد التاب الافتراضي
             selectedGrade: null,
             gradeLevels: ["الصف الأول", "الصف الثاني", "الصف الثالث"],
             selectedMonth: "شهر يناير",
->>>>>>> ca7a465 (add Add_admin , admin , img)
             student: {
                 name: "أحمد محمد",
                 gender: "ذكر",
@@ -850,24 +793,7 @@ export default {
                     paid_up: 120,
                     installment_system: "شهريا",
                 },
-<<<<<<< HEAD
-                Notifications: {
-                    special: [
-                        {
-                            Title: "جواب الفصل لولي الأمر",
-                            Details:
-                                "السيد/السيدة [اسم ولي الأمر]، نود إعلامكم بقرار فصل ابنكم/ابنتكم [اسم الطالب] من معهد السراج المنير الأزهري بسبب تكرار المخالفات للوائح والانضباط المدرسي، وذلك اعتبارًا من تاريخ هذا الخطاب.",
-                        },
-                    ],
-                    global: [
-                        {
-                            Title: "تنبيه اختبار",
-                            Details:
-                                "نود اعلامكم ان امتحانات اخر العام سوف تكون بدايه من 10/10/2024 حتى نهاية الشهر",
-                        },
-                    ],
-                },
-=======
+
                 Notifications: [
                     {
                         Title: "جواب الفصل لولي الأمر",
@@ -875,7 +801,6 @@ export default {
                             "السيد/السيدة [اسم ولي الأمر]، نود إعلامكم بقرار فصل ابنكم/ابنتكم [اسم الطالب] من معهد السراج المنير الأزهري بسبب تكرار المخالفات للوائح والانضباط المدرسي، وذلك اعتبارًا من تاريخ هذا الخطاب.",
                     },
                 ],
->>>>>>> ca7a465 (add Add_admin , admin , img)
 
                 photos: [
                     {
@@ -940,67 +865,8 @@ export default {
                 )?.Degrees || []
             );
         },
-<<<<<<< HEAD
-        numberOfMonths() {
-            if (!this.selectedPlan) return [];
-            const monthsMap = {
-                شهر: 1,
-                شهرين: 2,
-                "3 شهر": 3,
-                "4 شهر": 4,
-                "5 شهر": 5,
-            };
-            return Array.from(
-                { length: monthsMap[this.selectedPlan] },
-                (_, i) => i + 1
-            );
-        },
-        paymentPlanMonths() {
-            if (!this.selectedPaymentPlan) return [];
-
-            const monthsMap = {
-                شهر: 1,
-                شهرين: 2,
-                "3 شهر": 3,
-                "4 شهر": 4,
-                "5 شهر": 5,
-            };
-
-            return Array.from(
-                { length: monthsMap[this.selectedPaymentPlan] },
-                (_, i) => i + 1
-            );
-        },
-        installmentAmount() {
-            if (!this.selectedPlan) return 0;
-            const monthsMap = {
-                شهر: 1,
-                شهرين: 2,
-                "3 شهر": 3,
-                "4 شهر": 4,
-                "5 شهر": 5,
-            };
-            return (this.totalAmount / monthsMap[this.selectedPlan]).toFixed(2);
-        },
-        // خاص بالبروجريس
-        // خاص بالبروجريس
-        calculateProgress() {
-            return (this.paidAmount / this.totalAmount) * 100;
-        },
     },
     methods: {
-        payAmount() {
-            this.paidAmount += parseInt(this.amount);
-            this.amount = 0; // إعادة تعيين المبلغ المدفوع بعد الدفع
-            this.updateProgress();
-        },
-        updateProgress() {
-            this.progress = (this.paidAmount / this.totalAmount) * 100;
-        },
-=======
-    },
-    methods: {
->>>>>>> ca7a465 (add Add_admin , admin , img)
         selectMonth(month) {
             this.selectedMonth = month;
         },
@@ -1032,20 +898,11 @@ export default {
             doc.setFontSize(14);
             doc.text("معهد السراج المنير الأزهرى", 16, 70);
 
-<<<<<<< HEAD
-            doc.text(" " + this.student.name, 250, 30);
-            doc.text("  " + this.student.gradeLevel, 245, 40);
-            doc.text("" + this.student.schoolYear, 250, 50);
-            // doc.text(" " + this.student.Monthly[0].Certificate_title, 253, 60);
-            doc.setFontSize(30);
-            doc.text(this.student.Monthly[0].Certificate_title, 130, 84);
-=======
             doc.text("الاسم:  " + this.student.name, 248, 30);
             doc.text("المرحله الدراسيه:  " + this.student.gradeLevel, 225, 40);
             doc.text("السنه الدراسيه:  " + this.student.schoolYear, 232, 50);
             doc.setFontSize(30);
             doc.text("شهادة", 130, 84);
->>>>>>> ca7a465 (add Add_admin , admin , img)
 
             const tableColumn = [
                 "الدرجة النهائية للطالب",
@@ -1145,31 +1002,4 @@ export default {
 .center_subtitle {
     text-align: center;
 }
-<<<<<<< HEAD
-.v-progress-linear {
-    transition: 0.5s;
-    margin-top: 20px;
-}
-.cont > div {
-    transition: 0.5s;
-    background: #0088ff;
-    font-size: 18px;
-    font-weight: bold;
-    color: #ddd;
-    padding: 20px;
-    width: 300px;
-    border-radius: 15px;
-}
-.cont > div p {
-    color: #fff;
-    transition: 0.5s;
-    font-size: 30px;
-}
-.tooltip {
-    position: absolute;
-    top: -10px; /* قم بتعديل هذه القيمة لتتناسب مع التصميم */
-    transform: translateX(-50%);
-}
-=======
->>>>>>> ca7a465 (add Add_admin , admin , img)
 </style>
