@@ -1,12 +1,18 @@
 <template>
-    <div>
+    <div style="width: 100% !important; margin: auto; padding: 40px 0px">
         <div class="use">
             <div class="title">
                 <div class="right">الوظائف</div>
             </div>
         </div>
-        <v-container class="box d-flex">
-            <v-card v-for="Job in Jobs" :key="Job.id" width="100%" class="job">
+        <div class="box d-flex align-center justify-space-around">
+            <v-card
+                v-for="Job in Jobs"
+                :key="Job.id"
+                width="400px"
+                max-width="25%"
+                class="job"
+            >
                 <v-card-title class="title">
                     <p>{{ Job.title }}</p>
                 </v-card-title>
@@ -16,10 +22,12 @@
                 </v-card-subtitle>
 
                 <v-card-text width="100%">
-                    <p class="mb-2" style="color: var(--therd-color)">
+                    <p class="mb-2" style="color: var(--pink-color)">
                         متطلبات العمل :
                     </p>
-                    <p class="mb-4">{{ Job.description }}</p>
+                    <p class="mb-4" style="color: var(--therd-color)">
+                        {{ Job.description }}
+                    </p>
                     <v-btn
                         width="100%"
                         class="!text-center mt-2 text-h6"
@@ -130,7 +138,7 @@
                     >
                 </v-card-text>
             </v-card>
-        </v-container>
+        </div>
     </div>
 </template>
 <script>
@@ -190,24 +198,57 @@ form {
 }
 
 .use {
-    width: 94% !important;
+    width: fit-content !important;
     margin: auto;
     .title {
-        margin-top: 40px;
-        background: var(--secound-color);
-        padding: 15px 20px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 3px;
-        border-radius: 5px;
+        text-transform: uppercase;
         color: var(--main-color);
-        font-weight: bold;
-        font-size: 20px;
+        margin: 0 auto 80px;
+        border: 2px solid var(--main-color);
+        padding: 10px 20px;
+        font-size: 30px;
+        width: fit-content;
+        position: relative;
+        z-index: 1;
+        transition: 0.3s;
+    }
+    .title::before {
+        content: "";
+        width: 12px;
+        height: 12px;
+        background-color: var(--main-color);
+        position: absolute;
+        border-radius: 50%;
+        top: 50%;
+        right: -30px;
+        transform: translateY(-50%);
+    }
+    .title::after {
+        content: "";
+        width: 12px;
+        height: 12px;
+        background-color: var(--main-color);
+        position: absolute;
+        border-radius: 50%;
+        top: 50%;
+        left: -30px;
+        transform: translateY(-50%);
+    }
+    .title:hover::before {
+        z-index: -1;
+        animation: right-move 0.5s linear forwards;
+    }
+    .title:hover::after {
+        z-index: -1;
+        animation: left-move 0.5s linear forwards;
+    }
+    .title:hover {
+        color: white;
+        border: 2px solid white;
+        transition-delay: 0.5s;
     }
 }
 .job {
-    width: 25% !important;
     margin-bottom: 10px;
     .title {
         background: var(--main-color);
@@ -220,31 +261,38 @@ form {
         color: white;
         font-weight: bold;
         font-size: 20px;
-        & > div {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            &.left {
-                svg {
-                    color: var(--main-color);
-                    cursor: pointer;
-                    transition: 0.3s;
-                    background: #fff;
-                    padding: 10px;
-                    border-radius: 5px;
-                    &:hover {
-                        color: var(--therd-color);
-                    }
-                }
-            }
-        }
     }
 }
+
 .box {
-    width: 100% !important;
-    margin: 0 auto !important;
-    padding: 10px 0px !important;
-    justify-content: space-evenly !important;
-    flew-flow: row wrap !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+}
+
+@keyframes left-move {
+    50% {
+        left: 0;
+        width: 12px;
+        height: 12px;
+    }
+    100% {
+        left: 0;
+        border-radius: 0;
+        width: 50%;
+        height: 100%;
+    }
+}
+@keyframes right-move {
+    50% {
+        right: 0;
+        width: 12px;
+        height: 12px;
+    }
+    100% {
+        right: 0;
+        border-radius: 0;
+        width: 50%;
+        height: 100%;
+    }
 }
 </style>

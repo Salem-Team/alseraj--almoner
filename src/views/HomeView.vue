@@ -1,202 +1,115 @@
 <template>
-    <img
-        style="
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 245px;
-        "
-        v-if="loading1"
-        src="../assets/Spinner@1x-1.0s-200px-200px.svg"
-        alt=""
-    />
-    <div v-if="!loading1">
-        <div class="use">
-            <div class="title">
-                <div class="right">الوظائف</div>
+    <div>
+        <div class="paralax">
+            <div class="paralax_item p_item1"></div>
+            <div class="paralax_item p_item2"></div>
+            <div class="paralax_item p_item1"></div>
+        </div>
+        <div class="container">
+            <div class="content_header">
+                <h1>مدرسة السراج المنير</h1>
             </div>
         </div>
-        <div class="box">
-            <v-card v-for="Job in Jobs" :key="Job.id" width="100%" class="job">
-                <v-card-title class="title">
-                    <p>{{ Job.title }}</p>
-                </v-card-title>
-                <br />
-                <v-card-subtitle>
-                    {{ Job.time }}
-                </v-card-subtitle>
-
-                <v-card-text width="100%">
-                    <p class="mb-2" style="color: var(--therd-color)">
-                        متطلبات العمل :
-                    </p>
-                    <p class="mb-4">{{ Job.description }}</p>
-                    <v-btn
-                        width="100%"
-                        class="!text-center mt-2 text-h6"
-                        style="color: var(--main-color)"
-                        color="var(--secound-color)"
-                        @click="
-                            (jobs.dialog_2 = true), jobs.Job_Information(Job)
-                        "
-                    >
-                        التقديم على الوظيفة</v-btn
-                    >
-                    <v-dialog v-model="dialog_2" width="90%">
-                        <v-card width="100%" class="popup">
-                            <v-card-title
-                                class="d-flex justify-space-between align-center"
-                            >
-                                <div
-                                    class="text-h4 ps-2"
-                                    style="color: var(--main-color)"
-                                >
-                                    التقديم على الوظيفة
-                                </div>
-                                <v-btn
-                                    style="color: var(--main-color)"
-                                    icon="mdi-close"
-                                    variant="text"
-                                    @click="dialog_2 = false"
-                                ></v-btn>
-                            </v-card-title>
-                            <form ref="form" @submit.prevent class="ma-auto">
-                                <v-text-field
-                                    v-model="jobs.Title_Information"
-                                    type="text"
-                                    label="الوظيفة"
-                                    variant="outlined"
-                                    required
-                                ></v-text-field>
-                                <v-text-field
-                                    v-model="jobs.Apply.name"
-                                    type="text"
-                                    label="الاسم"
-                                    variant="outlined"
-                                    required
-                                ></v-text-field>
-                                <v-text-field
-                                    v-model="jobs.Apply.email"
-                                    type="email"
-                                    label="البريد الالكتروني"
-                                    variant="outlined"
-                                    required
-                                ></v-text-field>
-                                <v-text-field
-                                    v-model="jobs.Apply.phone"
-                                    type="text"
-                                    label="التليفون"
-                                    variant="outlined"
-                                    required
-                                ></v-text-field>
-                                <v-file-input
-                                    v-model="jobs.Apply.CV"
-                                    label="السيرة الذاتية"
-                                    variant="outlined"
-                                    prepend-icon=""
-                                    required
-                                    prepend-inner-icon="mdi-paperclip"
-                                    @input="jobs.upload_CV"
-                                >
-                                </v-file-input>
-                                <!-- Show progress bar if jobs.Apply.CV is truthy (assuming New is a data property) -->
-                                <v-progress-linear
-                                    v-if="jobs.Apply.CV"
-                                    :value="jobs.progress"
-                                    color="blue-grey"
-                                    height="25"
-                                >
-                                    <template v-slot:default="{ value }">
-                                        <strong>{{ Math.ceil(value) }}%</strong>
-                                    </template>
-                                </v-progress-linear>
-                                <br />
-                                <v-textarea
-                                    v-model="jobs.Apply.description"
-                                    label="وصف قصير"
-                                    variant="outlined"
-                                    required
-                                    :maxlength="150"
-                                ></v-textarea>
-                                <br />
-                                <v-slider
-                                    v-model="jobs.Apply.description.length"
-                                    :max="150"
-                                    step="1"
-                                    disabled
-                                    thumb-label="always"
-                                ></v-slider>
-                                <v-btn
-                                    class="d-flex align-center mt-4 mb-10"
-                                    type="submit"
-                                    color="primary"
-                                    :loading="loading"
-                                    :disabled="loading"
-                                    @click="jobs.Add_Apply(jobs.Id_Information)"
-                                >
-                                    تقديم
-                                </v-btn>
-                            </form>
-                        </v-card></v-dialog
-                    >
-                </v-card-text>
-            </v-card>
-        </div>
     </div>
+    <div visible>
+        <Photo_Gallery_data />
+        <News_data />
+        <Q_A />
+        <job_data />
+    </div>
+    <v-layout class="footer" visible>
+        <v-footer
+            class="d-flex flex-column"
+            style="width: 100% !important; margin: auto; padding: 0px"
+        >
+            <div
+                class="d-flex w-100 align-center px-4"
+                style="background: var(--main-color); color: white"
+            >
+                <strong>تواصل معنا من خلال مواقع التواصل الاجتماعي</strong>
+
+                <v-spacer></v-spacer>
+
+                <v-btn
+                    v-for="icon in icons"
+                    :key="icon"
+                    :icon="icon"
+                    class="mx-4"
+                    size="small"
+                    variant="plain"
+                ></v-btn>
+            </div>
+
+            <div
+                class="px-4 py-2 text-center w-100"
+                style="background: var(--secound-color)"
+            >
+                <strong>سالم تيم</strong> - {{ new Date().getFullYear() }}
+            </div>
+        </v-footer>
+    </v-layout>
 </template>
 
 <script>
-import { storeToRefs } from "pinia";
+import job_data from "../components/job_data.vue";
+import News_data from "../components/News_data.vue";
+import Q_A from "../components/Q_A.vue";
+import Photo_Gallery_data from "../components/Photo_Gallery_data.vue";
 import { defineComponent } from "vue";
-import { useJobs } from "@/store/job.js";
 export default defineComponent({
-    setup() {
-        const jobs = useJobs();
-        jobs.Get_data();
-        jobs.Get_Apply_data();
-        // Destructure reactive references and methods from Jobs store
-        const {
-            Job,
-            loading,
-            applies,
-            progress,
-            Apply,
-            upload_CV,
-            Get_applies,
-            dialog_2,
-            Get_Apply_data,
-            Add_Apply,
-            Job_Information,
-            Get_data,
-            Jobs,
-            apply,
-            loading1,
-        } = storeToRefs(jobs);
+    components: {
+        job_data,
+        Q_A,
+        News_data,
+        Photo_Gallery_data,
+    },
 
-        // Return the necessary reactive properties and methods
+    data() {
         return {
-            Job,
-            loading,
-            applies,
-            progress,
-            Apply,
-            upload_CV,
-            Get_applies,
-            dialog_2,
-            Get_Apply_data,
-            Add_Apply,
-            Job_Information,
-            Get_data,
-            Jobs,
-            jobs,
-            apply,
-            loading1,
+            icons: [
+                "mdi-facebook",
+                "mdi-twitter",
+                "mdi-linkedin",
+                "mdi-instagram",
+            ],
         };
     },
 });
 </script>
 <style lang="scss" scoped>
+body {
+    overflow: hidden;
+}
+.paralax {
+    .paralax_item {
+        width: 100%;
+        height: 200vh;
+        top: 0;
+        left: 0;
+    }
+    .p_item1 {
+        position: absolute;
+        background: url("../assets/sky.jpg") center/cover no-repeat;
+        width: 400%;
+        z-index: -1000000;
+        background-attachment: fixed;
+    }
+    .p_item2 {
+        background: url("../assets/school_bus.png") bottom/100% no-repeat;
+        width: 100%;
+        background-position: center;
+        z-index: 2;
+    }
+}
+.content_header {
+    color: white;
+    width: 100%;
+    position: relative;
+    bottom: 720px;
+    right: 910px;
+    z-index: -1887;
+    background-attachment: fixed;
+}
 form {
     width: 90%;
     margin: auto;
@@ -278,5 +191,17 @@ form {
     width: 95% !important;
     margin: 0 auto;
     padding: 10px 0px;
+}
+.visible {
+    opacity: 0;
+    animation: fadeIn 1s ease-in-out forwards;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 </style>

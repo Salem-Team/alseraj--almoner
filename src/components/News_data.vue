@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="width: 100% !important; margin: auto; padding: 40px 0px">
         <div class="use">
             <div class="title">
                 <div class="right">الأخبار</div>
@@ -17,24 +17,19 @@
             >
                 <v-img :src="New.image" height="300" cover></v-img>
 
-                <v-card-title
+                <v-card-text
                     class="card_title d-flex justify-center flex-wrap"
-                    style="
-                        bacground-color: transparent !important;
-                        border: none !important;
-                    "
+                    style="z-index: 100"
                 >
-                    <p style="z-index: 100">
-                        {{ New.title }}
-                    </p>
-                </v-card-title>
+                    {{ New.title }}
+                </v-card-text>
 
-                <v-card-subtitle style="color: var(--therd-color) !important">
+                <v-card-subtitle style="margin-top: 20px">
                     {{ New.time }}
                 </v-card-subtitle>
 
                 <v-card-text
-                    ><p style="color: var(--main-color) !important">
+                    ><p style="color: var(--therd-color) !important">
                         {{ New.description }}
                     </p>
                 </v-card-text>
@@ -67,20 +62,54 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 .use {
-    width: 94% !important;
+    width: fit-content !important;
     margin: auto;
     .title {
-        margin-top: 40px;
-        background: var(--secound-color);
-        padding: 15px 20px;
-        display: flex;
-        align-items: start;
-        justify-content: space-between;
-        gap: 3px;
-        border-radius: 5px;
+        text-transform: uppercase;
         color: var(--main-color);
-        font-weight: bold;
-        font-size: 20px;
+        margin: 0 auto 80px;
+        border: 2px solid var(--main-color);
+        padding: 10px 20px;
+        font-size: 30px;
+        width: fit-content;
+        position: relative;
+        z-index: 1;
+        transition: 0.3s;
+    }
+    .title::before {
+        content: "";
+        width: 12px;
+        height: 12px;
+        background-color: var(--main-color);
+        position: absolute;
+        border-radius: 50%;
+        top: 50%;
+        right: -30px;
+        transform: translateY(-50%);
+    }
+    .title::after {
+        content: "";
+        width: 12px;
+        height: 12px;
+        background-color: var(--main-color);
+        position: absolute;
+        border-radius: 50%;
+        top: 50%;
+        left: -30px;
+        transform: translateY(-50%);
+    }
+    .title:hover::before {
+        z-index: -1;
+        animation: right-move 0.5s linear forwards;
+    }
+    .title:hover::after {
+        z-index: -1;
+        animation: left-move 0.5s linear forwards;
+    }
+    .title:hover {
+        color: white;
+        border: 2px solid white;
+        transition-delay: 0.5s;
     }
 }
 .box {
@@ -88,12 +117,12 @@ export default defineComponent({
     gap: 10px !important;
 }
 .card_title {
-    margin-bottom: 15px;
     color: var(--main-color);
-    p {
-        font-weight: bold;
-        font-size: 20px;
-    }
+    margin: auto;
+    width: fit-content;
+    border-bottom: 2px solid var(--main-color);
+    font-weight: bold;
+    font-size: 20px;
 }
 .v-img::before {
     content: "";
@@ -110,5 +139,31 @@ export default defineComponent({
 }
 .v-card {
     text-align: center !important;
+}
+@keyframes left-move {
+    50% {
+        left: 0;
+        width: 12px;
+        height: 12px;
+    }
+    100% {
+        left: 0;
+        border-radius: 0;
+        width: 50%;
+        height: 100%;
+    }
+}
+@keyframes right-move {
+    50% {
+        right: 0;
+        width: 12px;
+        height: 12px;
+    }
+    100% {
+        right: 0;
+        border-radius: 0;
+        width: 50%;
+        height: 100%;
+    }
 }
 </style>
