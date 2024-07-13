@@ -73,7 +73,7 @@ const routes = [
         component: Photo_Gallery,
     },
     {
-        path: "/Classes",
+        path: "/ClassRoom",
         name: "Class",
         component: Classes,
         props: true,
