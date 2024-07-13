@@ -35,7 +35,7 @@
                 <div class="title">
                     <div>{{ classroom.grade }}</div>
                     <!-- تحديث الزرار لاستخدام goToClassroom -->
-                    <div class="button" @click="goToClassroom(classroom.id)">
+                    <div class="button" @click="goToClassroom(classroom.grade)">
                         الطلاب
                     </div>
                 </div>
