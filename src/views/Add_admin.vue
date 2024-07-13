@@ -208,6 +208,68 @@
             v-if="!loading1"
         >
             <div class="feat" v-for="user in users" :key="user.id">
+                <v-dialog v-model="admin.dailog_3" width="90%">
+                    <v-card width="100%" class="popup">
+                        <div
+                            class="d-flex justify-space-between align-center title"
+                        >
+                            <div style="color: var(--main-color)">
+                                تأكيد الحذف!
+                            </div>
+                            <v-btn
+                                icon="mdi-close"
+                                @click="admin.dailog_3 = false"
+                            ></v-btn>
+                        </div>
+
+                        <p
+                            style="
+                                padding: 20px;
+                                color: var(--therd-color);
+                                font-weight: bold;
+                            "
+                        >
+                            هل أنت متأكد من حذفك لهذا المشرف؟
+                        </p>
+                        <v-card-text>
+                            <div class="d-flex align-center">
+                                <v-btn
+                                    type="submit"
+                                    color="var(--main-color)"
+                                    :loading="loading"
+                                    :disabled="loading"
+                                    @click="admin.dailog_3 = false"
+                                    style="
+                                        color: #fff;
+                                        font-weight: bold;
+                                        width: 48%;
+                                        height: 45px;
+                                    "
+                                >
+                                    إلغاء
+                                </v-btn>
+                                <v-spacer />
+                                <v-btn
+                                    type="submit"
+                                    color="var(--pink-color)"
+                                    :loading="loading"
+                                    :disabled="loading"
+                                    @click="
+                                        admin.delete_user(admin.Id_Information)
+                                    "
+                                    style="
+                                        color: #fff;
+                                        font-weight: bold;
+                                        width: 48%;
+                                        height: 45px;
+                                    "
+                                >
+                                    تأكيد
+                                </v-btn>
+                            </div>
+                        </v-card-text>
+                    </v-card></v-dialog
+                >
                 <div>
                     <div class="head">
                         <div>
@@ -221,7 +283,8 @@
                             />
                             <font-awesome-icon
                                 :icon="['fas', 'trash']"
-                                @click="admin.dailog_3 = true"
+                                @click="admin.user_Information(user)"
+                                @click.="admin.dailog_3 = true"
                             />
                         </div>
                     </div>
@@ -287,60 +350,6 @@
             </v-btn>
         </template>
     </v-snackbar>
-
-    <v-dialog v-model="admin.dailog_3" width="90%">
-        <v-card width="100%" class="popup">
-            <div class="d-flex justify-space-between align-center title">
-                <div style="color: var(--main-color)">تأكيد الحذف!</div>
-                <v-btn icon="mdi-close" @click="admin.dailog_3 = false"></v-btn>
-            </div>
-
-            <p
-                style="
-                    padding: 20px;
-                    color: var(--therd-color);
-                    font-weight: bold;
-                "
-            >
-                هل أنت متأكد من حذفك لهذا المشرف؟
-            </p>
-            <v-card-text>
-                <div class="d-flex align-center">
-                    <v-btn
-                        type="submit"
-                        color="var(--main-color)"
-                        :loading="loading"
-                        :disabled="loading"
-                        @click="admin.dailog_3 = false"
-                        style="
-                            color: #fff;
-                            font-weight: bold;
-                            width: 48%;
-                            height: 45px;
-                        "
-                    >
-                        إلغاء
-                    </v-btn>
-                    <v-spacer />
-                    <v-btn
-                        type="submit"
-                        color="var(--pink-color)"
-                        :loading="loading"
-                        :disabled="loading"
-                        @click="admin.delete_user(user.id)"
-                        style="
-                            color: #fff;
-                            font-weight: bold;
-                            width: 48%;
-                            height: 45px;
-                        "
-                    >
-                        تأكيد
-                    </v-btn>
-                </div>
-            </v-card-text>
-        </v-card></v-dialog
-    >
 </template>
 
 <script scoped>

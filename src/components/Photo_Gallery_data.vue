@@ -23,6 +23,17 @@
                 <v-img :src="photo.image" height="300" cover></v-img>
             </v-card>
         </div>
+        <div v-if="Photos.length < 4" class="btn">
+            <v-btn
+                style="
+                    background-color: var(--main-color) !important;
+                    color: white !important;
+                    width: 20%;
+                "
+                @click="photos.Get_data"
+                >المزيد</v-btn
+            >
+        </div>
     </div>
 </template>
 <script>
@@ -32,7 +43,7 @@ import { usePhoto_Gallery } from "@/store/Photo_Gallery.js";
 export default defineComponent({
     setup() {
         const photos = usePhoto_Gallery();
-        photos.Get_data();
+        photos.Get_splice();
         // Destructure reactive references and methods from Photos store
         const {
             Photo,
@@ -178,5 +189,10 @@ export default defineComponent({
         width: 50%;
         height: 100%;
     }
+}
+.btn {
+    margin: auto !important;
+    text-align: center;
+    margin-top: 40px !important;
 }
 </style>
