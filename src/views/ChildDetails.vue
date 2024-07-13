@@ -3,7 +3,7 @@
         <v-card>
             <v-toolbar color="#fff" title="تفاصيل الطالب"> </v-toolbar>
 
-            <div class="d-flex flex-row" style="width: 100%; height: auto">
+            <div class="d-flex flex-row" style="width: 100%; height: 100vh">
                 <v-tabs v-model="tab" color="primary" direction="vertical">
                     <v-tab
                         prepend-icon="mdi-account"
@@ -289,19 +289,23 @@
                             >
                                 <v-col>
                                     <v-col>
-                                        <v-text-title></v-text-title>
+                                        <v-text-title>الاسم:</v-text-title>
                                         <v-text-title>{{
                                             student.name
                                         }}</v-text-title>
                                     </v-col>
                                     <v-col>
-                                        <v-text-title> </v-text-title>
+                                        <v-text-title
+                                            >المرحلة الدراسية:</v-text-title
+                                        >
                                         <v-text-title>{{
                                             student.gradeLevel
                                         }}</v-text-title>
                                     </v-col>
                                     <v-col>
-                                        <v-text-title> </v-text-title>
+                                        <v-text-title
+                                            >السنة الدراسية:</v-text-title
+                                        >
                                         <v-text-title>{{
                                             student.schoolYear
                                         }}</v-text-title>
@@ -364,7 +368,6 @@
                             v-if="student"
                             class="mx-auto my-4"
                             max-width="90%"
-                            style="height: auto"
                         >
                             <v-card-title
                                 class="text-h4 custom-font"
@@ -559,29 +562,22 @@
 
                     <v-tabs-window-item value="option-5">
                         <v-card flat v-if="student">
-                            <h2 class="ma-3">الإشعارات المخصصة لولي الأمر:</h2>
-                            <v-alert
-                                class="ma-3"
-                                v-for="(notification, index) in student
-                                    .Notifications.special"
-                                :key="index"
-                                type="warning"
+                            <h2 class="ma-5">الاشعارات</h2>
+                            <v-list-item
+                                height="200"
+                                v-for="notification in student.Notifications"
+                                :key="notification.id"
                             >
-                                <h3>{{ notification.Title }}</h3>
-                                <p>{{ notification.Details }}</p>
-                            </v-alert>
-
-                            <h2 class="ma-3">الإشعارات العامة:</h2>
-                            <v-alert
-                                class="ma-3"
-                                v-for="(notification, index) in student
-                                    .Notifications.global"
-                                :key="index"
-                                type="info"
-                            >
-                                <h3>{{ notification.Title }}</h3>
-                                <p>{{ notification.Details }}</p>
-                            </v-alert>
+                                <v-alert
+                                    class="ma-2"
+                                    :title="notification.Title"
+                                    type="info"
+                                    variant="tonal"
+                                    ><p class="mt-3 rounded-md">
+                                        {{ notification.Details }}
+                                    </p></v-alert
+                                >
+                            </v-list-item>
                         </v-card>
                     </v-tabs-window-item>
 
@@ -667,8 +663,7 @@ export default {
             paidAmount: 0,
             progress: 0,
             tab: "option-1", // تحديد التاب الافتراضي
-            // خاص بالصور وعرضها
-            selectedGrade: null, //تحديد السنه الدراسيه فى الصور
+            selectedGrade: null,
             gradeLevels: ["الصف الأول", "الصف الثاني", "الصف الثالث"],
             selectedMonth: "شهر يناير",
             selectedPlan: null,
@@ -793,22 +788,13 @@ export default {
                     paid_up: 120,
                     installment_system: "شهريا",
                 },
-                Notifications: {
-                    special: [
-                        {
-                            Title: "جواب الفصل لولي الأمر",
-                            Details:
-                                "السيد/السيدة [اسم ولي الأمر]، نود إعلامكم بقرار فصل ابنكم/ابنتكم [اسم الطالب] من معهد السراج المنير الأزهري بسبب تكرار المخالفات للوائح والانضباط المدرسي، وذلك اعتبارًا من تاريخ هذا الخطاب.",
-                        },
-                    ],
-                    global: [
-                        {
-                            Title: "تنبيه اختبار",
-                            Details:
-                                "نود اعلامكم ان امتحانات اخر العام سوف تكون بدايه من 10/10/2024 حتى نهاية الشهر",
-                        },
-                    ],
-                },
+                Notifications: [
+                    {
+                        Title: "جواب الفصل لولي الأمر",
+                        Details:
+                            "السيد/السيدة [اسم ولي الأمر]، نود إعلامكم بقرار فصل ابنكم/ابنتكم [اسم الطالب] من معهد السراج المنير الأزهري بسبب تكرار المخالفات للوائح والانضباط المدرسي، وذلك اعتبارًا من تاريخ هذا الخطاب.",
+                    },
+                ],
 
                 photos: [
                     {
@@ -1032,12 +1018,11 @@ export default {
             doc.setFontSize(14);
             doc.text("معهد السراج المنير الأزهرى", 16, 70);
 
-            doc.text(" " + this.student.name, 250, 30);
-            doc.text("  " + this.student.gradeLevel, 245, 40);
-            doc.text("" + this.student.schoolYear, 250, 50);
-            // doc.text(" " + this.student.Monthly[0].Certificate_title, 253, 60);
+            doc.text("الاسم:  " + this.student.name, 248, 30);
+            doc.text("المرحله الدراسيه:  " + this.student.gradeLevel, 225, 40);
+            doc.text("السنه الدراسيه:  " + this.student.schoolYear, 232, 50);
             doc.setFontSize(30);
-            doc.text(this.student.Monthly[0].Certificate_title, 130, 84);
+            doc.text("شهادة", 130, 84);
 
             const tableColumn = [
                 "الدرجة النهائية للطالب",

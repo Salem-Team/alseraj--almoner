@@ -1,64 +1,94 @@
 <template>
-    <img
-        style="
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 245px;
-        "
-        v-if="loading1"
-        src="../assets/Spinner@1x-1.0s-200px-200px.svg"
-        alt=""
-    />
-    <div v-if="!loading1">
-        <div class="use">
-            <div class="title">
-                <div class="right">
-                    <v-breadcrumbs>
-                        <v-breadcrumbs-item
-                            @click="$router.push('/admin')"
-                            link
-                        >
-                            الإشراف
-                        </v-breadcrumbs-item>
-                        <v-breadcrumbs-divider />
-                        <v-breadcrumbs-item
-                            @click="$router.push('/Modifications')"
-                            link
-                        >
-                            الإعدادات
-                        </v-breadcrumbs-item>
-                        <v-breadcrumbs-divider />
-                        <v-breadcrumbs-item
-                            @click="$router.push('/Add_admin')"
-                            link
-                        >
-                            إدارة المشرف
-                        </v-breadcrumbs-item>
-                    </v-breadcrumbs>
-                </div>
-                <div class="left">
-                    <font-awesome-icon
-                        @click="admin.dialog = true"
-                        :icon="['fas', 'plus']"
-                    />
-                </div>
+    <div class="visible">
+        <svg
+            style="
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 245px;
+            "
+            v-if="loading1"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 200 200"
+        >
+            <radialGradient
+                id="a12"
+                cx=".66"
+                fx=".66"
+                cy=".3125"
+                fy=".3125"
+                gradientTransform="scale(1.5)"
+            >
+                <stop offset="0" stop-color="#336699"></stop>
+                <stop offset=".3" stop-color="#336699" stop-opacity=".9"></stop>
+                <stop offset=".6" stop-color="#336699" stop-opacity=".6"></stop>
+                <stop offset=".8" stop-color="#336699" stop-opacity=".3"></stop>
+                <stop offset="1" stop-color="#336699" stop-opacity="0"></stop>
+            </radialGradient>
+            <circle
+                transform-origin="center"
+                fill="none"
+                stroke="url(#a12)"
+                stroke-width="15"
+                stroke-linecap="round"
+                stroke-dasharray="200 1000"
+                stroke-dashoffset="0"
+                cx="100"
+                cy="100"
+                r="70"
+            >
+                <animateTransform
+                    type="rotate"
+                    attributeName="transform"
+                    calcMode="spline"
+                    dur="2"
+                    values="360;0"
+                    keyTimes="0;1"
+                    keySplines="0 0 1 1"
+                    repeatCount="indefinite"
+                ></animateTransform>
+            </circle>
+            <circle
+                transform-origin="center"
+                fill="none"
+                opacity=".2"
+                stroke="#336699"
+                stroke-width="15"
+                stroke-linecap="round"
+                cx="100"
+                cy="100"
+                r="70"
+            ></circle>
+        </svg>
+        <div class="right">
+            <div>
+                <v-breadcrumbs>
+                    <v-breadcrumbs-item @click="$router.push('/admin')" link>
+                        الإشراف
+                    </v-breadcrumbs-item>
+                    <v-breadcrumbs-divider />
+                    <v-breadcrumbs-item> إدارة المشرفين </v-breadcrumbs-item>
+                </v-breadcrumbs>
+            </div>
+            <div class="left">
+                <img
+                    src="../assets/add_admin/followers.png"
+                    alt=""
+                    @click="admin.dialog = true"
+                    class="pluse"
+                />
             </div>
         </div>
         <v-dialog v-model="admin.dialog" width="90%">
             <v-card width="100%" class="popup">
-                <v-card-title class="d-flex justify-space-between align-center">
-                    <div class="text-h4 ps-2" style="color: var(--main-color)">
-                        إضافة مشرف
-                    </div>
+                <div class="d-flex justify-space-between align-center title">
+                    <div style="color: var(--main-color)">إضافة مشرف</div>
                     <v-btn
-                        style="color: var(--main-color)"
                         icon="mdi-close"
-                        variant="text"
                         @click="admin.dialog = false"
                     ></v-btn>
-                </v-card-title>
+                </div>
                 <form ref="form" @submit.prevent class="ma-auto">
                     <v-text-field
                         v-model="user.name"
@@ -94,14 +124,21 @@
                         "
                         @click:append-inner="admin.toggle_Show_Password"
                     ></v-text-field>
-
                     <v-btn
-                        class="d-flex align-center mt-4 mb-10"
+                        class="d-flex align-center mt-4"
                         type="submit"
-                        color="primary"
                         :loading="loading"
                         :disabled="loading"
                         @click="admin.add_admin"
+                        style="
+                            width: 100%;
+                            padding: 20px;
+                            letter-spacing: normal;
+                            font-weight: bold;
+                            font-size: 19px;
+                            background: var(--main-color);
+                            color: #fff;
+                        "
                     >
                         إضافة
                     </v-btn>
@@ -111,17 +148,15 @@
 
         <v-dialog v-model="admin.dialog_1" width="90%">
             <v-card width="100%" class="popup">
-                <v-card-title class="d-flex justify-space-between align-center">
-                    <div class="text-h4 ps-2" style="color: var(--main-color)">
-                        تعديل بيانات مشرف
+                <div class="d-flex justify-space-between align-center title">
+                    <div style="color: var(--main-color)">
+                        تعديل بينات المشرف
                     </div>
                     <v-btn
-                        style="color: var(--main-color)"
                         icon="mdi-close"
-                        variant="text"
                         @click="admin.dialog_1 = false"
                     ></v-btn>
-                </v-card-title>
+                </div>
                 <form ref="form" @submit.prevent class="ma-auto">
                     <v-text-field
                         v-model="admin.name_Information"
@@ -147,12 +182,20 @@
                         required
                     ></v-select>
                     <v-btn
-                        class="d-flex align-center mt-4 mb-10"
                         type="submit"
-                        color="primary"
                         :loading="loading"
                         :disabled="loading"
                         @click="admin.Update_Admin(admin.Id_Information)"
+                        class="d-flex align-center mt-4"
+                        style="
+                            width: 100%;
+                            padding: 20px;
+                            letter-spacing: normal;
+                            font-weight: bold;
+                            font-size: 19px;
+                            background: var(--main-color);
+                            color: #fff;
+                        "
                     >
                         تعديل
                     </v-btn>
@@ -162,89 +205,158 @@
         <v-container
             class="box d-flex align-center justify-space-around"
             width="90%"
+            v-if="!loading1"
         >
-            <v-card
-                v-for="user in users"
-                :key="user.id"
-                width="25%"
-                min-height="120"
-                class="job"
-                style="background-color: var(--secound-color)"
-            >
-                <v-card-title
-                    class="title d-flex align-center justify-center flex-wrap"
-                >
-                    <p>{{ user.name }}</p>
-                    <v-spacer />
-                    <div class="ma-2">
-                        <font-awesome-icon
-                            @click="admin.user_Information(user)"
-                            :icon="['fas', 'edit']"
-                            @click.="dialog_1 = true"
-                        />
-                    </div>
-                    <div>
-                        <font-awesome-icon
-                            @click="admin.dailog_3 = true"
-                            :icon="['fas', 'trash']"
-                        />
-                    </div>
-                </v-card-title>
-                <br />
-                <v-card-subtitle v-for="index in user.roles" :key="index">
-                    {{ index }}
-                </v-card-subtitle>
+            <div class="feat" v-for="user in users" :key="user.id">
+                <v-dialog v-model="admin.dailog_3" width="90%">
+                    <v-card width="100%" class="popup">
+                        <div
+                            class="d-flex justify-space-between align-center title"
+                        >
+                            <div style="color: var(--main-color)">
+                                تأكيد الحذف!
+                            </div>
+                            <v-btn
+                                icon="mdi-close"
+                                @click="admin.dailog_3 = false"
+                            ></v-btn>
+                        </div>
 
-                <v-card-text>{{ user.email }} </v-card-text>
-            </v-card>
+                        <p
+                            style="
+                                padding: 20px;
+                                color: var(--therd-color);
+                                font-weight: bold;
+                            "
+                        >
+                            هل أنت متأكد من حذفك لهذا المشرف؟
+                        </p>
+                        <v-card-text>
+                            <div class="d-flex align-center">
+                                <v-btn
+                                    type="submit"
+                                    color="var(--main-color)"
+                                    :loading="loading"
+                                    :disabled="loading"
+                                    @click="admin.dailog_3 = false"
+                                    style="
+                                        color: #fff;
+                                        font-weight: bold;
+                                        width: 48%;
+                                        height: 45px;
+                                    "
+                                >
+                                    إلغاء
+                                </v-btn>
+                                <v-spacer />
+                                <v-btn
+                                    type="submit"
+                                    color="var(--pink-color)"
+                                    :loading="loading"
+                                    :disabled="loading"
+                                    @click="
+                                        admin.delete_user(admin.Id_Information)
+                                    "
+                                    style="
+                                        color: #fff;
+                                        font-weight: bold;
+                                        width: 48%;
+                                        height: 45px;
+                                    "
+                                >
+                                    تأكيد
+                                </v-btn>
+                            </div>
+                        </v-card-text>
+                    </v-card></v-dialog
+                >
+                <div>
+                    <div class="head">
+                        <div>
+                            <div class="name">{{ user.name }}</div>
+                        </div>
+                        <div>
+                            <font-awesome-icon
+                                :icon="['fas', 'user-pen']"
+                                @click="admin.user_Information(user)"
+                                @click.="dialog_1 = true"
+                            />
+                            <font-awesome-icon
+                                :icon="['fas', 'trash']"
+                                @click="admin.user_Information(user)"
+                                @click.="admin.dailog_3 = true"
+                            />
+                        </div>
+                    </div>
+                    <div class="body">
+                        <div>الصلاحيات</div>
+                        <ul v-for="index in user.roles" :key="index">
+                            <li>{{ index }}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer">
+                    <v-dialog max-width="500">
+                        <template v-slot:activator="{ props: activatorProps }">
+                            <div class="show_password" v-bind="activatorProps">
+                                <font-awesome-icon
+                                    :icon="['fas', 'lock-open']"
+                                />
+                                <div>عرض كلمة المرور</div>
+                            </div>
+                        </template>
+
+                        <template v-slot:default="{ isActive }">
+                            <v-card>
+                                <div class="head">
+                                    <div>كلمة مرور</div>
+                                    <font-awesome-icon
+                                        :icon="['fas', 'xmark']"
+                                        @click="isActive.value = false"
+                                    />
+                                </div>
+                                <div class="body">
+                                    <div id="password">{{ user.password }}</div>
+
+                                    <div>
+                                        <div>
+                                            <font-awesome-icon
+                                                :icon="['fas', 'copy']"
+                                                @click="Snackbar_Function"
+                                                @click.prevent="
+                                                    isActive.value = false
+                                                "
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </v-card>
+                        </template>
+                    </v-dialog>
+                </div>
+            </div>
         </v-container>
     </div>
-    <v-dialog v-model="admin.dailog_3" width="90%">
-        <v-card width="100%" class="popup">
-            <v-card-title class="d-flex justify-space-between align-center">
-                <div class="text-h4 ps-2" style="color: var(--main-color)">
-                    حذف
-                </div>
-                <v-btn
-                    style="color: var(--main-color)"
-                    icon="mdi-close"
-                    variant="text"
-                    @click="admin.dailog_3 = false"
-                ></v-btn>
-            </v-card-title>
-            <v-card-text>
-                <p>تأكيد الحذف</p>
-                <div class="d-flex align-center mt-4">
-                    <v-btn
-                        type="submit"
-                        color="primary"
-                        :loading="loading"
-                        :disabled="loading"
-                        @click="admin.dailog_3 = false"
-                    >
-                        إلغاء
-                    </v-btn>
-                    <v-spacer />
-                    <v-btn
-                        type="submit"
-                        color="error"
-                        :loading="loading"
-                        :disabled="loading"
-                        @click="admin.delete_user(user.id)"
-                    >
-                        تأكيد
-                    </v-btn>
-                </div>
-            </v-card-text>
-        </v-card></v-dialog
-    >
+    <v-snackbar v-model="snackbar">
+        {{ text }}
+
+        <template v-slot:actions>
+            <v-btn
+                color="var(--main-color)"
+                variant="text"
+                @click="snackbar = false"
+            >
+                إغلاق
+            </v-btn>
+        </template>
+    </v-snackbar>
 </template>
 
 <script scoped>
 import { storeToRefs } from "pinia";
-import { defineComponent } from "vue";
+// import { defineComponent } from "vue";
 import { useadmin } from "@/store/admin.js";
-export default defineComponent({
+export default {
     setup() {
         const admin = useadmin();
         admin.Get_data();
@@ -290,46 +402,61 @@ export default defineComponent({
             dialog_1,
         };
     },
-});
+
+    data: () => ({
+        snackbar: false,
+        text: `تم نسخ كلمة المرور`,
+    }),
+    methods: {
+        Snackbar_Function() {
+            const passwordElement = document.getElementById("password");
+            const password =
+                passwordElement.innerText || passwordElement.textContent;
+
+            // استخدام واجهة برمجة تطبيقات الحافظة لنسخ النص
+            navigator.clipboard
+                .writeText(password)
+                .then(() => {
+                    console.log("تم نسخ كلمة المرور بنجاح!");
+                    this.snackbar = true;
+                })
+                .catch((err) => {
+                    console.error("فشل في نسخ كلمة المرور: ", err);
+                });
+        },
+    },
+};
 </script>
 <style lang="scss" scoped>
 form {
-    width: 90%;
-    margin: auto;
+    padding: 20px;
+    width: 100%;
 }
-
-.use {
-    width: 95% !important;
-    margin: auto;
-    .title {
-        margin-top: 40px;
+.popup .title {
+    padding: 20px 20px 0 !important;
+    font-size: 23px;
+    font-weight: bold;
+    color: var(--main-color);
+    position: relative;
+    margin-bottom: 15px;
+    &::before {
+        content: "";
+        position: absolute;
+        bottom: -15px;
+        height: 3px;
+        width: calc(100% - 40px);
         background: var(--secound-color);
-        padding: 15px 20px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 3px;
-        border-radius: 5px;
-        color: var(--main-color);
-        font-weight: bold;
-        font-size: 20px;
-        & > div {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            &.left {
-                svg {
-                    cursor: pointer;
-                    transition: 0.3s;
-                    background: #fff;
-                    padding: 10px;
-                    border-radius: 5px;
-                    &:hover {
-                        color: var(--therd-color);
-                    }
-                }
-            }
-        }
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+.v-btn--icon.v-btn--density-default {
+    color: var(--main-color);
+    width: auto;
+    height: auto;
+    box-shadow: none;
+    &:hover {
+        background: #fff;
     }
 }
 .box {
@@ -367,6 +494,223 @@ form {
                 }
             }
         }
+    }
+}
+
+.admin-card {
+    padding: 68px;
+    background-color: #2196f333;
+}
+.right {
+    width: 90% !important;
+    margin: auto;
+    font-weight: bold;
+    font-size: 20px;
+    border-bottom: 5px solid var(--secound-color);
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    .v-breadcrumbs-item:first-child {
+        color: var(--main-color);
+        cursor: pointer;
+        font-size: 24px;
+    }
+    .v-breadcrumbs {
+        padding: 16px 0;
+    }
+}
+.v-container {
+    margin: 20px auto !important;
+    flex-wrap: wrap;
+    padding: 0;
+    justify-content: flex-start !important;
+    flex-direction: column;
+    gap: 40px;
+}
+.card {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    font-size: 20px;
+    color: var(--main-color);
+    font-weight: bold;
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+}
+.feat {
+    width: 100%;
+    box-shadow: 0 0 10px #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    .head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        margin-bottom: 15px;
+        &::before {
+            content: "";
+            position: absolute;
+            bottom: -15px;
+            height: 3px;
+            width: 100%;
+            background: var(--secound-color);
+        }
+        & > div {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            .number {
+                background: var(--main-color);
+                color: #fff;
+                border-radius: 5px;
+                font-weight: bold;
+                font-size: 18px;
+                width: 30px;
+                height: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .name {
+                font-size: 20px;
+                color: var(--main-color);
+                font-weight: bold;
+            }
+            svg {
+                color: var(--main-color);
+                font-size: 20px;
+                cursor: pointer;
+
+                &:hover {
+                    color: var(--therd-color);
+                }
+            }
+        }
+    }
+    .body {
+        & > div {
+            font-weight: bold;
+            font-size: 19px;
+            color: var(--therd-color);
+            margin: 20px 0 5px;
+        }
+        ul {
+            color: var(--therd-color);
+            font-weight: bold;
+            font-size: 16px;
+            li {
+                list-style-type: square;
+                list-style-position: inside;
+            }
+        }
+    }
+    .footer {
+        .show_password {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            background: var(--main-color);
+            width: 100%;
+            padding: 10px;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            &:hover {
+                background-color: var(--therd-color);
+            }
+        }
+    }
+}
+.v-card.v-theme--light.v-card--density-default.v-card--variant-elevated {
+    .head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 10px 0;
+        font-size: 23px;
+        color: var(--main-color);
+        font-weight: bold;
+        position: relative;
+        margin-bottom: 20px;
+        svg {
+            cursor: pointer;
+            padding: 10px;
+        }
+        &::before {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            height: 4px;
+            width: 95%;
+            background: var(--secound-color);
+            transform: translateX(-50%);
+        }
+    }
+    .body {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        color: var(--therd-color);
+        background: var(--secound-color);
+        margin: 0 10px 10px;
+        border-radius: 5px;
+        svg {
+            color: var(--main-color);
+            font-size: 18px;
+            cursor: pointer;
+        }
+    }
+}
+@media (max-width: 599px) {
+}
+@media (min-width: 600px) and (max-width: 768px) {
+}
+@media (min-width: 769px) {
+    .v-container {
+        flex-direction: row;
+        gap: 15px;
+        align-items: stretch !important;
+    }
+    .card {
+        width: 32%;
+    }
+    .feat {
+        width: 32%;
+        justify-content: space-between;
+    }
+}
+img {
+    width: 50px;
+}
+img.pluse {
+    width: 40px;
+    cursor: pointer;
+    &:hover {
+        opacity: 0.7;
+    }
+}
+.visible {
+    opacity: 0;
+    animation: fadeIn 1s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
     }
 }
 </style>

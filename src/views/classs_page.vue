@@ -19,6 +19,7 @@
                             <font-awesome-icon
                                 :icon="['fas', 'filter']"
                                 style="cursor: pointer"
+                                @click="dialogFilter = true"
                             />
                             <font-awesome-icon
                                 :icon="['fas', 'plus']"
@@ -234,6 +235,68 @@
             </v-row>
         </v-container>
         <StudentList :year="year" />
+        <v-dialog v-model="dialogFilter" max-width="400">
+            <v-card>
+                <v-card-title>
+                    <span class="headline">فلتر</span>
+                </v-card-title>
+
+                <v-card-text>
+                    <v-row>
+                        <v-col cols="8"> ترتيب أبجدي </v-col>
+                        <v-col cols="4">
+                            <v-btn
+                                @click="toggleAlphabetical"
+                                :color="alphabetical ? 'success' : 'error'"
+                                icon
+                            >
+                                <v-icon>
+                                    {{
+                                        alphabetical
+                                            ? "mdi-toggle-switch"
+                                            : "mdi-toggle-switch-off"
+                                    }}
+                                </v-icon>
+                            </v-btn>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col cols="8"> المدفوعات </v-col>
+                        <v-col cols="4">
+                            <v-btn
+                                @click="togglePayments"
+                                :color="payments ? 'success' : 'error'"
+                                icon
+                            >
+                                <v-icon>
+                                    {{
+                                        payments
+                                            ? "mdi-toggle-switch"
+                                            : "mdi-toggle-switch-off"
+                                    }}
+                                </v-icon>
+                            </v-btn>
+                        </v-col>
+                    </v-row>
+
+                    <v-row>
+                        <v-col>
+                            <v-select
+                                v-model="selectedMonth"
+                                :items="months"
+                                label="ترتيب الأول"
+                            ></v-select>
+                        </v-col>
+                    </v-row>
+                </v-card-text>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="primary" @click="applyFilter">تطبيق</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
@@ -259,11 +322,28 @@ export default {
     },
     data() {
         return {
+            dialogFilter: false,
             dialog: false,
             dialog_1: false,
             dialog_2: false,
             type: ["جيد", "معلومات", "سيء"],
+            alphabetical: false,
+            payments: false,
+            selectedMonth: null,
+            months: ["الشهر الأول", "الشهر الثاني"],
         };
+    },
+    methods: {
+        toggleAlphabetical() {
+            this.alphabetical = !this.alphabetical;
+        },
+        togglePayments() {
+            this.payments = !this.payments;
+        },
+        applyFilter() {
+            // تطبيق الفلتر بناءً على الخيارات المحددة
+            this.dialog = false;
+        },
     },
 };
 </script>

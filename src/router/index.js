@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import ClassRoom from "../views/Class_room.vue";
+import Classes from "../views/The_Classes.vue";
 import ClassPage from "../views/classs_page.vue";
 import TheAdministrator from "../views/TheAdministrator.vue";
 import HomeView from "../views/HomeView.vue";
@@ -75,7 +75,7 @@ const routes = [
     {
         path: "/ClassRoom",
         name: "Class",
-        component: ClassRoom,
+        component: Classes,
         props: true,
     },
     {

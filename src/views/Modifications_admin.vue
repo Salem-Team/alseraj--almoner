@@ -15,32 +15,7 @@
             </v-breadcrumbs>
         </div>
         <v-container class="d-flex justify-space-evenly mb-4 mt-16">
-            <v-card
-                class="card text-center mt-3 bg-grey-lighten-3"
-                prepend-icon="mdi-account"
-                link
-                width="15%"
-                @click="$router.push('/Add_admin')"
-            >
-                <v-card-title>إدارة المشرف</v-card-title>
-            </v-card>
-            <v-card
-                class="card text-center mt-3 bg-grey-lighten-3"
-                prepend-icon="mdi-newspaper-variant-multiple-outline"
-                @click="$router.push('/Add_News')"
-                width="15%"
-            >
-                <v-card-title>الأخبار</v-card-title>
-            </v-card>
-            <v-card
-                class="card text-center mt-3 bg-grey-lighten-3"
-                prepend-icon="mdi-image"
-                link
-                @click="$router.push('/Photo_Gallery')"
-                width="15%"
-            >
-                <v-card-title>معرض الصور</v-card-title>
-            </v-card>
+            هذه الصفحة غير موجودة
         </v-container>
     </div>
 </template>

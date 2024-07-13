@@ -15,6 +15,7 @@
         "@fortawesome/free-solid-svg-icons": "^6.5.2",
         "@fortawesome/vue-fontawesome": "^3.0.8",
         "@mdi/font": "^7.4.47",
+        "chart.js": "^4.4.3",
         "core-js": "^3.8.3",
         "firebase": "^10.12.3",
         "gsap": "^3.12.5",
@@ -22,12 +23,13 @@
         "jspdf": "^2.5.1",
         "jspdf-autotable": "^3.8.2",
         "mitt": "^3.0.1",
+        "ng2-charts": "^6.0.1",
         "pinia": "^2.1.7",
         "vue": "^3.2.13",
         "vue-cookies": "^1.8.4",
         "vue-router": "^4.0.3",
         "vue-toastification": "^2.0.0-rc.5",
-        "vuetify": "^3.6.12",
+        "vuetify": "^3.6.11",
         "vuex": "^4.0.0"
     },
     "devDependencies": {
