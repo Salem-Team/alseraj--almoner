@@ -268,6 +268,21 @@ export const useJobs = defineStore("job", {
                 console.error("Error adding document: ", error);
             }
         },
+        async Get_splice() {
+            try {
+                this.loading1 = true;
+                this.Jobs = [];
+                const querySnapshot = await getDocs(collection(db, "Jobs"));
+                querySnapshot.forEach((doc) => {
+                    this.Jobs.push(doc.data());
+                });
+                this.Jobs = this.Jobs.slice(0, 3);
+                console.log("this.Jobs", this.Jobs);
+                this.loading1 = false;
+            } catch (error) {
+                console.error("Error adding document: ", error);
+            }
+        },
         async delete_notifications(notification_Id) {
             try {
                 // Log before attempting to delete
@@ -324,6 +339,7 @@ export const useJobs = defineStore("job", {
                     console.log("Job not found in Jobs array");
                 }
                 this.Get_data();
+                this.dialog_3 = false;
             } catch (error) {
                 console.error("Error deleting Job:", error);
             }

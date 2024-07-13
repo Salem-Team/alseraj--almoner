@@ -38,6 +38,7 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
         File_Name: "",
         type: "",
         Photos: [],
+        All_photos: [],
         trip: [],
         party: [],
         news: [],
@@ -124,6 +125,22 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
                 console.error("Error adding document: ", error);
             }
         },
+        async Get_splice() {
+            try {
+                this.loading1 = true;
+                this.Photos = [];
+                const querySnapshot = await getDocs(collection(db, "Photos"));
+                querySnapshot.forEach((doc) => {
+                    this.Photos.push(doc.data());
+                });
+                this.Photos = this.Photos.slice(0, 3);
+                console.log("this.Photos", this.Photos);
+                this.loading1 = false;
+                this.Type_Data();
+            } catch (error) {
+                console.error("Error adding document: ", error);
+            }
+        },
         async delete_photo(image) {
             const storage = getStorage();
 
@@ -158,6 +175,7 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
                     console.log("Photo not found in Photos array");
                 }
                 this.Get_data();
+                this.dialog_3 = false;
             } catch (error) {
                 console.error("Error deleting Photo:", error);
             }

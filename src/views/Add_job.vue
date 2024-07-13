@@ -185,6 +185,7 @@
                         :counter="150"
                         variant="outlined"
                         required
+                        :maxlength="150"
                     ></v-textarea>
 
                     <v-btn
@@ -228,6 +229,7 @@
                         :counter="150"
                         required
                         variant="outlined"
+                        :maxlength="150"
                     ></v-textarea>
 
                     <v-btn
@@ -650,6 +652,33 @@ img.pluse {
     }
     to {
         opacity: 1;
+    }
+}
+.popup .title {
+    padding: 20px 20px 0 !important;
+    font-size: 23px;
+    font-weight: bold;
+    color: var(--main-color);
+    position: relative;
+    margin-bottom: 15px;
+    &::before {
+        content: "";
+        position: absolute;
+        bottom: -15px;
+        height: 3px;
+        width: calc(100% - 40px);
+        background: var(--secound-color);
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+.v-btn--icon.v-btn--density-default {
+    color: var(--main-color);
+    width: auto;
+    height: auto;
+    box-shadow: none;
+    &:hover {
+        background: #fff;
     }
 }
 </style>

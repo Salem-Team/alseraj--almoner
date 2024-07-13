@@ -39,25 +39,25 @@
                     >
                         التقديم على الوظيفة</v-btn
                     >
+
                     <v-dialog v-model="dialog_2" width="90%">
                         <v-card width="100%" class="popup">
-                            <v-card-title
-                                class="d-flex justify-space-between align-center"
+                            <div
+                                class="d-flex justify-space-between align-center title mb-4"
                             >
-                                <div
-                                    class="text-h4 ps-2"
-                                    style="color: var(--main-color)"
-                                >
+                                <div style="color: var(--main-color)">
                                     التقديم على الوظيفة
                                 </div>
                                 <v-btn
-                                    style="color: var(--main-color)"
                                     icon="mdi-close"
-                                    variant="text"
                                     @click="dialog_2 = false"
                                 ></v-btn>
-                            </v-card-title>
-                            <form ref="form" @submit.prevent class="ma-auto">
+                            </div>
+                            <form
+                                ref="form"
+                                @submit.prevent
+                                class="ma-auto mt-4"
+                            >
                                 <v-text-field
                                     v-model="jobs.Title_Information"
                                     type="text"
@@ -124,12 +124,20 @@
                                     thumb-label="always"
                                 ></v-slider>
                                 <v-btn
-                                    class="d-flex align-center mt-4 mb-10"
+                                    class="d-flex align-center mt-4 mb-4"
                                     type="submit"
-                                    color="primary"
                                     :loading="loading"
                                     :disabled="loading"
                                     @click="jobs.Add_Apply(jobs.Id_Information)"
+                                    style="
+                                        width: 100%;
+                                        padding: 20px;
+                                        letter-spacing: normal;
+                                        font-weight: bold;
+                                        font-size: 19px;
+                                        background: var(--main-color);
+                                        color: #fff;
+                                    "
                                 >
                                     تقديم
                                 </v-btn>
@@ -138,6 +146,17 @@
                     >
                 </v-card-text>
             </v-card>
+        </div>
+        <div v-if="Jobs.length < 4" class="btn">
+            <v-btn
+                style="
+                    background-color: var(--main-color) !important;
+                    color: white !important;
+                    width: 20%;
+                "
+                @click="jobs.Get_data"
+                >المزيد</v-btn
+            >
         </div>
     </div>
 </template>
@@ -148,7 +167,7 @@ import { useJobs } from "@/store/job.js";
 export default defineComponent({
     setup() {
         const jobs = useJobs();
-        jobs.Get_data();
+        jobs.Get_splice();
         jobs.Get_Apply_data();
         // Destructure reactive references and methods from Jobs store
         const {
@@ -293,6 +312,38 @@ form {
         border-radius: 0;
         width: 50%;
         height: 100%;
+    }
+}
+.btn {
+    margin: auto !important;
+    text-align: center;
+    margin-top: 40px !important;
+}
+.popup .title {
+    padding: 20px 20px 0 !important;
+    font-size: 23px;
+    font-weight: bold;
+    color: var(--main-color);
+    position: relative;
+    margin-bottom: 15px;
+    &::before {
+        content: "";
+        position: absolute;
+        bottom: -15px;
+        height: 3px;
+        width: calc(100% - 40px);
+        background: var(--secound-color);
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+.v-btn--icon.v-btn--density-default {
+    color: var(--main-color);
+    width: auto;
+    height: auto;
+    box-shadow: none;
+    &:hover {
+        background: #fff;
     }
 }
 </style>

@@ -13,10 +13,10 @@
             </div>
         </div>
         <v-infinite-scroll
-            :height="300"
             :onLoad="load"
             width="95%"
-            style="margin: auto"
+            height="100%"
+            style="margin: auto; overflow: auto !important"
         >
             <template v-for="i in 5" :key="i">
                 <v-expansion-panels style="margin-bottom: 10px">
