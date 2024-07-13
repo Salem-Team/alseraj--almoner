@@ -41,9 +41,10 @@ body {
     font-style: normal;
 }
 :root {
-    --main-color: #0088ff;
+    --main-color: #336699;
     --secound-color: #eee;
     --therd-color: #7a7a7a;
+    --pink-color: #d8588c;
 }
 nav {
     padding: 30px;

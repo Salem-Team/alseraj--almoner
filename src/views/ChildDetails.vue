@@ -55,7 +55,7 @@
                         >
                             <v-card-title
                                 style="
-                                    background: #54a0ff;
+                                    background: #2980b9;
                                     border-radius: 20px;
                                     padding: 24px;
                                 "
@@ -366,27 +366,36 @@
                             max-width="90%"
                             style="height: auto"
                         >
-                            <h2 class="ma-3">المدفوعات</h2>
+                            <v-card-title
+                                class="text-h4 custom-font"
+                                style="color: #2980b9"
+                                >المدفوعات</v-card-title
+                            >
+                            <v-card-subtitle class="mb-4 text-h6 custom-title"
+                                >اختر نظام التقسيط</v-card-subtitle
+                            >
                             <v-row>
                                 <v-col cols="12" sm="12" md="12">
                                     <v-select
                                         v-model="selectedPlan"
                                         :items="selectPaid"
                                         label="اختر نظام التقسيط"
+                                        @change="updateCircles"
+                                        outlined
+                                        dense
                                     ></v-select>
-
-                                    <!-- Timeline to display the selected plan months -->
                                     <v-timeline
                                         v-if="selectedPlan"
-                                        style="height: auto"
+                                        class="mt-5 custom-timeline"
                                     >
                                         <v-timeline-item
                                             v-for="month in numberOfMonths"
                                             :key="month"
                                             :color="'primary'"
+                                            class="custom-timeline-item"
                                         >
-                                            <v-card>
-                                                <v-card-title
+                                            <v-card outlined>
+                                                <v-card-title class="text-h6"
                                                     >شهر
                                                     {{ month }}</v-card-title
                                                 >
@@ -398,7 +407,7 @@
                                         </v-timeline-item>
                                     </v-timeline>
                                 </v-col>
-                                <v-col>
+                                <v-col cols="12">
                                     <v-row
                                         v-if="selectedPlan"
                                         class="d-flex flex-column mt-16"
@@ -409,9 +418,16 @@
                                         <v-col
                                             cols="12"
                                             sm="8"
-                                            class="d-flex flex-row ga-5"
+                                            class="d-flex flex-row gap-5"
                                         >
                                             <v-text-field
+                                                v-model="totalAmount"
+                                                label="المبلغ المستحق"
+                                                outlined
+                                                @input="validateTotalAmount"
+                                            ></v-text-field>
+                                            <v-text-field
+                                                class="mr-2"
                                                 v-model="amount"
                                                 label="المبلغ المدفوع"
                                                 outlined
@@ -419,6 +435,7 @@
                                             <v-btn
                                                 color="primary"
                                                 size="large"
+                                                :disabled="remainingAmount <= 0"
                                                 @click="payAmount"
                                                 style="
                                                     height: 60px;
@@ -427,61 +444,89 @@
                                                 >دفع</v-btn
                                             >
                                         </v-col>
-                                        <v-col cols="12" sm="6"></v-col>
                                     </v-row>
 
                                     <v-row v-if="paidAmount > 0">
                                         <v-col cols="12">
-                                            <v-progress-linear
-                                                :value="progress"
-                                                color="primary"
-                                                height="20"
-                                                style="position: relative"
+                                            <div
+                                                class="d-flex justify-center mt-16"
                                             >
-                                                <v-tooltip bottom>
-                                                    <template
-                                                        v-slot:activator="{
-                                                            on,
-                                                            attrs,
+                                                <div class="progress_container">
+                                                    <div
+                                                        class="progress"
+                                                        :style="{
+                                                            width: progressBarWidth,
                                                         }"
+                                                    ></div>
+                                                    <div
+                                                        v-for="(
+                                                            circle, index
+                                                        ) in circles"
+                                                        :key="index"
+                                                        :class="[
+                                                            'circle',
+                                                            {
+                                                                circle_active:
+                                                                    index <=
+                                                                    currentActive,
+                                                                circle_success:
+                                                                    paidAmount >=
+                                                                    (totalAmount /
+                                                                        circles.length) *
+                                                                        (index +
+                                                                            1),
+                                                            },
+                                                        ]"
                                                     >
-                                                        <div
-                                                            class="tooltip"
-                                                            :style="{
-                                                                left:
-                                                                    progress +
-                                                                    '%',
-                                                            }"
-                                                            v-bind="attrs"
-                                                            v-on="on"
+                                                        <v-icon
+                                                            >mdi-check-bold</v-icon
                                                         >
-                                                            <v-icon small
-                                                                >mdi-circle</v-icon
-                                                            >
-                                                        </div>
-                                                    </template>
-                                                    <span>{{ progress }}%</span>
-                                                </v-tooltip>
-                                            </v-progress-linear>
+                                                        <span
+                                                            class="step_label"
+                                                            >{{
+                                                                steps[index]
+                                                            }}</span
+                                                        >
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </v-col>
+                                        <div class="ma-16 d-flex flex-column">
+                                            <div class="d-flex">
+                                                <div
+                                                    class="status-box paid-amount"
+                                                ></div>
+                                                <span class="status-text mr-2"
+                                                    >المبلغ المدفوع</span
+                                                >
+                                            </div>
+                                            <div class="d-flex">
+                                                <div
+                                                    class="status-box unpaid-amount"
+                                                ></div>
+                                                <span class="status-text mr-2"
+                                                    >ما لم يتم دفعه</span
+                                                >
+                                            </div>
+                                        </div>
                                         <v-col cols="12">
                                             <div
                                                 class="cont ma-16 d-flex justify-space-around align-center"
                                             >
                                                 <div
-                                                    class="d-flex flex-column align-center ga-3"
+                                                    class="d-flex flex-column align-center gap-3"
                                                 >
                                                     <h3>المبلغ المستحق</h3>
                                                     <p>{{ totalAmount }}</p>
                                                 </div>
                                                 <div
-                                                    class="cont d-flex flex-column align-center ga-3"
+                                                    class="d-flex flex-column align-center gap-3"
                                                 >
                                                     <h3>المبلغ المدفوع</h3>
                                                     <p>{{ paidAmount }}</p>
                                                 </div>
                                                 <div
-                                                    class="cont d-flex flex-column align-center ga-3"
+                                                    class="d-flex flex-column align-center gap-3"
                                                 >
                                                     <h3>الباقي من القسط</h3>
                                                     <p>
@@ -496,6 +541,19 @@
                                     </v-row>
                                 </v-col>
                             </v-row>
+                            <!-- v-alert for notifications -->
+                            <v-alert
+                                title="تنبيه"
+                                class="custom-alert mt-4"
+                                v-if="alertMessage"
+                                v-model="alertMessage"
+                                dense
+                                outlined
+                                closable
+                                type="warning"
+                            >
+                                {{ alertMessage }}
+                            </v-alert>
                         </v-card>
                     </v-tabs-window-item>
 
@@ -601,7 +659,11 @@ import Amiri_Regular from "@/assets/fonts/Amiri-Regular.js";
 export default {
     data() {
         return {
-            totalAmount: 50000,
+            alertMessage: false,
+            reachedProgress: false,
+            currentActive: 0,
+            // circles: [],
+            totalAmount: null,
             paidAmount: 0,
             progress: 0,
             tab: "option-1", // تحديد التاب الافتراضي
@@ -614,6 +676,14 @@ export default {
             amount: 0,
             selectedPaymentPlan: null,
             paymentPlans: ["شهر", "شهرين", "3 شهر", "4 شهر", "5 شهر"],
+            steps: [
+                "بدأ ",
+                "الخطوة 1",
+                "الخطوة 2",
+                "الخطوة 3",
+                "الخطوة 4",
+                "الخطوة 5",
+            ],
 
             // خاص بالبروحريس بار وتقسيم القسط
 
@@ -787,6 +857,20 @@ export default {
         };
     },
     computed: {
+        circles() {
+            if (!this.selectedPlan) return [];
+            // Include a circle at the beginning with index 0
+            return [
+                0,
+                ...Array.from(
+                    { length: this.selectPaid.indexOf(this.selectedPlan) + 1 },
+                    (_, i) => i + 1
+                ),
+            ];
+        },
+        remainingAmount() {
+            return this.totalAmount - this.paidAmount;
+        },
         filteredPhotos() {
             if (!this.selectedGrade) {
                 return this.student.photos;
@@ -844,24 +928,82 @@ export default {
             };
             return (this.totalAmount / monthsMap[this.selectedPlan]).toFixed(2);
         },
-        // خاص بالبروجريس
-        // خاص بالبروجريس
+
         calculateProgress() {
             return (this.paidAmount / this.totalAmount) * 100;
+        },
+        // خاص بالنسبه المئويه
+        progressBarWidth() {
+            if (this.remainingAmount <= 0) {
+                return "100%"; // Keep the progress bar at 100% when remaining amount reaches 0
+            }
+            const percentage = (this.paidAmount / this.totalAmount) * 100;
+            return `${percentage}%`;
         },
     },
     methods: {
         payAmount() {
-            this.paidAmount += parseInt(this.amount);
-            this.amount = 0; // إعادة تعيين المبلغ المدفوع بعد الدفع
+            const amountToPay = parseInt(this.amount);
+
+            // تحقق من أن المبلغ المدفوع غير سالب وأنه رقم صالح
+            if (isNaN(amountToPay) || amountToPay <= 0) {
+                this.showAlert("الرجاء إدخال المبلغ بالأرقام");
+                return;
+            }
+
+            // تحقق من أن المبلغ المدفوع لا يتجاوز المبلغ المستحق
+            if (amountToPay > this.remainingAmount) {
+                this.showAlert(
+                    "عفوا ! لا يمكن دفع مبلغ أكبر من المبلغ المستحق"
+                );
+                return;
+            }
+
+            // تحقق من أن المبلغ المدفوع لا يقل عن قيمة القسط الشهري
+            if (amountToPay < this.installmentAmount) {
+                this.showAlert("عفوا ! لا نقبل أقل من قيمة القسط الشهري");
+                return;
+            }
+
+            if (this.remainingAmount <= 0) {
+                return; // Do nothing if remaining amount is 0
+            }
+
+            if (this.currentActive < this.circles.length) {
+                this.currentActive++;
+            }
+
+            this.paidAmount += amountToPay;
+            this.amount = 0; // Reset the paid amount after payment
             this.updateProgress();
         },
-        updateProgress() {
-            this.progress = (this.paidAmount / this.totalAmount) * 100;
+        validateTotalAmount() {
+            if (this.totalAmount !== null) {
+                if (isNaN(this.totalAmount) || this.totalAmount < 0) {
+                    this.showAlert("لابد ان يكون رقما وليس سالبا");
+                    this.totalAmount = null;
+                }
+            }
+        },
+        showAlert(message) {
+            this.alertMessage = message;
+            setTimeout(() => {
+                this.alertMessage = "";
+            }, 30000); // Hide alert after 3 seconds
+        },
+        resetPayment() {
+            this.currentActive = 0;
+            this.paidAmount = 0;
+            // Reset any other payment related data
         },
         selectMonth(month) {
             this.selectedMonth = month;
         },
+        // حساب الباقى
+        updateProgress() {
+            this.progress = (this.paidAmount / this.totalAmount) * 100;
+        },
+
         downloadPDF() {
             const doc = new jsPDF("landscape");
             doc.addFileToVFS("Amiri-Regular.ttf", Amiri_Regular);
@@ -943,13 +1085,19 @@ export default {
             doc.save("table.pdf");
         },
     },
+    watch: {
+        selectedPlan(newVal) {
+            // Update circles when selectedPlan changes
+            this.circles = Array.from(
+                { length: this.selectPaid.indexOf(newVal) + 1 },
+                (_, i) => i
+            );
+            this.resetPayment(); // Reset payment when plan changes
+        },
+    },
 };
 </script>
 <style scoped>
-.avatar-hover:hover {
-    transform: scale(1.05);
-    transition: transform 0.2s;
-}
 .custom-font {
     font-family: "Cairo", sans-serif;
     font-size: 22px;
@@ -959,7 +1107,6 @@ export default {
     font-size: 20px;
     font-weight: 500;
     color: #333;
-    font-weight: bold;
 }
 .v-card-title {
     padding: 16px;
@@ -969,54 +1116,124 @@ export default {
 .v-card-text {
     padding: 16px;
 }
-.fixed-card {
-    width: 250px;
-    height: 150px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+.custom-timeline {
+    max-width: 90%;
+    margin: 0 auto;
 }
-
-.centered-subtitle {
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.custom-timeline-item {
+    margin-bottom: 16px;
 }
-.fixed_img {
-    width: 100%;
-    max-width: 300px;
-    /* display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center; */
+.custom-timeline-item .v-timeline-item__icon {
+    background-color: #2980b9;
 }
-
-.center_subtitle {
-    text-align: center;
+.custom-timeline-item .v-card {
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
-.v-progress-linear {
-    transition: 0.5s;
-    margin-top: 20px;
+.custom-timeline-item .v-card-title {
+    background-color: #2980b9;
+    color: white;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+.custom-timeline-item .v-card-text {
+    background-color: #f0f0f0;
 }
 .cont > div {
-    transition: 0.5s;
-    background: #0088ff;
-    font-size: 18px;
-    font-weight: bold;
-    color: #ddd;
+    margin: 10px;
     padding: 20px;
-    width: 300px;
-    border-radius: 15px;
-}
-.cont > div p {
     color: #fff;
-    transition: 0.5s;
-    font-size: 30px;
+    background: #2980b9;
 }
-.tooltip {
+.progress_container {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 2rem;
+    max-width: 90%;
+    width: 500px;
+    align-items: center;
+}
+.progress_container::before {
+    content: "";
+    background-color: #95a5a6;
     position: absolute;
-    top: -10px; /* قم بتعديل هذه القيمة لتتناسب مع التصميم */
-    transform: translateX(-50%);
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 100%;
+    z-index: -1;
+}
+.progress {
+    background-color: #2980b9;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 0;
+    z-index: -1;
+    transition: width 0.4s ease-in;
+}
+.circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: gray;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    direction: rtl;
+    position: relative;
+}
+.step_label {
+    font-size: 12px;
+    color: black;
+    position: absolute;
+    top: 60px;
+    width: 100px;
+    text-align: center;
+}
+.circle_active {
+    background-color: #2980b9;
+}
+.circle_success {
+    background-color: #2980b9;
+}
+.status-box {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    margin-right: 8px;
+    border-radius: 4px;
+}
+.paid-amount {
+    background-color: #2980b9;
+}
+.unpaid-amount {
+    background-color: gray;
+}
+.status-text {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+.custom-alert {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    height: 120px;
+    font-size: 25px;
+    z-index: 9999;
+    border-radius: 20px;
+    transition: all 0.5s ease-in-out;
+    /* text-align: center; */
 }
 </style>
