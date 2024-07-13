@@ -1,7 +1,4 @@
 import { defineStore } from "pinia";
-import { auth, db } from "../Firebase";
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { doc, getDoc, setDoc } from "firebase/firestore";
 import Cookies from "js-cookie";
 
 export const useAuthStore = defineStore("auth", {
@@ -11,62 +8,39 @@ export const useAuthStore = defineStore("auth", {
         error: null,
     }),
     actions: {
-        async login(email, password, expectedUserType) {
+        async login(email, password, userType) {
             this.loading = true;
             try {
-                const userCredential = await signInWithEmailAndPassword(
-                    auth,
-                    email,
-                    password
-                );
-
-                // Check if user exists
-                const userRef = doc(db, "users", userCredential.user.uid);
-                const userSnap = await getDoc(userRef);
-
-                if (userSnap.exists()) {
-                    const userData = userSnap.data();
-                    if (userData.userType === expectedUserType) {
-                        this.user = {
-                            ...userCredential.user,
-                            userType: userData.userType,
-                        };
-                        this.error = null;
-                        // Store user data in cookies
-                        Cookies.set("user", JSON.stringify(this.user), {
-                            expires: 7,
-                        });
-                    } else {
-                        await signOut(auth);
-                        this.error = "لايمكنك تسجيل الدخول";
-                    }
-                } else {
-                    await setDoc(doc(db, "users", userCredential.user.uid), {
-                        email: email,
-                        userType: expectedUserType,
-                    });
-
-                    this.user = {
-                        ...userCredential.user,
-                        userType: expectedUserType,
-                    };
+                // تحقق من البريد الإلكتروني وكلمة المرور
+                if (
+                    (userType === "parent" &&
+                        email === "parent@gmail.com" &&
+                        password === "123456") ||
+                    (userType === "admin" &&
+                        email === "admin@gmail.com" &&
+                        password === "123456")
+                ) {
+                    this.user = { email, userType };
                     this.error = null;
-                    // Store user data in cookies
+                    // تخزين بيانات المستخدم في الكوكيز
+                    Cookies.set("user", JSON.stringify(this.user), {
+                        expires: 7,
+                    });
+                } else {
+                    this.error = "Invalid email or password";
                 }
-                // Cookies.set("user", JSON.stringify(this.user), { expires: 7 });
             } catch (error) {
                 this.error = error.message;
             } finally {
                 this.loading = false;
             }
         },
-        async logout() {
-            await signOut(auth);
+        logout() {
             this.user = null;
-            // Remove user data from cookies
+            // إزالة بيانات المستخدم من الكوكيز
             Cookies.remove("user");
         },
-        // For hide Error after 5s
+        // لإخفاء الخطأ بعد 5 ثوانٍ
         clearError() {
             setTimeout(() => {
                 this.error = null;
