@@ -15,7 +15,10 @@
         "@fortawesome/free-solid-svg-icons": "^6.5.2",
         "@fortawesome/vue-fontawesome": "^3.0.8",
         "@mdi/font": "^7.4.47",
+<<<<<<< HEAD
         "chart.js": "^4.4.3",
+=======
+>>>>>>> 5fcbad62be2201dbbb8c547257c8fab0e6b875a1
         "core-js": "^3.8.3",
         "firebase": "^10.12.3",
         "gsap": "^3.12.5",
