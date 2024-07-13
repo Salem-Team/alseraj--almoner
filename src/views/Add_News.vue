@@ -437,8 +437,7 @@ form {
             border-top-left-radius: 5px;
             height: 100%;
             object-fit: cover;
-
-            width: 100%;
+            max-width: 100%;
         }
         svg {
             position: absolute;

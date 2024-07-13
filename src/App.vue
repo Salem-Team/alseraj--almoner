@@ -103,5 +103,8 @@ body {
 .v-container {
     width: 90% !important;
     max-width: 90% !important;
+    & > div {
+        flex-grow: 1;
+    }
 }
 </style>
