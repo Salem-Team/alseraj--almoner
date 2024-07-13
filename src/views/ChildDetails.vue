@@ -3,7 +3,7 @@
         <v-card>
             <v-toolbar color="#fff" title="تفاصيل الطالب"> </v-toolbar>
 
-            <div class="d-flex flex-row" style="width: 100%; height: 100vh">
+            <div class="d-flex flex-row" style="width: 100%; height: auto">
                 <v-tabs v-model="tab" color="primary" direction="vertical">
                     <v-tab
                         prepend-icon="mdi-account"
