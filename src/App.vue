@@ -1,19 +1,27 @@
 <template>
-    <div>
-        <nav class="ma-2">
-            <router-link to="/">Home</router-link> |
-            <router-link to="/admin">لوحة الاشراف</router-link>|
-            <span v-if="user">
-                <router-link @click="logout" to="/UserLogin"
+    <div class="main_header">
+        <nav>
+            <div class="container">
+                <router-link class="a" to="/">Home</router-link>
+            </div>
+            <div class="container">
+                <router-link class="a" to="/admin">لوحة الاشراف</router-link>
+            </div>
+            <div class="container">
+                <router-link
+                    class="a"
+                    v-if="user"
+                    @click="logout"
+                    to="/UserLogin"
                     >Sign Out</router-link
                 >
-            </span>
-            <span v-else>
-                <router-link to="/UserLogin">Sign In</router-link>
-            </span>
+                <router-link class="a" v-else to="/UserLogin"
+                    >Sign In</router-link
+                >
+            </div>
         </nav>
-        <router-view />
     </div>
+    <router-view />
 </template>
 
 <script>
@@ -51,20 +59,52 @@ body {
     --therd-color: #7a7a7a;
     --pink-color: #d8588c;
 }
-nav {
-    padding: 30px;
-
-    a {
-        font-weight: bold;
-        color: #2c3e50;
-
-        &.router-link-exact-active {
-            color: #42b983;
+.main_header {
+    padding: 0px 30px;
+    background-color: white;
+    -webkit-box-shadow: 0 0 10px #ddd;
+    -moz-box-shadow: 0 0 10px #ddd;
+    box-shadow: 0 0 10px #ddd;
+    nav {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        flex-flow: wrap;
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 72px;
+            position: relative;
+            overflow: hidden;
+            font-size: 18px;
+            transition: 0.3s;
+            &:hover {
+                opacity: 1;
+                z-index: 100;
+                top: calc(100% + 1px);
+            }
+        }
+        .a {
+            text-decoration: none;
+        }
+        .container::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background-color: var(--main-color);
+            top: 0;
+            left: -100%;
+            transition: 0.3s;
         }
     }
 }
 .v-container {
     width: 90% !important;
     max-width: 90% !important;
+    & > div {
+        flex-grow: 1;
+    }
 }
 </style>

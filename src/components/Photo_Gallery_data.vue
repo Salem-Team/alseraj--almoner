@@ -1,24 +1,28 @@
 <template>
-    <div>
+    <div
+        style="
+            width: 100% !important;
+            margin: auto;
+            background: var(--secound-color);
+            padding: 40px 0px;
+        "
+    >
         <div class="use">
             <div class="title">
                 <div class="right">معرض الصور</div>
             </div>
         </div>
-        <v-container
-            class="box d-flex align-center justify-space-around"
-            style="width: 94% !important; margin: auto"
-        >
+        <div class="box d-flex align-center justify-space-around">
             <v-card
                 class="card"
                 v-for="photo in Photos"
                 :key="photo.id"
-                width="300px"
+                width="400px"
                 max-width="25%"
             >
                 <v-img :src="photo.image" height="300" cover></v-img>
             </v-card>
-        </v-container>
+        </div>
     </div>
 </template>
 <script>
@@ -58,23 +62,56 @@ export default defineComponent({
 .box {
     flex-wrap: wrap !important;
     gap: 10px !important;
-    background: var(--secound-color);
 }
 .use {
-    width: 94% !important;
+    width: fit-content !important;
     margin: auto;
     .title {
-        margin-top: 40px;
-        background: var(--secound-color);
-        padding: 15px 20px;
-        display: flex;
-        align-items: start;
-        justify-content: space-between;
-        gap: 3px;
-        border-radius: 5px;
+        text-transform: uppercase;
         color: var(--main-color);
-        font-weight: bold;
-        font-size: 20px;
+        margin: 0 auto 80px;
+        border: 2px solid var(--main-color);
+        padding: 10px 20px;
+        font-size: 30px;
+        width: fit-content;
+        position: relative;
+        z-index: 1;
+        transition: 0.3s;
+    }
+    .title::before {
+        content: "";
+        width: 12px;
+        height: 12px;
+        background-color: var(--main-color);
+        position: absolute;
+        border-radius: 50%;
+        top: 50%;
+        right: -30px;
+        transform: translateY(-50%);
+    }
+    .title::after {
+        content: "";
+        width: 12px;
+        height: 12px;
+        background-color: var(--main-color);
+        position: absolute;
+        border-radius: 50%;
+        top: 50%;
+        left: -30px;
+        transform: translateY(-50%);
+    }
+    .title:hover::before {
+        z-index: -1;
+        animation: right-move 0.5s linear forwards;
+    }
+    .title:hover::after {
+        z-index: -1;
+        animation: left-move 0.5s linear forwards;
+    }
+    .title:hover {
+        color: white;
+        border: 2px solid white;
+        transition-delay: 0.5s;
     }
 }
 .card {
@@ -114,6 +151,32 @@ export default defineComponent({
         opacity: 0;
         width: 200%;
         height: 200%;
+    }
+}
+@keyframes left-move {
+    50% {
+        left: 0;
+        width: 12px;
+        height: 12px;
+    }
+    100% {
+        left: 0;
+        border-radius: 0;
+        width: 50%;
+        height: 100%;
+    }
+}
+@keyframes right-move {
+    50% {
+        right: 0;
+        width: 12px;
+        height: 12px;
+    }
+    100% {
+        right: 0;
+        border-radius: 0;
+        width: 50%;
+        height: 100%;
     }
 }
 </style>

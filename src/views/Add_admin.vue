@@ -517,7 +517,7 @@ form {
     padding: 0;
     justify-content: flex-start !important;
     flex-direction: column;
-    gap: 20px;
+    gap: 40px;
 }
 .card {
     display: flex;

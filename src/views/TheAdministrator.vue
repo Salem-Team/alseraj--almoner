@@ -18,7 +18,7 @@
             </v-card>
             <v-card class="card" link @click="$router.push('/Add_job')">
                 <img src="../assets/admin/job-application.png" alt="" />
-                <div>تقديم على وظائف</div>
+                <div>التقديم على الوظائف</div>
             </v-card>
             <v-card class="card" link @click="$router.push('/Add_admin')">
                 <img src="../assets/admin/developers (1).png" alt="" />
@@ -75,7 +75,7 @@ export default {
     padding: 0;
     justify-content: space-between !important;
     flex-direction: column;
-    gap: 20px;
+    gap: 40px;
 }
 .card {
     display: flex;
