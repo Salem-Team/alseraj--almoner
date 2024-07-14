@@ -4,49 +4,43 @@
         <div class="use">
             <div class="title">
                 <div class="right">الوظائف</div>
-                <!-- Jobs -->
             </div>
         </div>
 
-        <!-- Container for Job Cards -->
+        <!-- Main Content Container -->
         <v-container>
+            <!-- Iterate over Jobs -->
             <div class="feat" v-for="Job in Jobs" :key="Job.id">
                 <div>
-                    <!-- Job Card Header -->
+                    <!-- Job Header -->
                     <div class="header">
                         <div class="small_container">
                             <div class="title">{{ Job.title }}</div>
-                            <!-- Job Title -->
                         </div>
                         <div class="time">
                             <font-awesome-icon :icon="['fas', 'clock']" />
-                            <!-- Clock Icon -->
                             <div>{{ Job.time }}</div>
-                            <!-- Job Time -->
                         </div>
                     </div>
 
-                    <!-- Job Card Body -->
+                    <!-- Job Details -->
                     <div class="body">
                         <div class="title">متطلبات العمل</div>
-                        <!-- Job Requirements -->
                         <ul>
                             <li>{{ Job.description }}</li>
-                            <!-- Job Description -->
                         </ul>
                     </div>
                 </div>
 
-                <!-- Job Card Footer - Apply Button -->
+                <!-- Apply Button -->
                 <div
                     class="footer"
                     @click="(jobs.dialog_2 = true), jobs.Job_Information(Job)"
                 >
                     التقديم على الوظيفة
-                    <!-- Apply for Job -->
                 </div>
 
-                <!-- Dialog for Job Application Form -->
+                <!-- Apply Dialog -->
                 <v-dialog v-model="dialog_2" width="90%">
                     <v-card width="100%" class="popup">
                         <div
@@ -54,15 +48,13 @@
                         >
                             <div style="color: var(--main-color)">
                                 التقديم على الوظيفة
-                                <!-- Apply for Job -->
                             </div>
                             <v-btn icon @click="dialog_2 = false">
                                 <v-icon>mdi-close</v-icon>
-                                <!-- Close Icon -->
                             </v-btn>
                         </div>
 
-                        <!-- Job Application Form -->
+                        <!-- Form for Job Application with validation -->
                         <form
                             ref="form"
                             @submit.prevent="
@@ -70,7 +62,7 @@
                             "
                             class="ma-auto mt-4"
                         >
-                            <!-- Job Title Field -->
+                            <!-- Job Title Input -->
                             <v-text-field
                                 v-model="jobs.Title_Information"
                                 type="text"
@@ -80,7 +72,7 @@
                                 :rules="[(v) => !!v || 'يجب إدخال اسم الوظيفة']"
                             ></v-text-field>
 
-                            <!-- Name Field -->
+                            <!-- Name Input -->
                             <v-text-field
                                 v-model="jobs.Apply.name"
                                 type="text"
@@ -90,7 +82,7 @@
                                 :rules="[(v) => !!v || 'يجب إدخال الاسم']"
                             ></v-text-field>
 
-                            <!-- Email Field -->
+                            <!-- Email Input -->
                             <v-text-field
                                 v-model="jobs.Apply.email"
                                 type="email"
@@ -105,7 +97,7 @@
                                 ]"
                             ></v-text-field>
 
-                            <!-- Phone Field -->
+                            <!-- Phone Input -->
                             <v-text-field
                                 v-model="jobs.Apply.phone"
                                 type="text"
@@ -205,16 +197,15 @@
                                     </v-btn>
                                 </v-btn-toggle>
                             </div>
-
-                            <!-- Short Description Field -->
+                            <!-- Short Description Textarea -->
                             <v-textarea
                                 v-model="jobs.Apply.description"
                                 label="وصف قصير"
                                 variant="outlined"
                                 required
-                                :maxlength="150"
                                 rows="4"
                                 no-resize
+                                :maxlength="150"
                                 :rules="[(v) => !!v || 'يجب إدخال وصف قصير']"
                             ></v-textarea>
 
@@ -244,27 +235,12 @@
                                 "
                             >
                                 تقديم
-                                <!-- Submit -->
                             </v-btn>
                         </form>
                     </v-card>
                 </v-dialog>
             </div>
         </v-container>
-
-        <!-- Button to Load More Jobs -->
-        <div v-if="Jobs.length < 4" class="btn">
-            <v-btn
-                style="
-                    background-color: var(--main-color) !important;
-                    color: white !important;
-                    width: 20%;
-                "
-                @click="$router.push('/jobs_more')"
-                >المزيد</v-btn
-            >
-            <!-- Load More -->
-        </div>
     </div>
 </template>
 
@@ -276,12 +252,10 @@ import { useJobs } from "@/store/job.js";
 export default defineComponent({
     setup() {
         const jobs = useJobs();
+        jobs.Get_data();
+        jobs.Get_Apply_data();
 
-        // Initialize and fetch initial data
-        jobs.Get_splice(); // Fetch initial limited set of Jobs
-        jobs.Get_Apply_data(); // Fetch data related to Job applications
-
-        // Destructure reactive references and methods from Jobs store
+        // Destructuring reactive references and methods from Jobs store
         const {
             Job,
             loading,
@@ -315,13 +289,14 @@ export default defineComponent({
             Job_Information,
             Get_data,
             Jobs,
-            jobs,
+            jobs, // Ensure jobs is returned for template access
             apply,
             loading1,
         };
     },
 });
 </script>
+
 <style lang="scss" scoped>
 form {
     width: 90%;

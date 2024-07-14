@@ -46,20 +46,17 @@
                                     @click="dialog = false"
                                 ></v-btn>
                             </v-card-title>
-                            <v-container
-                                class="d-flex justify-space-evenly mb-4"
-                            >
+                            <div class="cards d-flex justify-space-evenly mb-4">
                                 <v-card
                                     style="
                                         background-color: var(
-                                            --main-color
+                                            --secound-color
                                         ) !important;
-                                        color: white !important;
+                                        width: 20% !important;
                                     "
                                     class="card text-center mt-3"
                                     prepend-icon="mdi-account"
                                     link
-                                    min-width="15%"
                                     @click="dialog_1 = true"
                                 >
                                     <v-card-title @click="dialog = false"
@@ -69,14 +66,13 @@
                                 <v-card
                                     style="
                                         background-color: var(
-                                            --main-color
+                                            --secound-color
                                         ) !important;
-                                        color: white !important;
                                     "
                                     class="card text-center mt-3"
                                     prepend-icon="mdi-newspaper-variant-multiple-outline"
                                     @click="showAddStudentDialog"
-                                    min-width="15%"
+                                    width="20%"
                                 >
                                     <v-card-title @click="dialog = false"
                                         >إضافة بيانات الطالب</v-card-title
@@ -85,21 +81,20 @@
                                 <v-card
                                     style="
                                         background-color: var(
-                                            --main-color
+                                            --secound-color
                                         ) !important;
-                                        color: white !important;
                                     "
                                     class="card text-center mt-3"
                                     prepend-icon="mdi-image"
                                     link
                                     @click="dialog_2 = true"
-                                    min-width="15%"
+                                    width="20%"
                                 >
                                     <v-card-title @click="dialog = false"
                                         >إضافة الصور</v-card-title
                                     >
                                 </v-card>
-                            </v-container>
+                            </div>
                         </v-card></v-dialog
                     >
                     <v-dialog v-model="dialog_1" width="90%">
@@ -348,7 +343,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 form {
     width: 90%;
     margin: auto;

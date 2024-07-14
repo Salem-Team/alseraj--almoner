@@ -92,29 +92,48 @@
                 <form ref="form" @submit.prevent class="ma-auto">
                     <v-text-field
                         v-model="user.name"
+                        :rules="[(v) => !!v || 'الاسم مطلوب']"
                         type="text"
-                        label=" الاسم"
+                        label="الاسم"
                         variant="outlined"
                         required
                     ></v-text-field>
+
                     <v-text-field
                         v-model="user.email"
+                        :rules="[
+                            (v) => !!v || 'البريد الإلكتروني مطلوب',
+                            (v) =>
+                                /.+@.+\..+/.test(v) ||
+                                'البريد الإلكتروني غير صالح',
+                        ]"
                         type="email"
                         label="بريد الكتروني"
                         variant="outlined"
                         required
                     ></v-text-field>
+
                     <v-select
                         style="width: 100%"
                         v-model="user.roles"
                         :items="admin.role"
+                        :rules="[
+                            (v) => (!!v && v.length > 0) || 'أختر نوع الصلاحية',
+                        ]"
                         label="أختر نوع الصلاحية"
                         variant="outlined"
                         multiple
                         required
                     ></v-select>
+
                     <v-text-field
                         v-model="user.password"
+                        :rules="[
+                            (v) => !!v || 'كلمة المرور مطلوبة',
+                            (v) =>
+                                (v && v.length >= 6) ||
+                                'يجب أن تكون كلمة المرور 6 أحرف على الأقل',
+                        ]"
                         :type="admin.show_Password ? 'text' : 'password'"
                         label="كلمة مرور"
                         variant="outlined"
@@ -162,6 +181,7 @@
                         v-model="admin.name_Information"
                         type="text"
                         label=" الاسم"
+                        :rules="[(v) => !!v || 'الاسم مطلوب']"
                         variant="outlined"
                         required
                     ></v-text-field>
@@ -170,12 +190,21 @@
                         type="email"
                         label="بريد الكتروني"
                         variant="outlined"
+                        :rules="[
+                            (v) => !!v || 'البريد الإلكتروني مطلوب',
+                            (v) =>
+                                /.+@.+\..+/.test(v) ||
+                                'البريد الإلكتروني غير صالح',
+                        ]"
                         required
                     ></v-text-field>
                     <v-select
                         style="width: 100%"
                         v-model="admin.roles_Information"
                         :items="admin.role"
+                        :rules="[
+                            (v) => (!!v && v.length > 0) || 'أختر نوع الصلاحية',
+                        ]"
                         label="أختر نوع الصلاحية"
                         variant="outlined"
                         multiple
@@ -317,7 +346,6 @@
                                 </div>
                                 <div class="body">
                                     <div id="password">{{ user.password }}</div>
-
                                     <div>
                                         <div>
                                             <font-awesome-icon

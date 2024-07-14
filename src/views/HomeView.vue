@@ -28,7 +28,7 @@
         />
     </section>
     <div visible>
-        <Photo_Gallery_data style="margin-top: 50px" />
+        <Photo_Gallery_data />
         <News_data />
         <Q_A />
         <job_data />
