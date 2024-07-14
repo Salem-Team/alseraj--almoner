@@ -6,6 +6,7 @@ import ClassPage from "../views/classs_page.vue";
 import TheAdministrator from "../views/TheAdministrator.vue";
 
 import UserLogin from "../views/USerLogin.vue";
+import ForgetPassword from "../views/ForgetPassword.vue";
 import Parent_Dashboard from "../views/Parent_Dashboard.vue";
 import Student_Dashboard from "../views/Student_Dashboard.vue";
 import admin_Dashboard from "../views/admin_Dashboard.vue";
@@ -27,6 +28,11 @@ const routes = [
         path: "/UserLogin",
         name: "UserLogin",
         component: UserLogin,
+    },
+    {
+        path: "/forget-password",
+        name: "ForgetPassword",
+        component: ForgetPassword,
     },
     {
         path: "/Parent_Dashboard",

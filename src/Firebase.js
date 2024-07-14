@@ -1,7 +1,8 @@
 import { initializeApp } from "firebase/app";
-// Add Auth For Signin
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import { getMessaging, isSupported } from "firebase/messaging";
+import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBdk3sqIHjXvB2C-O-lvkRgMFpg8pemkno",
@@ -13,9 +14,18 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const analytics = getAnalytics(app);
 
-export { auth, db };
+let messaging;
+isSupported().then((supported) => {
+    if (supported) {
+        messaging = getMessaging(app);
+    } else {
+        console.warn("This browser does not support Firebase Messaging.");
+    }
+});
+
+export { auth, db, analytics, messaging };

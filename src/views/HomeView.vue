@@ -72,6 +72,8 @@ import News_data from "../components/News_data.vue";
 import Q_A from "../components/Q_A.vue";
 import Photo_Gallery_data from "../components/Photo_Gallery_data.vue";
 import { defineComponent } from "vue";
+import { dataNotifications } from "@/store/dataNotifications";
+import { mapActions } from "pinia";
 export default defineComponent({
     components: {
         job_data,
@@ -91,9 +93,11 @@ export default defineComponent({
         };
     },
     mounted() {
+        this.requestNotificationPermission();
         this.moveText();
     },
     methods: {
+        ...mapActions(dataNotifications, ["requestNotificationPermission"]),
         moveText() {
             let text = document.getElementById("text");
             let tree_left = document.getElementById("tree-left");
