@@ -2,7 +2,7 @@
     <div class="main_header">
         <nav>
             <div class="container">
-                <router-link class="a" to="/">Home</router-link>
+                <router-link class="a" to="/">الرئيسية</router-link>
             </div>
             <div class="container">
                 <router-link class="a" to="/admin">لوحة الاشراف</router-link>
@@ -13,10 +13,10 @@
                     v-if="user"
                     @click="logout"
                     to="/UserLogin"
-                    >Sign Out</router-link
+                    >تسجيل خروج</router-link
                 >
                 <router-link class="a" v-else to="/UserLogin"
-                    >Sign In</router-link
+                    >تسجيل دخول</router-link
                 >
             </div>
         </nav>
@@ -106,5 +106,9 @@ body {
     & > div {
         flex-grow: 1;
     }
+}
+a {
+    color: var(--main-color);
+    font-weight: bold;
 }
 </style>

@@ -126,6 +126,7 @@ export default defineComponent({
 .box {
     flex-wrap: wrap !important;
     gap: 10px !important;
+    align-items: stretch !important;
 }
 .card_title {
     color: var(--main-color);

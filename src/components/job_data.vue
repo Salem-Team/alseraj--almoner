@@ -5,148 +5,134 @@
                 <div class="right">الوظائف</div>
             </div>
         </div>
-        <div class="box d-flex align-center justify-space-around">
-            <v-card
-                v-for="Job in Jobs"
-                :key="Job.id"
-                width="400px"
-                max-width="25%"
-                class="job"
-            >
-                <v-card-title class="title">
-                    <p>{{ Job.title }}</p>
-                </v-card-title>
-                <br />
-                <v-card-subtitle>
-                    {{ Job.time }}
-                </v-card-subtitle>
-
-                <v-card-text width="100%">
-                    <p class="mb-2" style="color: var(--pink-color)">
-                        متطلبات العمل :
-                    </p>
-                    <p class="mb-4" style="color: var(--therd-color)">
-                        {{ Job.description }}
-                    </p>
-                    <v-btn
-                        width="100%"
-                        class="!text-center mt-2 text-h6"
-                        style="color: var(--main-color)"
-                        color="var(--secound-color)"
-                        @click="
-                            (jobs.dialog_2 = true), jobs.Job_Information(Job)
-                        "
-                    >
-                        التقديم على الوظيفة</v-btn
-                    >
-
-                    <v-dialog v-model="dialog_2" width="90%">
-                        <v-card width="100%" class="popup">
-                            <div
-                                class="d-flex justify-space-between align-center title mb-4"
-                            >
-                                <div style="color: var(--main-color)">
-                                    التقديم على الوظيفة
-                                </div>
-                                <v-btn
-                                    icon="mdi-close"
-                                    @click="dialog_2 = false"
-                                ></v-btn>
+        <v-container>
+            <div class="feat" v-for="Job in Jobs" :key="Job.id">
+                <div>
+                    <div class="header">
+                        <div class="small_container">
+                            <div class="title">{{ Job.title }}</div>
+                        </div>
+                        <div class="time">
+                            <font-awesome-icon :icon="['fas', 'clock']" />
+                            <div>{{ Job.time }}</div>
+                        </div>
+                    </div>
+                    <div class="body">
+                        <div class="title">متطلبات العمل</div>
+                        <ul>
+                            <li>{{ Job.description }}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div
+                    class="footer"
+                    @click="(jobs.dialog_2 = true), jobs.Job_Information(Job)"
+                >
+                    التقديم على الوظيفة
+                </div>
+                <v-dialog v-model="dialog_2" width="90%">
+                    <v-card width="100%" class="popup">
+                        <div
+                            class="d-flex justify-space-between align-center title mb-4"
+                        >
+                            <div style="color: var(--main-color)">
+                                التقديم على الوظيفة
                             </div>
-                            <form
-                                ref="form"
-                                @submit.prevent
-                                class="ma-auto mt-4"
+                            <v-btn
+                                icon="mdi-close"
+                                @click="dialog_2 = false"
+                            ></v-btn>
+                        </div>
+                        <form ref="form" @submit.prevent class="ma-auto mt-4">
+                            <v-text-field
+                                v-model="jobs.Title_Information"
+                                type="text"
+                                label="الوظيفة"
+                                variant="outlined"
+                                required
+                            ></v-text-field>
+                            <v-text-field
+                                v-model="jobs.Apply.name"
+                                type="text"
+                                label="الاسم"
+                                variant="outlined"
+                                required
+                            ></v-text-field>
+                            <v-text-field
+                                v-model="jobs.Apply.email"
+                                type="email"
+                                label="البريد الالكتروني"
+                                variant="outlined"
+                                required
+                            ></v-text-field>
+                            <v-text-field
+                                v-model="jobs.Apply.phone"
+                                type="text"
+                                label="التليفون"
+                                variant="outlined"
+                                required
+                            ></v-text-field>
+                            <v-file-input
+                                v-model="jobs.Apply.CV"
+                                label="السيرة الذاتية"
+                                variant="outlined"
+                                prepend-icon=""
+                                required
+                                prepend-inner-icon="mdi-paperclip"
+                                @input="jobs.upload_CV"
                             >
-                                <v-text-field
-                                    v-model="jobs.Title_Information"
-                                    type="text"
-                                    label="الوظيفة"
-                                    variant="outlined"
-                                    required
-                                ></v-text-field>
-                                <v-text-field
-                                    v-model="jobs.Apply.name"
-                                    type="text"
-                                    label="الاسم"
-                                    variant="outlined"
-                                    required
-                                ></v-text-field>
-                                <v-text-field
-                                    v-model="jobs.Apply.email"
-                                    type="email"
-                                    label="البريد الالكتروني"
-                                    variant="outlined"
-                                    required
-                                ></v-text-field>
-                                <v-text-field
-                                    v-model="jobs.Apply.phone"
-                                    type="text"
-                                    label="التليفون"
-                                    variant="outlined"
-                                    required
-                                ></v-text-field>
-                                <v-file-input
-                                    v-model="jobs.Apply.CV"
-                                    label="السيرة الذاتية"
-                                    variant="outlined"
-                                    prepend-icon=""
-                                    required
-                                    prepend-inner-icon="mdi-paperclip"
-                                    @input="jobs.upload_CV"
-                                >
-                                </v-file-input>
-                                <!-- Show progress bar if jobs.Apply.CV is truthy (assuming New is a data property) -->
-                                <v-progress-linear
-                                    v-if="jobs.Apply.CV"
-                                    :value="jobs.progress"
-                                    color="blue-grey"
-                                    height="25"
-                                >
-                                    <template v-slot:default="{ value }">
-                                        <strong>{{ Math.ceil(value) }}%</strong>
-                                    </template>
-                                </v-progress-linear>
-                                <br />
-                                <v-textarea
-                                    v-model="jobs.Apply.description"
-                                    label="وصف قصير"
-                                    variant="outlined"
-                                    required
-                                    :maxlength="150"
-                                ></v-textarea>
-                                <br />
-                                <v-slider
-                                    v-model="jobs.Apply.description.length"
-                                    :max="150"
-                                    step="1"
-                                    disabled
-                                    thumb-label="always"
-                                ></v-slider>
-                                <v-btn
-                                    class="d-flex align-center mt-4 mb-4"
-                                    type="submit"
-                                    :loading="loading"
-                                    :disabled="loading"
-                                    @click="jobs.Add_Apply(jobs.Id_Information)"
-                                    style="
-                                        width: 100%;
-                                        padding: 20px;
-                                        letter-spacing: normal;
-                                        font-weight: bold;
-                                        font-size: 19px;
-                                        background: var(--main-color);
-                                        color: #fff;
-                                    "
-                                >
-                                    تقديم
-                                </v-btn>
-                            </form>
-                        </v-card></v-dialog
-                    >
-                </v-card-text>
-            </v-card>
-        </div>
+                            </v-file-input>
+                            <!-- Show progress bar if jobs.Apply.CV is truthy (assuming New is a data property) -->
+                            <v-progress-linear
+                                v-if="jobs.Apply.CV"
+                                :value="jobs.progress"
+                                color="blue-grey"
+                                height="25"
+                            >
+                                <template v-slot:default="{ value }">
+                                    <strong>{{ Math.ceil(value) }}%</strong>
+                                </template>
+                            </v-progress-linear>
+                            <br />
+                            <v-textarea
+                                v-model="jobs.Apply.description"
+                                label="وصف قصير"
+                                variant="outlined"
+                                required
+                                :maxlength="150"
+                            ></v-textarea>
+                            <br />
+                            <v-slider
+                                v-model="jobs.Apply.description.length"
+                                :max="150"
+                                step="1"
+                                disabled
+                                thumb-label="always"
+                            ></v-slider>
+                            <v-btn
+                                class="d-flex align-center mt-4 mb-4"
+                                type="submit"
+                                :loading="loading"
+                                :disabled="loading"
+                                @click="jobs.Add_Apply(jobs.Id_Information)"
+                                style="
+                                    width: 100%;
+                                    padding: 20px;
+                                    letter-spacing: normal;
+                                    font-weight: bold;
+                                    font-size: 19px;
+                                    background: var(--main-color);
+                                    color: #fff;
+                                "
+                            >
+                                تقديم
+                            </v-btn>
+                        </form>
+                    </v-card></v-dialog
+                >
+            </div>
+        </v-container>
+
         <div v-if="Jobs.length < 4" class="btn">
             <v-btn
                 style="
@@ -318,6 +304,172 @@ form {
     margin: auto !important;
     text-align: center;
     margin-top: 40px !important;
+}
+.popup .title {
+    padding: 20px 20px 0 !important;
+    font-size: 23px;
+    font-weight: bold;
+    color: var(--main-color);
+    position: relative;
+    margin-bottom: 15px;
+    &::before {
+        content: "";
+        position: absolute;
+        bottom: -15px;
+        height: 3px;
+        width: calc(100% - 40px);
+        background: var(--secound-color);
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+.v-btn--icon.v-btn--density-default {
+    color: var(--main-color);
+    width: auto;
+    height: auto;
+    box-shadow: none;
+    &:hover {
+        background: #fff;
+    }
+}
+
+.v-container {
+    margin: 20px auto !important;
+    flex-wrap: wrap;
+    padding: 0;
+    justify-content: flex-start !important;
+    flex-direction: column;
+    gap: 40px;
+    width: 90%;
+    display: flex;
+}
+
+.feat {
+    width: 100%;
+    box-shadow: 0 0 10px #ddd;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 10px;
+    justify-content: space-between;
+    .header {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+        position: relative;
+        svg {
+            cursor: pointer;
+            color: var(--main-color);
+            &:hover {
+                color: var(--therd-color);
+            }
+        }
+
+        &::before {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            height: 4px;
+            width: calc(100% - 20px);
+            background: var(--secound-color);
+            transform: translateX(-50%);
+        }
+        .small_container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            & > div {
+                font-size: 20px;
+                font-weight: bold;
+                color: var(--main-color);
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                color: var(--main-color);
+            }
+        }
+        .time {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--therd-color);
+            font-weight: bold;
+            font-size: 14px;
+        }
+    }
+    .body {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--therd-color);
+        }
+        ul {
+            color: var(--therd-color);
+            font-weight: bold;
+            font-size: 16px;
+            li {
+                list-style-type: square;
+                list-style-position: inside;
+            }
+        }
+    }
+    .footer {
+        background: var(--main-color);
+        color: #fff;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+        font-weight: bold;
+        cursor: pointer;
+        &:hover {
+            background: var(--therd-color);
+        }
+    }
+}
+
+@media (max-width: 599px) {
+}
+@media (min-width: 600px) and (max-width: 768px) {
+}
+@media (min-width: 769px) {
+    .v-container {
+        flex-direction: row;
+        gap: 15px;
+        align-items: stretch !important;
+    }
+
+    .feat {
+        width: 32%;
+    }
+}
+
+img.pluse {
+    width: 40px;
+    cursor: pointer;
+    &:hover {
+        opacity: 0.7;
+    }
+}
+.visible {
+    opacity: 0;
+    animation: fadeIn 1s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 .popup .title {
     padding: 20px 20px 0 !important;
