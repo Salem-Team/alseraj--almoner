@@ -320,8 +320,17 @@
                                                         "
                                                         required
                                                         label="اسم الطالب"
+                                                        @input="
+                                                            updateField(
+                                                                'student_information',
+                                                                0,
+                                                                'student_name',
+                                                                selectedStudent
+                                                                    .student_information[0]
+                                                                    .student_name
+                                                            )
+                                                        "
                                                     ></v-text-field>
-
                                                     <v-select
                                                         :items="[
                                                             '1/1',
@@ -355,6 +364,16 @@
                                                         "
                                                         label="الفصل"
                                                         required
+                                                        @blur="
+                                                            updateField(
+                                                                'student_information',
+                                                                1,
+                                                                'class',
+                                                                selectedStudent
+                                                                    .student_information[1]
+                                                                    .class
+                                                            )
+                                                        "
                                                     ></v-select>
                                                 </div>
                                                 <div
@@ -378,9 +397,18 @@
                                                         required
                                                         :items="['انثي', 'ذكر']"
                                                         variant="outlined"
+                                                        @blur="
+                                                            updateField(
+                                                                'student_information',
+                                                                3,
+                                                                'gender',
+                                                                selectedStudent
+                                                                    .student_information[3]
+                                                                    .gender
+                                                            )
+                                                        "
                                                     ></v-select>
                                                 </div>
-
                                                 <v-select
                                                     v-model="
                                                         selectedStudent
@@ -394,8 +422,17 @@
                                                     required
                                                     :items="['عربي', 'لغات']"
                                                     variant="outlined"
+                                                    @blur="
+                                                        updateField(
+                                                            'student_information',
+                                                            4,
+                                                            'section',
+                                                            selectedStudent
+                                                                .student_information[4]
+                                                                .section
+                                                        )
+                                                    "
                                                 ></v-select>
-
                                                 <v-menu
                                                     ref="menu"
                                                     v-model="menu"
@@ -461,6 +498,7 @@
                                                 </v-menu>
                                             </div>
                                         </div>
+
                                         <div v-if="e1 === 2" ref="slide2">
                                             <div style="padding: 20px">
                                                 <div
@@ -736,7 +774,7 @@
                                                                     <tr>
                                                                         <td>
                                                                             تاريخ
-                                                                            الميلاد
+                                                                            الامتحان
                                                                         </td>
                                                                         <td>
                                                                             {{
@@ -814,7 +852,7 @@
                                                                             v-model="
                                                                                 newSubject.Date
                                                                             "
-                                                                            label="تاريخ الميلاد"
+                                                                            label="تاريخ الامتحان"
                                                                             prepend-icon="mdi-calendar"
                                                                             readonly
                                                                             required
@@ -965,7 +1003,7 @@
                                                                             v-model="
                                                                                 editedSubject.Date
                                                                             "
-                                                                            label="تاريخ الميلاد"
+                                                                            label="تاريخ الامتحان"
                                                                             prepend-icon="mdi-calendar"
                                                                             readonly
                                                                             required
@@ -1049,9 +1087,10 @@
                                                         style="
                                                             margin-left: 20px;
                                                         "
+                                                        >{{
+                                                            index + 4
+                                                        }}</v-avatar
                                                     >
-                                                        {{ index + 4 }}
-                                                    </v-avatar>
                                                     <h2 style="color: #2196f3">
                                                         النتائج الشهريه
                                                     </h2>
@@ -1137,8 +1176,7 @@
                                                                     >امتحان:</v-text-title
                                                                 >
                                                                 <v-text-title>{{
-                                                                    this
-                                                                        .selectedMonth
+                                                                    selectedMonth
                                                                 }}</v-text-title>
                                                             </v-col>
                                                         </v-col>
@@ -1272,7 +1310,7 @@
                                                     color="info"
                                                     style="margin-left: 20px"
                                                 >
-                                                    {{ index + 4 }}
+                                                    {{ index + 5 }}
                                                 </v-avatar>
                                                 <h2 style="color: #2196f3">
                                                     المدفوعات
@@ -1449,7 +1487,7 @@
                                                             margin-left: 20px;
                                                         "
                                                         >{{
-                                                            index + 5
+                                                            index + 6
                                                         }}</v-avatar
                                                     >
                                                     <h2 style="color: #2196f3">
@@ -1474,38 +1512,30 @@
                                                     cols="12"
                                                     md="4"
                                                 >
-                                                    <v-card
-                                                        :color="
-                                                            getCardClass(
-                                                                note.NotificationType
-                                                            )
+                                                    <v-alert
+                                                        :type="
+                                                            note.NotificationType ===
+                                                            'سئ'
+                                                                ? 'error'
+                                                                : note.NotificationType ===
+                                                                  'جيد'
+                                                                ? 'success'
+                                                                : 'info'
                                                         "
                                                         class="pa-3 mb-3 notification-card"
-                                                        outlined
+                                                        border="left"
+                                                        colored-border
                                                     >
-                                                        <v-card-title
+                                                        <div
                                                             class="d-flex justify-space-between align-center"
                                                         >
-                                                            {{
+                                                            <span>{{
                                                                 note.NoticeTitle
-                                                            }}
+                                                            }}</span>
                                                             <div>
                                                                 <v-icon
-                                                                    :color="
-                                                                        getIconClass(
-                                                                            note.NotificationType
-                                                                        )
-                                                                    "
                                                                     small
-                                                                >
-                                                                    {{
-                                                                        getIcon(
-                                                                            note.NotificationType
-                                                                        )
-                                                                    }}
-                                                                </v-icon>
-                                                                <v-icon
-                                                                    small
+                                                                    color="white"
                                                                     class="mr-2"
                                                                     @click="
                                                                         editNotifications(
@@ -1513,25 +1543,30 @@
                                                                             index
                                                                         )
                                                                     "
-                                                                    >mdi-pencil</v-icon
                                                                 >
+                                                                    mdi-pencil
+                                                                </v-icon>
                                                                 <v-icon
                                                                     small
                                                                     class="mr-2"
+                                                                    color="white"
                                                                     @click="
                                                                         deleteNotification(
                                                                             selectedStudent.id,
                                                                             index
                                                                         )
                                                                     "
-                                                                    >mdi-delete</v-icon
                                                                 >
+                                                                    mdi-delete
+                                                                </v-icon>
                                                             </div>
-                                                        </v-card-title>
-                                                        <v-card-text>{{
-                                                            note.theDescription
-                                                        }}</v-card-text>
-                                                    </v-card>
+                                                        </div>
+                                                        <div>
+                                                            {{
+                                                                note.theDescription
+                                                            }}
+                                                        </div>
+                                                    </v-alert>
                                                 </v-col>
                                             </v-row>
 
@@ -1684,7 +1719,7 @@
                                                             margin-left: 20px;
                                                         "
                                                     >
-                                                        {{ index + 6 }}
+                                                        {{ index + 7 }}
                                                     </v-avatar>
                                                     <h2 style="color: #2196f3">
                                                         الصور
@@ -2257,9 +2292,82 @@ export default {
                                     },
                                 ],
                             },
-                            // أضف المزيد من الأشهر هنا
                             {
                                 Certificate_title: "شهر فبراير",
+                                Degrees: [
+                                    {
+                                        Subject_Name: "انجليزى",
+                                        Teacher_Name: "كريم عمر",
+                                        Behavior_assessment: "جيد",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 98,
+                                    },
+                                    {
+                                        Subject_Name: " جغرافيا",
+                                        Teacher_Name: "كمال محمود",
+                                        Behavior_assessment: "جيد جدا",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 94,
+                                    },
+                                    {
+                                        Subject_Name: " جغرافيا",
+                                        Teacher_Name: "علاء محمود",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 82,
+                                    },
+                                    {
+                                        Subject_Name: " تاريخ",
+                                        Teacher_Name: "خالد محمد",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 79,
+                                    },
+                                ],
+                            },
+                            {
+                                Certificate_title: "شهر مارس",
+                                Degrees: [
+                                    {
+                                        Subject_Name: "انجليزى",
+                                        Teacher_Name: "كريم عمر",
+                                        Behavior_assessment: "جيد",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 98,
+                                    },
+                                    {
+                                        Subject_Name: " جغرافيا",
+                                        Teacher_Name: "كمال محمود",
+                                        Behavior_assessment: "جيد جدا",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 94,
+                                    },
+                                    {
+                                        Subject_Name: " جغرافيا",
+                                        Teacher_Name: "علاء محمود",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 82,
+                                    },
+                                    {
+                                        Subject_Name: " تاريخ",
+                                        Teacher_Name: "خالد محمد",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 79,
+                                    },
+                                ],
+                            },
+                            {
+                                Certificate_title: "شهر ابرايل",
                                 Degrees: [
                                     {
                                         Subject_Name: "انجليزى",
@@ -2299,9 +2407,9 @@ export default {
                     },
                 ],
                 payments: {
-                    Requird: 100,
-                    paid_up: 120,
-                    installment_system: "شهريا",
+                    Requird: 0,
+                    paid_up: 0,
+                    installment_system: "",
                 },
                 Notifications: [
                     {
@@ -2405,6 +2513,69 @@ export default {
         await this.fetchStudents();
     },
     methods: {
+        async updateField(section, index, field, value) {
+            this.selectedStudent[section][index][field] = value;
+            await this.updateFirebaseField();
+        },
+        async updateFirebaseField() {
+            try {
+                const studentDoc = doc(db, "students", this.selectedStudent.id);
+                await updateDoc(studentDoc, {
+                    student_information:
+                        this.selectedStudent.student_information,
+                });
+                console.log("Document updated successfully");
+            } catch (error) {
+                console.error("Error updating document:", error);
+            }
+        },
+        getAlertType(notificationType) {
+            if (notificationType === "سي") {
+                return "error";
+            }
+            switch (notificationType) {
+                case "success":
+                    return "success";
+                case "error":
+                    return "error";
+                case "warning":
+                    return "warning";
+                case "info":
+                    return "info";
+                default:
+                    return "info";
+            }
+        },
+        getIcon(notificationType) {
+            switch (notificationType) {
+                case "success":
+                    return "mdi-check-circle";
+                case "error":
+                case "سي":
+                    return "mdi-alert-circle";
+                case "warning":
+                    return "mdi-alert";
+                case "info":
+                    return "mdi-information";
+                default:
+                    return "mdi-information";
+            }
+        },
+        getIconClass(notificationType) {
+            switch (notificationType) {
+                case "success":
+                    return "green";
+                case "error":
+                case "سي":
+                    return "red";
+                case "warning":
+                    return "orange";
+                case "info":
+                    return "blue";
+                default:
+                    return "blue";
+            }
+        },
         async fetchStudents() {
             try {
                 const querySnapshot = await getDocs(collection(db, "students"));
@@ -2413,7 +2584,6 @@ export default {
                     const student = {
                         id: doc.id,
                         ...studentData,
-                        // Format the birthday
                         student_information:
                             studentData.student_information.map(
                                 (info, index) => {
@@ -2422,7 +2592,6 @@ export default {
                                         info.birthday &&
                                         info.birthday.seconds
                                     ) {
-                                        // Convert Firestore Timestamp to Date and then format it
                                         const date = new Date(
                                             info.birthday.seconds * 1000
                                         );
@@ -2440,6 +2609,37 @@ export default {
                 console.log("Fetched students:", this.students_class);
             } catch (error) {
                 console.error("Error fetching students:", error);
+            }
+        },
+        async updateMonthlyDegrees(degrees) {
+            if (!this.selectedStudent) {
+                console.error("Error: selectedStudent is null");
+                return;
+            }
+
+            try {
+                const studentRef = doc(db, "students", this.selectedStudent.id);
+
+                const updatedResults = [...this.selectedStudent.Results];
+
+                const updatedMonthly = updatedResults[1].Monthly.map(
+                    (month) => {
+                        if (month.Certificate_title === this.selectedMonth) {
+                            return { ...month, Degrees: degrees };
+                        }
+                        return month;
+                    }
+                );
+
+                updatedResults[1].Monthly = updatedMonthly;
+
+                await updateDoc(studentRef, {
+                    Results: updatedResults,
+                });
+
+                console.log("Monthly degrees updated successfully");
+            } catch (error) {
+                console.error("Error updating monthly degrees:", error);
             }
         },
         async submit() {
@@ -2509,7 +2709,7 @@ export default {
                         ],
                     },
                     {
-                        monthly: [
+                        Monthly: [
                             { Certifications_title: "" },
                             {
                                 Degree: [
@@ -2834,15 +3034,15 @@ export default {
                 NotificationType: "",
             };
         },
-        getCardClass(type) {
-            return type === "سئ" ? "red-lighten-4" : "green-lighten-4";
-        },
-        getIconClass(type) {
-            return type === "سئ" ? "red-lighten-4" : "green-lighten-4";
-        },
-        getIcon(type) {
-            return type === "سئ" ? "mdi-alert-circle" : "mdi-check-circle";
-        },
+        // getCardClass(type) {
+        //     return type === "سئ" ? "red-lighten-4" : "green-lighten-4";
+        // },
+        // getIconClass(type) {
+        //     return type === "سئ" ? "red-lighten-4" : "green-lighten-4";
+        // },
+        // getIcon(type) {
+        //     return type === "سئ" ? "mdi-alert-circle" : "mdi-check-circle";
+        // },
         // ul
         editPhotos(studentId, index) {
             this.editedStudentId = studentId;
@@ -2949,6 +3149,7 @@ export default {
                 console.error("Error updating document:", error);
             }
         },
+
         async updateGuardian() {
             try {
                 if (this.currentStudentId) {
@@ -3036,6 +3237,13 @@ export default {
             handler: "updateGuardian",
             deep: true, // To detect changes in nested array elements
         },
+        selectedMonthlyDegrees: {
+            handler(newVal) {
+                // Save changes to Firebase
+                this.updateMonthlyDegrees(newVal);
+            },
+            deep: true,
+        },
     },
     computed: {
         filteredStudents() {
@@ -3044,9 +3252,11 @@ export default {
             );
         },
         selectedMonthlyDegrees() {
-            // اختر الشهر المحدد
+            if (!this.selectedStudent) {
+                return [];
+            }
             return (
-                this.form.Results[1].Monthly.find(
+                this.selectedStudent.Results[1].Monthly.find(
                     (month) => month.Certificate_title === this.selectedMonth
                 )?.Degrees || []
             );
