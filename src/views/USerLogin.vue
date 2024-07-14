@@ -5,8 +5,8 @@
             <v-card-text>
                 <v-form @submit.prevent="handleLogin">
                     <v-select
-                        v-model="userType.type"
-                        :items="userType.types"
+                        v-model="userType"
+                        :items="userTypes"
                         label="User Type"
                         required
                     ></v-select>
@@ -41,24 +41,23 @@
 </template>
 
 <script>
-import Cookies from "js-cookie";
+import { mapState, mapActions } from "pinia";
+import { useAuthStore } from "../store/userStore";
 
 export default {
     data() {
         return {
             email: "",
             password: "",
-            userType: {
-                type: "",
-                types: ["parent", "admin"],
-            },
-            loading: false,
-            error: null,
-            user: null,
+            userType: "",
+            userTypes: ["parent", "admin"],
         };
     },
+    computed: {
+        ...mapState(useAuthStore, ["loading", "error"]),
+    },
     watch: {
-        "userType.type"(newValue) {
+        userType(newValue) {
             if (newValue === "parent") {
                 this.email = "parent@gmail.com";
                 this.password = "123456";
@@ -69,32 +68,16 @@ export default {
         },
     },
     methods: {
+        ...mapActions(useAuthStore, ["login"]),
         async handleLogin() {
-            this.loading = true;
-            this.error = null;
-
-            // تحقق من البريد الإلكتروني وكلمة المرور
-            if (
-                (this.userType.type === "parent" &&
-                    this.email === "parent@gmail.com" &&
-                    this.password === "123456") ||
-                (this.userType.type === "admin" &&
-                    this.email === "admin@gmail.com" &&
-                    this.password === "123456")
-            ) {
-                this.user = { email: this.email, type: this.userType.type };
-                Cookies.set("user", JSON.stringify(this.user), { expires: 7 });
-
-                if (this.userType.type === "parent") {
+            await this.login(this.email, this.password, this.userType);
+            if (!this.error) {
+                if (this.userType === "parent") {
                     this.$router.push({ name: "Parent_Dashboard" });
-                } else if (this.userType.type === "admin") {
+                } else if (this.userType === "admin") {
                     this.$router.push({ name: "admin_Dashboard" });
                 }
-            } else {
-                this.error = "Invalid email or password";
             }
-
-            this.loading = false;
         },
     },
 };
@@ -107,8 +90,5 @@ export default {
     padding: 1rem;
     border: 1px solid #ccc;
     border-radius: 5px;
-}
-.error {
-    color: red;
 }
 </style>

@@ -1,18 +1,34 @@
 <template>
-    <div>
-        <div class="paralax">
-            <div class="paralax_item p_item1"></div>
-            <div class="paralax_item p_item2"></div>
-            <div class="paralax_item p_item1"></div>
-        </div>
-        <div class="container">
-            <div class="content_header">
-                <h1>مدرسة السراج المنير</h1>
-            </div>
-        </div>
-    </div>
+    <section class="parallax">
+        <h1 id="text">مدرسة السراج المنير</h1>
+        <img
+            style="filter: grayscale(1)"
+            src="../assets/gate-left.png"
+            id="gate-left"
+        />
+        <img
+            style="filter: grayscale(1)"
+            src="../assets/gate-right.png"
+            id="gate-right"
+        />
+        <img
+            style="filter: grayscale(1)"
+            src="../assets/tree-left.png"
+            id="tree-left"
+        />
+        <img
+            style="filter: grayscale(1)"
+            src="../assets/tree-right.png"
+            id="tree-right"
+        />
+        <img
+            style="filter: grayscale(1) !important"
+            src="../assets/grass.png"
+            id="grass"
+        />
+    </section>
     <div visible>
-        <Photo_Gallery_data />
+        <Photo_Gallery_data style="margin-top: 50px" />
         <News_data />
         <Q_A />
         <job_data />
@@ -74,31 +90,72 @@ export default defineComponent({
             ],
         };
     },
+    mounted() {
+        this.moveText();
+    },
+    methods: {
+        moveText() {
+            let text = document.getElementById("text");
+            let tree_left = document.getElementById("tree-left");
+            let tree_right = document.getElementById("tree-right");
+            let gate_left = document.getElementById("gate-left");
+            let gate_right = document.getElementById("gate-right");
+            window.addEventListener("scroll", () => {
+                let value = window.scrollY;
+                text.style.marginTop = value * 1.5 + `px`;
+                tree_left.style.left = value * -1.5 + `px`;
+                tree_right.style.left = value * 1.5 + `px`;
+                gate_left.style.left = value * 0.3 + `px`;
+                gate_right.style.left = value * -0.3 + `px`;
+            });
+        },
+    },
 });
 </script>
 <style lang="scss" scoped>
 body {
     overflow: hidden;
 }
-.paralax {
-    .paralax_item {
-        width: 100%;
-        height: 200vh;
-        top: 0;
-        left: 0;
-    }
-    .p_item1 {
+.parallax {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url("../assets/sky.jpg") no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    overflow: hidden;
+    #text {
         position: absolute;
-        background: url("../assets/sky.jpg") center/cover no-repeat;
-        width: 400%;
-        z-index: -1000000;
-        background-attachment: fixed;
-    }
-    .p_item2 {
-        background: url("../assets/school_bus.png") bottom/100% no-repeat;
+        font-size: 5em;
+        color: #1b283a;
+        text-shadow: 2px 4px 5px #f9f9f9;
+        margin-top: 0px;
+        top: 15%;
+        transform: translate(-50%, -50%);
+        left: 50%;
         width: 100%;
-        background-position: center;
-        z-index: 2;
+        text-align: center;
+    }
+    img {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        left: 0;
+        pointer-events: none;
+    }
+    #grass {
+        bottom: 0;
+    }
+    #gate-left {
+        position: absolute;
+        transform: translateX(-282px);
+    }
+    #gate-right {
+        position: absolute;
+        transform: translateX(305px);
     }
 }
 .content_header {

@@ -147,6 +147,7 @@ export const useadmin = defineStore("admin", {
                 } else {
                     console.log("user not found in users array");
                 }
+                this.dialog_3 = false;
                 this.Get_data();
             } catch (error) {
                 console.error("Error deleting Job:", error);

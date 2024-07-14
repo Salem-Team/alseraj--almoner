@@ -35,6 +35,17 @@
                 </v-card-text>
             </v-card>
         </v-container>
+        <div v-if="News.length < 4" class="btn">
+            <v-btn
+                style="
+                    background-color: var(--main-color) !important;
+                    color: white !important;
+                    width: 20%;
+                "
+                @click="news.Get_data"
+                >المزيد</v-btn
+            >
+        </div>
     </div>
 </template>
 <script>
@@ -44,7 +55,7 @@ import { useNews } from "@/store/News.js";
 export default defineComponent({
     setup() {
         const news = useNews();
-        news.Get_data();
+        news.Get_splice();
         // Destructure reactive references and methods from News store
         const { New, loading, loading1, Get_data, News } = storeToRefs(news);
 
@@ -115,6 +126,7 @@ export default defineComponent({
 .box {
     flex-wrap: wrap !important;
     gap: 10px !important;
+    align-items: stretch !important;
 }
 .card_title {
     color: var(--main-color);
@@ -165,5 +177,10 @@ export default defineComponent({
         width: 50%;
         height: 100%;
     }
+}
+.btn {
+    margin: auto !important;
+    text-align: center;
+    margin-top: 40px !important;
 }
 </style>

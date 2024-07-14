@@ -121,6 +121,21 @@ export const useNews = defineStore("News", {
                 console.error("Error adding document: ", error);
             }
         },
+        async Get_splice() {
+            try {
+                this.News = [];
+                this.loading1 = true;
+                const querySnapshot = await getDocs(collection(db, "News"));
+                querySnapshot.forEach((doc) => {
+                    this.News.push(doc.data());
+                });
+                this.News = this.News.slice(0, 3);
+                console.log("this.News", this.News);
+                this.loading1 = false;
+            } catch (error) {
+                console.error("Error adding document: ", error);
+            }
+        },
         async delete_New(NewId, image) {
             try {
                 // Log before attempting to delete

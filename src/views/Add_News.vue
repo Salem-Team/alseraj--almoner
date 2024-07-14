@@ -83,18 +83,13 @@
 
         <v-dialog v-model="dialog" width="90%">
             <v-card width="100%" class="popup">
-                <v-card-title class="d-flex justify-space-between align-center">
-                    <div class="text-h4 ps-2" style="color: var(--main-color)">
-                        إضافة خبر
-                    </div>
-                    <v-btn
-                        style="color: var(--main-color)"
-                        icon="mdi-close"
-                        variant="text"
-                        @click="dialog = false"
-                    ></v-btn>
-                </v-card-title>
-                <form ref="form" @submit.prevent class="ma-auto">
+                <div
+                    class="d-flex justify-space-between align-center title mb-4"
+                >
+                    <div style="color: var(--main-color)">إضافة خبر</div>
+                    <v-btn icon="mdi-close" @click="dialog = false"></v-btn>
+                </div>
+                <form ref="form" @submit.prevent class="ma-auto mt-4">
                     <v-text-field
                         v-model="New.title"
                         type="text"
@@ -131,36 +126,38 @@
                         label="وصف قصير"
                         :counter="150"
                         variant="outlined"
+                        :maxlength="150"
                         required
                     ></v-textarea>
-
                     <v-btn
-                        class="d-flex align-center mt-4 mb-10"
+                        class="d-flex align-center mt-4 mb-4"
                         type="submit"
-                        color="primary"
                         :loading="loading"
                         :disabled="loading"
                         @click="news.Add_News"
+                        style="
+                            width: 100%;
+                            padding: 20px;
+                            letter-spacing: normal;
+                            font-weight: bold;
+                            font-size: 19px;
+                            background: var(--main-color);
+                            color: #fff;
+                        "
                     >
-                        نشر
+                        إضافة
                     </v-btn>
                 </form>
             </v-card></v-dialog
         >
+
         <v-dialog v-model="dialog_1" width="90%">
             <v-card width="100%" class="popup">
-                <v-card-title class="d-flex justify-space-between align-center">
-                    <div class="text-h4 ps-2" style="color: var(--main-color)">
-                        تعديل خبر
-                    </div>
-                    <v-btn
-                        style="color: var(--main-color)"
-                        icon="mdi-close"
-                        variant="text"
-                        @click="dialog_1 = false"
-                    ></v-btn>
-                </v-card-title>
-                <form ref="form" @submit.prevent class="ma-auto">
+                <div class="d-flex justify-space-between align-center title">
+                    <div style="color: var(--main-color)">تعديل خبر</div>
+                    <v-btn icon="mdi-close" @click="dialog_1 = false"></v-btn>
+                </div>
+                <form ref="form" @submit.prevent class="ma-auto mt-4">
                     <v-text-field
                         v-model="news.Title_Information"
                         type="text"
@@ -169,7 +166,11 @@
                         required
                     ></v-text-field>
 
-                    <v-img :src="news.Image_Information" height="200"></v-img>
+                    <v-img
+                        :src="news.Image_Information"
+                        height="400"
+                        width="100%"
+                    ></v-img>
                     <br />
                     <v-textarea
                         v-model="news.Description_Information"
@@ -177,21 +178,29 @@
                         :counter="150"
                         required
                         variant="outlined"
+                        :maxlength="150"
                     ></v-textarea>
-
                     <v-btn
-                        class="d-flex align-center mt-4 mb-10"
                         type="submit"
-                        color="primary"
                         :loading="loading"
                         :disabled="loading"
                         @click="news.Update_News(news.Id_Information)"
+                        class="d-flex align-center mt-4 mb-4"
+                        style="
+                            width: 100%;
+                            padding: 20px;
+                            letter-spacing: normal;
+                            font-weight: bold;
+                            font-size: 19px;
+                            background: var(--main-color);
+                            color: #fff;
+                        "
                     >
                         تعديل
                     </v-btn>
                 </form>
-            </v-card>
-        </v-dialog>
+            </v-card></v-dialog
+        >
         <v-container class="box d-flex align-center justify-space-around">
             <div class="feat" v-for="New in News" :key="New.id">
                 <div class="Top">
@@ -204,10 +213,15 @@
                         :icon="['fas', 'trash']"
                         @click="news.dailog_3 = true"
                     />
-                    <img :src="New.image" alt="" />
+                    <v-img
+                        :src="New.image"
+                        width="100%"
+                        height="300"
+                        cover
+                    ></v-img>
                 </div>
                 <div class="Bottom">
-                    <div class="title">فتح باب القبول</div>
+                    <div class="title">{{ New.title }}</div>
                     <div class="time">
                         <font-awesome-icon :icon="['fas', 'clock']" />
                         <div>{{ New.time }}</div>
@@ -221,36 +235,50 @@
     </div>
     <v-dialog v-model="news.dailog_3" width="90%">
         <v-card width="100%" class="popup">
-            <v-card-title class="d-flex justify-space-between align-center">
-                <div class="text-h4 ps-2" style="color: var(--main-color)">
-                    حذف
-                </div>
-                <v-btn
-                    style="color: var(--main-color)"
-                    icon="mdi-close"
-                    variant="text"
-                    @click="news.dailog_3 = false"
-                ></v-btn>
-            </v-card-title>
+            <div class="d-flex justify-space-between align-center title">
+                <div style="color: var(--main-color)">تأكيد الحذف!</div>
+                <v-btn icon="mdi-close" @click="news.dailog_3 = false"></v-btn>
+            </div>
+
+            <p
+                style="
+                    padding: 20px;
+                    color: var(--therd-color);
+                    font-weight: bold;
+                "
+            >
+                هل أنت متأكد من حذفك لهذا الخبر
+            </p>
             <v-card-text>
-                <p>تأكيد الحذف</p>
-                <div class="d-flex align-center mt-4">
+                <div class="d-flex align-center">
                     <v-btn
                         type="submit"
-                        color="primary"
+                        color="var(--main-color)"
                         :loading="loading"
                         :disabled="loading"
                         @click="news.dailog_3 = false"
+                        style="
+                            color: #fff;
+                            font-weight: bold;
+                            width: 48%;
+                            height: 45px;
+                        "
                     >
                         إلغاء
                     </v-btn>
                     <v-spacer />
                     <v-btn
                         type="submit"
-                        color="error"
+                        color="var(--pink-color)"
                         :loading="loading"
                         :disabled="loading"
                         @click="news.delete_New(New.id, New.image)"
+                        style="
+                            color: #fff;
+                            font-weight: bold;
+                            width: 48%;
+                            height: 45px;
+                        "
                     >
                         تأكيد
                     </v-btn>
@@ -421,7 +449,7 @@ form {
     border-radius: 5px;
     display: flex;
     flex-direction: column;
-    max-height: 500px;
+    max-width: 33%;
     & > div {
         width: 100%;
 
@@ -432,12 +460,9 @@ form {
         align-items: center;
         justify-content: center;
         height: 250px;
-        img {
+        .v-img {
             border-top-right-radius: 5px;
             border-top-left-radius: 5px;
-            height: 100%;
-            object-fit: cover;
-            width: 100%;
         }
         svg {
             position: absolute;
@@ -449,6 +474,7 @@ form {
             border-radius: 50%;
             cursor: pointer;
             color: #fff;
+            z-index: 100000000000;
             background: var(--main-color);
             &:first-child {
                 left: 40px;
@@ -647,6 +673,34 @@ img.pluse {
     }
     to {
         opacity: 1;
+    }
+}
+
+.popup .title {
+    padding: 20px 20px 0 !important;
+    font-size: 23px;
+    font-weight: bold;
+    color: var(--main-color);
+    position: relative;
+    margin-bottom: 15px;
+    &::before {
+        content: "";
+        position: absolute;
+        bottom: -15px;
+        height: 3px;
+        width: calc(100% - 40px);
+        background: var(--secound-color);
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+.v-btn--icon.v-btn--density-default {
+    color: var(--main-color);
+    width: auto;
+    height: auto;
+    box-shadow: none;
+    &:hover {
+        background: #fff;
     }
 }
 </style>

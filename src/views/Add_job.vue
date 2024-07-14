@@ -1,18 +1,108 @@
 <template>
-    <img
-        style="
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 245px;
-        "
-        v-if="jobs.loading1"
-        src="../assets/Spinner@1x-1.0s-200px-200px.svg"
-        alt=""
-    />
-    <div v-if="!jobs.loading1">
-        <div class="use">
+    <div class="visible">
+        <svg
+            style="
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 245px;
+            "
+            v-if="loading1"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 200 200"
+        >
+            <radialGradient
+                id="a12"
+                cx=".66"
+                fx=".66"
+                cy=".3125"
+                fy=".3125"
+                gradientTransform="scale(1.5)"
+            >
+                <stop offset="0" stop-color="#336699"></stop>
+                <stop offset=".3" stop-color="#336699" stop-opacity=".9"></stop>
+                <stop offset=".6" stop-color="#336699" stop-opacity=".6"></stop>
+                <stop offset=".8" stop-color="#336699" stop-opacity=".3"></stop>
+                <stop offset="1" stop-color="#336699" stop-opacity="0"></stop>
+            </radialGradient>
+            <circle
+                transform-origin="center"
+                fill="none"
+                stroke="url(#a12)"
+                stroke-width="15"
+                stroke-linecap="round"
+                stroke-dasharray="200 1000"
+                stroke-dashoffset="0"
+                cx="100"
+                cy="100"
+                r="70"
+            >
+                <animateTransform
+                    type="rotate"
+                    attributeName="transform"
+                    calcMode="spline"
+                    dur="2"
+                    values="360;0"
+                    keyTimes="0;1"
+                    keySplines="0 0 1 1"
+                    repeatCount="indefinite"
+                ></animateTransform>
+            </circle>
+            <circle
+                transform-origin="center"
+                fill="none"
+                opacity=".2"
+                stroke="#336699"
+                stroke-width="15"
+                stroke-linecap="round"
+                cx="100"
+                cy="100"
+                r="70"
+            ></circle>
+        </svg>
+        <div class="right">
+            <div>
+                <v-breadcrumbs>
+                    <v-breadcrumbs-item @click="$router.push('/admin')" link>
+                        الإشراف
+                    </v-breadcrumbs-item>
+                    <v-breadcrumbs-divider />
+                    <v-breadcrumbs-item>التقديم على الوظائف</v-breadcrumbs-item>
+                </v-breadcrumbs>
+            </div>
+            <div class="left">
+                <v-menu>
+                    <template v-slot:activator="{ props }">
+                        <v-badge color="error" :content="jobs.counter.counter">
+                            <v-icon
+                                class="icon"
+                                v-bind="props"
+                                @click="jobs.Update_counter"
+                                >mdi-bell-outline</v-icon
+                            >
+                        </v-badge>
+                    </template>
+                    <v-list>
+                        <v-list-item
+                            v-for="notification in notifications"
+                            :key="notification.id"
+                            @click="jobs.delete_notifications(notification.id)"
+                        >
+                            <v-list-item-title
+                                >{{ notification.text }}
+                            </v-list-item-title>
+                        </v-list-item>
+                    </v-list>
+                </v-menu>
+                <font-awesome-icon
+                    @click="dialog = true"
+                    :icon="['fas', 'plus']"
+                />
+            </div>
+        </div>
+
+        <!-- <div class="use">
             <div class="title">
                 <div class="right">
                     <v-breadcrumbs>
@@ -66,7 +156,7 @@
                     />
                 </div>
             </div>
-        </div>
+        </div> -->
         <v-dialog v-model="dialog" width="90%">
             <v-card width="100%" class="popup">
                 <v-card-title class="d-flex justify-space-between align-center">
@@ -95,6 +185,7 @@
                         :counter="150"
                         variant="outlined"
                         required
+                        :maxlength="150"
                     ></v-textarea>
 
                     <v-btn
@@ -138,6 +229,7 @@
                         :counter="150"
                         required
                         variant="outlined"
+                        :maxlength="150"
                     ></v-textarea>
 
                     <v-btn
@@ -153,8 +245,63 @@
                 </form>
             </v-card></v-dialog
         >
-        <div class="box">
-            <v-card v-for="Job in Jobs" :key="Job.id" width="100%" class="job">
+        <v-container>
+            <div class="feat" v-for="Job in Jobs" :key="Job.id">
+                <div>
+                    <div class="header">
+                        <div class="small_container">
+                            <div class="title">{{ Job.title }}</div>
+                            <div>
+                                <font-awesome-icon
+                                    @click="jobs.Job_Information(Job)"
+                                    :icon="['fas', 'edit']"
+                                    @click.="dialog_1 = true"
+                                />
+                                <font-awesome-icon
+                                    @click="jobs.dailog_3 = true"
+                                    :icon="['fas', 'trash']"
+                                />
+                            </div>
+                        </div>
+                        <div class="time">
+                            <font-awesome-icon :icon="['fas', 'clock']" />
+                            <div>{{ Job.time }}</div>
+                        </div>
+                    </div>
+                    <div class="body">
+                        <div class="title">متطلبات العمل</div>
+                        <ul>
+                            <li>{{ Job.description }}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer" @click="jobs.dialog_4 = true">
+                    ({{ Job.applies.length || 0 }}) طلبات التقديم
+                </div>
+
+                <v-dialog v-model="jobs.dialog_4" width="90%">
+                    <v-card width="100%" class="popup">
+                        <v-card-title
+                            class="d-flex justify-space-between align-center"
+                        >
+                            <div
+                                class="text-h4 ps-2"
+                                style="color: var(--main-color)"
+                            >
+                                طلبات التقديم
+                            </div>
+                            <v-btn
+                                style="color: var(--main-color)"
+                                icon="mdi-close"
+                                variant="text"
+                                @click="jobs.dialog_4 = false"
+                            ></v-btn>
+                        </v-card-title> </v-card
+                ></v-dialog>
+            </div>
+        </v-container>
+        <!-- <div class="box">
+            <v-card width="100%" class="job">
                 <v-card-title
                     class="title d-flex align-center justify-center flex-wrap"
                 >
@@ -224,7 +371,7 @@
                     </v-expansion-panels>
                 </v-card-text>
             </v-card>
-        </div>
+        </div> -->
     </div>
     <v-dialog v-model="jobs.dailog_3" width="90%">
         <v-card width="100%" class="popup">
@@ -342,81 +489,196 @@ form {
     margin: auto;
 }
 
-.use {
-    width: 95% !important;
+.right {
+    width: 90% !important;
     margin: auto;
-    .title {
-        margin-top: 40px;
-        background: var(--secound-color);
-        padding: 15px 20px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 3px;
-        border-radius: 5px;
+    font-weight: bold;
+    font-size: 20px;
+    border-bottom: 5px solid var(--secound-color);
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .v-breadcrumbs-item:first-child {
         color: var(--main-color);
-        font-weight: bold;
-        font-size: 20px;
-        & > div {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            &.left {
-                .icon,
-                svg {
-                    cursor: pointer;
-                    transition: 0.3s;
-                    background: #fff;
-                    padding: 10px;
-                    border-radius: 5px;
-                    &:hover {
-                        color: var(--therd-color);
-                    }
-                }
-                .icon {
-                    padding: 20px;
-                }
-            }
+        cursor: pointer;
+        font-size: 24px;
+    }
+    .v-breadcrumbs {
+        padding: 16px 0;
+    }
+}
+.left {
+    svg {
+        cursor: pointer;
+        &:hover {
+            color: var(--therd-color);
         }
     }
 }
-.job {
-    width: 100% !important;
-    margin-bottom: 10px;
-    .title {
-        background: var(--main-color);
-        padding: 10px 15px;
+.v-container {
+    margin: 20px auto !important;
+    flex-wrap: wrap;
+    padding: 0;
+    justify-content: flex-start !important;
+    flex-direction: column;
+    gap: 40px;
+    width: 90%;
+    display: flex;
+}
+
+.feat {
+    width: 100%;
+    box-shadow: 0 0 10px #ddd;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 10px;
+    justify-content: space-between;
+    .header {
         display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 5px;
-        border-radius: 5px;
-        color: white;
-        font-weight: bold;
-        font-size: 20px;
-        & > div {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+        position: relative;
+        svg {
+            cursor: pointer;
+            color: var(--main-color);
+            &:hover {
+                color: var(--therd-color);
+            }
+        }
+
+        &::before {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            height: 4px;
+            width: calc(100% - 20px);
+            background: var(--secound-color);
+            transform: translateX(-50%);
+        }
+        .small_container {
             display: flex;
             align-items: center;
-            gap: 10px;
-            &.left {
-                svg {
-                    color: var(--main-color);
-                    cursor: pointer;
-                    transition: 0.3s;
-                    background: #fff;
-                    padding: 10px;
-                    border-radius: 5px;
-                    &:hover {
-                        color: var(--therd-color);
-                    }
-                }
+            justify-content: space-between;
+
+            & > div {
+                font-size: 20px;
+                font-weight: bold;
+                color: var(--main-color);
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                color: var(--main-color);
+            }
+        }
+        .time {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--therd-color);
+            font-weight: bold;
+            font-size: 14px;
+        }
+    }
+    .body {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--therd-color);
+        }
+        ul {
+            color: var(--therd-color);
+            font-weight: bold;
+            font-size: 16px;
+            li {
+                list-style-type: square;
+                list-style-position: inside;
             }
         }
     }
+    .footer {
+        background: var(--main-color);
+        color: #fff;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+        font-weight: bold;
+        cursor: pointer;
+        &:hover {
+            background: var(--therd-color);
+        }
+    }
 }
-.box {
-    width: 95% !important;
-    margin: 0 auto;
-    padding: 10px 0px;
+
+@media (max-width: 599px) {
+}
+@media (min-width: 600px) and (max-width: 768px) {
+}
+@media (min-width: 769px) {
+    .v-container {
+        flex-direction: row;
+        gap: 15px;
+        align-items: stretch !important;
+    }
+
+    .feat {
+        width: 32%;
+    }
+}
+
+img.pluse {
+    width: 40px;
+    cursor: pointer;
+    &:hover {
+        opacity: 0.7;
+    }
+}
+.visible {
+    opacity: 0;
+    animation: fadeIn 1s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+.popup .title {
+    padding: 20px 20px 0 !important;
+    font-size: 23px;
+    font-weight: bold;
+    color: var(--main-color);
+    position: relative;
+    margin-bottom: 15px;
+    &::before {
+        content: "";
+        position: absolute;
+        bottom: -15px;
+        height: 3px;
+        width: calc(100% - 40px);
+        background: var(--secound-color);
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+.v-btn--icon.v-btn--density-default {
+    color: var(--main-color);
+    width: auto;
+    height: auto;
+    box-shadow: none;
+    &:hover {
+        background: #fff;
+    }
 }
 </style>
