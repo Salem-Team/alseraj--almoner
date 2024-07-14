@@ -117,10 +117,14 @@
                                                 accept="image/*"
                                                 variant="outlined"
                                                 prepend-icon=""
-                                                width="100%"
                                                 prepend-inner-icon="mdi-paperclip"
                                                 @change="photos.onFileChange"
                                                 required
+                                                :rules="[
+                                                    (v) =>
+                                                        !!v ||
+                                                        'الرجاء اختيار صورة',
+                                                ]"
                                             >
                                             </v-file-input>
                                             <span
@@ -134,7 +138,7 @@
                                             >
                                                 تصفح صورك
                                             </span>
-                                            <!-- Show progress bar if New.image is truthy (assuming New is a data property) -->
+                                            <!-- Show progress bar if photos.Photo.image is truthy (assuming photos is a data property) -->
                                             <v-progress-linear
                                                 v-if="photos.Photo.image"
                                                 :value="progress"
@@ -158,6 +162,7 @@
                                             :src="photos.image"
                                             height="200"
                                         ></v-img>
+
                                         <v-select
                                             style="width: 100%"
                                             v-model="photos.type"
@@ -167,7 +172,13 @@
                                             @blur="photos.handletypes"
                                             @click="photos.handletypes"
                                             required
+                                            :rules="[
+                                                (v) =>
+                                                    !!v ||
+                                                    'الرجاء اختيار نوع الصورة',
+                                            ]"
                                         ></v-select>
+
                                         <v-btn
                                             class="mt-2 mb-2"
                                             type="submit"

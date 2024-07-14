@@ -92,6 +92,7 @@
                 <form ref="form" @submit.prevent class="ma-auto mt-4">
                     <v-text-field
                         v-model="New.title"
+                        :rules="[(v) => !!v || 'الرجاء إدخال عنوان الخبر']"
                         type="text"
                         label="عنوان"
                         variant="outlined"
@@ -121,10 +122,73 @@
                         </template>
                     </v-progress-linear>
                     <br />
+                    <div class="d-flex justify-space-between pb-0">
+                        <v-btn-toggle
+                            v-model="formatting"
+                            variant="outlined"
+                            divided
+                            multiple
+                        >
+                            <v-btn>
+                                <v-icon icon="mdi-format-italic"></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <v-icon icon="mdi-format-bold"></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <v-icon icon="mdi-format-underline"></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <div
+                                    class="d-flex align-center flex-column justify-center"
+                                >
+                                    <v-icon
+                                        icon="mdi-format-color-text"
+                                    ></v-icon>
+
+                                    <v-sheet
+                                        color="primary"
+                                        height="4"
+                                        width="26"
+                                        tile
+                                    ></v-sheet>
+                                </div>
+                            </v-btn>
+                        </v-btn-toggle>
+
+                        <v-btn-toggle
+                            v-model="alignment"
+                            variant="outlined"
+                            divided
+                        >
+                            <v-btn>
+                                <v-icon icon="mdi-format-align-center"></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <v-icon icon="mdi-format-align-left"></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <v-icon icon="mdi-format-align-right"></v-icon>
+                            </v-btn>
+                        </v-btn-toggle>
+                    </div>
                     <v-textarea
                         v-model="New.description"
+                        :rules="[
+                            (v) => !!v || 'الرجاء إدخال وصف قصير',
+                            (v) =>
+                                (v && v.length <= 150) ||
+                                'يجب أن يكون الوصف 150 حرفًا كحد أقصى',
+                        ]"
                         label="وصف قصير"
                         :counter="150"
+                        rows="4"
+                        no-resize
                         variant="outlined"
                         :maxlength="150"
                         required
@@ -148,8 +212,8 @@
                         إضافة
                     </v-btn>
                 </form>
-            </v-card></v-dialog
-        >
+            </v-card>
+        </v-dialog>
 
         <v-dialog v-model="dialog_1" width="90%">
             <v-card width="100%" class="popup">
@@ -160,6 +224,7 @@
                 <form ref="form" @submit.prevent class="ma-auto mt-4">
                     <v-text-field
                         v-model="news.Title_Information"
+                        :rules="[(v) => !!v || 'الرجاء إدخال عنوان الخبر']"
                         type="text"
                         label="عنوان"
                         variant="outlined"
@@ -172,11 +237,74 @@
                         width="100%"
                     ></v-img>
                     <br />
+                    <div class="d-flex justify-space-between pb-0">
+                        <v-btn-toggle
+                            v-model="formatting"
+                            variant="outlined"
+                            divided
+                            multiple
+                        >
+                            <v-btn>
+                                <v-icon icon="mdi-format-italic"></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <v-icon icon="mdi-format-bold"></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <v-icon icon="mdi-format-underline"></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <div
+                                    class="d-flex align-center flex-column justify-center"
+                                >
+                                    <v-icon
+                                        icon="mdi-format-color-text"
+                                    ></v-icon>
+
+                                    <v-sheet
+                                        color="primary"
+                                        height="4"
+                                        width="26"
+                                        tile
+                                    ></v-sheet>
+                                </div>
+                            </v-btn>
+                        </v-btn-toggle>
+
+                        <v-btn-toggle
+                            v-model="alignment"
+                            variant="outlined"
+                            divided
+                        >
+                            <v-btn>
+                                <v-icon icon="mdi-format-align-center"></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <v-icon icon="mdi-format-align-left"></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <v-icon icon="mdi-format-align-right"></v-icon>
+                            </v-btn>
+                        </v-btn-toggle>
+                    </div>
                     <v-textarea
                         v-model="news.Description_Information"
+                        :rules="[
+                            (v) => !!v || 'الرجاء إدخال وصف قصير',
+                            (v) =>
+                                (v && v.length <= 150) ||
+                                'يجب أن يكون الوصف 150 حرفًا كحد أقصى',
+                        ]"
                         label="وصف قصير"
                         :counter="150"
                         required
+                        rows="4"
+                        no-resize
                         variant="outlined"
                         :maxlength="150"
                     ></v-textarea>
@@ -199,8 +327,8 @@
                         تعديل
                     </v-btn>
                 </form>
-            </v-card></v-dialog
-        >
+            </v-card>
+        </v-dialog>
         <v-container class="box d-flex align-center justify-space-around">
             <div class="feat" v-for="New in News" :key="New.id">
                 <div class="Top">

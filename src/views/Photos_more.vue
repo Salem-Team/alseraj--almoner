@@ -30,21 +30,6 @@
                 <!-- Display each photo -->
             </v-card>
         </div>
-
-        <!-- Load More Button -->
-        <div v-if="Photos.length < 4" class="btn">
-            <v-btn
-                style="
-                    background-color: var(
-                        --main-color
-                    ) !important; /* Button background color */
-                    color: white !important; /* Button text color */
-                    width: 20%; /* Button width */
-                "
-                @click="$router.push('/Photos_more')"
-                >المزيد</v-btn
-            >
-        </div>
     </div>
 </template>
 
@@ -59,7 +44,7 @@ export default defineComponent({
         const photos = usePhoto_Gallery();
 
         // Initialize or fetch data on component setup
-        photos.Get_splice(); // Retrieve initial set of photos
+        photos.Get_data(); // Retrieve initial set of photos
 
         // Destructure reactive references and methods from Photo Gallery store
         const {

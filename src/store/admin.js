@@ -9,7 +9,9 @@ import {
     updateDoc,
     getDocs,
 } from "@firebase/firestore";
+
 const firebaseConfig = {
+    // Firebase configuration object
     apiKey: "AIzaSyBdk3sqIHjXvB2C-O-lvkRgMFpg8pemkno",
     authDomain: "alseraj--almoner.firebaseapp.com",
     projectId: "alseraj--almoner",
@@ -17,16 +19,19 @@ const firebaseConfig = {
     messagingSenderId: "462211256149",
     appId: "1:462211256149:web:a03ace3c70b306620169dc",
 };
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 export const useadmin = defineStore("admin", {
     state: () => ({
+        // Reactive state
         dialog: false,
         dialog_1: false,
         dialog_3: false,
         user: {
+            // Initial user object
             name: "",
             email: "",
             password: "",
@@ -35,6 +40,7 @@ export const useadmin = defineStore("admin", {
             roles: [],
         },
         role: [
+            // List of roles
             "حذف واضافة مشرفين",
             "مشرف الروضة",
             "مشرف الصف الاول",
@@ -50,17 +56,21 @@ export const useadmin = defineStore("admin", {
             "مشرف الصف الثاني الثانوي",
             "مشرف الصف الثالث الثانوي",
         ],
-        users: [],
-        loading: false,
-        show_Password: false,
-        loading1: false,
+        users: [], // Array to hold user data
+        loading: false, // Loading state
+        show_Password: false, // State for showing password
+        loading1: false, // Another loading state
     }),
     actions: {
+        // Actions section (methods)
+
+        // Toggle password visibility
         toggle_Show_Password() {
             this.show_Password = !this.show_Password;
         },
+
+        // Generate random password
         generate_Random_Password() {
-            // توليد كلمة مرور عشوائية
             const characters =
                 "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             let password = "";
@@ -69,25 +79,15 @@ export const useadmin = defineStore("admin", {
                     Math.floor(Math.random() * characters.length)
                 );
             }
-            // تحديث حالة المكون لعرض الكلمة المرور الجديدةة
-            this.user.password = password;
+            this.user.password = password; // Update user's password
             return this.user.password;
         },
-        /*async copy_Password() {
-            const toast = useToast();
-            try {
-                await navigator.clipboard.writeText(this.user.password);
-                toast.success("تم نسخ الباسورد!");
-            } catch (err) {
-                console.error("Failed to copy text: ", err);
-                toast.error("فشل في نسخ الباسورد", {
-                    className: "custom-toast-error",
-                });
-            }
-        },*/
+
+        // Add new admin user
         async add_admin() {
             try {
                 this.loading = true;
+                // Add document to Firestore collection
                 const docRef = await addDoc(collection(db, "users"), {
                     name: this.user.name,
                     email: this.user.email,
@@ -99,61 +99,56 @@ export const useadmin = defineStore("admin", {
                     id: docRef.id,
                 });
                 console.log("Document written with ID: ", docRef.id);
-                console.log("this.Users", this.users);
-                this.Get_data();
-                this.dialog = false;
-                this.loading = false;
+                this.Get_data(); // Refresh user data
+                this.dialog = false; // Close dialog
+                this.loading = false; // Stop loading indicator
             } catch (error) {
-                // ..
-                console.log(error.Message);
+                console.error("Error adding document: ", error);
             }
         },
+
+        // Fetch admin user data
         async Get_data() {
             try {
                 this.loading1 = true;
-                this.users = [];
+                this.users = []; // Clear users array
+                // Retrieve documents from Firestore collection
                 const querySnapshot = await getDocs(collection(db, "users"));
+                // Loop through documents and filter by userType
                 querySnapshot.forEach((doc) => {
                     if (doc.data().userType == "admin") {
-                        this.users.push(doc.data());
+                        this.users.push(doc.data()); // Add admin users to array
                     }
                 });
                 console.log("this.Users", this.users);
                 this.loading1 = false;
             } catch (error) {
-                console.error("Error adding document: ", error);
+                console.error("Error retrieving data: ", error);
             }
         },
+
+        // Delete user from Firestore and array
         async delete_user(user_Id) {
             try {
-                // Log before attempting to delete
                 console.log("Deleting user from Firestore:", user_Id);
-                // Delete the document from Firestore
-                await deleteDoc(doc(db, "users", user_Id));
-                // Log after successful deletion
-                console.log(
-                    "user deleted from Firestore successfully:",
-                    user_Id
-                );
-                // Find the index of the user in the users array
+                await deleteDoc(doc(db, "users", user_Id)); // Delete document
                 const index = this.users.findIndex(
                     (user) => user.id === user_Id
                 );
-
-                // If the user is found in the users array, remove it
                 if (index !== -1) {
-                    this.users.splice(index, 1);
-                    console.log("user deleted successfully from users array");
+                    this.users.splice(index, 1); // Remove user from array
+                    console.log("User deleted successfully from users array");
                 } else {
-                    console.log("user not found in users array");
+                    console.log("User not found in users array");
                 }
-                this.dialog_3 = false;
-                this.Get_data();
+                this.Get_data(); // Refresh user data
+                this.dialog_3 = false; // Close dialog
             } catch (error) {
-                console.error("Error deleting Job:", error);
+                console.error("Error deleting user:", error);
             }
         },
-        //get the data for each user
+
+        // Store user information
         user_Information(user) {
             this.name_Information = user.name;
             this.Id_Information = user.id;
@@ -161,20 +156,23 @@ export const useadmin = defineStore("admin", {
             this.email_Information = user.email;
             this.roles_Information = user.roles;
         },
+
+        // Update admin user information
         async Update_Admin(userId) {
             try {
                 this.loading = true;
                 const docRef = doc(db, "users", userId);
-                updateDoc(docRef, {
+                // Update document in Firestore
+                await updateDoc(docRef, {
                     name: this.name_Information,
                     email: this.email_Information,
                     roles: this.roles_Information,
                 });
-                this.Get_data();
+                this.Get_data(); // Refresh user data
                 this.loading = false;
-                this.dialog_1 = false;
+                this.dialog_1 = false; // Close dialog
             } catch (error) {
-                console.error("Error updating the Job:", error);
+                console.error("Error updating user:", error);
             }
         },
     },

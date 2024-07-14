@@ -41,19 +41,6 @@
                 </v-card-text>
             </v-card>
         </v-container>
-
-        <!-- Button to Load More News -->
-        <div v-if="News.length < 4" class="btn">
-            <v-btn
-                style="
-                    background-color: var(--main-color) !important;
-                    color: white !important;
-                    width: 20%;
-                "
-                @click="$router.push('/News_more')"
-                >المزيد</v-btn
-            >
-        </div>
     </div>
 </template>
 
@@ -68,7 +55,7 @@ export default defineComponent({
         const news = useNews();
 
         // Initialize or fetch data on component setup
-        news.Get_splice();
+        news.Get_data();
 
         // Destructure reactive references and methods from News store
         const { New, loading, loading1, Get_data, News } = storeToRefs(news);
