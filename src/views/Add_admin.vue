@@ -237,7 +237,7 @@
             v-if="!loading1"
         >
             <div class="feat" v-for="user in users" :key="user.id">
-                <v-dialog v-model="admin.dailog_3" width="90%">
+                <v-dialog v-model="dialog_3" width="90%">
                     <v-card width="100%" class="popup">
                         <div
                             class="d-flex justify-space-between align-center title"
@@ -247,7 +247,7 @@
                             </div>
                             <v-btn
                                 icon="mdi-close"
-                                @click="admin.dailog_3 = false"
+                                @click="dialog_3 = false"
                             ></v-btn>
                         </div>
 
@@ -267,7 +267,7 @@
                                     color="var(--main-color)"
                                     :loading="loading"
                                     :disabled="loading"
-                                    @click="admin.dailog_3 = false"
+                                    @click="dialog_3 = false"
                                     style="
                                         color: #fff;
                                         font-weight: bold;
@@ -313,7 +313,7 @@
                             <font-awesome-icon
                                 :icon="['fas', 'trash']"
                                 @click="admin.user_Information(user)"
-                                @click.="admin.dailog_3 = true"
+                                @click.="dialog_3 = true"
                             />
                         </div>
                     </div>

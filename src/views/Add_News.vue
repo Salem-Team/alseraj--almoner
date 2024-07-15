@@ -262,6 +262,7 @@
                                 >
                                     <v-icon
                                         icon="mdi-format-color-text"
+                                        @click="dialog_7 = true"
                                     ></v-icon>
 
                                     <v-sheet
@@ -280,15 +281,39 @@
                             divided
                         >
                             <v-btn>
-                                <v-icon icon="mdi-format-align-center"></v-icon>
+                                <v-icon
+                                    @click="
+                                        news.alignment(
+                                            news.Description_Information,
+                                            center
+                                        )
+                                    "
+                                    icon="mdi-format-align-center"
+                                ></v-icon>
                             </v-btn>
 
                             <v-btn>
-                                <v-icon icon="mdi-format-align-left"></v-icon>
+                                <v-icon
+                                    icon="mdi-format-align-left"
+                                    @click="
+                                        news.alignment(
+                                            news.Description_Information,
+                                            left
+                                        )
+                                    "
+                                ></v-icon>
                             </v-btn>
 
                             <v-btn>
-                                <v-icon icon="mdi-format-align-right"></v-icon>
+                                <v-icon
+                                    icon="mdi-format-align-right"
+                                    @click="
+                                        news.alignment(
+                                            news.Description_Information,
+                                            right
+                                        )
+                                    "
+                                ></v-icon>
                             </v-btn>
                         </v-btn-toggle>
                     </div>
@@ -339,12 +364,14 @@
                     />
                     <font-awesome-icon
                         :icon="['fas', 'trash']"
-                        @click="news.dailog_3 = true"
+                        @click="news.dialog_3 = true"
                     />
                     <v-img
                         :src="New.image"
                         width="100%"
                         height="300"
+                        @click.="news.New_Information(New)"
+                        @click="dialog_6 = true"
                         cover
                     ></v-img>
                 </div>
@@ -359,13 +386,42 @@
                     </div>
                 </div>
             </div>
+            <!-- Display each photo -->
+            <v-dialog v-model="dialog_6" width="90%">
+                <v-card width="100%" class="popup">
+                    <div
+                        class="d-flex justify-space-between align-center title"
+                    >
+                        <div style="color: var(--main-color)">الصور</div>
+                        <v-btn
+                            icon="mdi-close"
+                            @click="dialog_6 = false"
+                        ></v-btn>
+                    </div>
+                    <v-carousel hide-delimiters>
+                        <v-carousel-item
+                            class="pa-5"
+                            :src="news.Image_Information"
+                            height="400"
+                            cover
+                        ></v-carousel-item>
+                        <v-carousel-item
+                            class="pa-5"
+                            v-for="New in News"
+                            :key="New.id"
+                            :src="New.image"
+                            height="400"
+                            cover
+                        ></v-carousel-item>
+                    </v-carousel> </v-card
+            ></v-dialog>
         </v-container>
     </div>
-    <v-dialog v-model="news.dailog_3" width="90%">
+    <v-dialog v-model="news.dialog_3" width="90%">
         <v-card width="100%" class="popup">
             <div class="d-flex justify-space-between align-center title">
                 <div style="color: var(--main-color)">تأكيد الحذف!</div>
-                <v-btn icon="mdi-close" @click="news.dailog_3 = false"></v-btn>
+                <v-btn icon="mdi-close" @click="news.dialog_3 = false"></v-btn>
             </div>
 
             <p
@@ -384,7 +440,7 @@
                         color="var(--main-color)"
                         :loading="loading"
                         :disabled="loading"
-                        @click="news.dailog_3 = false"
+                        @click="news.dialog_3 = false"
                         style="
                             color: #fff;
                             font-weight: bold;
@@ -428,12 +484,14 @@ export default defineComponent({
         const {
             New,
             News,
+            alignment,
             dialog_3,
             Add_News,
             dialog,
             loading,
             loading1,
             dialog_1,
+            dialog_6,
             delete_New,
             Get_data,
             upload_Image,
@@ -445,8 +503,10 @@ export default defineComponent({
         return {
             New,
             Add_News,
+            alignment,
             loading,
             dialog_3,
+            dialog_6,
             loading1,
             delete_New,
             New_Information,

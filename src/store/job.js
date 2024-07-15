@@ -321,7 +321,9 @@ export const useJobs = defineStore("job", {
             try {
                 this.loading1 = true;
                 this.Jobs = [];
-                const querySnapshot = await getDocs(collection(db, "Jobs"));
+                const querySnapshot = await getDocs(
+                    query(collection(db, "Jobs"), orderBy("time", "asc"))
+                );
                 querySnapshot.forEach((doc) => {
                     this.Jobs.push(doc.data());
                 });

@@ -6,6 +6,8 @@ import {
     updateDoc,
     deleteDoc,
     doc,
+    query,
+    orderBy,
 } from "@firebase/firestore";
 import { initializeApp } from "@firebase/app";
 import { getFirestore } from "firebase/firestore";
@@ -44,6 +46,7 @@ export const useNews = defineStore("News", {
         Image_Information: null,
         Time_Condition: "",
         progress: 0,
+        dialog_6: false,
         News: [],
         New: {
             title: "",
@@ -87,7 +90,9 @@ export const useNews = defineStore("News", {
             // Delete the file
             deleteObject(desertRef);
         },
-
+        alignment(text, align) {
+            text.textAlign = align;
+        },
         // Action method to add news item to Firestore
         async Add_News() {
             try {
@@ -133,7 +138,9 @@ export const useNews = defineStore("News", {
             try {
                 this.News = [];
                 this.loading1 = true;
-                const querySnapshot = await getDocs(collection(db, "News"));
+                const querySnapshot = await getDocs(
+                    query(collection(db, "News"), orderBy("time", "asc"))
+                );
                 querySnapshot.forEach((doc) => {
                     this.News.push(doc.data());
                 });

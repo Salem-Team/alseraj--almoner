@@ -15,7 +15,57 @@
                 <!-- Title in Arabic -->
             </div>
         </div>
-
+        <div class="pr-10 pb-5">
+            <v-btn-toggle
+                v-model="photos.photos_show"
+                variant="outlined"
+                style="
+                    border: 2px solid var(--main-color);
+                    color: var(--main-color);
+                "
+            >
+                <v-btn
+                    value="all"
+                    @click="photos.show_Data"
+                    style="
+                        font-size: 20px !important;
+                        font-weight: 600 !important;
+                    "
+                >
+                    الكل
+                </v-btn>
+                <v-btn
+                    value="trip"
+                    @click="photos.show_Data"
+                    style="
+                        font-size: 20px !important;
+                        font-weight: 600 !important;
+                    "
+                >
+                    رحلات
+                </v-btn>
+                <v-btn
+                    value="news"
+                    @click="photos.show_Data"
+                    style="
+                        font-size: 20px !important;
+                        font-weight: 600 !important;
+                    "
+                >
+                    أخبار
+                </v-btn>
+                <v-btn
+                    value="party"
+                    @click="photos.show_Data"
+                    style="
+                        font-size: 20px !important;
+                        font-weight: 600 !important;
+                    "
+                >
+                    حفلات
+                </v-btn>
+            </v-btn-toggle>
+        </div>
         <!-- Cards Container -->
         <div class="box d-flex align-center justify-space-around">
             <!-- Photo Cards Loop -->
@@ -25,12 +75,41 @@
                 :key="photo.id"
                 width="400px"
                 max-width="25%"
+                @click.="photos.photo_Information(photo)"
+                @click="dialog_6 = true"
             >
                 <v-img :src="photo.image" height="300" cover></v-img>
                 <!-- Display each photo -->
+                <v-dialog v-model="dialog_6" width="90%">
+                    <v-card width="100%" class="popup">
+                        <div
+                            class="d-flex justify-space-between align-center title"
+                        >
+                            <div style="color: var(--main-color)">الصور</div>
+                            <v-btn
+                                icon="mdi-close"
+                                @click="dialog_6 = false"
+                            ></v-btn>
+                        </div>
+                        <v-carousel hide-delimiters>
+                            <v-carousel-item
+                                class="pa-5"
+                                :src="photos.Photo_Information"
+                                height="400"
+                                cover
+                            ></v-carousel-item>
+                            <v-carousel-item
+                                class="pa-5"
+                                v-for="photo in Photos"
+                                :key="photo.id"
+                                :src="photo.image"
+                                height="400"
+                                cover
+                            ></v-carousel-item>
+                        </v-carousel> </v-card
+                ></v-dialog>
             </v-card>
         </div>
-
         <!-- Load More Button -->
         <div v-if="Photos.length < 4" class="btn">
             <v-btn
@@ -67,14 +146,18 @@ export default defineComponent({
             loading,
             Photos,
             Add_Photos,
+            dialog_6,
             Get_data,
             loading1,
             image,
+            photo_Information,
+            Photo_Information,
         } = storeToRefs(photos);
 
         // Return the necessary reactive properties and methods
         return {
             Photo,
+            dialog_6,
             loading,
             Photos,
             Add_Photos,
@@ -82,6 +165,8 @@ export default defineComponent({
             loading1,
             image,
             photos,
+            Photo_Information,
+            photo_Information,
         };
     },
 });
@@ -93,13 +178,19 @@ export default defineComponent({
     flex-wrap: wrap !important; /* Wrap items inside container */
     gap: 10px !important; /* Gap between items */
 }
+.v-btn--variant-outlined {
+    border: none;
+}
+.v-btn-group .v-btn:not(:last-child) {
+    border-inline-end: solid;
+}
 .use {
     width: fit-content !important; /* Fit content width */
     margin: auto; /* Centered horizontally */
     .title {
         text-transform: uppercase; /* Uppercase title text */
         color: var(--main-color); /* Main color for title */
-        margin: 0 auto 80px; /* Margin bottom for title */
+        margin: 0 auto 20px; /* Margin bottom for title */
         border: 2px solid var(--main-color); /* Border for title */
         padding: 10px 20px; /* Padding inside title */
         font-size: 30px; /* Font size of title */
@@ -228,5 +319,32 @@ export default defineComponent({
     margin: auto !important; /* Centered horizontally */
     text-align: center; /* Center text */
     margin-top: 40px !important; /* Margin top */
+}
+.popup .title {
+    padding: 20px 20px 0 !important;
+    font-size: 23px;
+    font-weight: bold;
+    color: var(--main-color);
+    position: relative;
+    margin-bottom: 15px;
+    &::before {
+        content: "";
+        position: absolute;
+        bottom: -15px;
+        height: 3px;
+        width: calc(100% - 40px);
+        background: var(--secound-color);
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+.v-btn--icon.v-btn--density-default {
+    color: var(--main-color);
+    width: auto;
+    height: auto;
+    box-shadow: none;
+    &:hover {
+        background: #fff;
+    }
 }
 </style>
