@@ -6,6 +6,8 @@ import {
     updateDoc,
     deleteDoc,
     doc,
+    orderBy,
+    query,
 } from "@firebase/firestore";
 import { initializeApp } from "@firebase/app";
 import { getFirestore } from "firebase/firestore";
@@ -38,6 +40,8 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
     state: () => ({
         dialog: false,
         dialog_3: false,
+        dialog_6: false,
+        photos_show: "",
         File_Name: "",
         type: "",
         Photos: [],
@@ -46,8 +50,10 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
         party: [],
         news: [],
         image: null,
-        tab: null,
+        tab: "all",
         progress: 0,
+        Photo_Information: "",
+        Id_Information: "",
         Types: ["trip", "party", "news"],
         Photo: {
             image: null,
@@ -132,7 +138,9 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
             try {
                 this.loading1 = true;
                 this.Photos = [];
-                const querySnapshot = await getDocs(collection(db, "Photos"));
+                const querySnapshot = await getDocs(
+                    query(collection(db, "Photos"), orderBy("time", "asc"))
+                );
                 querySnapshot.forEach((doc) => {
                     this.Photos.push(doc.data());
                 });
@@ -154,7 +162,7 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
                 querySnapshot.forEach((doc) => {
                     this.Photos.push(doc.data());
                 });
-                this.Photos = this.Photos.slice(0, 3);
+                this.Photos = this.Photos.slice(0, 6);
                 console.log("this.Photos", this.Photos);
                 this.loading1 = false;
                 // Update type-specific data arrays
@@ -214,7 +222,17 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
                 console.error("Error deleting Photo:", error);
             }
         },
-
+        show_Data() {
+            if (this.photos_show === "trip" || this.tab === "trip") {
+                this.Photos = this.trip;
+            } else if (this.photos_show === "party" || this.tab === "party") {
+                this.Photos = this.party;
+            } else if (this.photos_show === "news" || this.tab === "news") {
+                this.Photos = this.news;
+            } else {
+                this.Get_data();
+            }
+        },
         // Action method to categorize photos into respective arrays based on type
         Type_Data() {
             this.trip = [];
@@ -240,6 +258,12 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
             } else {
                 this.image = null;
             }
+        },
+        // Store Photo information
+        photo_Information(Photo) {
+            this.Photo_Information = Photo.image;
+            this.Id_Information = Photo.id;
+            console.log(Photo.id);
         },
     },
 });

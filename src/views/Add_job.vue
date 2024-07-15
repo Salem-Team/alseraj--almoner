@@ -104,18 +104,11 @@
 
         <v-dialog v-model="dialog" width="90%">
             <v-card width="100%" class="popup">
-                <v-card-title class="d-flex justify-space-between align-center">
-                    <div class="text-h4 ps-2" style="color: var(--main-color)">
-                        إضافة وظيفة
-                    </div>
-                    <v-btn
-                        style="color: var(--main-color)"
-                        icon="mdi-close"
-                        variant="text"
-                        @click="dialog = false"
-                    ></v-btn>
-                </v-card-title>
-                <form ref="form" @submit.prevent class="ma-auto">
+                <div class="d-flex justify-space-between align-center title">
+                    <div style="color: var(--main-color)">إضافة وظيفة</div>
+                    <v-btn icon="mdi-close" @click="dialog = false"></v-btn>
+                </div>
+                <form ref="form" @submit.prevent class="ma-auto mt-4">
                     <v-text-field
                         v-model="Job.title"
                         :rules="[(v) => !!v || 'الرجاء إدخال عنوان الوظيفة']"
@@ -195,34 +188,34 @@
                         no-resize
                         :maxlength="150"
                     ></v-textarea>
-
                     <v-btn
-                        class="d-flex align-center mt-4 mb-10"
                         type="submit"
-                        color="primary"
                         :loading="loading"
                         :disabled="loading"
                         @click="jobs.Add_Jobs"
+                        class="d-flex align-center mb-4"
+                        style="
+                            width: 100%;
+                            padding: 20px;
+                            letter-spacing: normal;
+                            font-weight: bold;
+                            font-size: 19px;
+                            background: var(--main-color);
+                            color: #fff;
+                        "
                     >
                         نشر
                     </v-btn>
                 </form>
-            </v-card>
-        </v-dialog>
+            </v-card></v-dialog
+        >
         <v-dialog v-model="dialog_1" width="90%">
             <v-card width="100%" class="popup">
-                <v-card-title class="d-flex justify-space-between align-center">
-                    <div class="text-h4 ps-2" style="color: var(--main-color)">
-                        تعديل الوظيفة
-                    </div>
-                    <v-btn
-                        style="color: var(--main-color)"
-                        icon="mdi-close"
-                        variant="text"
-                        @click="dialog_1 = false"
-                    ></v-btn>
-                </v-card-title>
-                <form ref="form" @submit.prevent class="ma-auto">
+                <div class="d-flex justify-space-between align-center title">
+                    <div style="color: var(--main-color)">تعديل الوظيفة</div>
+                    <v-btn icon="mdi-close" @click="dialog_1 = false"></v-btn>
+                </div>
+                <form ref="form" @submit.prevent class="ma-auto mt-4">
                     <v-text-field
                         v-model="jobs.Title_Information"
                         :rules="[(v) => !!v || 'الرجاء إدخال عنوان الوظيفة']"
@@ -303,20 +296,27 @@
                         variant="outlined"
                         :maxlength="150"
                     ></v-textarea>
-
                     <v-btn
-                        class="d-flex align-center mt-4 mb-10"
                         type="submit"
-                        color="primary"
                         :loading="loading"
                         :disabled="loading"
                         @click="jobs.Update_Jobs(jobs.Id_Information)"
+                        class="d-flex align-center mb-4"
+                        style="
+                            width: 100%;
+                            padding: 20px;
+                            letter-spacing: normal;
+                            font-weight: bold;
+                            font-size: 19px;
+                            background: var(--main-color);
+                            color: #fff;
+                        "
                     >
                         تعديل
                     </v-btn>
                 </form>
-            </v-card>
-        </v-dialog>
+            </v-card></v-dialog
+        >
         <v-container>
             <div class="feat" v-for="Job in Jobs" :key="Job.id">
                 <div>
@@ -330,7 +330,7 @@
                                     @click.="dialog_1 = true"
                                 />
                                 <font-awesome-icon
-                                    @click="jobs.dailog_3 = true"
+                                    @click="jobs.dialog_3 = true"
                                     :icon="['fas', 'trash']"
                                 />
                             </div>
@@ -360,25 +360,17 @@
                 <!-- Dialog for Job Applications -->
                 <v-dialog v-model="jobs.dialog_4" width="90%">
                     <v-card width="100%" class="popup">
-                        <!-- Dialog Title and Close Button -->
-                        <v-card-title
-                            class="d-flex justify-space-between align-center"
+                        <div
+                            class="d-flex justify-space-between align-center title"
                         >
-                            <div
-                                class="text-h4 ps-2"
-                                style="color: var(--main-color)"
-                            >
+                            <div style="color: var(--main-color)">
                                 طلبات التقديم
                             </div>
                             <v-btn
-                                style="color: var(--main-color)"
-                                icon
+                                icon="mdi-close"
                                 @click="jobs.dialog_4 = false"
-                            >
-                                <v-icon>mdi-close</v-icon>
-                            </v-btn>
-                        </v-card-title>
-
+                            ></v-btn>
+                        </div>
                         <!-- Loop through Job Applications -->
                         <v-container>
                             <div
@@ -392,9 +384,6 @@
                                             {{ Apply.name }}
                                         </div>
                                         <div>
-                                            <font-awesome-icon
-                                                icon="fas fa-edit"
-                                            />
                                             <font-awesome-icon
                                                 icon="fas fa-trash"
                                             />
@@ -410,49 +399,64 @@
                                 <div class="body">
                                     <div class="title">{{ Apply.phone }}</div>
                                     <div class="title">
+                                        وصف قصير:<br />
                                         {{ Apply.description }}
                                     </div>
                                 </div>
                                 <a class="footer" :href="Apply.CV">CV</a>
                             </div>
                         </v-container>
-                    </v-card>
-                </v-dialog>
+                    </v-card></v-dialog
+                >
             </div>
         </v-container>
     </div>
-    <v-dialog v-model="jobs.dailog_3" width="90%">
+    <v-dialog v-model="dialog_3" width="90%">
         <v-card width="100%" class="popup">
-            <v-card-title class="d-flex justify-space-between align-center">
-                <div class="text-h4 ps-2" style="color: var(--main-color)">
-                    حذف
-                </div>
-                <v-btn
-                    style="color: var(--main-color)"
-                    icon="mdi-close"
-                    variant="text"
-                    @click="jobs.dailog_3 = false"
-                ></v-btn>
-            </v-card-title>
+            <div class="d-flex justify-space-between align-center title">
+                <div style="color: var(--main-color)">تأكيد الحذف!</div>
+                <v-btn icon="mdi-close" @click="dialog_3 = false"></v-btn>
+            </div>
+
+            <p
+                style="
+                    padding: 20px;
+                    color: var(--therd-color);
+                    font-weight: bold;
+                "
+            >
+                هل أنت متأكد من حذفك لهذه الوظيفة؟
+            </p>
             <v-card-text>
-                <p>تأكيد الحذف</p>
-                <div class="d-flex align-center mt-4">
+                <div class="d-flex align-center">
                     <v-btn
                         type="submit"
-                        color="primary"
+                        color="var(--main-color)"
                         :loading="loading"
                         :disabled="loading"
-                        @click="jobs.dailog_3 = false"
+                        @click="dialog_3 = false"
+                        style="
+                            color: #fff;
+                            font-weight: bold;
+                            width: 48%;
+                            height: 45px;
+                        "
                     >
                         إلغاء
                     </v-btn>
                     <v-spacer />
                     <v-btn
                         type="submit"
-                        color="error"
+                        color="var(--pink-color)"
                         :loading="loading"
                         :disabled="loading"
                         @click="jobs.delete_Job(Job.id, Job.CV)"
+                        style="
+                            color: #fff;
+                            font-weight: bold;
+                            width: 48%;
+                            height: 45px;
+                        "
                     >
                         تأكيد
                     </v-btn>

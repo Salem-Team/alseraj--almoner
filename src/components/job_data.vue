@@ -150,6 +150,7 @@
                                     <v-btn>
                                         <v-icon
                                             icon="mdi-format-italic"
+                                            value="italic"
                                         ></v-icon>
                                     </v-btn>
 
@@ -160,6 +161,7 @@
                                     <v-btn>
                                         <v-icon
                                             icon="mdi-format-underline"
+                                            value="underline"
                                         ></v-icon>
                                     </v-btn>
 
@@ -169,6 +171,7 @@
                                         >
                                             <v-icon
                                                 icon="mdi-format-color-text"
+                                                value="color"
                                             ></v-icon>
 
                                             <v-sheet
@@ -186,23 +189,22 @@
                                     variant="outlined"
                                     divided
                                 >
-                                    <v-btn>
-                                        <v-icon
-                                            icon="mdi-format-align-center"
-                                        ></v-icon>
-                                    </v-btn>
-
-                                    <v-btn>
-                                        <v-icon
-                                            icon="mdi-format-align-left"
-                                        ></v-icon>
-                                    </v-btn>
-
-                                    <v-btn>
-                                        <v-icon
-                                            icon="mdi-format-align-right"
-                                        ></v-icon>
-                                    </v-btn>
+                                    <v-btn
+                                        icon="mdi-format-align-left"
+                                        value="left"
+                                    ></v-btn>
+                                    <v-btn
+                                        icon="mdi-format-align-center"
+                                        value="center"
+                                    ></v-btn>
+                                    <v-btn
+                                        icon="mdi-format-align-right"
+                                        value="right"
+                                    ></v-btn>
+                                    <v-btn
+                                        icon="mdi-format-align-justify"
+                                        value="justify"
+                                    ></v-btn>
                                 </v-btn-toggle>
                             </div>
 

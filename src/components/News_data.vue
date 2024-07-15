@@ -16,6 +16,8 @@
                 :key="New.id"
                 width="100%"
                 max-width="25%"
+                @click.="news.New_Information(New)"
+                @click="dialog_6 = true"
             >
                 <!-- Image -->
                 <v-img :src="New.image" height="300" cover></v-img>
@@ -40,6 +42,35 @@
                     </p>
                 </v-card-text>
             </v-card>
+            <!-- Display each photo -->
+            <v-dialog v-model="dialog_6" width="90%">
+                <v-card width="100%" class="popup">
+                    <div
+                        class="d-flex justify-space-between align-center title"
+                    >
+                        <div style="color: var(--main-color)">الصور</div>
+                        <v-btn
+                            icon="mdi-close"
+                            @click="dialog_6 = false"
+                        ></v-btn>
+                    </div>
+                    <v-carousel hide-delimiters>
+                        <v-carousel-item
+                            class="pa-5"
+                            :src="news.Image_Information"
+                            height="400"
+                            cover
+                        ></v-carousel-item>
+                        <v-carousel-item
+                            class="pa-5"
+                            v-for="New in News"
+                            :key="New.id"
+                            :src="New.image"
+                            height="400"
+                            cover
+                        ></v-carousel-item>
+                    </v-carousel> </v-card
+            ></v-dialog>
         </v-container>
 
         <!-- Button to Load More News -->
@@ -71,11 +102,21 @@ export default defineComponent({
         news.Get_splice();
 
         // Destructure reactive references and methods from News store
-        const { New, loading, loading1, Get_data, News } = storeToRefs(news);
+        const {
+            New,
+            loading,
+            loading1,
+            Get_data,
+            News,
+            dialog_6,
+            New_Information,
+        } = storeToRefs(news);
 
         // Return the necessary reactive properties and methods
         return {
             New,
+            dialog_6,
+            New_Information,
             loading,
             loading1,
             Get_data,
@@ -220,5 +261,32 @@ export default defineComponent({
     margin: auto !important;
     text-align: center;
     margin-top: 40px !important;
+}
+.popup .title {
+    padding: 20px 20px 0 !important;
+    font-size: 23px;
+    font-weight: bold;
+    color: var(--main-color);
+    position: relative;
+    margin-bottom: 15px;
+    &::before {
+        content: "";
+        position: absolute;
+        bottom: -15px;
+        height: 3px;
+        width: calc(100% - 40px);
+        background: var(--secound-color);
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+.v-btn--icon.v-btn--density-default {
+    color: var(--main-color);
+    width: auto;
+    height: auto;
+    box-shadow: none;
+    &:hover {
+        background: #fff;
+    }
 }
 </style>
