@@ -285,22 +285,45 @@
                                                 <div
                                                     style="
                                                         display: flex;
-                                                        margin-bottom: 20px;
-                                                        align-items: center;
+                                                        justify-content: space-between;
                                                     "
                                                 >
-                                                    <v-avatar
-                                                        color="info"
+                                                    <div
                                                         style="
-                                                            margin-left: 20px;
+                                                            display: flex;
+                                                            margin-bottom: 20px;
+                                                            align-items: center;
                                                         "
                                                     >
-                                                        {{ index + 1 }}
-                                                    </v-avatar>
-                                                    <h2 style="color: #2196f3">
-                                                        معلومات الطالب
-                                                    </h2>
+                                                        <v-avatar
+                                                            color="info"
+                                                            style="
+                                                                margin-left: 20px;
+                                                            "
+                                                        >
+                                                            {{ index + 1 }}
+                                                        </v-avatar>
+                                                        <h2
+                                                            style="
+                                                                color: #2196f3;
+                                                            "
+                                                        >
+                                                            معلومات الطالب
+                                                        </h2>
+                                                    </div>
+                                                    <v-btn
+                                                        color="primary"
+                                                        :disabled="!changesMade"
+                                                        @click="saveChanges"
+                                                        :class="{
+                                                            'grey--text':
+                                                                !changesMade,
+                                                        }"
+                                                    >
+                                                        حفظ التغييرات
+                                                    </v-btn>
                                                 </div>
+
                                                 <div
                                                     style="
                                                         width: 100%;
@@ -320,16 +343,7 @@
                                                         "
                                                         required
                                                         label="اسم الطالب"
-                                                        @input="
-                                                            updateField(
-                                                                'student_information',
-                                                                0,
-                                                                'student_name',
-                                                                selectedStudent
-                                                                    .student_information[0]
-                                                                    .student_name
-                                                            )
-                                                        "
+                                                        @input="markChanges"
                                                     ></v-text-field>
                                                     <v-select
                                                         :items="[
@@ -397,16 +411,7 @@
                                                         required
                                                         :items="['انثي', 'ذكر']"
                                                         variant="outlined"
-                                                        @blur="
-                                                            updateField(
-                                                                'student_information',
-                                                                3,
-                                                                'gender',
-                                                                selectedStudent
-                                                                    .student_information[3]
-                                                                    .gender
-                                                            )
-                                                        "
+                                                        @blur="markChanges"
                                                     ></v-select>
                                                 </div>
                                                 <v-select
@@ -422,16 +427,7 @@
                                                     required
                                                     :items="['عربي', 'لغات']"
                                                     variant="outlined"
-                                                    @blur="
-                                                        updateField(
-                                                            'student_information',
-                                                            4,
-                                                            'section',
-                                                            selectedStudent
-                                                                .student_information[4]
-                                                                .section
-                                                        )
-                                                    "
+                                                    @blur="markChanges"
                                                 ></v-select>
                                                 <v-menu
                                                     ref="menu"
@@ -1078,23 +1074,50 @@
                                                 <div
                                                     style="
                                                         display: flex;
-                                                        margin-bottom: 20px;
+                                                        justify-content: space-between;
                                                         align-items: center;
                                                     "
                                                 >
-                                                    <v-avatar
-                                                        color="info"
+                                                    <div
                                                         style="
-                                                            margin-left: 20px;
+                                                            display: flex;
+                                                            margin-bottom: 20px;
+                                                            align-items: center;
                                                         "
-                                                        >{{
-                                                            index + 4
-                                                        }}</v-avatar
                                                     >
-                                                    <h2 style="color: #2196f3">
-                                                        النتائج الشهريه
-                                                    </h2>
+                                                        <v-avatar
+                                                            color="info"
+                                                            style="
+                                                                margin-left: 20px;
+                                                            "
+                                                            >{{
+                                                                index + 4
+                                                            }}</v-avatar
+                                                        >
+                                                        <h2
+                                                            style="
+                                                                color: #2196f3;
+                                                            "
+                                                        >
+                                                            النتائج الشهرية
+                                                        </h2>
+                                                    </div>
+                                                    <v-btn
+                                                        rounded="xs"
+                                                        size="large"
+                                                        :disabled="
+                                                            !changesMade2
+                                                        "
+                                                        @click="saveChanges2"
+                                                        color="primary"
+                                                        :class="{
+                                                            'grey--text':
+                                                                !changesMade2,
+                                                        }"
+                                                        >حفظ التغييرات</v-btn
+                                                    >
                                                 </div>
+                                                <!-- Select month buttons -->
                                                 <v-card flat>
                                                     <v-row>
                                                         <v-col
@@ -1147,7 +1170,7 @@
                                                         </v-col>
                                                     </v-row>
 
-                                                    <!-- بيانات الطالب -->
+                                                    <!-- Student information -->
                                                     <v-row
                                                         class="d-flex flex-row align-center justify-space-between ma-5"
                                                     >
@@ -1203,7 +1226,7 @@
                                                         </v-col>
                                                     </v-row>
 
-                                                    <!-- جدول النتائج -->
+                                                    <!-- Results table -->
                                                     <div class="table">
                                                         <v-table>
                                                             <thead>
@@ -1302,19 +1325,41 @@
                                             <div
                                                 style="
                                                     display: flex;
-
+                                                    justify-content: space-between;
                                                     align-items: center;
                                                 "
                                             >
-                                                <v-avatar
-                                                    color="info"
-                                                    style="margin-left: 20px"
+                                                <div
+                                                    style="
+                                                        display: flex;
+                                                        align-items: center;
+                                                    "
                                                 >
-                                                    {{ index + 5 }}
-                                                </v-avatar>
-                                                <h2 style="color: #2196f3">
-                                                    المدفوعات
-                                                </h2>
+                                                    <v-avatar
+                                                        color="info"
+                                                        style="
+                                                            margin-left: 20px;
+                                                        "
+                                                        >{{
+                                                            index + 5
+                                                        }}</v-avatar
+                                                    >
+                                                    <h2 style="color: #2196f3">
+                                                        المدفوعات
+                                                    </h2>
+                                                </div>
+                                                <v-btn
+                                                    rounded="xs"
+                                                    size="large"
+                                                    :disabled="!changesMade3"
+                                                    @click="saveChanges3"
+                                                    color="primary"
+                                                    :class="{
+                                                        'grey--text':
+                                                            !changesMade,
+                                                    }"
+                                                    >حفظ التعديلات</v-btn
+                                                >
                                             </div>
                                             <v-card
                                                 flat
@@ -1337,9 +1382,8 @@
                                                                     style="
                                                                         font-size: 20px;
                                                                     "
+                                                                    >المستحق</v-card-title
                                                                 >
-                                                                    المستحق
-                                                                </v-card-title>
                                                                 <v-card-subtitle
                                                                     class="custom-font centered-subtitle"
                                                                     style="
@@ -1358,10 +1402,7 @@
                                                                         class="payments_input"
                                                                         required
                                                                         @input="
-                                                                            updateFirebase(
-                                                                                selectedStudent.id,
-                                                                                selectedStudent.payments
-                                                                            )
+                                                                            handleInput
                                                                         "
                                                                     ></v-text-field>
                                                                 </v-card-subtitle>
@@ -1381,9 +1422,8 @@
                                                                     style="
                                                                         font-size: 20px;
                                                                     "
+                                                                    >المدفوع</v-card-title
                                                                 >
-                                                                    المدفوع
-                                                                </v-card-title>
                                                                 <v-card-subtitle
                                                                     class="custom-font centered-subtitle"
                                                                     style="
@@ -1402,10 +1442,7 @@
                                                                         class="payments_input"
                                                                         required
                                                                         @input="
-                                                                            updateFirebase(
-                                                                                selectedStudent.id,
-                                                                                selectedStudent.payments
-                                                                            )
+                                                                            handleInput
                                                                         "
                                                                     ></v-text-field>
                                                                 </v-card-subtitle>
@@ -1425,9 +1462,9 @@
                                                                     style="
                                                                         font-size: 20px;
                                                                     "
+                                                                    >نظام
+                                                                    التقسيط</v-card-title
                                                                 >
-                                                                    نظام التقسيط
-                                                                </v-card-title>
                                                                 <v-card-subtitle
                                                                     class="custom-font centered-subtitle"
                                                                     style="
@@ -1453,10 +1490,7 @@
                                                                         class="payments_input"
                                                                         required
                                                                         @blur="
-                                                                            updateFirebase(
-                                                                                selectedStudent.id,
-                                                                                selectedStudent.payments
-                                                                            )
+                                                                            handleInput
                                                                         "
                                                                     ></v-select>
                                                                 </v-card-subtitle>
@@ -1778,63 +1812,7 @@
                                                     </v-card>
                                                 </v-col>
                                             </v-row>
-                                            <!-- <v-dialog
-                                                v-model="editPhotosDialog"
-                                                max-width="500px"
-                                            >
-                                                <v-card>
-                                                    <v-card-title>
-                                                        <span class="headline"
-                                                            >تعديل الصورة</span
-                                                        >
-                                                    </v-card-title>
-                                                    <v-card-text>
-                                                        <v-form ref="editForm">
-                                                            <v-file-input
-                                                                style="
-                                                                    width: 100%;
-                                                                "
-                                                                v-model="
-                                                                    editedPhotos.file
-                                                                "
-                                                                label="صورة"
-                                                                accept="image/*"
-                                                                variant="outlined"
-                                                                prepend-icon=""
-                                                                width="100%"
-                                                                prepend-inner-icon="mdi-paperclip"
-                                                                required
-                                                            ></v-file-input>
-                                                            <v-textarea
-                                                                v-model="
-                                                                    editedPhotos.grade
-                                                                "
-                                                                label="وصف الصورة"
-                                                                required
-                                                            ></v-textarea>
-                                                        </v-form>
-                                                    </v-card-text>
-                                                    <v-card-actions>
-                                                        <v-spacer></v-spacer>
-                                                        <v-btn
-                                                            color="blue darken-1"
-                                                            text
-                                                            @click="
-                                                                closePhotoDialogs
-                                                            "
-                                                            >إلغاء</v-btn
-                                                        >
-                                                        <v-btn
-                                                            color="blue darken-1"
-                                                            text
-                                                            @click="
-                                                                savePhotosEdit
-                                                            "
-                                                            >حفظ</v-btn
-                                                        >
-                                                    </v-card-actions>
-                                                </v-card>
-                                            </v-dialog> -->
+
                                             <v-dialog
                                                 v-model="dialogAddPhoto"
                                                 max-width="500px"
@@ -2022,25 +2000,11 @@
                                         "
                                     >
                                         <v-select
-                                            :items="classes"
-                                            v-model="
-                                                form.student_information[2]
-                                                    .educational_level
-                                            "
-                                            variant="outlined"
-                                            style="width: 50%"
-                                            :error-messages="
-                                                errors.educational_level
-                                            "
-                                            label="المستوى التعليمي"
-                                            required
-                                        ></v-select>
-                                        <v-select
                                             v-model="
                                                 form.student_information[3]
                                                     .gender
                                             "
-                                            style="width: 50%"
+                                            style="width: 100%"
                                             :error-messages="errors.gender"
                                             label="الجنس"
                                             required
@@ -2505,8 +2469,11 @@ export default {
                 paid_up: 120,
                 installment_system: "شهريا",
             },
-            selectedStudent: null, // To track the selected student
+            selectedStudent: "", // To track the selected student
             dialogStudentDetails: false,
+            changesMade: false,
+            changesMade2: false,
+            changesMade3: false,
         };
     },
     async created() {
@@ -2514,21 +2481,74 @@ export default {
     },
     methods: {
         async updateField(section, index, field, value) {
+            if (!this.selectedStudent) {
+                console.error("Error: selectedStudent is null");
+                return;
+            }
+
+            // Update the selected student data
             this.selectedStudent[section][index][field] = value;
+            this.changesMade = true;
+            // Call updateFirebaseField to update Firestore
             await this.updateFirebaseField();
         },
+
         async updateFirebaseField() {
             try {
                 const studentDoc = doc(db, "students", this.selectedStudent.id);
+
+                // Update only the necessary fields in Firestore
                 await updateDoc(studentDoc, {
                     student_information:
                         this.selectedStudent.student_information,
                 });
+
                 console.log("Document updated successfully");
             } catch (error) {
                 console.error("Error updating document:", error);
             }
         },
+        markChanges() {
+            // Mark changes only, without updating Firebase
+            if (!this.changesMade2) {
+                this.changesMade2 = true;
+                // Optionally, you can also store the original data for comparison
+                this.originalStudentData = JSON.parse(
+                    JSON.stringify(this.selectedStudent)
+                );
+            }
+        },
+        async saveChanges() {
+            try {
+                const studentDoc = doc(db, "students", this.selectedStudent.id);
+                // Update only if changes were marked
+                if (this.changesMade) {
+                    await updateDoc(studentDoc, {
+                        student_information:
+                            this.selectedStudent.student_information,
+                    });
+                    console.log("Document updated successfully");
+                }
+                // Reset changesMade and original data
+                this.changesMade = false;
+                this.originalStudentData = {};
+            } catch (error) {
+                console.error("Error updating document:", error);
+            }
+        },
+        selectMonth(month) {
+            this.selectedMonth = month;
+            // Fetch the data for the selected month
+        },
+        saveChanges2() {
+            // Implement your save logic here
+            // For example, update data in Firebase
+            // After saving, reset changesMade to false
+            this.changesMade2 = false;
+            // Optionally, update Firebase here if needed
+            this.updateMonthlyDegrees(this.selectedMonthlyDegrees); // Example to update Firebase
+        },
+
         getAlertType(notificationType) {
             if (notificationType === "سي") {
                 return "error";
@@ -2611,37 +2631,7 @@ export default {
                 console.error("Error fetching students:", error);
             }
         },
-        async updateMonthlyDegrees(degrees) {
-            if (!this.selectedStudent) {
-                console.error("Error: selectedStudent is null");
-                return;
-            }
 
-            try {
-                const studentRef = doc(db, "students", this.selectedStudent.id);
-
-                const updatedResults = [...this.selectedStudent.Results];
-
-                const updatedMonthly = updatedResults[1].Monthly.map(
-                    (month) => {
-                        if (month.Certificate_title === this.selectedMonth) {
-                            return { ...month, Degrees: degrees };
-                        }
-                        return month;
-                    }
-                );
-
-                updatedResults[1].Monthly = updatedMonthly;
-
-                await updateDoc(studentRef, {
-                    Results: updatedResults,
-                });
-
-                console.log("Monthly degrees updated successfully");
-            } catch (error) {
-                console.error("Error updating monthly degrees:", error);
-            }
-        },
         async submit() {
             if (this.validateForm()) {
                 console.log(this.errors);
@@ -2824,7 +2814,7 @@ export default {
                 });
             }
         },
-        async openStudentDetails(student) {
+        openStudentDetails(student) {
             this.selectedStudent = student;
             this.dialogStudentDetails = true;
         },
@@ -2857,22 +2847,38 @@ export default {
                         Subject_Name: this.newSubject.Subject_Name,
                         Major_degree: this.newSubject.Major_degree,
                         Student_degree: this.newSubject.Student_degree,
-                        Date: this.newSubject.Date, // إضافة التاريخ هنا
+                        Date: this.newSubject.Date,
                     });
+                    // Update selectedStudent with the updated data
+                    // عند تحديث selectedStudent باستخدام بيانات محدثة
+                    this.selectedStudent = Object.assign(
+                        {},
+                        this.selectedStudent,
+                        studentData
+                    );
+
+                    // Update the student document with the new weekly result
                     await updateDoc(studentRef, studentData);
+
+                    // Close the dialog after adding the subject
                     this.dialogAddSubject = false;
+
+                    // Reset newSubject for future additions
                     this.newSubject = {
                         Subject_Name: "",
                         Major_degree: null,
                         Student_degree: null,
-                        Date: null, // إعادة تعيين التاريخ
+                        Date: null,
                     };
+
+                    // Fetch students again to update the UI
                     await this.fetchStudents();
                 }
             } catch (error) {
                 console.error("Error adding subject:", error);
             }
         },
+
         editSubject(studentId, index) {
             this.editedStudentId = studentId;
             this.editedIndex = index;
@@ -2896,6 +2902,14 @@ export default {
                         studentData.Results[0].weekly[this.editedIndex],
                         this.editedSubject
                     );
+                    // عند تحديث selectedStudent باستخدام بيانات محدثة
+                    this.selectedStudent = Object.assign(
+                        {},
+                        this.selectedStudent,
+                        studentData
+                    );
+                    console.log(this.selectedStudent);
+
                     await updateDoc(studentRef, studentData);
                     this.closeDialog();
                     await this.fetchStudents();
@@ -2918,14 +2932,47 @@ export default {
             try {
                 const studentRef = doc(db, "students", studentId);
                 const studentDoc = await getDoc(studentRef);
-                if (studentDoc.exists()) {
-                    const studentData = studentDoc.data();
-                    studentData.Results[0].weekly.splice(subjectIndex, 1);
-                    await updateDoc(studentRef, studentData);
-                    await this.fetchStudents();
-                    // await this.openStudentDetails();
-                    // this.dilog_ss = true;
+
+                if (!studentDoc.exists()) {
+                    console.error("Student does not exist with id:", studentId);
+                    return;
                 }
+
+                const studentData = studentDoc.data();
+
+                if (!studentData.Results || !studentData.Results[0].weekly) {
+                    console.error(
+                        "Invalid student data structure:",
+                        studentData
+                    );
+                    return;
+                }
+
+                if (
+                    subjectIndex < 0 ||
+                    subjectIndex >= studentData.Results[0].weekly.length
+                ) {
+                    console.error("Invalid subject index:", subjectIndex);
+                    return;
+                }
+                // عند تحديث selectedStudent باستخدام بيانات محدثة
+                this.selectedStudent = Object.assign(
+                    {},
+                    this.selectedStudent,
+                    studentData
+                );
+
+                studentData.Results[0].weekly.splice(subjectIndex, 1);
+
+                await updateDoc(studentRef, studentData);
+                await this.fetchStudents();
+
+                console.log(
+                    "Deleted subject at index:",
+                    subjectIndex,
+                    "for student with id:",
+                    studentId
+                );
             } catch (error) {
                 console.error("Error deleting subject:", error);
             }
@@ -2953,9 +3000,6 @@ export default {
             this.menuz = false;
         },
         // ool
-        selectMonth(month) {
-            this.selectedMonth = month;
-        },
         // ias
         async saveNotificationsEdit() {
             try {
@@ -2966,6 +3010,12 @@ export default {
                     Object.assign(
                         studentData.Notifications[this.editedIndex],
                         this.editedNotifications
+                    );
+                    // عند تحديث selectedStudent باستخدام بيانات محدثة
+                    this.selectedStudent = Object.assign(
+                        {},
+                        this.selectedStudent,
+                        studentData
                     );
                     await updateDoc(studentRef, studentData);
                     this.closeNotificationsDialogs();
@@ -2997,6 +3047,12 @@ export default {
                         theDescription: this.AddNotice.theDescription,
                         NotificationType: this.AddNotice.NotificationType,
                     });
+                    // عند تحديث selectedStudent باستخدام بيانات محدثة
+                    this.selectedStudent = Object.assign(
+                        {},
+                        this.selectedStudent,
+                        studentData
+                    );
                     await updateDoc(studentRef, studentData);
                     this.dialogAddNotice = false;
                     this.AddNotice = {
@@ -3017,6 +3073,12 @@ export default {
                 if (studentDoc.exists()) {
                     const studentData = studentDoc.data();
                     studentData.Notifications.splice(NotificatIndex, 1);
+                    // عند تحديث selectedStudent باستخدام بيانات محدثة
+                    this.selectedStudent = Object.assign(
+                        {},
+                        this.selectedStudent,
+                        studentData
+                    );
                     await updateDoc(studentRef, studentData);
                     await this.fetchStudents();
                     // this.dilog_ss = true;
@@ -3075,7 +3137,12 @@ export default {
                         linkphoto: downloadURL,
                         grade: this.editedPhotos.grade || "",
                     };
-
+                    // عند تحديث selectedStudent باستخدام بيانات محدثة
+                    this.selectedStudent = Object.assign(
+                        {},
+                        this.selectedStudent,
+                        studentData
+                    );
                     // Log the data before updating
                     console.log("Updating student data:", studentData);
 
@@ -3108,10 +3175,17 @@ export default {
                     const studentDoc = await getDoc(studentRef);
                     if (studentDoc.exists()) {
                         const studentData = studentDoc.data();
+
                         studentData.photos.push({
                             DatePhoto: this.AddPhoto.Date,
                             linkphoto: downloadURL,
                         });
+                        // عند تحديث selectedStudent باستخدام بيانات محدثة
+                        this.selectedStudent = Object.assign(
+                            {},
+                            this.selectedStudent,
+                            studentData
+                        );
                         await updateDoc(studentRef, studentData);
                         this.dialogAddPhoto = false;
                         this.AddPhoto = {
@@ -3132,6 +3206,12 @@ export default {
                 if (studentDoc.exists()) {
                     const studentData = studentDoc.data();
                     studentData.photos.splice(PhotosIndex, 1);
+                    // عند تحديث selectedStudent باستخدام بيانات محدثة
+                    this.selectedStudent = Object.assign(
+                        {},
+                        this.selectedStudent,
+                        studentData
+                    );
                     await updateDoc(studentRef, studentData);
                     await this.fetchStudents();
                     // this.dilog_ss = true;
@@ -3140,15 +3220,15 @@ export default {
                 console.error("Error deleting subject:", error);
             }
         },
-        async updateFirebase(studentId, payments) {
-            try {
-                const studentDoc = doc(db, "students", studentId);
-                await updateDoc(studentDoc, { payments });
-                console.log("Document updated successfully");
-            } catch (error) {
-                console.error("Error updating document:", error);
-            }
-        },
+        // async updateFirebase(studentId, payments) {
+        //     try {
+        //         const studentDoc = doc(db, "students", studentId);
+        //         await updateDoc(studentDoc, { payments });
+        //         console.log("Document updated successfully");
+        //     } catch (error) {
+        //         console.error("Error updating document:", error);
+        //     }
+        // },
 
         async updateGuardian() {
             try {
@@ -3223,6 +3303,62 @@ export default {
                 );
             });
         },
+
+        async updateMonthlyDegrees(degrees) {
+            if (!this.selectedStudent) {
+                console.error("Error: selectedStudent is null");
+                return;
+            }
+
+            try {
+                const studentRef = doc(db, "students", this.selectedStudent.id);
+
+                // Clone the current results to avoid mutating the original data
+                const updatedResults = [...this.selectedStudent.Results];
+
+                // Map through Monthly results to find and update the selected month
+                const updatedMonthly = updatedResults[1].Monthly.map(
+                    (month) => {
+                        if (month.Certificate_title === this.selectedMonth) {
+                            return { ...month, Degrees: degrees };
+                        }
+                        return month;
+                    }
+                );
+
+                // Update the Monthly field in updatedResults
+                updatedResults[1].Monthly = updatedMonthly;
+
+                // Update Firestore document with updatedResults
+                await updateDoc(studentRef, {
+                    Results: updatedResults,
+                });
+
+                console.log("Monthly degrees updated successfully");
+            } catch (error) {
+                console.error("Error updating monthly degrees:", error);
+            }
+        },
+        handleInput() {
+            // Track changes
+            this.changesMade3 = true;
+        },
+        async updateFirebase(studentId, payments) {
+            try {
+                const studentDoc = doc(db, "students", studentId);
+                await updateDoc(studentDoc, { payments });
+                console.log("Document updated successfully");
+            } catch (error) {
+                console.error("Error updating document:", error);
+            }
+        },
+        saveChanges3() {
+            // استدعاء updateFirebase فقط عند النقر على زر الحفظ
+            this.updateFirebase(
+                this.selectedStudent.id,
+                this.selectedStudent.payments
+            );
+        },
     },
     watch: {
         "form.student_information[5].birthday"(newVal) {
@@ -3238,9 +3374,9 @@ export default {
             deep: true, // To detect changes in nested array elements
         },
         selectedMonthlyDegrees: {
-            handler(newVal) {
+            handler() {
                 // Save changes to Firebase
-                this.updateMonthlyDegrees(newVal);
+                this.changesMade2 = true;
             },
             deep: true,
         },
