@@ -378,16 +378,7 @@
                                                         "
                                                         label="الفصل"
                                                         required
-                                                        @blur="
-                                                            updateField(
-                                                                'student_information',
-                                                                1,
-                                                                'class',
-                                                                selectedStudent
-                                                                    .student_information[1]
-                                                                    .class
-                                                            )
-                                                        "
+                                                        @blur="markChanges"
                                                     ></v-select>
                                                 </div>
                                                 <div
@@ -2510,8 +2501,8 @@ export default {
         },
         markChanges() {
             // Mark changes only, without updating Firebase
-            if (!this.changesMade2) {
-                this.changesMade2 = true;
+            if (!this.changesMade) {
+                this.changesMade = true;
                 // Optionally, you can also store the original data for comparison
                 this.originalStudentData = JSON.parse(
                     JSON.stringify(this.selectedStudent)
@@ -2541,12 +2532,8 @@ export default {
             // Fetch the data for the selected month
         },
         saveChanges2() {
-            // Implement your save logic here
-            // For example, update data in Firebase
-            // After saving, reset changesMade to false
-            this.changesMade2 = false;
-            // Optionally, update Firebase here if needed
             this.updateMonthlyDegrees(this.selectedMonthlyDegrees); // Example to update Firebase
+            this.changesMade2 = false;
         },
 
         getAlertType(notificationType) {
@@ -3358,6 +3345,7 @@ export default {
                 this.selectedStudent.id,
                 this.selectedStudent.payments
             );
+            this.changesMade3 = false;
         },
     },
     watch: {
