@@ -30,6 +30,7 @@ const routes = [
         name: "UserLogin",
         component: UserLogin,
     },
+
     {
         path: "/Parent_Dashboard",
         name: "Parent_Dashboard",
