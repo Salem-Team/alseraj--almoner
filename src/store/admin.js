@@ -9,7 +9,7 @@ import {
     updateDoc,
     getDocs,
 } from "@firebase/firestore";
-
+import { useSecureDataStore } from "./secureData";
 const firebaseConfig = {
     // Firebase configuration object
     apiKey: "AIzaSyBdk3sqIHjXvB2C-O-lvkRgMFpg8pemkno",
@@ -86,6 +86,13 @@ export const useadmin = defineStore("admin", {
         // Add new admin user
         async add_admin() {
             try {
+                const secrureDataStore = useSecureDataStore();
+                const x = secrureDataStore.encryptData(
+                    this.user.name,
+                    "12345t"
+                );
+                console.log("users=>", this.user);
+                console.log("x=>", x);
                 this.loading = true;
                 // Add document to Firestore collection
                 const docRef = await addDoc(collection(db, "users"), {
