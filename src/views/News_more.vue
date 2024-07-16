@@ -72,19 +72,6 @@
                     </v-carousel> </v-card
             ></v-dialog>
         </v-container>
-
-        <!-- Button to Load More News -->
-        <div v-if="News.length < 4" class="btn">
-            <v-btn
-                style="
-                    background-color: var(--main-color) !important;
-                    color: white !important;
-                    width: 20%;
-                "
-                @click="$router.push('/News_more')"
-                >المزيد</v-btn
-            >
-        </div>
     </div>
 </template>
 
@@ -99,7 +86,7 @@ export default defineComponent({
         const news = useNews();
 
         // Initialize or fetch data on component setup
-        news.Get_splice();
+        news.Get_data();
 
         // Destructure reactive references and methods from News store
         const {
@@ -108,16 +95,16 @@ export default defineComponent({
             loading1,
             Get_data,
             News,
-            dialog_6,
             New_Information,
+            dialog_6,
         } = storeToRefs(news);
 
         // Return the necessary reactive properties and methods
         return {
             New,
             dialog_6,
-            New_Information,
             loading,
+            New_Information,
             loading1,
             Get_data,
             news,
@@ -256,12 +243,6 @@ export default defineComponent({
     }
 }
 
-/* Button Styling */
-.btn {
-    margin: auto !important;
-    text-align: center;
-    margin-top: 40px !important;
-}
 .popup .title {
     padding: 20px 20px 0 !important;
     font-size: 23px;

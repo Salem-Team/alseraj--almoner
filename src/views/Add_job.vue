@@ -102,99 +102,107 @@
             </div>
         </div>
 
-        <!-- <div class="use">
-            <div class="title">
-                <div class="right">
-                    <v-breadcrumbs>
-                        <v-breadcrumbs-item
-                            @click="$router.push('/admin')"
-                            link
-                        >
-                            الإشراف
-                        </v-breadcrumbs-item>
-                        <v-breadcrumbs-divider />
-                        <v-breadcrumbs-item
-                            @click="$router.push('/Add_Job')"
-                            link
-                        >
-                            الوظائف
-                        </v-breadcrumbs-item>
-                    </v-breadcrumbs>
-                </div>
-                <div class="left">
-                    <v-menu>
-                        <template v-slot:activator="{ props }">
-                            <v-badge
-                                color="error"
-                                :content="jobs.counter.counter"
-                            >
-                                <v-icon
-                                    class="icon"
-                                    v-bind="props"
-                                    @click="jobs.Update_counter"
-                                    >mdi-bell-outline</v-icon
-                                >
-                            </v-badge>
-                        </template>
-                        <v-list>
-                            <v-list-item
-                                v-for="notification in notifications"
-                                :key="notification.id"
-                                @click="
-                                    jobs.delete_notifications(notification.id)
-                                "
-                            >
-                                <v-list-item-title
-                                    >{{ notification.text }}
-                                </v-list-item-title>
-                            </v-list-item>
-                        </v-list>
-                    </v-menu>
-                    <font-awesome-icon
-                        @click="dialog = true"
-                        :icon="['fas', 'plus']"
-                    />
-                </div>
-            </div>
-        </div> -->
         <v-dialog v-model="dialog" width="90%">
             <v-card width="100%" class="popup">
-                <v-card-title class="d-flex justify-space-between align-center">
-                    <div class="text-h4 ps-2" style="color: var(--main-color)">
-                        إضافة وظيفة
-                    </div>
-                    <v-btn
-                        style="color: var(--main-color)"
-                        icon="mdi-close"
-                        variant="text"
-                        @click="dialog = false"
-                    ></v-btn>
-                </v-card-title>
-                <form ref="form" @submit.prevent class="ma-auto">
+                <div class="d-flex justify-space-between align-center title">
+                    <div style="color: var(--main-color)">إضافة وظيفة</div>
+                    <v-btn icon="mdi-close" @click="dialog = false"></v-btn>
+                </div>
+                <form ref="form" @submit.prevent class="ma-auto mt-4">
                     <v-text-field
                         v-model="Job.title"
+                        :rules="[(v) => !!v || 'الرجاء إدخال عنوان الوظيفة']"
                         type="text"
                         label="عنوان"
                         variant="outlined"
                         required
                     ></v-text-field>
+                    <div class="d-flex justify-space-between pb-0">
+                        <v-btn-toggle
+                            v-model="formatting"
+                            variant="outlined"
+                            divided
+                            multiple
+                        >
+                            <v-btn>
+                                <v-icon icon="mdi-format-italic"></v-icon>
+                            </v-btn>
 
+                            <v-btn>
+                                <v-icon icon="mdi-format-bold"></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <v-icon icon="mdi-format-underline"></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <div
+                                    class="d-flex align-center flex-column justify-center"
+                                >
+                                    <v-icon
+                                        icon="mdi-format-color-text"
+                                    ></v-icon>
+
+                                    <v-sheet
+                                        color="primary"
+                                        height="4"
+                                        width="26"
+                                        tile
+                                    ></v-sheet>
+                                </div>
+                            </v-btn>
+                        </v-btn-toggle>
+
+                        <v-btn-toggle
+                            v-model="alignment"
+                            variant="outlined"
+                            divided
+                        >
+                            <v-btn>
+                                <v-icon icon="mdi-format-align-center"></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <v-icon icon="mdi-format-align-left"></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <v-icon icon="mdi-format-align-right"></v-icon>
+                            </v-btn>
+                        </v-btn-toggle>
+                    </div>
                     <v-textarea
                         v-model="Job.description"
+                        :rules="[
+                            (v) => !!v || 'الرجاء إدخال وصف قصير',
+                            (v) =>
+                                (v && v.length <= 150) ||
+                                'يجب أن يكون الوصف 150 حرفًا كحد أقصى',
+                        ]"
                         label="وصف قصير"
                         :counter="150"
                         variant="outlined"
                         required
+                        rows="4"
+                        no-resize
                         :maxlength="150"
                     ></v-textarea>
-
                     <v-btn
-                        class="d-flex align-center mt-4 mb-10"
                         type="submit"
-                        color="primary"
                         :loading="loading"
                         :disabled="loading"
                         @click="jobs.Add_Jobs"
+                        class="d-flex align-center mb-4"
+                        style="
+                            width: 100%;
+                            padding: 20px;
+                            letter-spacing: normal;
+                            font-weight: bold;
+                            font-size: 19px;
+                            background: var(--main-color);
+                            color: #fff;
+                        "
                     >
                         نشر
                     </v-btn>
@@ -203,42 +211,106 @@
         >
         <v-dialog v-model="dialog_1" width="90%">
             <v-card width="100%" class="popup">
-                <v-card-title class="d-flex justify-space-between align-center">
-                    <div class="text-h4 ps-2" style="color: var(--main-color)">
-                        تعديل الوظيفة
-                    </div>
-                    <v-btn
-                        style="color: var(--main-color)"
-                        icon="mdi-close"
-                        variant="text"
-                        @click="dialog_1 = false"
-                    ></v-btn>
-                </v-card-title>
-                <form ref="form" @submit.prevent class="ma-auto">
+                <div class="d-flex justify-space-between align-center title">
+                    <div style="color: var(--main-color)">تعديل الوظيفة</div>
+                    <v-btn icon="mdi-close" @click="dialog_1 = false"></v-btn>
+                </div>
+                <form ref="form" @submit.prevent class="ma-auto mt-4">
                     <v-text-field
                         v-model="jobs.Title_Information"
+                        :rules="[(v) => !!v || 'الرجاء إدخال عنوان الوظيفة']"
                         type="text"
                         label="عنوان"
                         variant="outlined"
                         required
                     ></v-text-field>
                     <br />
+                    <div class="d-flex justify-space-between pb-0">
+                        <v-btn-toggle
+                            v-model="formatting"
+                            variant="outlined"
+                            divided
+                            multiple
+                        >
+                            <v-btn>
+                                <v-icon icon="mdi-format-italic"></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <v-icon icon="mdi-format-bold"></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <v-icon icon="mdi-format-underline"></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <div
+                                    class="d-flex align-center flex-column justify-center"
+                                >
+                                    <v-icon
+                                        icon="mdi-format-color-text"
+                                    ></v-icon>
+
+                                    <v-sheet
+                                        color="primary"
+                                        height="4"
+                                        width="26"
+                                        tile
+                                    ></v-sheet>
+                                </div>
+                            </v-btn>
+                        </v-btn-toggle>
+
+                        <v-btn-toggle
+                            v-model="alignment"
+                            variant="outlined"
+                            divided
+                        >
+                            <v-btn>
+                                <v-icon icon="mdi-format-align-center"></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <v-icon icon="mdi-format-align-left"></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <v-icon icon="mdi-format-align-right"></v-icon>
+                            </v-btn>
+                        </v-btn-toggle>
+                    </div>
                     <v-textarea
                         v-model="jobs.Description_Information"
+                        :rules="[
+                            (v) => !!v || 'الرجاء إدخال وصف قصير',
+                            (v) =>
+                                (v && v.length <= 150) ||
+                                'يجب أن يكون الوصف 150 حرفًا كحد أقصى',
+                        ]"
                         label="وصف قصير"
                         :counter="150"
                         required
+                        rows="4"
+                        no-resize
                         variant="outlined"
                         :maxlength="150"
                     ></v-textarea>
-
                     <v-btn
-                        class="d-flex align-center mt-4 mb-10"
                         type="submit"
-                        color="primary"
                         :loading="loading"
                         :disabled="loading"
                         @click="jobs.Update_Jobs(jobs.Id_Information)"
+                        class="d-flex align-center mb-4"
+                        style="
+                            width: 100%;
+                            padding: 20px;
+                            letter-spacing: normal;
+                            font-weight: bold;
+                            font-size: 19px;
+                            background: var(--main-color);
+                            color: #fff;
+                        "
                     >
                         تعديل
                     </v-btn>
@@ -258,7 +330,7 @@
                                     @click.="dialog_1 = true"
                                 />
                                 <font-awesome-icon
-                                    @click="jobs.dailog_3 = true"
+                                    @click="jobs.dialog_3 = true"
                                     :icon="['fas', 'trash']"
                                 />
                             </div>
@@ -275,136 +347,116 @@
                         </ul>
                     </div>
                 </div>
-                <div class="footer" @click="jobs.dialog_4 = true">
+                <div
+                    class="footer"
+                    @click="
+                        (jobs.dialog_4 = true),
+                            jobs.Job_Information(Job),
+                            jobs.Get_applies(Job.applies)
+                    "
+                >
                     ({{ Job.applies.length || 0 }}) طلبات التقديم
                 </div>
-
+                <!-- Dialog for Job Applications -->
                 <v-dialog v-model="jobs.dialog_4" width="90%">
                     <v-card width="100%" class="popup">
-                        <v-card-title
-                            class="d-flex justify-space-between align-center"
+                        <div
+                            class="d-flex justify-space-between align-center title"
                         >
-                            <div
-                                class="text-h4 ps-2"
-                                style="color: var(--main-color)"
-                            >
+                            <div style="color: var(--main-color)">
                                 طلبات التقديم
                             </div>
                             <v-btn
-                                style="color: var(--main-color)"
                                 icon="mdi-close"
-                                variant="text"
                                 @click="jobs.dialog_4 = false"
                             ></v-btn>
-                        </v-card-title> </v-card
-                ></v-dialog>
+                        </div>
+                        <!-- Loop through Job Applications -->
+                        <v-container>
+                            <div
+                                class="feat"
+                                v-for="Apply in apply"
+                                :key="Apply.id"
+                            >
+                                <div class="header">
+                                    <div class="small_container">
+                                        <div class="title">
+                                            {{ Apply.name }}
+                                        </div>
+                                        <div>
+                                            <font-awesome-icon
+                                                icon="fas fa-trash"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="time">
+                                        <font-awesome-icon
+                                            icon="fas fa-envelope"
+                                        />
+                                        <div>{{ Apply.email }}</div>
+                                    </div>
+                                </div>
+                                <div class="body">
+                                    <div class="title">{{ Apply.phone }}</div>
+                                    <div class="title">
+                                        وصف قصير:<br />
+                                        {{ Apply.description }}
+                                    </div>
+                                </div>
+                                <a class="footer" :href="Apply.CV">CV</a>
+                            </div>
+                        </v-container>
+                    </v-card></v-dialog
+                >
             </div>
         </v-container>
-        <!-- <div class="box">
-            <v-card width="100%" class="job">
-                <v-card-title
-                    class="title d-flex align-center justify-center flex-wrap"
-                >
-                    <p>{{ Job.title }}</p>
-                    <v-spacer />
-                    <div class="left">
-                        <font-awesome-icon
-                            @click="jobs.Job_Information(Job)"
-                            :icon="['fas', 'edit']"
-                            @click.="dialog_1 = true"
-                        />
-                    </div>
-                    <div class="left">
-                        <font-awesome-icon
-                            @click="jobs.dailog_3 = true"
-                            :icon="['fas', 'trash']"
-                        />
-                    </div>
-                </v-card-title>
-                <br />
-                <v-card-subtitle>
-                    {{ Job.time }}
-                </v-card-subtitle>
-
-                <v-card-text>
-                    <p class="mb-2" style="color: var(--therd-color)">
-                        متطلبات العمل :
-                    </p>
-                    <p class="mb-4">{{ Job.description }}</p>
-
-                    <v-expansion-panels
-                        @click="
-                            jobs.Job_Information(Job),
-                                jobs.Get_applies(jobs.Title_Information)
-                        "
-                    >
-                        <v-expansion-panel
-                            style="
-                                background-color: var(
-                                    --secound-color
-                                ) !important;
-                                color: var(--main-color);
-                                font-weight: bold;
-                                font-size: 20px;
-                            "
-                            ><v-expansion-panel-title>
-                                التقديمات({{ Job.applies.length || 0 }})
-                            </v-expansion-panel-title>
-                            <v-expansion-panel-text>
-                                <v-expansion-panels>
-                                    <v-expansion-panel
-                                        v-for="Apply in apply"
-                                        :key="Apply.id"
-                                        :title="Apply.name"
-                                        :text="Apply.email"
-                                    >
-                                        <v-expansion-panel-text>
-                                            {{ Apply.phone }}
-                                        </v-expansion-panel-text>
-                                        <v-expansion-panel-text>
-                                            <a :href="Apply.CV">CV</a>
-                                        </v-expansion-panel-text>
-                                    </v-expansion-panel>
-                                </v-expansion-panels>
-                            </v-expansion-panel-text>
-                        </v-expansion-panel>
-                    </v-expansion-panels>
-                </v-card-text>
-            </v-card>
-        </div> -->
     </div>
-    <v-dialog v-model="jobs.dailog_3" width="90%">
+    <v-dialog v-model="dialog_3" width="90%">
         <v-card width="100%" class="popup">
-            <v-card-title class="d-flex justify-space-between align-center">
-                <div class="text-h4 ps-2" style="color: var(--main-color)">
-                    حذف
-                </div>
-                <v-btn
-                    style="color: var(--main-color)"
-                    icon="mdi-close"
-                    variant="text"
-                    @click="jobs.dailog_3 = false"
-                ></v-btn>
-            </v-card-title>
+            <div class="d-flex justify-space-between align-center title">
+                <div style="color: var(--main-color)">تأكيد الحذف!</div>
+                <v-btn icon="mdi-close" @click="dialog_3 = false"></v-btn>
+            </div>
+
+            <p
+                style="
+                    padding: 20px;
+                    color: var(--therd-color);
+                    font-weight: bold;
+                "
+            >
+                هل أنت متأكد من حذفك لهذه الوظيفة؟
+            </p>
             <v-card-text>
-                <p>تأكيد الحذف</p>
-                <div class="d-flex align-center mt-4">
+                <div class="d-flex align-center">
                     <v-btn
                         type="submit"
-                        color="primary"
+                        color="var(--main-color)"
                         :loading="loading"
                         :disabled="loading"
-                        @click="jobs.dailog_3 = false"
+                        @click="dialog_3 = false"
+                        style="
+                            color: #fff;
+                            font-weight: bold;
+                            width: 48%;
+                            height: 45px;
+                        "
                     >
                         إلغاء
                     </v-btn>
                     <v-spacer />
                     <v-btn
                         type="submit"
-                        color="error"
+                        color="var(--pink-color)"
                         :loading="loading"
                         :disabled="loading"
                         @click="jobs.delete_Job(Job.id, Job.CV)"
+                        style="
+                            color: #fff;
+                            font-weight: bold;
+                            width: 48%;
+                            height: 45px;
+                        "
                     >
                         تأكيد
                     </v-btn>
@@ -424,6 +476,7 @@ export default defineComponent({
         jobs.Get_data();
         jobs.Get_Apply_data();
         jobs.Get_notifications_data();
+        jobs.counter_display();
         // Destructure reactive references and methods from Jobs store
         const {
             Job,
@@ -447,6 +500,7 @@ export default defineComponent({
             Get_applies,
             loading1,
             apply,
+            counter_display,
             counter,
             delete_notifications,
             Get_notifications_data,
@@ -459,6 +513,7 @@ export default defineComponent({
             loading1,
             loading,
             applies,
+            counter_display,
             Update_counter,
             delete_notifications,
             Get_notifications_data,
@@ -488,7 +543,12 @@ form {
     width: 90%;
     margin: auto;
 }
-
+.bg-error {
+    --v-theme-overlay-multiplier: var(--v-theme-error-overlay-multiplier);
+    background-color: rgb(var(--v-theme-error)) !important;
+    color: rgb(var(--v-theme-on-error)) !important;
+    display: none;
+}
 .right {
     width: 90% !important;
     margin: auto;

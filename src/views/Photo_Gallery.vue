@@ -117,10 +117,14 @@
                                                 accept="image/*"
                                                 variant="outlined"
                                                 prepend-icon=""
-                                                width="100%"
                                                 prepend-inner-icon="mdi-paperclip"
                                                 @change="photos.onFileChange"
                                                 required
+                                                :rules="[
+                                                    (v) =>
+                                                        !!v ||
+                                                        'الرجاء اختيار صورة',
+                                                ]"
                                             >
                                             </v-file-input>
                                             <span
@@ -134,7 +138,7 @@
                                             >
                                                 تصفح صورك
                                             </span>
-                                            <!-- Show progress bar if New.image is truthy (assuming New is a data property) -->
+                                            <!-- Show progress bar if photos.Photo.image is truthy (assuming photos is a data property) -->
                                             <v-progress-linear
                                                 v-if="photos.Photo.image"
                                                 :value="progress"
@@ -158,6 +162,7 @@
                                             :src="photos.image"
                                             height="200"
                                         ></v-img>
+
                                         <v-select
                                             style="width: 100%"
                                             v-model="photos.type"
@@ -167,7 +172,13 @@
                                             @blur="photos.handletypes"
                                             @click="photos.handletypes"
                                             required
+                                            :rules="[
+                                                (v) =>
+                                                    !!v ||
+                                                    'الرجاء اختيار نوع الصورة',
+                                            ]"
                                         ></v-select>
+
                                         <v-btn
                                             class="mt-2 mb-2"
                                             type="submit"
@@ -204,9 +215,18 @@
                                 color: white;
                             "
                         >
-                            <v-tab value="party">حفلات</v-tab>
-                            <v-tab value="news">أخبار</v-tab>
-                            <v-tab value="trip">رحلات</v-tab>
+                            <v-tab value="all" @click="photos.show_Data"
+                                >الكل</v-tab
+                            >
+                            <v-tab value="party" @click="photos.show_Data"
+                                >حفلات</v-tab
+                            >
+                            <v-tab value="news" @click="photos.show_Data"
+                                >أخبار</v-tab
+                            >
+                            <v-tab value="trip" @click="photos.show_Data"
+                                >رحلات</v-tab
+                            >
                         </v-tabs>
 
                         <v-card-text>
@@ -217,10 +237,14 @@
                                         width="90%"
                                     >
                                         <v-card
-                                            v-for="photo in party"
+                                            v-for="photo in Photos"
                                             :key="photo.id"
                                             width="200px"
                                             max-width="25%"
+                                            @click.="
+                                                photos.photo_Information(photo)
+                                            "
+                                            @click="dialog_6 = true"
                                         >
                                             <v-fab
                                                 icon="mdi-delete"
@@ -229,7 +253,7 @@
                                                 absolute
                                                 style="bottom: -15px; left: 5px"
                                                 offset
-                                                @click="photos.dailog_3 = true"
+                                                @click="photos.dialog_3 = true"
                                             ></v-fab>
                                             <v-img
                                                 :src="photo.image"
@@ -240,16 +264,20 @@
                                     </v-container>
                                 </v-tabs-window-item>
 
-                                <v-tabs-window-item value="news">
+                                <v-tabs-window-item value="all">
                                     <v-container
                                         class="box d-flex align-center justify-space-around"
                                         width="90%"
                                     >
                                         <v-card
-                                            v-for="photo in news"
+                                            v-for="photo in Photos"
                                             :key="photo.id"
                                             width="200px"
                                             max-width="25%"
+                                            @click.="
+                                                photos.photo_Information(photo)
+                                            "
+                                            @click="dialog_6 = true"
                                         >
                                             <v-fab
                                                 icon="mdi-delete"
@@ -258,7 +286,39 @@
                                                 absolute
                                                 style="bottom: -15px; left: 5px"
                                                 offset
-                                                @click="photos.dailog_3 = true"
+                                                @click="photos.dialog_3 = true"
+                                            ></v-fab>
+                                            <v-img
+                                                :src="photo.image"
+                                                height="200"
+                                                cover
+                                            ></v-img>
+                                        </v-card>
+                                    </v-container>
+                                </v-tabs-window-item>
+                                <v-tabs-window-item value="news">
+                                    <v-container
+                                        class="box d-flex align-center justify-space-around"
+                                        width="90%"
+                                    >
+                                        <v-card
+                                            v-for="photo in Photos"
+                                            :key="photo.id"
+                                            width="200px"
+                                            max-width="25%"
+                                            @click.="
+                                                photos.photo_Information(photo)
+                                            "
+                                            @click="dialog_6 = true"
+                                        >
+                                            <v-fab
+                                                icon="mdi-delete"
+                                                location="top right"
+                                                size="40"
+                                                absolute
+                                                style="bottom: -15px; left: 5px"
+                                                offset
+                                                @click="photos.dialog_3 = true"
                                             ></v-fab>
                                             <v-img
                                                 :src="photo.image"
@@ -275,10 +335,14 @@
                                         width="90%"
                                     >
                                         <v-card
-                                            v-for="photo in trip"
+                                            v-for="photo in Photos"
                                             :key="photo.id"
                                             width="200px"
                                             max-width="25%"
+                                            @click.="
+                                                photos.photo_Information(photo)
+                                            "
+                                            @click="dialog_6 = true"
                                         >
                                             <v-fab
                                                 icon="mdi-delete"
@@ -287,7 +351,7 @@
                                                 absolute
                                                 style="bottom: -15px; left: 5px"
                                                 offset
-                                                @click="photos.dailog_3 = true"
+                                                @click="photos.dialog_3 = true"
                                             ></v-fab>
                                             <v-img
                                                 :src="photo.image"
@@ -297,6 +361,39 @@
                                         </v-card>
                                     </v-container>
                                 </v-tabs-window-item>
+                                <!-- Display each photo -->
+                                <v-dialog v-model="dialog_6" width="90%">
+                                    <v-card width="100%" class="popup">
+                                        <div
+                                            class="d-flex justify-space-between align-center title"
+                                        >
+                                            <div
+                                                style="color: var(--main-color)"
+                                            >
+                                                الصور
+                                            </div>
+                                            <v-btn
+                                                icon="mdi-close"
+                                                @click="dialog_6 = false"
+                                            ></v-btn>
+                                        </div>
+                                        <v-carousel hide-delimiters>
+                                            <v-carousel-item
+                                                class="pa-5"
+                                                :src="photos.Photo_Information"
+                                                height="400"
+                                                cover
+                                            ></v-carousel-item>
+                                            <v-carousel-item
+                                                class="pa-5"
+                                                v-for="photo in Photos"
+                                                :key="photo.id"
+                                                :src="photo.image"
+                                                height="400"
+                                                cover
+                                            ></v-carousel-item>
+                                        </v-carousel> </v-card
+                                ></v-dialog>
                             </v-tabs-window>
                         </v-card-text>
                     </v-card>
@@ -326,38 +423,52 @@
             </v-card-actions>
         </v-card>
     </div>
-    <v-dialog v-model="photos.dailog_3" width="90%">
+    <v-dialog v-model="dialog_3" width="90%">
         <v-card width="100%" class="popup">
-            <v-card-title class="d-flex justify-space-between align-center">
-                <div class="text-h4 ps-2" style="color: var(--main-color)">
-                    حذف
-                </div>
-                <v-btn
-                    style="color: var(--main-color)"
-                    icon="mdi-close"
-                    variant="text"
-                    @click="photos.dailog_3 = false"
-                ></v-btn>
-            </v-card-title>
+            <div class="d-flex justify-space-between align-center title">
+                <div style="color: var(--main-color)">تأكيد الحذف!</div>
+                <v-btn icon="mdi-close" @click="dialog_3 = false"></v-btn>
+            </div>
+
+            <p
+                style="
+                    padding: 20px;
+                    color: var(--therd-color);
+                    font-weight: bold;
+                "
+            >
+                هل أنت متأكد من حذفك لهذه الصورة؟
+            </p>
             <v-card-text>
-                <p>تأكيد الحذف</p>
-                <div class="d-flex align-center mt-4">
+                <div class="d-flex align-center">
                     <v-btn
                         type="submit"
-                        color="primary"
+                        color="var(--main-color)"
                         :loading="loading"
                         :disabled="loading"
-                        @click="photos.dailog_3 = false"
+                        @click="dialog_3 = false"
+                        style="
+                            color: #fff;
+                            font-weight: bold;
+                            width: 48%;
+                            height: 45px;
+                        "
                     >
                         إلغاء
                     </v-btn>
                     <v-spacer />
                     <v-btn
                         type="submit"
-                        color="error"
+                        color="var(--pink-color)"
                         :loading="loading"
                         :disabled="loading"
                         @click="photos.delete_Photo(photo.id, photo.image)"
+                        style="
+                            color: #fff;
+                            font-weight: bold;
+                            width: 48%;
+                            height: 45px;
+                        "
                     >
                         تأكيد
                     </v-btn>
@@ -388,13 +499,17 @@ export default defineComponent({
             upload_Image,
             type,
             Types,
+            dialog_6,
             handletypes,
+            Photo_Information,
+            photo_Information,
             loading1,
             tab,
             image,
             onFileChange,
             trip,
             progress,
+            show_Data,
             party,
             news,
         } = storeToRefs(photos);
@@ -404,14 +519,18 @@ export default defineComponent({
             Photo,
             dialog_3,
             loading,
+            dialog_6,
             onFileChange,
             loading1,
             image,
             handletypes,
             Add_Photos,
             delete_Photo,
+            Photo_Information,
+            photo_Information,
             Get_data,
             progress,
+            show_Data,
             upload_Image,
             photos,
             dialog,
@@ -504,5 +623,32 @@ form {
 .box {
     flex-wrap: wrap;
     gap: 10px;
+}
+.popup .title {
+    padding: 20px 20px 0 !important;
+    font-size: 23px;
+    font-weight: bold;
+    color: var(--main-color);
+    position: relative;
+    margin-bottom: 15px;
+    &::before {
+        content: "";
+        position: absolute;
+        bottom: -15px;
+        height: 3px;
+        width: calc(100% - 40px);
+        background: var(--secound-color);
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+.v-btn--icon.v-btn--density-default {
+    color: var(--main-color);
+    width: auto;
+    height: auto;
+    box-shadow: none;
+    &:hover {
+        background: #fff;
+    }
 }
 </style>

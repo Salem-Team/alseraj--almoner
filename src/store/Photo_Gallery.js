@@ -6,6 +6,8 @@ import {
     updateDoc,
     deleteDoc,
     doc,
+    orderBy,
+    query,
 } from "@firebase/firestore";
 import { initializeApp } from "@firebase/app";
 import { getFirestore } from "firebase/firestore";
@@ -19,6 +21,7 @@ import {
 } from "firebase/storage";
 
 const firebaseConfig = {
+    // Firebase configuration object
     apiKey: "AIzaSyBdk3sqIHjXvB2C-O-lvkRgMFpg8pemkno",
     authDomain: "alseraj--almoner.firebaseapp.com",
     projectId: "alseraj--almoner",
@@ -26,15 +29,19 @@ const firebaseConfig = {
     messagingSenderId: "462211256149",
     appId: "1:462211256149:web:a03ace3c70b306620169dc",
 };
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
+// Define Pinia store for managing photo gallery
 export const usePhoto_Gallery = defineStore("Photo_Gallery", {
     state: () => ({
         dialog: false,
         dialog_3: false,
+        dialog_6: false,
+        photos_show: "",
         File_Name: "",
         type: "",
         Photos: [],
@@ -43,8 +50,10 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
         party: [],
         news: [],
         image: null,
-        tab: null,
+        tab: "all",
         progress: 0,
+        Photo_Information: "",
+        Id_Information: "",
         Types: ["trip", "party", "news"],
         Photo: {
             image: null,
@@ -54,22 +63,24 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
         loading1: false,
     }),
     actions: {
+        // Action method to handle setting File_Name based on type
         handletypes() {
             if (this.type === "trip") {
                 this.File_Name = "trip/";
-                console.log(this.type);
             } else if (this.type === "party") {
                 this.File_Name = "party/";
             } else if (this.type === "news") {
                 this.File_Name = "news/";
             }
         },
+
+        // Action method to upload an image to Firebase Storage
         async upload_Image(file) {
             this.random = Math.random();
-            // Create a storage reference with the file name
+            // Create a storage reference with the file name including type and random number
             const storageReference = storageRef(
                 storage,
-                this.File_Name + "/" + this.random + file.name
+                this.File_Name + this.random + file.name
             );
             // Upload the file bytes to the storage reference and get a snapshot of the upload
             const snapshot = await uploadBytes(storageReference, file);
@@ -82,24 +93,35 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
             // Return a promise that resolves with the download URL of the uploaded file
             return getDownloadURL(snapshot.ref);
         },
+
+        // Action method to add a photo to Firestore
         async Add_Photos() {
             try {
                 this.loading = true;
                 if (this.Photo.image) {
+                    // Step 1: Upload the image and get the download URL
                     const imageUrl = await this.upload_Image(this.Photo.image);
+
                     // Get current local time
                     const currentTime = new Date().toLocaleString();
+
+                    // Step 2: Add a document to the "Photos" collection in Firestore
                     const docRef = await addDoc(collection(db, "Photos"), {
                         image: imageUrl,
                         time: currentTime,
                         type: this.type,
                     });
-                    this.Photo.image = imageUrl;
+
+                    // Step 3: Update the newly added document with its own ID
                     await updateDoc(docRef, {
                         id: docRef.id,
                     });
+
                     console.log("Document written with ID: ", docRef.id);
+
+                    // Step 4: Refresh photo data
                     this.Get_data();
+
                     this.loading = false;
                     this.dialog = false;
                 } else {
@@ -110,21 +132,28 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
                 console.error("Error adding document: ", error);
             }
         },
+
+        // Action method to retrieve all photos from Firestore
         async Get_data() {
             try {
                 this.loading1 = true;
                 this.Photos = [];
-                const querySnapshot = await getDocs(collection(db, "Photos"));
+                const querySnapshot = await getDocs(
+                    query(collection(db, "Photos"), orderBy("time", "asc"))
+                );
                 querySnapshot.forEach((doc) => {
                     this.Photos.push(doc.data());
                 });
                 console.log("this.Photos", this.Photos);
                 this.loading1 = false;
+                // Update type-specific data arrays
                 this.Type_Data();
             } catch (error) {
-                console.error("Error adding document: ", error);
+                console.error("Error retrieving data:", error);
             }
         },
+
+        // Action method to retrieve limited photos from Firestore (first 3)
         async Get_splice() {
             try {
                 this.loading1 = true;
@@ -133,14 +162,17 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
                 querySnapshot.forEach((doc) => {
                     this.Photos.push(doc.data());
                 });
-                this.Photos = this.Photos.slice(0, 3);
+                this.Photos = this.Photos.slice(0, 6);
                 console.log("this.Photos", this.Photos);
                 this.loading1 = false;
+                // Update type-specific data arrays
                 this.Type_Data();
             } catch (error) {
-                console.error("Error adding document: ", error);
+                console.error("Error retrieving data:", error);
             }
         },
+
+        // Action method to delete a photo from Firebase Storage
         async delete_photo(image) {
             const storage = getStorage();
 
@@ -150,19 +182,26 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
             // Delete the file
             deleteObject(desertRef);
         },
+
+        // Action method to delete a photo from Firestore
         async delete_Photo(PhotoId, image) {
             try {
                 // Log before attempting to delete
                 console.log("Deleting Photo from Firestore:", PhotoId);
-                // Delete the document from Firestore
+
+                // Step 1: Delete the document from Firestore
                 await deleteDoc(doc(db, "Photos", PhotoId));
+
+                // Step 2: Delete the corresponding image from Firebase Storage
                 this.delete_photo(image);
+
                 // Log after successful deletion
                 console.log(
                     "Photo deleted from Firestore successfully:",
                     PhotoId
                 );
-                // Find the index of the Photo in the Photos array
+
+                // Step 3: Find the index of the deleted Photo in the Photos array
                 const index = this.Photos.findIndex(
                     (Photo) => Photo.id === PhotoId
                 );
@@ -174,30 +213,43 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
                 } else {
                     console.log("Photo not found in Photos array");
                 }
+
+                // Step 4: Refresh photo data
                 this.Get_data();
+
                 this.dialog_3 = false;
             } catch (error) {
                 console.error("Error deleting Photo:", error);
             }
         },
-        // Loop through each Photo to extract Type_info
+        show_Data() {
+            if (this.photos_show === "trip" || this.tab === "trip") {
+                this.Photos = this.trip;
+            } else if (this.photos_show === "party" || this.tab === "party") {
+                this.Photos = this.party;
+            } else if (this.photos_show === "news" || this.tab === "news") {
+                this.Photos = this.news;
+            } else {
+                this.Get_data();
+            }
+        },
+        // Action method to categorize photos into respective arrays based on type
         Type_Data() {
             this.trip = [];
             this.party = [];
             this.news = [];
             this.Photos.forEach((Photo) => {
-                if (Photo.type == "trip") {
+                if (Photo.type === "trip") {
                     this.trip.push(Photo);
-                    console.log("this.trip", this.trip);
-                }
-                if (Photo.type == "party") {
+                } else if (Photo.type === "party") {
                     this.party.push(Photo);
-                }
-                if (Photo.type == "news") {
+                } else if (Photo.type === "news") {
                     this.news.push(Photo);
                 }
             });
         },
+
+        // Action method to handle file change event and set image preview
         onFileChange(event) {
             const file = event.target.files[0];
             if (file) {
@@ -206,6 +258,12 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
             } else {
                 this.image = null;
             }
+        },
+        // Store Photo information
+        photo_Information(Photo) {
+            this.Photo_Information = Photo.image;
+            this.Id_Information = Photo.id;
+            console.log(Photo.id);
         },
     },
 });

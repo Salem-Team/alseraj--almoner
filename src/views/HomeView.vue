@@ -118,7 +118,7 @@ body {
 }
 .parallax {
     position: relative;
-    height: 130vh;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -132,13 +132,22 @@ body {
         font-size: 5em;
         color: #1b283a;
         text-shadow: 2px 4px 5px #f9f9f9;
+        margin-top: 0px;
+        top: 15%;
+        transform: translate(-50%, -50%);
+        left: 50%;
+        width: 100%;
+        text-align: center;
     }
     img {
         position: absolute;
         width: 100%;
-        top: 0;
+        bottom: 0;
         left: 0;
         pointer-events: none;
+    }
+    #grass {
+        bottom: 0;
     }
     #gate-left {
         position: absolute;

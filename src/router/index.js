@@ -12,6 +12,9 @@ import Edit_profile from "../views/Edit_profile.vue";
 import Modifications from "../views/Modifications_admin.vue";
 import Add_News from "../views/Add_News.vue";
 import Add_job from "../views/Add_job.vue";
+import jobs_more from "../views/jobs_more.vue";
+import News_more from "../views/News_more.vue";
+import Photos_more from "../views/Photos_more.vue";
 import Photo_Gallery from "../views/Photo_Gallery.vue";
 import Add_admin from "../views/Add_admin.vue";
 import ChildDetails from "../views/ChildDetails.vue";
@@ -27,6 +30,7 @@ const routes = [
         name: "UserLogin",
         component: UserLogin,
     },
+
     {
         path: "/Parent_Dashboard",
         name: "Parent_Dashboard",
@@ -93,6 +97,21 @@ const routes = [
         path: "/Add_admin",
         name: "Add_admin",
         component: Add_admin,
+    },
+    {
+        path: "/jobs_more",
+        name: "jobs_more",
+        component: jobs_more,
+    },
+    {
+        path: "/News_more",
+        name: "News_more",
+        component: News_more,
+    },
+    {
+        path: "/Photos_more",
+        name: "Photos_more",
+        component: Photos_more,
     },
 ];
 

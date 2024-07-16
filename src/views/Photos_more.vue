@@ -110,20 +110,6 @@
                 ></v-dialog>
             </v-card>
         </div>
-        <!-- Load More Button -->
-        <div v-if="Photos.length < 4" class="btn">
-            <v-btn
-                style="
-                    background-color: var(
-                        --main-color
-                    ) !important; /* Button background color */
-                    color: white !important; /* Button text color */
-                    width: 20%; /* Button width */
-                "
-                @click="$router.push('/Photos_more')"
-                >المزيد</v-btn
-            >
-        </div>
     </div>
 </template>
 
@@ -138,17 +124,18 @@ export default defineComponent({
         const photos = usePhoto_Gallery();
 
         // Initialize or fetch data on component setup
-        photos.Get_splice(); // Retrieve initial set of photos
-
+        photos.Get_data(); // Retrieve initial set of photos
         // Destructure reactive references and methods from Photo Gallery store
         const {
             Photo,
             loading,
             Photos,
-            Add_Photos,
             dialog_6,
+            Add_Photos,
+            photos_show,
             Get_data,
             loading1,
+            show_Data,
             image,
             photo_Information,
             Photo_Information,
@@ -157,16 +144,18 @@ export default defineComponent({
         // Return the necessary reactive properties and methods
         return {
             Photo,
-            dialog_6,
+            photos_show,
             loading,
             Photos,
+            dialog_6,
             Add_Photos,
             Get_data,
             loading1,
-            image,
-            photos,
+            show_Data,
             Photo_Information,
             photo_Information,
+            image,
+            photos,
         };
     },
 });
@@ -312,13 +301,6 @@ export default defineComponent({
         width: 50%; /* Final width */
         height: 100%; /* Final height */
     }
-}
-
-/* Button Styling */
-.btn {
-    margin: auto !important; /* Centered horizontally */
-    text-align: center; /* Center text */
-    margin-top: 40px !important; /* Margin top */
 }
 .popup .title {
     padding: 20px 20px 0 !important;

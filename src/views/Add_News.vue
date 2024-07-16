@@ -92,6 +92,7 @@
                 <form ref="form" @submit.prevent class="ma-auto mt-4">
                     <v-text-field
                         v-model="New.title"
+                        :rules="[(v) => !!v || 'الرجاء إدخال عنوان الخبر']"
                         type="text"
                         label="عنوان"
                         variant="outlined"
@@ -121,10 +122,73 @@
                         </template>
                     </v-progress-linear>
                     <br />
+                    <div class="d-flex justify-space-between pb-0">
+                        <v-btn-toggle
+                            v-model="formatting"
+                            variant="outlined"
+                            divided
+                            multiple
+                        >
+                            <v-btn>
+                                <v-icon icon="mdi-format-italic"></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <v-icon icon="mdi-format-bold"></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <v-icon icon="mdi-format-underline"></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <div
+                                    class="d-flex align-center flex-column justify-center"
+                                >
+                                    <v-icon
+                                        icon="mdi-format-color-text"
+                                    ></v-icon>
+
+                                    <v-sheet
+                                        color="primary"
+                                        height="4"
+                                        width="26"
+                                        tile
+                                    ></v-sheet>
+                                </div>
+                            </v-btn>
+                        </v-btn-toggle>
+
+                        <v-btn-toggle
+                            v-model="alignment"
+                            variant="outlined"
+                            divided
+                        >
+                            <v-btn>
+                                <v-icon icon="mdi-format-align-center"></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <v-icon icon="mdi-format-align-left"></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <v-icon icon="mdi-format-align-right"></v-icon>
+                            </v-btn>
+                        </v-btn-toggle>
+                    </div>
                     <v-textarea
                         v-model="New.description"
+                        :rules="[
+                            (v) => !!v || 'الرجاء إدخال وصف قصير',
+                            (v) =>
+                                (v && v.length <= 150) ||
+                                'يجب أن يكون الوصف 150 حرفًا كحد أقصى',
+                        ]"
                         label="وصف قصير"
                         :counter="150"
+                        rows="4"
+                        no-resize
                         variant="outlined"
                         :maxlength="150"
                         required
@@ -148,8 +212,8 @@
                         إضافة
                     </v-btn>
                 </form>
-            </v-card></v-dialog
-        >
+            </v-card>
+        </v-dialog>
 
         <v-dialog v-model="dialog_1" width="90%">
             <v-card width="100%" class="popup">
@@ -160,6 +224,7 @@
                 <form ref="form" @submit.prevent class="ma-auto mt-4">
                     <v-text-field
                         v-model="news.Title_Information"
+                        :rules="[(v) => !!v || 'الرجاء إدخال عنوان الخبر']"
                         type="text"
                         label="عنوان"
                         variant="outlined"
@@ -172,11 +237,99 @@
                         width="100%"
                     ></v-img>
                     <br />
+                    <div class="d-flex justify-space-between pb-0">
+                        <v-btn-toggle
+                            v-model="formatting"
+                            variant="outlined"
+                            divided
+                            multiple
+                        >
+                            <v-btn>
+                                <v-icon icon="mdi-format-italic"></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <v-icon icon="mdi-format-bold"></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <v-icon icon="mdi-format-underline"></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <div
+                                    class="d-flex align-center flex-column justify-center"
+                                >
+                                    <v-icon
+                                        icon="mdi-format-color-text"
+                                        @click="dialog_7 = true"
+                                    ></v-icon>
+
+                                    <v-sheet
+                                        color="primary"
+                                        height="4"
+                                        width="26"
+                                        tile
+                                    ></v-sheet>
+                                </div>
+                            </v-btn>
+                        </v-btn-toggle>
+
+                        <v-btn-toggle
+                            v-model="alignment"
+                            variant="outlined"
+                            divided
+                        >
+                            <v-btn>
+                                <v-icon
+                                    @click="
+                                        news.alignment(
+                                            news.Description_Information,
+                                            center
+                                        )
+                                    "
+                                    icon="mdi-format-align-center"
+                                ></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <v-icon
+                                    icon="mdi-format-align-left"
+                                    @click="
+                                        news.alignment(
+                                            news.Description_Information,
+                                            left
+                                        )
+                                    "
+                                ></v-icon>
+                            </v-btn>
+
+                            <v-btn>
+                                <v-icon
+                                    icon="mdi-format-align-right"
+                                    @click="
+                                        news.alignment(
+                                            news.Description_Information,
+                                            right
+                                        )
+                                    "
+                                ></v-icon>
+                            </v-btn>
+                        </v-btn-toggle>
+                    </div>
                     <v-textarea
                         v-model="news.Description_Information"
+                        :rules="[
+                            (v) => !!v || 'الرجاء إدخال وصف قصير',
+                            (v) =>
+                                (v && v.length <= 150) ||
+                                'يجب أن يكون الوصف 150 حرفًا كحد أقصى',
+                        ]"
                         label="وصف قصير"
                         :counter="150"
                         required
+                        rows="4"
+                        no-resize
                         variant="outlined"
                         :maxlength="150"
                     ></v-textarea>
@@ -199,8 +352,8 @@
                         تعديل
                     </v-btn>
                 </form>
-            </v-card></v-dialog
-        >
+            </v-card>
+        </v-dialog>
         <v-container class="box d-flex align-center justify-space-around">
             <div class="feat" v-for="New in News" :key="New.id">
                 <div class="Top">
@@ -211,12 +364,14 @@
                     />
                     <font-awesome-icon
                         :icon="['fas', 'trash']"
-                        @click="news.dailog_3 = true"
+                        @click="news.dialog_3 = true"
                     />
                     <v-img
                         :src="New.image"
                         width="100%"
                         height="300"
+                        @click.="news.New_Information(New)"
+                        @click="dialog_6 = true"
                         cover
                     ></v-img>
                 </div>
@@ -231,13 +386,42 @@
                     </div>
                 </div>
             </div>
+            <!-- Display each photo -->
+            <v-dialog v-model="dialog_6" width="90%">
+                <v-card width="100%" class="popup">
+                    <div
+                        class="d-flex justify-space-between align-center title"
+                    >
+                        <div style="color: var(--main-color)">الصور</div>
+                        <v-btn
+                            icon="mdi-close"
+                            @click="dialog_6 = false"
+                        ></v-btn>
+                    </div>
+                    <v-carousel hide-delimiters>
+                        <v-carousel-item
+                            class="pa-5"
+                            :src="news.Image_Information"
+                            height="400"
+                            cover
+                        ></v-carousel-item>
+                        <v-carousel-item
+                            class="pa-5"
+                            v-for="New in News"
+                            :key="New.id"
+                            :src="New.image"
+                            height="400"
+                            cover
+                        ></v-carousel-item>
+                    </v-carousel> </v-card
+            ></v-dialog>
         </v-container>
     </div>
-    <v-dialog v-model="news.dailog_3" width="90%">
+    <v-dialog v-model="news.dialog_3" width="90%">
         <v-card width="100%" class="popup">
             <div class="d-flex justify-space-between align-center title">
                 <div style="color: var(--main-color)">تأكيد الحذف!</div>
-                <v-btn icon="mdi-close" @click="news.dailog_3 = false"></v-btn>
+                <v-btn icon="mdi-close" @click="news.dialog_3 = false"></v-btn>
             </div>
 
             <p
@@ -256,7 +440,7 @@
                         color="var(--main-color)"
                         :loading="loading"
                         :disabled="loading"
-                        @click="news.dailog_3 = false"
+                        @click="news.dialog_3 = false"
                         style="
                             color: #fff;
                             font-weight: bold;
@@ -300,12 +484,14 @@ export default defineComponent({
         const {
             New,
             News,
+            alignment,
             dialog_3,
             Add_News,
             dialog,
             loading,
             loading1,
             dialog_1,
+            dialog_6,
             delete_New,
             Get_data,
             upload_Image,
@@ -317,8 +503,10 @@ export default defineComponent({
         return {
             New,
             Add_News,
+            alignment,
             loading,
             dialog_3,
+            dialog_6,
             loading1,
             delete_New,
             New_Information,
