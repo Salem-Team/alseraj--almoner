@@ -372,7 +372,7 @@
                                     المدفوعات
                                 </v-card-title>
                                 <v-card-subtitle
-                                    class="mb-4 mt-10 text-h6 custom-title"
+                                    class="mb-4 text-h6 custom-title"
                                 >
                                     ادخل المبلغ واختر نظام الدفع
                                 </v-card-subtitle>
@@ -402,7 +402,7 @@
                                     <v-row
                                         v-if="paymentMethod === 'نظام التقسيط'"
                                     >
-                                        <v-col cols="12" md="12">
+                                        <v-col cols="12" md="6">
                                             <v-select
                                                 v-model="selectedPlan"
                                                 :items="selectPaid"
@@ -505,62 +505,18 @@
                                         </div>
                                     </div>
                                 </v-row>
-                                <v-row>
-                                    <v-col>
-                                        <v-dialog
-                                            v-model="dialogSuccess"
-                                            max-width="600"
-                                            @input="handleDialogClose"
-                                        >
-                                            <v-card>
-                                                <v-card-actions
-                                                    class="justify-center"
-                                                >
-                                                    <v-icon
-                                                        color="success"
-                                                        size="100"
-                                                        >mdi-check-circle-outline</v-icon
-                                                    >
-                                                </v-card-actions>
-                                                <v-card-text
-                                                    class="text-center"
-                                                >
-                                                    <p class="success-message">
-                                                        تم دفع مبلغ
-                                                        {{ paidAmount }} جنيه.
-                                                        بنجاح
-                                                    </p>
-                                                </v-card-text>
-                                                <v-card-actions>
-                                                    <v-btn
-                                                        color="success"
-                                                        @click="
-                                                            dialogSuccess = false
-                                                        "
-                                                    >
-                                                        موافق
-                                                    </v-btn>
-                                                </v-card-actions>
-                                            </v-card>
-                                        </v-dialog>
-                                    </v-col>
-                                </v-row>
-                                <v-row class="d-flex justify-center">
-                                    <v-col cols="12" md="4">
+                                <v-row class="my-4">
+                                    <v-col
+                                        cols="12"
+                                        md="6"
+                                        style="margin: 0 auto"
+                                    >
                                         <v-text-field
                                             v-model="amount"
                                             label="ادخل المبلغ للدفع"
                                             outlined
                                             dense
                                         ></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" md="4">
-                                        <v-btn
-                                            color="primary"
-                                            size="x-large"
-                                            @click="payAmount"
-                                            >ادفع</v-btn
-                                        >
                                     </v-col>
                                 </v-row>
                                 <v-row class="my-4">
@@ -606,19 +562,6 @@
                                     </v-col>
                                 </v-row>
                             </div>
-                            <!-- v-alert for notifications -->
-                            <v-alert
-                                title="تنبيه"
-                                class="custom-alert mt-4"
-                                v-if="alertMessage"
-                                v-model="alertMessage"
-                                dense
-                                outlined
-                                closable
-                                type="warning"
-                            >
-                                {{ alertMessage }}
-                            </v-alert>
                         </div>
                     </v-tabs-window-item>
 
@@ -1070,6 +1013,17 @@ export default {
         },
         resetPayment() {
             this.paidAmount = 0;
+        },
+    },
+    watch: {
+        amount(newValue) {
+            const amountToPay = parseInt(newValue);
+
+            if (!isNaN(amountToPay) && amountToPay > 0) {
+                this.paidAmount = amountToPay;
+            } else {
+                this.paidAmount = 0;
+            }
         },
     },
 };
