@@ -21,18 +21,49 @@
                 <v-row>
                     <v-col cols="12" sm="4">
                         <v-card class="info-card" style="height: 100%">
-                            <v-card-title class="info-card-title text-center"
-                                >بياناتك الشخصيه</v-card-title
-                            >
+                            <v-card-title class="info-card-title text-center">
+                                بياناتك الشخصيه
+                            </v-card-title>
                             <v-divider></v-divider>
                             <v-card-text class="info-card-text">
-                                <strong>الاسم:</strong>
-                                <div>{{ parent.name }}</div>
-                                <strong>الايميل:</strong>
-                                <div>{{ parent.email }}</div>
-                                <strong>رقم الهاتف:</strong>
-                                <div>{{ parent.phoneNumber }}</div>
+                                <div v-if="!editingMode">
+                                    <strong>الاسم:</strong>
+                                    <div>{{ parent.name }}</div>
+                                    <strong>الايميل:</strong>
+                                    <div>{{ parent.email }}</div>
+                                    <strong>رقم الهاتف:</strong>
+                                    <div>{{ parent.phoneNumber }}</div>
+                                </div>
+                                <div v-else>
+                                    <v-text-field
+                                        v-model="editedParent.name"
+                                        label="الاسم"
+                                    ></v-text-field>
+                                    <v-text-field
+                                        v-model="editedParent.email"
+                                        label="الايميل"
+                                    ></v-text-field>
+                                    <v-text-field
+                                        v-model="editedParent.phoneNumber"
+                                        label="رقم الهاتف"
+                                    ></v-text-field>
+                                </div>
                             </v-card-text>
+                            <v-divider></v-divider>
+                            <v-card-actions>
+                                <v-btn
+                                    v-if="!editingMode"
+                                    color="primary"
+                                    @click="startEditing"
+                                    >تعديل</v-btn
+                                >
+                                <v-btn
+                                    v-else
+                                    color="primary"
+                                    @click="saveChanges"
+                                    >حفظ</v-btn
+                                >
+                            </v-card-actions>
                         </v-card>
                     </v-col>
 
@@ -108,6 +139,8 @@ export default {
             email: "parent@gmail.com",
             phoneNumber: "0105245841",
         },
+        editedParent: {},
+        editingMode: false,
     }),
     computed: {
         ...mapState(useAuthStore, ["user"]),
@@ -117,22 +150,14 @@ export default {
         Edit() {
             this.$router.push({ name: "Edit_profile" });
         },
-
-        methods: {
-            ...mapActions(useAuthStore, ["logout"]),
-            Edit() {
-                this.$router.push({ name: "Edit_profile" });
-            },
-            async My_Logout() {
-                try {
-                    await this.logout();
-                    this.$router.push({ name: "home" });
-                } catch (error) {
-                    console.error("حدث خطأ أثناء تسجيل الخروج:", error.message);
-                }
-            },
+        async My_Logout() {
+            try {
+                await this.logout();
+                this.$router.push({ name: "home" });
+            } catch (error) {
+                console.error("حدث خطأ أثناء تسجيل الخروج:", error.message);
+            }
         },
-
         goToChildDetails(childId) {
             this.$router.push({
                 name: "ChildDetails",
@@ -175,6 +200,7 @@ export default {
     align-items: center;
     margin-bottom: 20px;
 }
+
 .action-buttons v-btn {
     margin-left: 10px;
 }
@@ -205,6 +231,7 @@ export default {
     flex-direction: column;
     justify-content: center;
 }
+
 .info-card-text > * {
     padding: 8px;
 }

@@ -5,6 +5,7 @@ import store from "./store";
 import "vuetify/styles";
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
+import VTooltip from "v-tooltip";
 import { ref } from "vue";
 import { createPinia } from "pinia";
 // Initialize Pinia
@@ -36,6 +37,7 @@ createApp(App)
     .use(store)
     .use(vuetify)
     .use(router)
+    .use(VTooltip)
     .use(Toast, { position: "top-right", timeout: 3000 })
     .component("font-awesome-icon", FontAwesomeIcon)
     .mount("#app");
