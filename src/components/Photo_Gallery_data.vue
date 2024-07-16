@@ -15,57 +15,6 @@
                 <!-- Title in Arabic -->
             </div>
         </div>
-        <div class="pr-10 pb-5">
-            <v-btn-toggle
-                v-model="photos.photos_show"
-                variant="outlined"
-                style="
-                    border: 2px solid var(--main-color);
-                    color: var(--main-color);
-                "
-            >
-                <v-btn
-                    value="all"
-                    @click="photos.show_Data"
-                    style="
-                        font-size: 20px !important;
-                        font-weight: 600 !important;
-                    "
-                >
-                    الكل
-                </v-btn>
-                <v-btn
-                    value="trip"
-                    @click="photos.show_Data"
-                    style="
-                        font-size: 20px !important;
-                        font-weight: 600 !important;
-                    "
-                >
-                    رحلات
-                </v-btn>
-                <v-btn
-                    value="news"
-                    @click="photos.show_Data"
-                    style="
-                        font-size: 20px !important;
-                        font-weight: 600 !important;
-                    "
-                >
-                    أخبار
-                </v-btn>
-                <v-btn
-                    value="party"
-                    @click="photos.show_Data"
-                    style="
-                        font-size: 20px !important;
-                        font-weight: 600 !important;
-                    "
-                >
-                    حفلات
-                </v-btn>
-            </v-btn-toggle>
-        </div>
         <!-- Cards Container -->
         <div class="box d-flex align-center justify-space-around">
             <!-- Photo Cards Loop -->
@@ -78,7 +27,22 @@
                 @click.="photos.photo_Information(photo)"
                 @click="dialog_6 = true"
             >
-                <v-img :src="photo.image" height="300" cover></v-img>
+                <v-img
+                    v-if="photo.File_type == 'صورة'"
+                    :src="photo.image"
+                    height="300"
+                    cover
+                ></v-img>
+                <video
+                    v-if="photo.File_type == 'فيديو'"
+                    width="320"
+                    height="300"
+                    controls
+                >
+                    <source :src="photo.video" type="video/mp4" />
+
+                    Your browser does not support the video tag.
+                </video>
                 <!-- Display each photo -->
                 <v-dialog v-model="dialog_6" width="90%">
                     <v-card width="100%" class="popup">
@@ -111,7 +75,7 @@
             </v-card>
         </div>
         <!-- Load More Button -->
-        <div v-if="Photos.length < 4" class="btn">
+        <div v-if="Photos.length < 6" class="btn">
             <v-btn
                 style="
                     background-color: var(
@@ -190,7 +154,7 @@ export default defineComponent({
     .title {
         text-transform: uppercase; /* Uppercase title text */
         color: var(--main-color); /* Main color for title */
-        margin: 0 auto 20px; /* Margin bottom for title */
+        margin: 0 auto 80px; /* Margin bottom for title */
         border: 2px solid var(--main-color); /* Border for title */
         padding: 10px 20px; /* Padding inside title */
         font-size: 30px; /* Font size of title */

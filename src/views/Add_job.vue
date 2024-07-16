@@ -117,77 +117,26 @@
                         variant="outlined"
                         required
                     ></v-text-field>
-                    <div class="d-flex justify-space-between pb-0">
-                        <v-btn-toggle
-                            v-model="formatting"
-                            variant="outlined"
-                            divided
-                            multiple
-                        >
-                            <v-btn>
-                                <v-icon icon="mdi-format-italic"></v-icon>
-                            </v-btn>
-
-                            <v-btn>
-                                <v-icon icon="mdi-format-bold"></v-icon>
-                            </v-btn>
-
-                            <v-btn>
-                                <v-icon icon="mdi-format-underline"></v-icon>
-                            </v-btn>
-
-                            <v-btn>
-                                <div
-                                    class="d-flex align-center flex-column justify-center"
-                                >
-                                    <v-icon
-                                        icon="mdi-format-color-text"
-                                    ></v-icon>
-
-                                    <v-sheet
-                                        color="primary"
-                                        height="4"
-                                        width="26"
-                                        tile
-                                    ></v-sheet>
-                                </div>
-                            </v-btn>
-                        </v-btn-toggle>
-
-                        <v-btn-toggle
-                            v-model="alignment"
-                            variant="outlined"
-                            divided
-                        >
-                            <v-btn>
-                                <v-icon icon="mdi-format-align-center"></v-icon>
-                            </v-btn>
-
-                            <v-btn>
-                                <v-icon icon="mdi-format-align-left"></v-icon>
-                            </v-btn>
-
-                            <v-btn>
-                                <v-icon icon="mdi-format-align-right"></v-icon>
-                            </v-btn>
-                        </v-btn-toggle>
+                    <div class="card">
+                        <Editor v-model="Job.description">
+                            <v-textarea
+                                v-model="Job.description"
+                                :rules="[
+                                    (v) => !!v || 'الرجاء إدخال وصف قصير',
+                                    (v) =>
+                                        (v && v.length <= 150) ||
+                                        'يجب أن يكون الوصف 150 حرفًا كحد أقصى',
+                                ]"
+                                label="وصف قصير"
+                                :counter="150"
+                                variant="outlined"
+                                required
+                                rows="4"
+                                no-resize
+                                :maxlength="150"
+                            ></v-textarea>
+                        </Editor>
                     </div>
-                    <v-textarea
-                        v-model="Job.description"
-                        :rules="[
-                            (v) => !!v || 'الرجاء إدخال وصف قصير',
-                            (v) =>
-                                (v && v.length <= 150) ||
-                                'يجب أن يكون الوصف 150 حرفًا كحد أقصى',
-                        ]"
-                        label="وصف قصير"
-                        :counter="150"
-                        variant="outlined"
-                        required
-                        rows="4"
-                        no-resize
-                        :maxlength="150"
-                    ></v-textarea>
                     <v-btn
                         type="submit"
                         :loading="loading"
@@ -225,77 +174,27 @@
                         required
                     ></v-text-field>
                     <br />
-                    <div class="d-flex justify-space-between pb-0">
-                        <v-btn-toggle
-                            v-model="formatting"
+
+                    <div class="card">
+                        <Editor v-model="jobs.Description_Information">
+                        </Editor>
+                        <v-textarea
+                            v-model="jobs.Description_Information"
+                            :rules="[
+                                (v) => !!v || 'الرجاء إدخال وصف قصير',
+                                (v) =>
+                                    (v && v.length <= 150) ||
+                                    'يجب أن يكون الوصف 150 حرفًا كحد أقصى',
+                            ]"
+                            label="وصف قصير"
+                            :counter="150"
+                            required
+                            rows="4"
+                            no-resize
                             variant="outlined"
-                            divided
-                            multiple
-                        >
-                            <v-btn>
-                                <v-icon icon="mdi-format-italic"></v-icon>
-                            </v-btn>
-
-                            <v-btn>
-                                <v-icon icon="mdi-format-bold"></v-icon>
-                            </v-btn>
-
-                            <v-btn>
-                                <v-icon icon="mdi-format-underline"></v-icon>
-                            </v-btn>
-
-                            <v-btn>
-                                <div
-                                    class="d-flex align-center flex-column justify-center"
-                                >
-                                    <v-icon
-                                        icon="mdi-format-color-text"
-                                    ></v-icon>
-
-                                    <v-sheet
-                                        color="primary"
-                                        height="4"
-                                        width="26"
-                                        tile
-                                    ></v-sheet>
-                                </div>
-                            </v-btn>
-                        </v-btn-toggle>
-
-                        <v-btn-toggle
-                            v-model="alignment"
-                            variant="outlined"
-                            divided
-                        >
-                            <v-btn>
-                                <v-icon icon="mdi-format-align-center"></v-icon>
-                            </v-btn>
-
-                            <v-btn>
-                                <v-icon icon="mdi-format-align-left"></v-icon>
-                            </v-btn>
-
-                            <v-btn>
-                                <v-icon icon="mdi-format-align-right"></v-icon>
-                            </v-btn>
-                        </v-btn-toggle>
+                            :maxlength="150"
+                        ></v-textarea>
                     </div>
-                    <v-textarea
-                        v-model="jobs.Description_Information"
-                        :rules="[
-                            (v) => !!v || 'الرجاء إدخال وصف قصير',
-                            (v) =>
-                                (v && v.length <= 150) ||
-                                'يجب أن يكون الوصف 150 حرفًا كحد أقصى',
-                        ]"
-                        label="وصف قصير"
-                        :counter="150"
-                        required
-                        rows="4"
-                        no-resize
-                        variant="outlined"
-                        :maxlength="150"
-                    ></v-textarea>
                     <v-btn
                         type="submit"
                         :loading="loading"
@@ -469,8 +368,13 @@
 <script>
 import { storeToRefs } from "pinia";
 import { defineComponent } from "vue";
+// Advanced Use - Hook into Quill's API for Custom Functionality
+import Editor from "primevue/editor";
 import { useJobs } from "@/store/job.js";
 export default defineComponent({
+    components: {
+        Editor, // Register VueEditor component
+    },
     setup() {
         const jobs = useJobs();
         jobs.Get_data();
