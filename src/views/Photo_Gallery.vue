@@ -111,6 +111,7 @@
                                             "
                                         >
                                             <v-file-input
+                                                v-if="photos.types == 'صورة'"
                                                 style="width: 100%"
                                                 v-model="photos.Photo.image"
                                                 label="صورة"
@@ -124,6 +125,24 @@
                                                     (v) =>
                                                         !!v ||
                                                         'الرجاء اختيار صورة',
+                                                ]"
+                                            >
+                                            </v-file-input>
+                                            <v-file-input
+                                                v-if="photos.types == 'فيديو'"
+                                                style="width: 100%"
+                                                v-model="photos.Photo.video"
+                                                label="فيديو"
+                                                accept="mp4"
+                                                variant="outlined"
+                                                prepend-icon=""
+                                                prepend-inner-icon="mdi-paperclip"
+                                                @change="photos.on_Video_Change"
+                                                required
+                                                :rules="[
+                                                    (v) =>
+                                                        !!v ||
+                                                        'الرجاء اختيار فيديو',
                                                 ]"
                                             >
                                             </v-file-input>
@@ -162,7 +181,20 @@
                                             :src="photos.image"
                                             height="200"
                                         ></v-img>
+                                        <video
+                                            v-if="photos.Photo.video"
+                                            width="320"
+                                            height="240"
+                                            controls
+                                        >
+                                            <source
+                                                :src="photos.video"
+                                                type="video/mp4"
+                                            />
 
+                                            Your browser does not support the
+                                            video tag.
+                                        </video>
                                         <v-select
                                             style="width: 100%"
                                             v-model="photos.type"
@@ -178,8 +210,21 @@
                                                     'الرجاء اختيار نوع الصورة',
                                             ]"
                                         ></v-select>
-
+                                        <v-select
+                                            style="width: 100%"
+                                            v-model="photos.types"
+                                            :items="['صورة', 'فيديو']"
+                                            label="أختر النوع "
+                                            variant="outlined"
+                                            required
+                                            :rules="[
+                                                (v) =>
+                                                    !!v ||
+                                                    'الرجاء اختيار النوع ',
+                                            ]"
+                                        ></v-select>
                                         <v-btn
+                                            v-if="photos.types == 'صورة'"
                                             class="mt-2 mb-2"
                                             type="submit"
                                             style="
@@ -192,7 +237,23 @@
                                             :disabled="loading"
                                             @click="photos.Add_Photos"
                                         >
-                                            إضافة
+                                            إضافة صورة
+                                        </v-btn>
+                                        <v-btn
+                                            v-if="photos.types == 'فيديو'"
+                                            class="mt-2 mb-2"
+                                            type="submit"
+                                            style="
+                                                background-color: var(
+                                                    --main-color
+                                                );
+                                                color: white;
+                                            "
+                                            :loading="loading"
+                                            :disabled="loading"
+                                            @click="photos.Add_Video"
+                                        >
+                                            إضافة فيديو
                                         </v-btn>
                                     </div>
                                 </div>
@@ -256,10 +317,27 @@
                                                 @click="photos.dialog_3 = true"
                                             ></v-fab>
                                             <v-img
+                                                v-if="photo.File_type == 'صورة'"
                                                 :src="photo.image"
                                                 height="200"
                                                 cover
                                             ></v-img>
+                                            <video
+                                                v-if="
+                                                    photo.File_type == 'فيديو'
+                                                "
+                                                width="320"
+                                                height="240"
+                                                controls
+                                            >
+                                                <source
+                                                    :src="photo.video"
+                                                    type="video/mp4"
+                                                />
+
+                                                Your browser does not support
+                                                the video tag.
+                                            </video>
                                         </v-card>
                                     </v-container>
                                 </v-tabs-window-item>
@@ -289,10 +367,27 @@
                                                 @click="photos.dialog_3 = true"
                                             ></v-fab>
                                             <v-img
+                                                v-if="photo.File_type == 'صورة'"
                                                 :src="photo.image"
                                                 height="200"
                                                 cover
                                             ></v-img>
+                                            <video
+                                                v-if="
+                                                    photo.File_type == 'فيديو'
+                                                "
+                                                width="320"
+                                                height="240"
+                                                controls
+                                            >
+                                                <source
+                                                    :src="photo.video"
+                                                    type="video/mp4"
+                                                />
+
+                                                Your browser does not support
+                                                the video tag.
+                                            </video>
                                         </v-card>
                                     </v-container>
                                 </v-tabs-window-item>
@@ -321,10 +416,27 @@
                                                 @click="photos.dialog_3 = true"
                                             ></v-fab>
                                             <v-img
+                                                v-if="photo.File_type == 'صورة'"
                                                 :src="photo.image"
                                                 height="200"
                                                 cover
                                             ></v-img>
+                                            <video
+                                                v-if="
+                                                    photo.File_type == 'فيديو'
+                                                "
+                                                width="320"
+                                                height="240"
+                                                controls
+                                            >
+                                                <source
+                                                    :src="photo.video"
+                                                    type="video/mp4"
+                                                />
+
+                                                Your browser does not support
+                                                the video tag.
+                                            </video>
                                         </v-card>
                                     </v-container>
                                 </v-tabs-window-item>
@@ -354,10 +466,27 @@
                                                 @click="photos.dialog_3 = true"
                                             ></v-fab>
                                             <v-img
+                                                v-if="photo.File_type == 'صورة'"
                                                 :src="photo.image"
                                                 height="200"
                                                 cover
                                             ></v-img>
+                                            <video
+                                                v-if="
+                                                    photo.File_type == 'فيديو'
+                                                "
+                                                width="320"
+                                                height="240"
+                                                controls
+                                            >
+                                                <source
+                                                    :src="photo.video"
+                                                    type="video/mp4"
+                                                />
+
+                                                Your browser does not support
+                                                the video tag.
+                                            </video>
                                         </v-card>
                                     </v-container>
                                 </v-tabs-window-item>
@@ -489,16 +618,20 @@ export default defineComponent({
         // Destructure reactive references and methods from Photos store
         const {
             Photo,
+            types,
+            Add_Video,
             dialog_3,
             loading,
             Photos,
             Add_Photos,
+            on_Video_Change,
             dialog,
             delete_Photo,
             Get_data,
             upload_Image,
             type,
             Types,
+            video,
             dialog_6,
             handletypes,
             Photo_Information,
@@ -517,6 +650,10 @@ export default defineComponent({
         // Return the necessary reactive properties and methods
         return {
             Photo,
+            types,
+            on_Video_Change,
+            video,
+            Add_Video,
             dialog_3,
             loading,
             dialog_6,

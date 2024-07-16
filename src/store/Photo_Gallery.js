@@ -44,12 +44,14 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
         photos_show: "",
         File_Name: "",
         type: "",
+        types: "صورة",
         Photos: [],
         All_photos: [],
         trip: [],
         party: [],
         news: [],
         image: null,
+        video: null,
         tab: "all",
         progress: 0,
         Photo_Information: "",
@@ -57,6 +59,7 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
         Types: ["trip", "party", "news"],
         Photo: {
             image: null,
+            video: null,
         },
         random: 0,
         loading: false,
@@ -101,7 +104,6 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
                 if (this.Photo.image) {
                     // Step 1: Upload the image and get the download URL
                     const imageUrl = await this.upload_Image(this.Photo.image);
-
                     // Get current local time
                     const currentTime = new Date().toLocaleString();
 
@@ -110,6 +112,7 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
                         image: imageUrl,
                         time: currentTime,
                         type: this.type,
+                        File_type: this.types,
                     });
 
                     // Step 3: Update the newly added document with its own ID
@@ -125,14 +128,51 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
                     this.loading = false;
                     this.dialog = false;
                 } else {
-                    console.error("No image selected.");
+                    console.error("No file selected.");
                     this.loading = false;
                 }
             } catch (error) {
                 console.error("Error adding document: ", error);
             }
         },
+        // Action method to add a photo to Firestore
+        async Add_Video() {
+            try {
+                this.loading = true;
+                if (this.Photo.video) {
+                    // Step 1: Upload the image and get the download URL
+                    const videoUrl = await this.upload_Image(this.Photo.video);
+                    // Get current local time
+                    const currentTime = new Date().toLocaleString();
 
+                    // Step 2: Add a document to the "Photos" collection in Firestore
+                    const docRef = await addDoc(collection(db, "Photos"), {
+                        video: videoUrl,
+                        time: currentTime,
+                        type: this.type,
+                        File_type: this.types,
+                    });
+
+                    // Step 3: Update the newly added document with its own ID
+                    await updateDoc(docRef, {
+                        id: docRef.id,
+                    });
+
+                    console.log("Document written with ID: ", docRef.id);
+
+                    // Step 4: Refresh photo data
+                    this.Get_data();
+
+                    this.loading = false;
+                    this.dialog = false;
+                } else {
+                    console.error("No file selected.");
+                    this.loading = false;
+                }
+            } catch (error) {
+                console.error("Error adding document: ", error);
+            }
+        },
         // Action method to retrieve all photos from Firestore
         async Get_data() {
             try {
@@ -259,9 +299,20 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
                 this.image = null;
             }
         },
+        // Action method to handle file change event and set image preview
+        on_Video_Change(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Convert file to a URL that can be used as an image source
+                this.video = URL.createObjectURL(file);
+            } else {
+                this.video = null;
+            }
+        },
         // Store Photo information
         photo_Information(Photo) {
             this.Photo_Information = Photo.image;
+            this.Video_Information = Photo.video;
             this.Id_Information = Photo.id;
             console.log(Photo.id);
         },

@@ -78,7 +78,22 @@
                 @click.="photos.photo_Information(photo)"
                 @click="dialog_6 = true"
             >
-                <v-img :src="photo.image" height="300" cover></v-img>
+                <v-img
+                    v-if="photo.File_type == 'صورة'"
+                    :src="photo.image"
+                    height="200"
+                    cover
+                ></v-img>
+                <video
+                    v-if="photo.File_type == 'فيديو'"
+                    width="320"
+                    height="240"
+                    controls
+                >
+                    <source :src="photo.video" type="video/mp4" />
+
+                    Your browser does not support the video tag.
+                </video>
                 <!-- Display each photo -->
                 <v-dialog v-model="dialog_6" width="90%">
                     <v-card width="100%" class="popup">
