@@ -87,19 +87,22 @@ export const useadmin = defineStore("admin", {
         async add_admin() {
             try {
                 const secrureDataStore = useSecureDataStore();
-                const x = secrureDataStore.encryptData(
-                    this.user.name,
-                    "12345t"
-                );
-                console.log("users=>", this.user);
-                console.log("x=>", x);
+
                 this.loading = true;
                 // Add document to Firestore collection
                 const docRef = await addDoc(collection(db, "users"), {
-                    name: this.user.name,
-                    email: this.user.email,
+                    name: secrureDataStore.encryptData(
+                        this.user.name,
+                        "12345a"
+                    ),
+                    email: secrureDataStore.encryptData(
+                        this.user.email,
+                        "12345a"
+                    ),
                     userType: this.user.expectedUserType,
+
                     password: this.user.password,
+
                     roles: this.user.roles,
                 });
                 await updateDoc(docRef, {
@@ -117,17 +120,34 @@ export const useadmin = defineStore("admin", {
         // Fetch admin user data
         async Get_data() {
             try {
+                const decryption = useSecureDataStore();
                 this.loading1 = true;
                 this.users = []; // Clear users array
+
                 // Retrieve documents from Firestore collection
                 const querySnapshot = await getDocs(collection(db, "users"));
                 // Loop through documents and filter by userType
                 querySnapshot.forEach((doc) => {
                     if (doc.data().userType == "admin") {
-                        this.users.push(doc.data()); // Add admin users to array
+                        const userData = {
+                            email: decryption.decryptData(
+                                doc.data().email,
+                                "12345a"
+                            ),
+
+                            name: decryption.decryptData(
+                                doc.data().name,
+                                "12345a"
+                            ),
+                            userType: doc.data().expectedUserType,
+
+                            password: doc.data().password,
+
+                            roles: doc.data().roles,
+                        };
+                        this.users.push(userData); // Add admin users to array
                     }
                 });
-                console.log("this.Users", this.users);
                 this.loading1 = false;
             } catch (error) {
                 console.error("Error retrieving data: ", error);
