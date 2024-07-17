@@ -19,11 +19,9 @@ const firebaseConfig = {
     messagingSenderId: "462211256149",
     appId: "1:462211256149:web:a03ace3c70b306620169dc",
 };
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
 export const useadmin = defineStore("admin", {
     state: () => ({
         // Reactive state
@@ -63,12 +61,10 @@ export const useadmin = defineStore("admin", {
     }),
     actions: {
         // Actions section (methods)
-
         // Toggle password visibility
         toggle_Show_Password() {
             this.show_Password = !this.show_Password;
         },
-
         // Generate random password
         generate_Random_Password() {
             const characters =
@@ -82,7 +78,6 @@ export const useadmin = defineStore("admin", {
             this.user.password = password; // Update user's password
             return this.user.password;
         },
-
         // Add new admin user
         async add_admin() {
             try {
@@ -116,7 +111,6 @@ export const useadmin = defineStore("admin", {
                 console.error("Error adding document: ", error);
             }
         },
-
         // Fetch admin user data
         async Get_data() {
             try {
@@ -130,6 +124,7 @@ export const useadmin = defineStore("admin", {
                 querySnapshot.forEach((doc) => {
                     if (doc.data().userType == "admin") {
                         const userData = {
+                            id: doc.id,
                             email: decryption.decryptData(
                                 doc.data().email,
                                 "12345a"
@@ -153,7 +148,6 @@ export const useadmin = defineStore("admin", {
                 console.error("Error retrieving data: ", error);
             }
         },
-
         // Delete user from Firestore and array
         async delete_user(user_Id) {
             try {
@@ -174,7 +168,6 @@ export const useadmin = defineStore("admin", {
                 console.error("Error deleting user:", error);
             }
         },
-
         // Store user information
         user_Information(user) {
             this.name_Information = user.name;
@@ -183,7 +176,6 @@ export const useadmin = defineStore("admin", {
             this.email_Information = user.email;
             this.roles_Information = user.roles;
         },
-
         // Update admin user information
         async Update_Admin(userId) {
             try {

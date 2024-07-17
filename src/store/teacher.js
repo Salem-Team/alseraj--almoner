@@ -10,6 +10,7 @@ import {
     getDocs,
 } from "@firebase/firestore";
 
+import { useSecureDataStore } from "./secureData";
 const firebaseConfig = {
     // Firebase configuration object
     apiKey: "AIzaSyBdk3sqIHjXvB2C-O-lvkRgMFpg8pemkno",
@@ -19,11 +20,9 @@ const firebaseConfig = {
     messagingSenderId: "462211256149",
     appId: "1:462211256149:web:a03ace3c70b306620169dc",
 };
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
 export const useteacher = defineStore("teacher", {
     state: () => ({
         // Reactive state
@@ -63,12 +62,10 @@ export const useteacher = defineStore("teacher", {
     }),
     actions: {
         // Actions section (methods)
-
         // Toggle password visibility
         toggle_Show_Password() {
             this.show_Password = !this.show_Password;
         },
-
         // Generate random password
         generate_Random_Password() {
             const characters =
@@ -82,17 +79,26 @@ export const useteacher = defineStore("teacher", {
             this.user.password = password; // Update user's password
             return this.user.password;
         },
-
         // Add new teacher user
         async add_teacher() {
             try {
+                const secrureDataStore = useSecureDataStore();
+
                 this.loading = true;
                 // Add document to Firestore collection
                 const docRef = await addDoc(collection(db, "teachers"), {
-                    name: this.user.name,
-                    email: this.user.email,
+                    name: secrureDataStore.encryptData(
+                        this.user.name,
+                        "12345a"
+                    ),
+                    email: secrureDataStore.encryptData(
+                        this.user.email,
+                        "12345a"
+                    ),
                     userType: this.user.expectedUserType,
+
                     password: this.user.password,
+
                     roles: this.user.roles,
                 });
                 await updateDoc(docRef, {
@@ -106,27 +112,44 @@ export const useteacher = defineStore("teacher", {
                 console.error("Error adding document: ", error);
             }
         },
-
         // Fetch teacher user data
         async Get_data() {
             try {
+                const decryption = useSecureDataStore();
                 this.loading1 = true;
                 this.users = []; // Clear users array
+
                 // Retrieve documents from Firestore collection
                 const querySnapshot = await getDocs(collection(db, "teachers"));
                 // Loop through documents and filter by userType
                 querySnapshot.forEach((doc) => {
                     if (doc.data().userType == "teacher") {
-                        this.users.push(doc.data()); // Add teacher users to array
+                        const userData = {
+                            id: doc.id,
+                            email: decryption.decryptData(
+                                doc.data().email,
+                                "12345a"
+                            ),
+
+                            name: decryption.decryptData(
+                                doc.data().name,
+                                "12345a"
+                            ),
+                            userType: doc.data().expectedUserType,
+
+                            password: doc.data().password,
+
+                            roles: doc.data().roles,
+                        };
+                        this.users.push(userData); // Add teacher users to array
                     }
                 });
-                console.log("this.Users", this.users);
+                console.log("this.teachers", this.users);
                 this.loading1 = false;
             } catch (error) {
                 console.error("Error retrieving data: ", error);
             }
         },
-
         // Delete user from Firestore and array
         async delete_user(user_Id) {
             try {
@@ -147,7 +170,6 @@ export const useteacher = defineStore("teacher", {
                 console.error("Error deleting user:", error);
             }
         },
-
         // Store user information
         user_Information(user) {
             this.name_Information = user.name;
@@ -156,7 +178,6 @@ export const useteacher = defineStore("teacher", {
             this.email_Information = user.email;
             this.roles_Information = user.roles;
         },
-
         // Update teacher user information
         async Update_teacher(userId) {
             try {
