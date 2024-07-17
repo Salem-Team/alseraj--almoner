@@ -170,21 +170,28 @@ export const useadmin = defineStore("admin", {
         },
         // Store user information
         user_Information(user) {
-            this.name_Information = user.name;
-            this.Id_Information = user.id;
+            this.name_Information = user.userData.name;
+            this.Id_Information = user.userData.id;
             console.log(user.id);
-            this.email_Information = user.email;
-            this.roles_Information = user.roles;
+            this.email_Information = user.userData.email;
+            this.roles_Information = user.userData.roles;
         },
         // Update admin user information
         async Update_Admin(userId) {
             try {
+                const secrureDataStore = useSecureDataStore();
                 this.loading = true;
                 const docRef = doc(db, "users", userId);
                 // Update document in Firestore
                 await updateDoc(docRef, {
-                    name: this.name_Information,
-                    email: this.email_Information,
+                    name: secrureDataStore.encryptData(
+                        this.name_Information,
+                        "12345a"
+                    ),
+                    email: secrureDataStore.encryptData(
+                        this.email_Information,
+                        "12345a"
+                    ),
                     roles: this.roles_Information,
                 });
                 this.Get_data(); // Refresh user data
