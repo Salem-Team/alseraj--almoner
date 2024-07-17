@@ -10,6 +10,7 @@ import {
     deleteDoc,
     arrayUnion,
     doc,
+    Timestamp,
 } from "@firebase/firestore";
 import { initializeApp } from "@firebase/app";
 import { getFirestore } from "firebase/firestore";
@@ -45,17 +46,21 @@ export const useJobs = defineStore("job", {
         dialog_1: false,
         dialog_2: false,
         dialog_3: false,
+        dialog_9: false,
         name_Information: "",
         email_Information: "",
         phone_Information: "",
         CV_Information: null,
         applies_Information: [],
+        id_Information: "",
+        Id_Information: "",
         progress: 0,
         Jobs: [],
         Job: {
             title: "",
             description: "",
             applies: [],
+            id: "",
         },
         Apply: {
             name: "",
@@ -118,7 +123,7 @@ export const useJobs = defineStore("job", {
                 if (this.Apply.CV) {
                     // Step 1: Upload CV and get the download URL
                     const CVUrl = await this.upload_CV(this.Apply.CV);
-
+                    const currentTime = Timestamp.now();
                     // Step 2: Prepare data to add to the "Apply" collection
                     const applyData = {
                         title: this.Title_Information,
@@ -127,6 +132,7 @@ export const useJobs = defineStore("job", {
                         phone: this.Apply.phone,
                         CV: CVUrl,
                         description: this.Apply.description,
+                        time: currentTime,
                     };
 
                     // Step 3: Add a document to the "Apply" collection
@@ -150,7 +156,6 @@ export const useJobs = defineStore("job", {
                     });
 
                     // Step 6: Update counter and notifications
-                    const currentTime = new Date().toLocaleString();
                     const Snapshot = await getDocs(collection(db, "counter"));
                     Snapshot.forEach((doc) => {
                         this.counter = doc.data();
@@ -197,6 +202,61 @@ export const useJobs = defineStore("job", {
                 console.error("Error adding document: ", error);
             }
         },
+        async Delete_Apply(applyId, JobId, CV) {
+            try {
+                this.loading = true;
+
+                // Step 1: Delete the Apply document from the "Apply" collection
+                await deleteDoc(doc(db, "Apply", applyId));
+                console.log(
+                    "Document with ID ",
+                    applyId,
+                    " deleted successfully."
+                );
+
+                // Step 2: Delete the corresponding CV from Firebase Storage
+                await this.delete_CV(CV);
+                console.log("CV deleted successfully.");
+
+                // Step 3: Remove the apply document ID from the corresponding "Jobs" document
+                const jobRef = doc(db, "Jobs", JobId);
+                const jobSnapshot = await getDoc(jobRef);
+
+                if (jobSnapshot.exists()) {
+                    const jobData = jobSnapshot.data();
+                    const updatedApplies = jobData.applies.filter(
+                        (id) => id !== applyId
+                    );
+                    await updateDoc(jobRef, { applies: updatedApplies });
+                    console.log(
+                        "Apply document ID removed from Jobs document."
+                    );
+                } else {
+                    console.log("Jobs document not found.");
+                }
+                // Find the index of the Apply in the Apply array
+                const index = this.Apply.findIndex(
+                    (Apply) => Apply.id === applyId
+                );
+                // If the Apply is found in the Apply array, remove it
+                if (index !== -1) {
+                    this.Apply.splice(index, 1);
+                    console.log("Apply deleted successfully from Apply array");
+                } else {
+                    console.log("Apply not found in Apply array");
+                }
+                // Step 4: Refresh data if needed
+                this.Get_Apply_data();
+                this.Get_data();
+                // Step 5: Perform UI-related operations (if needed)
+                // Close dialog, update UI, etc.
+                this.dialog_9 = false;
+                this.loading = false;
+            } catch (error) {
+                console.error("Error deleting document: ", error);
+                this.loading = false;
+            }
+        },
 
         // Display counter functionality
         async counter_display() {
@@ -211,7 +271,7 @@ export const useJobs = defineStore("job", {
         async Add_Jobs() {
             try {
                 this.loading = true;
-                const currentTime = new Date().toLocaleString();
+                const currentTime = Timestamp.now();
                 const docRef = await addDoc(collection(db, "Jobs"), {
                     title: this.Job.title,
                     description: this.Job.description,
@@ -258,7 +318,7 @@ export const useJobs = defineStore("job", {
                 const querySnapshot = await getDocs(
                     query(
                         collection(db, "Apply_notifications"),
-                        orderBy("time", "asc")
+                        orderBy("time", "desc")
                     )
                 );
                 querySnapshot.forEach((doc) => {
@@ -322,8 +382,9 @@ export const useJobs = defineStore("job", {
                 this.loading1 = true;
                 this.Jobs = [];
                 const querySnapshot = await getDocs(
-                    query(collection(db, "Jobs"), orderBy("time", "asc"))
+                    query(collection(db, "Jobs"), orderBy("time", "desc"))
                 );
+
                 querySnapshot.forEach((doc) => {
                     this.Jobs.push(doc.data());
                 });
@@ -439,12 +500,22 @@ export const useJobs = defineStore("job", {
             this.Description_Information = Job.description;
             this.applies_Information = Job.applies;
         },
+        // Store job details for displaying in a dialog
+        Apply_Information(Apply) {
+            this.Name_Information = "";
+            this.Email_Information = "";
+            this.CV_Information = null;
+            this.Name_Information = Apply.name;
+            this.id_Information = Apply.id;
+            console.log(Apply.id);
+            this.CV_Information = Apply.CV;
+        },
 
         // Update job details
         async Update_Jobs(JobId) {
             try {
                 this.loading = true;
-                const currentTime = new Date().toLocaleString();
+                const currentTime = Timestamp.now().toDate();
                 const docRef = doc(db, "Jobs", JobId);
                 updateDoc(docRef, {
                     title: this.Title_Information,

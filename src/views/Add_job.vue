@@ -118,24 +118,23 @@
                         required
                     ></v-text-field>
                     <div class="card">
-                        <Editor v-model="Job.description">
-                            <v-textarea
-                                v-model="Job.description"
-                                :rules="[
-                                    (v) => !!v || 'الرجاء إدخال وصف قصير',
-                                    (v) =>
-                                        (v && v.length <= 150) ||
-                                        'يجب أن يكون الوصف 150 حرفًا كحد أقصى',
-                                ]"
-                                label="وصف قصير"
-                                :counter="150"
-                                variant="outlined"
-                                required
-                                rows="4"
-                                no-resize
-                                :maxlength="150"
-                            ></v-textarea>
-                        </Editor>
+                        <Editor v-model="Job.description"> </Editor>
+                        <v-textarea
+                            v-model="Job.description"
+                            :rules="[
+                                (v) => !!v || 'الرجاء إدخال وصف قصير',
+                                (v) =>
+                                    (v && v.length <= 150) ||
+                                    'يجب أن يكون الوصف 150 حرفًا كحد أقصى',
+                            ]"
+                            label="وصف قصير"
+                            :counter="150"
+                            variant="outlined"
+                            required
+                            rows="4"
+                            no-resize
+                            :maxlength="150"
+                        ></v-textarea>
                     </div>
                     <v-btn
                         type="submit"
@@ -229,14 +228,15 @@
                                     @click.="dialog_1 = true"
                                 />
                                 <font-awesome-icon
-                                    @click="jobs.dialog_3 = true"
+                                    @click="jobs.Job_Information(Job)"
+                                    @click.="jobs.dialog_3 = true"
                                     :icon="['fas', 'trash']"
                                 />
                             </div>
                         </div>
                         <div class="time">
                             <font-awesome-icon :icon="['fas', 'clock']" />
-                            <div>{{ Job.time }}</div>
+                            <div>{{ Job.time.toDate() }}</div>
                         </div>
                     </div>
                     <div class="body">
@@ -285,6 +285,15 @@
                                         <div>
                                             <font-awesome-icon
                                                 icon="fas fa-trash"
+                                                @click="
+                                                    (jobs.dialog_9 = true),
+                                                        jobs.Job_Information(
+                                                            Job
+                                                        ),
+                                                        jobs.Apply_Information(
+                                                            Apply
+                                                        )
+                                                "
                                             />
                                         </div>
                                     </div>
@@ -293,6 +302,7 @@
                                             icon="fas fa-envelope"
                                         />
                                         <div>{{ Apply.email }}</div>
+                                        <div>{{ Apply.time.toDate() }}</div>
                                     </div>
                                 </div>
                                 <div class="body">
@@ -349,7 +359,65 @@
                         color="var(--pink-color)"
                         :loading="loading"
                         :disabled="loading"
-                        @click="jobs.delete_Job(Job.id, Job.CV)"
+                        @click="jobs.delete_Job(Id_Information)"
+                        style="
+                            color: #fff;
+                            font-weight: bold;
+                            width: 48%;
+                            height: 45px;
+                        "
+                    >
+                        تأكيد
+                    </v-btn>
+                </div>
+            </v-card-text>
+        </v-card></v-dialog
+    ><v-dialog v-model="dialog_9" width="90%">
+        <v-card width="100%" class="popup">
+            <div class="d-flex justify-space-between align-center title">
+                <div style="color: var(--main-color)">تأكيد الحذف!</div>
+                <v-btn icon="mdi-close" @click="dialog_9 = false"></v-btn>
+            </div>
+
+            <p
+                style="
+                    padding: 20px;
+                    color: var(--therd-color);
+                    font-weight: bold;
+                "
+            >
+                هل أنت متأكد من حذفك لهذه الطلب؟
+            </p>
+            <v-card-text>
+                <div class="d-flex align-center">
+                    <v-btn
+                        type="submit"
+                        color="var(--main-color)"
+                        :loading="loading"
+                        :disabled="loading"
+                        @click="dialog_9 = false"
+                        style="
+                            color: #fff;
+                            font-weight: bold;
+                            width: 48%;
+                            height: 45px;
+                        "
+                    >
+                        إلغاء
+                    </v-btn>
+                    <v-spacer />
+                    <v-btn
+                        type="submit"
+                        color="var(--pink-color)"
+                        :loading="loading"
+                        :disabled="loading"
+                        @click="
+                            jobs.Delete_Apply(
+                                id_Information,
+                                Id_Information,
+                                CV_Information
+                            )
+                        "
                         style="
                             color: #fff;
                             font-weight: bold;
@@ -386,6 +454,12 @@ export default defineComponent({
             Job,
             Jobs,
             dialog_3,
+            dialog_9,
+            Delete_Apply,
+            CV_Information,
+            Apply_Information,
+            id_Information,
+            Id_Information,
             applies,
             Apply,
             loading,
@@ -415,7 +489,13 @@ export default defineComponent({
             Job,
             dialog_3,
             loading1,
+            CV_Information,
+            id_Information,
+            Id_Information,
+            dialog_9,
             loading,
+            Apply_Information,
+            Delete_Apply,
             applies,
             counter_display,
             Update_counter,

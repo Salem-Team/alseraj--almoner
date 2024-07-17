@@ -75,7 +75,7 @@
             </v-card>
         </div>
         <!-- Load More Button -->
-        <div v-if="Photos.length < 6" class="btn">
+        <div v-if="Photos.length < 3" class="btn">
             <v-btn
                 style="
                     background-color: var(

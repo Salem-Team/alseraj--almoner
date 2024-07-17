@@ -8,6 +8,7 @@ import {
     doc,
     query,
     orderBy,
+    Timestamp,
 } from "@firebase/firestore";
 import { initializeApp } from "@firebase/app";
 import { getFirestore } from "firebase/firestore";
@@ -46,6 +47,7 @@ export const useNews = defineStore("News", {
         Image_Information: null,
         Time_Condition: "",
         progress: 0,
+        image: "",
         dialog_6: false,
         News: [],
         New: {
@@ -89,6 +91,7 @@ export const useNews = defineStore("News", {
 
             // Delete the file
             deleteObject(desertRef);
+            console.log("Photo deleted");
         },
         alignment(text, align) {
             text.textAlign = align;
@@ -102,7 +105,7 @@ export const useNews = defineStore("News", {
                     const imageUrl = await this.upload_Image(this.New.image);
 
                     // Get current local time
-                    const currentTime = new Date().toLocaleString();
+                    const currentTime = Timestamp.now();
 
                     // Step 2: Add a document to the "News" collection in Firestore
                     const docRef = await addDoc(collection(db, "News"), {
@@ -139,7 +142,7 @@ export const useNews = defineStore("News", {
                 this.News = [];
                 this.loading1 = true;
                 const querySnapshot = await getDocs(
-                    query(collection(db, "News"), orderBy("time", "asc"))
+                    query(collection(db, "News"), orderBy("time", "desc"))
                 );
                 querySnapshot.forEach((doc) => {
                     this.News.push(doc.data());
@@ -212,19 +215,32 @@ export const useNews = defineStore("News", {
             this.Image_Information = New.image;
             this.Time_Condition = New.time;
         },
-
+        // Action method to handle file change event and set image preview
+        onFileChange(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Convert file to a URL that can be used as an image source
+                this.image = URL.createObjectURL(file);
+            } else {
+                this.image = null;
+            }
+        },
         // Action method to update news details in Firestore
         async Update_News(NewId) {
             try {
                 this.loading = true;
-                const currentTime = new Date().toLocaleString();
+                const currentTime = Timestamp.now();
                 const docRef = doc(db, "News", NewId);
-
+                // Step 1: Upload the image and get the download URL
+                const imageUrl = await this.upload_Image(
+                    this.Image_Information
+                );
                 // Step 1: Update the document in Firestore
                 await updateDoc(docRef, {
                     title: this.Title_Information,
                     description: this.Description_Information,
                     time: currentTime,
+                    image: imageUrl,
                 });
 
                 // Step 2: Refresh news data
