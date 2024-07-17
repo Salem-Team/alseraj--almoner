@@ -21,6 +21,7 @@
                                 style="cursor: pointer"
                                 @click="dialogFilter = true"
                             />
+
                             <font-awesome-icon
                                 :icon="['fas', 'plus']"
                                 @click="dialog = true"
@@ -452,8 +453,76 @@
                     >
                 </v-col>
             </v-row>
+            <v-dialog
+                v-model="dialogFilter"
+                max-width="600px"
+                class="custom-dialog"
+            >
+                <transition name="fade">
+                    <v-card>
+                        <v-card-title class="headline">
+                            فلتر الطلابه
+                        </v-card-title>
+                        <v-card-text>
+                            <!-- Filter Options -->
+                            <v-form>
+                                <!-- Alphabetical Order Toggle -->
+                                <v-row class="mb-3">
+                                    <v-col cols="6">
+                                        <v-btn
+                                            color="blue darken-1"
+                                            text
+                                            v-model="filters.alphabetical"
+                                            @click="toggleSorting"
+                                            class="filter-btn"
+                                        >
+                                            {{
+                                                sortActive
+                                                    ? "إلغاء الترتيب"
+                                                    : "ترتيب الطلاب ابجديا"
+                                            }}
+                                        </v-btn>
+                                    </v-col>
+
+                                    <v-col cols="6">
+                                        <v-btn
+                                            color="blue darken-1"
+                                            text
+                                            v-model="filters.byPayments"
+                                            @click="togglePaymentsSorting"
+                                            class="filter-btn"
+                                        >
+                                            {{
+                                                paymentSortActive
+                                                    ? "إلغاء الترتيب"
+                                                    : "ترتيب حسب المدفوعات"
+                                            }}
+                                        </v-btn>
+                                    </v-col>
+                                </v-row>
+
+                                <!-- Sort by Grades Select -->
+                                <v-row class="mb-3">
+                                    <v-col cols="12">
+                                        <v-select
+                                            v-model="filters.byGrades"
+                                            :items="gradeOptions"
+                                            label="ترتيب حسب الدرجات"
+                                            outlined
+                                            hide-details
+                                        ></v-select>
+                                    </v-col>
+                                </v-row>
+                            </v-form>
+                        </v-card-text>
+                    </v-card>
+                </transition>
+            </v-dialog>
         </v-container>
-        <StudentList :year="year" />
+        <StudentList
+            :year="year"
+            :sortStudents="sortStudentsByYearAndAlphabetically"
+        />
     </div>
 </template>
 
@@ -468,6 +537,8 @@ import {
     getDocs,
     updateDoc,
     getFirestore,
+    query,
+    where,
 } from "firebase/firestore";
 import { initializeApp } from "@firebase/app";
 import { getStorage } from "firebase/storage";
@@ -511,6 +582,8 @@ export default {
                     link: "",
                 },
             ],
+            paymentSortActive: false,
+            sortActive: false, // متغير لتتبع حالة الترتيب
             class_rooms: [],
             dialog: false,
             newNotification: {
@@ -518,6 +591,8 @@ export default {
                 theDescription: "",
                 NotificationType: "",
             },
+            students_class: [],
+            searchQuery: "",
             dialogAddPhoto: false,
             dialog_1: false,
             dialog_2: false,
@@ -543,6 +618,28 @@ export default {
                 Date: "",
                 link: "",
             },
+
+            filters: {
+                alphabetical: false,
+                byPayments: false,
+                byGrades: null,
+                month: null,
+            },
+            gradeOptions: ["First Month", "Second Month"],
+            monthOptions: [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December",
+            ],
         };
     },
     computed: {
@@ -553,15 +650,58 @@ export default {
         },
     },
     methods: {
+        async sortStudentsByYearAndAlphabetically() {
+            try {
+                // Fetch students belonging to the specified year
+                const q = query(
+                    collection(db, "students"),
+                    where("year", "==", this.year)
+                );
+                const querySnapshot = await getDocs(q);
+
+                this.students_class = querySnapshot.docs
+                    .map((doc) => ({
+                        id: doc.id,
+                        ...doc.data(),
+                        showDetails: false,
+                    }))
+                    .sort((a, b) => {
+                        const nameA =
+                            a.student_information[0].student_name.toLowerCase();
+                        const nameB =
+                            b.student_information[0].student_name.toLowerCase();
+                        return nameA.localeCompare(nameB, "ar", {
+                            sensitivity: "base",
+                        });
+                    });
+                console.log(this.students_class);
+            } catch (error) {
+                console.error("Error sorting students:", error);
+            }
+        },
+        toggleSorting() {
+            this.sortActive = !this.sortActive; // تبديل حالة الترتيب
+            if (this.sortActive) {
+                this.sortStudentsByYearAndAlphabetically(); // تنفيذ ترتيب عند تفعيله
+            }
+        },
         toggleAlphabetical() {
             this.alphabetical = !this.alphabetical;
         },
         togglePayments() {
             this.payments = !this.payments;
         },
+        togglePaymentsSorting() {
+            this.paymentSortActive = !this.paymentSortActive;
+        },
         applyFilter() {
             // تطبيق الفلتر بناءً على الخيارات المحددة
             this.dialog = false;
+        },
+        applyFilters() {
+            // Handle filter logic here
+            console.log("Filters applied:", this.filters);
+            this.dialogFilter = false;
         },
         async fetchClassRooms() {
             try {
@@ -758,5 +898,27 @@ form {
     background: #2196f3c4;
     color: white;
     font-size: 23px;
+}
+.custom-dialog .v-dialog {
+    border-radius: 10px; /* Example: Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Example: Soft shadow */
+}
+
+.custom-dialog .v-card {
+    background-color: #ffffff; /* Example: White background */
+}
+.filter-btn {
+    border: none;
+    border-radius: 30px;
+    padding: 0px 20px;
+    background-color: #5979e6 !important;
+    color: #ffffff;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.filter-btn:hover {
+    background-color: rgba(53, 98, 247, 0.719) !important;
 }
 </style>
