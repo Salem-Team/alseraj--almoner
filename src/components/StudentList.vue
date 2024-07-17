@@ -5,11 +5,12 @@
             @input="searchStudent"
             label="ادخل اسم الطالب"
         ></v-text-field>
+
         <v-row>
             <v-col cols="12">
                 <v-list>
                     <v-list-item
-                        v-for="(student, index) in filteredStudents"
+                        v-for="(student, index) in sortedStudents"
                         :key="student.id"
                     >
                         <v-list-item-content class="student-item">
@@ -39,13 +40,112 @@
                                             <v-avatar color="info">
                                                 <v-icon
                                                     @click.stop="
-                                                        deleteStudent(
+                                                        openDeleteDialog(
                                                             student.id
                                                         )
                                                     "
                                                     icon="mdi-delete"
                                                 ></v-icon>
                                             </v-avatar>
+                                            <v-dialog
+                                                v-model="dialog_stu"
+                                                width="90%"
+                                            >
+                                                <template
+                                                    v-if="
+                                                        dialog_stu ===
+                                                        student.id
+                                                    "
+                                                >
+                                                    <v-card
+                                                        width="100%"
+                                                        class="popup"
+                                                    >
+                                                        <div
+                                                            class="d-flex justify-space-between align-center title"
+                                                        >
+                                                            <div
+                                                                style="
+                                                                    color: var(
+                                                                        --main-color
+                                                                    );
+                                                                "
+                                                            >
+                                                                تأكيد الحذف!
+                                                            </div>
+                                                            <v-btn
+                                                                icon="mdi-close"
+                                                                @click="
+                                                                    closeDeleteDialog
+                                                                "
+                                                            ></v-btn>
+                                                        </div>
+                                                        <p
+                                                            style="
+                                                                padding: 20px;
+                                                                color: var(
+                                                                    --therd-color
+                                                                );
+                                                                font-weight: bold;
+                                                            "
+                                                        >
+                                                            هل أنت متأكد من حذفك
+                                                            لهذا الطالب؟
+                                                        </p>
+                                                        <v-card-text>
+                                                            <div
+                                                                class="d-flex align-center"
+                                                            >
+                                                                <v-btn
+                                                                    type="submit"
+                                                                    color="var(--main-color)"
+                                                                    :loading="
+                                                                        loading
+                                                                    "
+                                                                    :disabled="
+                                                                        loading
+                                                                    "
+                                                                    @click="
+                                                                        closeDeleteDialog
+                                                                    "
+                                                                    style="
+                                                                        color: #fff;
+                                                                        font-weight: bold;
+                                                                        width: 48%;
+                                                                        height: 45px;
+                                                                    "
+                                                                >
+                                                                    إلغاء
+                                                                </v-btn>
+                                                                <v-spacer />
+                                                                <v-btn
+                                                                    type="submit"
+                                                                    color="var(--pink-color)"
+                                                                    :loading="
+                                                                        loading
+                                                                    "
+                                                                    :disabled="
+                                                                        loading
+                                                                    "
+                                                                    @click="
+                                                                        confirmDeleteStudent(
+                                                                            student.id
+                                                                        )
+                                                                    "
+                                                                    style="
+                                                                        color: #fff;
+                                                                        font-weight: bold;
+                                                                        width: 48%;
+                                                                        height: 45px;
+                                                                    "
+                                                                >
+                                                                    تأكيد
+                                                                </v-btn>
+                                                            </div>
+                                                        </v-card-text>
+                                                    </v-card>
+                                                </template>
+                                            </v-dialog>
                                         </div>
                                     </div>
                                 </v-col>
@@ -1869,38 +1969,6 @@
                                 </v-stepper-window>
                             </v-stepper>
                         </v-dialog>
-                        <!-- New Search Student Dialog -->
-                        <v-dialog
-                            transition="dialog-top-transition"
-                            width="90%"
-                            v-model="dialogStore.dialog_searchstudent"
-                        >
-                            <template v-slot:default>
-                                <v-card>
-                                    <v-toolbar
-                                        title="البحث عن طالب"
-                                    ></v-toolbar>
-                                    <v-card-text class="text-h2 pa-6">
-                                        <v-text-field
-                                            v-model="searchQuery"
-                                            label="ادخل اسم الطالب"
-                                        ></v-text-field>
-                                        <v-btn @click="searchStudent"
-                                            >بحث</v-btn
-                                        >
-                                    </v-card-text>
-                                    <v-card-actions class="justify-end">
-                                        <v-btn
-                                            text="Close"
-                                            @click="
-                                                dialogStore.hideSearchStudentDialog
-                                            "
-                                            >Close</v-btn
-                                        >
-                                    </v-card-actions>
-                                </v-card>
-                            </template>
-                        </v-dialog>
                     </v-list-item>
                 </v-list>
             </v-col>
@@ -2125,6 +2193,7 @@ export default {
             type: Number,
             required: true,
         },
+        sortStudents: Function,
     },
     setup() {
         const toast = useToast();
@@ -2137,6 +2206,7 @@ export default {
     },
     data() {
         return {
+            dialog_stu: false,
             menuz: false,
             steps: [
                 "معلومات الطالب",
@@ -2179,7 +2249,7 @@ export default {
             students_class: [],
             dialog_addstudent: false,
             searchQuery: "",
-
+            students: [],
             form: {
                 student_information: [
                     { student_name: "" },
@@ -2447,6 +2517,7 @@ export default {
                 Date: "",
                 link: "",
             },
+            loading: false,
             currentStudentId: null,
             valid: false,
             editedmony: {
@@ -2586,7 +2657,7 @@ export default {
         async fetchStudents() {
             try {
                 const querySnapshot = await getDocs(collection(db, "students"));
-                this.students_class = querySnapshot.docs.map((doc) => {
+                this.students = querySnapshot.docs.map((doc) => {
                     const studentData = doc.data();
                     const student = {
                         id: doc.id,
@@ -2611,8 +2682,10 @@ export default {
                                 }
                             ),
                     };
+
                     return student;
                 });
+
                 console.log("Fetched students:", this.students_class);
             } catch (error) {
                 console.error("Error fetching students:", error);
@@ -2621,20 +2694,9 @@ export default {
 
         async submit() {
             if (this.validateForm()) {
-                console.log(this.errors);
-
                 try {
-                    console.log(
-                        "Adding student:",
-                        this.form.student_information,
-                        this.form.Results,
-                        this.form.payments,
-                        this.form.Notifications,
-                        this.form.photos,
-                        this.year
-                    );
-
-                    await addDoc(collection(db, "students"), {
+                    // Add student data to Firestore
+                    const docRef = await addDoc(collection(db, "students"), {
                         student_information: this.form.student_information,
                         Results: this.form.Results,
                         payments: this.form.payments,
@@ -2643,22 +2705,56 @@ export default {
                         year: this.year,
                     });
 
+                    // Get the ID of the newly added document
+                    const newStudentId = docRef.id;
+
+                    // Construct the student object to add to the local array
+                    const newStudent = {
+                        id: newStudentId,
+                        student_information: this.form.student_information,
+                        Results: this.form.Results,
+                        payments: this.form.payments,
+                        Notifications: this.form.Notifications,
+                        photos: this.form.photos,
+                        year: this.year,
+                    };
+
+                    // Push the new student to the local array
+                    this.students.push(newStudent);
+
+                    // Reset form fields and close dialog
                     this.dialog_addstudent = false;
                     this.handleReset();
                     await this.fetchStudents();
                     this.dialogStore.hideAddStudentDialog();
-                    console.log(this.formattedDate);
-                    this.form.student_information[5].birthday =
-                        this.formattedDate;
+
+                    console.log("Added new student:", newStudent);
                 } catch (error) {
                     console.error("Error adding document:", error);
                 }
             }
         },
+        openDeleteDialog(studentId) {
+            this.dialog_stu = studentId;
+        },
+        closeDeleteDialog() {
+            this.dialog_stu = null;
+        },
+        async confirmDeleteStudent(studentId) {
+            this.loading = true;
+            try {
+                await this.deleteStudent(studentId);
+            } catch (error) {
+                console.error("Error deleting student:", error);
+            } finally {
+                this.loading = false;
+                this.closeDeleteDialog();
+            }
+        },
         async deleteStudent(id) {
             try {
                 await deleteDoc(doc(db, "students", id));
-                this.students_class = this.students_class.filter(
+                this.students = this.students.filter(
                     (student) => student.id !== id
                 );
                 console.log("Deleted student with id:", id);
@@ -2674,39 +2770,198 @@ export default {
                     { educational_level: "" },
                     { gender: "" },
                     { section: "" },
-                    { birthday: "" },
+                    { birthday: null },
                 ],
-
+                Guardian: [
+                    { Guardian_name: "" },
+                    { Guardian_phone: "" },
+                    { Guardian_email: "" },
+                    { Guardian_password: "" },
+                    { Brothers_in_school: "" },
+                    { brother: [""] },
+                ],
                 Results: [
                     {
                         weekly: [
-                            { Subject_Name: "" },
-                            { Degree: "" },
-                            { Data: "" },
+                            {
+                                Subject_Name: "",
+                                Major_degree: 0,
+                                Student_degree: 0,
+                                Date: null,
+                            },
                         ],
                     },
                     {
                         Monthly: [
-                            { Certifications_title: "" },
                             {
-                                Degree: [
-                                    { Subject_Name: "" },
-                                    { Teacher_Name: "" },
-                                    { Behavior_assessment: "" },
-                                    { Minor_degree: "" },
-                                    { Major_degree: "" },
-                                    { Student_degree: "" },
+                                Certificate_title: "شهر يناير",
+                                Degrees: [
+                                    {
+                                        Subject_Name: "عربي",
+                                        Teacher_Name: "عماد عمر",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 99,
+                                    },
+                                    {
+                                        Subject_Name: "قرآن كريم",
+                                        Teacher_Name: "نور محمود",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 95,
+                                    },
+                                    {
+                                        Subject_Name: " جغرافيا",
+                                        Teacher_Name: "علاء محمود",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 80,
+                                    },
+                                    {
+                                        Subject_Name: " تاريخ",
+                                        Teacher_Name: "خالد محمد",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 77,
+                                    },
+                                ],
+                            },
+                            {
+                                Certificate_title: "شهر فبراير",
+                                Degrees: [
+                                    {
+                                        Subject_Name: "انجليزى",
+                                        Teacher_Name: "كريم عمر",
+                                        Behavior_assessment: "جيد",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 98,
+                                    },
+                                    {
+                                        Subject_Name: " جغرافيا",
+                                        Teacher_Name: "كمال محمود",
+                                        Behavior_assessment: "جيد جدا",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 94,
+                                    },
+                                    {
+                                        Subject_Name: " جغرافيا",
+                                        Teacher_Name: "علاء محمود",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 82,
+                                    },
+                                    {
+                                        Subject_Name: " تاريخ",
+                                        Teacher_Name: "خالد محمد",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 79,
+                                    },
+                                ],
+                            },
+                            {
+                                Certificate_title: "شهر مارس",
+                                Degrees: [
+                                    {
+                                        Subject_Name: "انجليزى",
+                                        Teacher_Name: "كريم عمر",
+                                        Behavior_assessment: "جيد",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 98,
+                                    },
+                                    {
+                                        Subject_Name: " جغرافيا",
+                                        Teacher_Name: "كمال محمود",
+                                        Behavior_assessment: "جيد جدا",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 94,
+                                    },
+                                    {
+                                        Subject_Name: " جغرافيا",
+                                        Teacher_Name: "علاء محمود",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 82,
+                                    },
+                                    {
+                                        Subject_Name: " تاريخ",
+                                        Teacher_Name: "خالد محمد",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 79,
+                                    },
+                                ],
+                            },
+                            {
+                                Certificate_title: "شهر ابرايل",
+                                Degrees: [
+                                    {
+                                        Subject_Name: "انجليزى",
+                                        Teacher_Name: "كريم عمر",
+                                        Behavior_assessment: "جيد",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 98,
+                                    },
+                                    {
+                                        Subject_Name: " جغرافيا",
+                                        Teacher_Name: "كمال محمود",
+                                        Behavior_assessment: "جيد جدا",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 94,
+                                    },
+                                    {
+                                        Subject_Name: " جغرافيا",
+                                        Teacher_Name: "علاء محمود",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 82,
+                                    },
+                                    {
+                                        Subject_Name: " تاريخ",
+                                        Teacher_Name: "خالد محمد",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 79,
+                                    },
                                 ],
                             },
                         ],
                     },
                 ],
-                payments: [
-                    { Required: "" },
-                    { paid_up: "" },
-                    { installment_system: "" },
+                payments: {
+                    Requird: 0,
+                    paid_up: 0,
+                    installment_system: "",
+                },
+                Notifications: [
+                    {
+                        NoticeTitle: "",
+                        theDescription: "",
+                        NotificationType: "",
+                    },
                 ],
-                Notifications: [{ Title: "" }, { Details: "" }],
+                photos: [
+                    {
+                        Date: "",
+                        link: "",
+                    },
+                ],
             };
         },
         validateForm() {
@@ -2743,7 +2998,7 @@ export default {
                     const querySnapshot = await getDocs(
                         collection(db, "students")
                     );
-                    this.students_class = querySnapshot.docs.map((doc) => ({
+                    this.students = querySnapshot.docs.map((doc) => ({
                         id: doc.id,
                         ...doc.data(),
                         showDetails: false,
@@ -2753,7 +3008,7 @@ export default {
                     const querySnapshot = await getDocs(
                         collection(db, "students")
                     );
-                    this.students_class = querySnapshot.docs
+                    this.students = querySnapshot.docs
                         .map((doc) => ({
                             id: doc.id,
                             ...doc.data(),
@@ -3084,15 +3339,7 @@ export default {
                 NotificationType: "",
             };
         },
-        // getCardClass(type) {
-        //     return type === "سئ" ? "red-lighten-4" : "green-lighten-4";
-        // },
-        // getIconClass(type) {
-        //     return type === "سئ" ? "red-lighten-4" : "green-lighten-4";
-        // },
-        // getIcon(type) {
-        //     return type === "سئ" ? "mdi-alert-circle" : "mdi-check-circle";
-        // },
+
         // ul
         editPhotos(studentId, index) {
             this.editedStudentId = studentId;
@@ -3213,15 +3460,6 @@ export default {
                 console.error("Error deleting subject:", error);
             }
         },
-        // async updateFirebase(studentId, payments) {
-        //     try {
-        //         const studentDoc = doc(db, "students", studentId);
-        //         await updateDoc(studentDoc, { payments });
-        //         console.log("Document updated successfully");
-        //     } catch (error) {
-        //         console.error("Error updating document:", error);
-        //     }
-        // },
 
         async updateGuardian() {
             try {
@@ -3381,6 +3619,23 @@ export default {
                 (student) => student.year === this.year
             );
         },
+        sortedStudents() {
+            if (this.$parent.sortActive) {
+                // تنفيذ ترتيب الطلاب فقط عندما يكون sortActive مفعلًا
+                const sorted = [...this.students].sort((a, b) => {
+                    const nameA =
+                        a.student_information[0].student_name.toUpperCase();
+                    const nameB =
+                        b.student_information[0].student_name.toUpperCase();
+                    if (nameA < nameB) return -1;
+                    if (nameA > nameB) return 1;
+                    return 0;
+                });
+                return sorted;
+            } else {
+                return this.students; // إذا كان sortActive غير مفعل، عدم التغيير في الترتيب
+            }
+        },
         selectedMonthlyDegrees() {
             if (!this.selectedStudent) {
                 return [];
@@ -3392,12 +3647,13 @@ export default {
             );
         },
     },
-    mounted() {
+    async mounted() {
         this.searchStudent(); // Fetch all students initially
         this.generateRandomPassword();
         this.fetchStudents();
-        // this.currentStudentId = "9QOVmJbJNRK3NVUhuThC";
-        // console.log(this.selectedStudent.student_information[5].birthday);
+
+        this.students = this.$parent.students_class; // Assuming students_class is passed down from parent
+        await this.sortStudents(); // If sorting is needed on mount
     },
 };
 </script>
@@ -3523,5 +3779,8 @@ export default {
 }
 .notification-card .v-icon:hover {
     color: #1e88e5;
+}
+.v-overlay__scrim {
+    display: none;
 }
 </style>
