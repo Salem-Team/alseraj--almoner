@@ -170,11 +170,11 @@ export const useadmin = defineStore("admin", {
         },
         // Store user information
         user_Information(user) {
-            this.name_Information = user.userData.name;
-            this.Id_Information = user.userData.id;
+            this.name_Information = user.name;
+            this.Id_Information = user.id;
             console.log(user.id);
-            this.email_Information = user.userData.email;
-            this.roles_Information = user.userData.roles;
+            this.email_Information = user.email;
+            this.roles_Information = user.roles;
         },
         // Update admin user information
         async Update_Admin(userId) {
