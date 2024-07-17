@@ -172,7 +172,8 @@
                                                         @click="
                                                             deleteNotification(
                                                                 filteredClasses[0]
-                                                                    .id
+                                                                    .id,
+                                                                index
                                                             )
                                                         "
                                                         >mdi-delete</v-icon
@@ -357,7 +358,8 @@
                                                     @click="
                                                         deletePhotos(
                                                             filteredClasses[0]
-                                                                .id
+                                                                .id,
+                                                            index
                                                         )
                                                     "
                                                     >mdi-delete</v-icon
