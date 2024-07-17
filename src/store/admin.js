@@ -9,7 +9,6 @@ import {
     updateDoc,
     getDocs,
 } from "@firebase/firestore";
-
 import { useSecureDataStore } from "./secureData";
 const firebaseConfig = {
     // Firebase configuration object
@@ -144,7 +143,6 @@ export const useadmin = defineStore("admin", {
                         this.users.push(userData); // Add admin users to array
                     }
                 });
-                console.log("this.Users", this.users);
                 this.loading1 = false;
             } catch (error) {
                 console.error("Error retrieving data: ", error);
