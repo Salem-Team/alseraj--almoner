@@ -181,12 +181,19 @@ export const useteacher = defineStore("teacher", {
         // Update teacher user information
         async Update_teacher(userId) {
             try {
+                const secrureDataStore = useSecureDataStore();
                 this.loading = true;
                 const docRef = doc(db, "teachers", userId);
                 // Update document in Firestore
                 await updateDoc(docRef, {
-                    name: this.name_Information,
-                    email: this.email_Information,
+                    name: secrureDataStore.encryptData(
+                        this.name_Information,
+                        "12345a"
+                    ),
+                    email: secrureDataStore.encryptData(
+                        this.email_Information,
+                        "12345a"
+                    ),
                     roles: this.roles_Information,
                 });
                 this.Get_data(); // Refresh user data
