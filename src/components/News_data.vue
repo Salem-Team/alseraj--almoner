@@ -32,7 +32,7 @@
 
                 <!-- Time -->
                 <v-card-subtitle style="margin-top: 20px">
-                    {{ New.time }}
+                    {{ New.time.toDate() }}
                 </v-card-subtitle>
 
                 <!-- Description -->

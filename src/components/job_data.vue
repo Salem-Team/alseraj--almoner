@@ -21,7 +21,7 @@
                         <div class="time">
                             <font-awesome-icon :icon="['fas', 'clock']" />
                             <!-- Clock Icon -->
-                            <div>{{ Job.time }}</div>
+                            <div>{{ Job.time.toDate() }}</div>
                             <!-- Job Time -->
                         </div>
                     </div>

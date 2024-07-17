@@ -8,6 +8,7 @@ import {
     doc,
     orderBy,
     query,
+    Timestamp,
 } from "@firebase/firestore";
 import { initializeApp } from "@firebase/app";
 import { getFirestore } from "firebase/firestore";
@@ -105,7 +106,7 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
                     // Step 1: Upload the image and get the download URL
                     const imageUrl = await this.upload_Image(this.Photo.image);
                     // Get current local time
-                    const currentTime = new Date().toLocaleString();
+                    const currentTime = Timestamp.now();
 
                     // Step 2: Add a document to the "Photos" collection in Firestore
                     const docRef = await addDoc(collection(db, "Photos"), {
@@ -143,7 +144,7 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
                     // Step 1: Upload the image and get the download URL
                     const videoUrl = await this.upload_Image(this.Photo.video);
                     // Get current local time
-                    const currentTime = new Date().toLocaleString();
+                    const currentTime = Timestamp.now();
 
                     // Step 2: Add a document to the "Photos" collection in Firestore
                     const docRef = await addDoc(collection(db, "Photos"), {
@@ -179,7 +180,7 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
                 this.loading1 = true;
                 this.Photos = [];
                 const querySnapshot = await getDocs(
-                    query(collection(db, "Photos"), orderBy("time", "asc"))
+                    query(collection(db, "Photos"), orderBy("time", "desc"))
                 );
                 querySnapshot.forEach((doc) => {
                     this.Photos.push(doc.data());
@@ -202,7 +203,7 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
                 querySnapshot.forEach((doc) => {
                     this.Photos.push(doc.data());
                 });
-                this.Photos = this.Photos.slice(0, 6);
+                this.Photos = this.Photos.slice(0, 3);
                 console.log("this.Photos", this.Photos);
                 this.loading1 = false;
                 // Update type-specific data arrays
