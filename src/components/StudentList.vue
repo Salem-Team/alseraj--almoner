@@ -2460,7 +2460,7 @@ export default {
                 paid_up: 120,
                 installment_system: "شهريا",
             },
-            selectedStudent: "", // To track the selected student
+            selectedStudent: "",
             dialogStudentDetails: false,
             changesMade: false,
             changesMade2: false,
@@ -3029,7 +3029,7 @@ export default {
                 const studentDoc = await getDoc(studentRef);
                 if (studentDoc.exists()) {
                     const studentData = studentDoc.data();
-                    studentData.Notifications.push({
+                    studentData.push({
                         NoticeTitle: this.AddNotice.NoticeTitle,
                         theDescription: this.AddNotice.theDescription,
                         NotificationType: this.AddNotice.NotificationType,
@@ -3043,9 +3043,9 @@ export default {
                     await updateDoc(studentRef, studentData);
                     this.dialogAddNotice = false;
                     this.AddNotice = {
-                        NoticeTitle: "",
-                        theDescription: "",
-                        NotificationType: "",
+                        NoticeTitle: this.AddNotice.NoticeTitle,
+                        theDescription: this.AddNotice.theDescription,
+                        NotificationType: this.AddNotice.NotificationType,
                     };
                     await this.fetchStudents();
                 }
@@ -3053,6 +3053,7 @@ export default {
                 console.error("Error adding subject:", error);
             }
         },
+
         async deleteNotification(studentId, NotificatIndex) {
             try {
                 const studentRef = doc(db, "students", studentId);
@@ -3162,22 +3163,27 @@ export default {
                     const studentDoc = await getDoc(studentRef);
                     if (studentDoc.exists()) {
                         const studentData = studentDoc.data();
-
-                        studentData.photos.push({
-                            DatePhoto: this.AddPhoto.Date,
-                            linkphoto: downloadURL,
-                        });
                         // عند تحديث selectedStudent باستخدام بيانات محدثة
                         this.selectedStudent = Object.assign(
                             {},
                             this.selectedStudent,
                             studentData
                         );
+
+                        studentData.photos.push({
+                            DatePhoto: this.AddPhoto.Date,
+                            linkphoto: downloadURL,
+                        });
                         await updateDoc(studentRef, studentData);
                         this.dialogAddPhoto = false;
+
+                        studentData.photos = {
+                            DatePhoto: "",
+                            linkphoto: null,
+                        };
                         this.AddPhoto = {
-                            file: null,
-                            grade: "",
+                            Date: "",
+                            link: null,
                         };
                         await this.fetchStudents();
                     }
