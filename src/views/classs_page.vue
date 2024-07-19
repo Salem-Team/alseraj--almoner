@@ -485,11 +485,12 @@
                                     <v-col cols="6">
                                         <v-switch
                                             v-model="isSortedAscending"
-                                            :label="
-                                                isSortedAscending
-                                                    ? 'ترتيب أبجدي'
-                                                    : 'ترتيب عكسي'
-                                            "
+                                            label="ترتيب أبجدي"
+                                            :style="{
+                                                color: isSortedAscending
+                                                    ? 'green'
+                                                    : '',
+                                            }"
                                             class="filter-switch"
                                         />
                                     </v-col>
