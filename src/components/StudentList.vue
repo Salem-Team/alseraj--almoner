@@ -5,11 +5,12 @@
             @input="searchStudent"
             label="ادخل اسم الطالب"
         ></v-text-field>
+
         <v-row>
             <v-col cols="12">
                 <v-list>
                     <v-list-item
-                        v-for="(student, index) in filteredStudents"
+                        v-for="(student, index) in sortedStudents"
                         :key="student.id"
                     >
                         <v-list-item-content class="student-item">
@@ -39,7 +40,7 @@
                                             <v-avatar color="info">
                                                 <v-icon
                                                     @click.stop="
-                                                        deleteStudent(
+                                                        confirmDeleteStudent(
                                                             student.id
                                                         )
                                                     "
@@ -53,7 +54,13 @@
                             <v-row style="margin-right: 70px; margin-top: 0px">
                                 <v-col cols="12">
                                     <div>
-                                        <h3 style="color: #2196f3">فصل 2/1</h3>
+                                        <h3 style="color: #2196f3">
+                                            فصل
+                                            {{
+                                                student.student_information[1]
+                                                    .class
+                                            }}
+                                        </h3>
                                     </div>
                                 </v-col>
                                 <v-col cols="2">
@@ -68,7 +75,13 @@
                                             color: #fff;
                                         "
                                     >
-                                        <h3>93%</h3>
+                                        <h3>
+                                            {{
+                                                percentageTotalDegrees(
+                                                    student
+                                                ).toFixed(2)
+                                            }}%
+                                        </h3>
                                         <p>الشهر الاول</p>
                                     </v-card> </v-col
                                 ><v-col cols="2">
@@ -83,7 +96,13 @@
                                             color: #fff;
                                         "
                                     >
-                                        <h3>99%</h3>
+                                        <h3>
+                                            {{
+                                                percentageTotalDegrees2(
+                                                    student
+                                                ).toFixed(2)
+                                            }}%
+                                        </h3>
                                         <p>الشهر الثاني</p>
                                     </v-card> </v-col
                                 ><v-col cols="2">
@@ -113,7 +132,13 @@
                                             color: #fff;
                                         "
                                     >
-                                        <h3>93%</h3>
+                                        <h3>
+                                            {{
+                                                percentageTotalDegrees3(
+                                                    student
+                                                ).toFixed(2)
+                                            }}%
+                                        </h3>
                                         <p>الشهر الاول</p>
                                     </v-card> </v-col
                                 ><v-col cols="2">
@@ -128,7 +153,13 @@
                                             color: #fff;
                                         "
                                     >
-                                        <h3>93%</h3>
+                                        <h3>
+                                            {{
+                                                percentageTotalDegrees4(
+                                                    student
+                                                ).toFixed(2)
+                                            }}%
+                                        </h3>
                                         <p>الشهر الثاني</p>
                                     </v-card>
                                 </v-col>
@@ -971,21 +1002,6 @@
                                                                             attrs,
                                                                         }"
                                                                     >
-                                                                        <!-- <v-text-field
-                                                                            v-model="
-                                                                                editedSubject.Date
-                                                                            "
-                                                                            label="تاريخ الميلاد"
-                                                                            prepend-icon="mdi-calendar"
-                                                                            readonly
-                                                                            required
-                                                                            v-bind="
-                                                                                attrs
-                                                                            "
-                                                                            v-on="
-                                                                                on
-                                                                            "
-                                                                        ></v-text-field> -->
                                                                         <v-text-field
                                                                             v-model="
                                                                                 editedSubject.Date
@@ -1631,6 +1647,7 @@
                                                                 :items="[
                                                                     'سئ',
                                                                     'جيد',
+                                                                    'معلومات',
                                                                 ]"
                                                             ></v-select>
                                                         </v-form>
@@ -1696,6 +1713,7 @@
                                                                 :items="[
                                                                     'سئ',
                                                                     'جيد',
+                                                                    'معلومات',
                                                                 ]"
                                                             ></v-select>
                                                         </v-form>
@@ -1868,38 +1886,6 @@
                                     </form>
                                 </v-stepper-window>
                             </v-stepper>
-                        </v-dialog>
-                        <!-- New Search Student Dialog -->
-                        <v-dialog
-                            transition="dialog-top-transition"
-                            width="90%"
-                            v-model="dialogStore.dialog_searchstudent"
-                        >
-                            <template v-slot:default>
-                                <v-card>
-                                    <v-toolbar
-                                        title="البحث عن طالب"
-                                    ></v-toolbar>
-                                    <v-card-text class="text-h2 pa-6">
-                                        <v-text-field
-                                            v-model="searchQuery"
-                                            label="ادخل اسم الطالب"
-                                        ></v-text-field>
-                                        <v-btn @click="searchStudent"
-                                            >بحث</v-btn
-                                        >
-                                    </v-card-text>
-                                    <v-card-actions class="justify-end">
-                                        <v-btn
-                                            text="Close"
-                                            @click="
-                                                dialogStore.hideSearchStudentDialog
-                                            "
-                                            >Close</v-btn
-                                        >
-                                    </v-card-actions>
-                                </v-card>
-                            </template>
                         </v-dialog>
                     </v-list-item>
                 </v-list>
@@ -2125,6 +2111,7 @@ export default {
             type: Number,
             required: true,
         },
+        sortStudents: Function,
     },
     setup() {
         const toast = useToast();
@@ -2137,6 +2124,7 @@ export default {
     },
     data() {
         return {
+            dialog_stu: false,
             menuz: false,
             steps: [
                 "معلومات الطالب",
@@ -2164,6 +2152,7 @@ export default {
                 Student_degree: null,
                 Date: null,
             },
+            years: "",
             AddNotice: {
                 NoticeTitle: "",
                 theDescription: "",
@@ -2179,8 +2168,579 @@ export default {
             students_class: [],
             dialog_addstudent: false,
             searchQuery: "",
-
+            students: [],
             form: {
+                student_information: [
+                    { student_name: "" },
+                    { class: "" },
+                    { educational_level: this.year },
+                    { gender: "" },
+                    { section: "" },
+                    { birthday: null },
+                ],
+                Guardian: [
+                    { Guardian_name: "" },
+                    { Guardian_phone: "" },
+                    { Guardian_email: "" },
+                    { Guardian_password: "" },
+                    { Brothers_in_school: "" },
+                    { brother: [""] },
+                ],
+                Results: [
+                    {
+                        weekly: [
+                            {
+                                Subject_Name: "",
+                                Major_degree: 0,
+                                Student_degree: 0,
+                                Date: null,
+                            },
+                        ],
+                    },
+                    {
+                        Monthly: [
+                            {
+                                Certificate_title: "شهر يناير",
+                                Degrees: [
+                                    {
+                                        Subject_Name: "عربي",
+                                        Teacher_Name: "عماد عمر",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 99,
+                                    },
+                                    {
+                                        Subject_Name: "قرآن كريم",
+                                        Teacher_Name: "نور محمود",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 95,
+                                    },
+                                    {
+                                        Subject_Name: " جغرافيا",
+                                        Teacher_Name: "علاء محمود",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 80,
+                                    },
+                                    {
+                                        Subject_Name: " تاريخ",
+                                        Teacher_Name: "خالد محمد",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 77,
+                                    },
+                                ],
+                            },
+                            {
+                                Certificate_title: "شهر فبراير",
+                                Degrees: [
+                                    {
+                                        Subject_Name: "انجليزى",
+                                        Teacher_Name: "كريم عمر",
+                                        Behavior_assessment: "جيد",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 98,
+                                    },
+                                    {
+                                        Subject_Name: " جغرافيا",
+                                        Teacher_Name: "كمال محمود",
+                                        Behavior_assessment: "جيد جدا",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 94,
+                                    },
+                                    {
+                                        Subject_Name: " جغرافيا",
+                                        Teacher_Name: "علاء محمود",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 82,
+                                    },
+                                    {
+                                        Subject_Name: " تاريخ",
+                                        Teacher_Name: "خالد محمد",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 79,
+                                    },
+                                ],
+                            },
+                            {
+                                Certificate_title: "شهر مارس",
+                                Degrees: [
+                                    {
+                                        Subject_Name: "انجليزى",
+                                        Teacher_Name: "كريم عمر",
+                                        Behavior_assessment: "جيد",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 98,
+                                    },
+                                    {
+                                        Subject_Name: " جغرافيا",
+                                        Teacher_Name: "كمال محمود",
+                                        Behavior_assessment: "جيد جدا",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 94,
+                                    },
+                                    {
+                                        Subject_Name: " جغرافيا",
+                                        Teacher_Name: "علاء محمود",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 82,
+                                    },
+                                    {
+                                        Subject_Name: " تاريخ",
+                                        Teacher_Name: "خالد محمد",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 79,
+                                    },
+                                ],
+                            },
+                            {
+                                Certificate_title: "شهر ابرايل",
+                                Degrees: [
+                                    {
+                                        Subject_Name: "انجليزى",
+                                        Teacher_Name: "كريم عمر",
+                                        Behavior_assessment: "جيد",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 98,
+                                    },
+                                    {
+                                        Subject_Name: " جغرافيا",
+                                        Teacher_Name: "كمال محمود",
+                                        Behavior_assessment: "جيد جدا",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 94,
+                                    },
+                                    {
+                                        Subject_Name: " جغرافيا",
+                                        Teacher_Name: "علاء محمود",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 82,
+                                    },
+                                    {
+                                        Subject_Name: " تاريخ",
+                                        Teacher_Name: "خالد محمد",
+                                        Behavior_assessment: "ممتاز",
+                                        Minor_degree: 50,
+                                        Major_degree: 100,
+                                        Student_degree: 79,
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+                payments: {
+                    Requird: 0,
+                    paid_up: 0,
+                    installment_system: "",
+                },
+                Notifications: [
+                    {
+                        NoticeTitle: "",
+                        theDescription: "",
+                        NotificationType: "",
+                    },
+                ],
+
+                photos: [
+                    {
+                        Date: "",
+                        link: "",
+                    },
+                ],
+            },
+
+            errors: {
+                student_name: [],
+                class: [],
+                educational_level: [],
+                gender: [],
+                section: [],
+                birthday: [],
+                Guardian_name: [],
+                Guardian_phone: [],
+                Guardian_email: [],
+                Guardian_password: [],
+                Brothers_in_school: [],
+                brother: [],
+                weekly_Subject_Name: [],
+                weekly_Degree: [],
+                weekly_Data: [],
+                monthly_Certifications_title: [],
+                monthly_Subject_Name: [],
+                monthly_Teacher_Name: [],
+                monthly_Behavior_assessment: [],
+                monthly_Minor_degree: [],
+                monthly_Major_degree: [],
+                monthly_Student_degree: [],
+                payments_Required: [],
+                payments_paid_up: [],
+                payments_installment_system: [],
+                Notifications_Title: [],
+                Notifications_Details: [],
+            },
+            currentStep: "Step 1",
+            progress: 75,
+            classes: [
+                "الصف الثالث الثانوي",
+                "الصف الثاني الثانوي",
+                " الصف أولى ثانوي",
+                "الصف الثالث الاعدادي",
+                "الصف الثاني الاعدادي",
+                "الصف الاول الاعدادي",
+                "الصف السادس الابتدائي",
+                "الصف الخامس الابتدائي",
+                "الصف الرابع الابتدائي",
+                "الصف الثالث الابتدائي",
+                "الصف الثاني الابتدائي",
+                "الصف الاول الابتدائي",
+                "ثانيه روضه",
+                " اولي روضه",
+            ],
+            tempDate: null,
+            formattedDate: "",
+            editDialog: false,
+            editedIndex: -1,
+            editedSubject: {
+                Subject_Name: "",
+                Major_degree: 0,
+                Student_degree: 0,
+                Date: null,
+            },
+            editedNotifications: {
+                NoticeTitle: "",
+                theDescription: "",
+                NotificationType: "",
+            },
+            editedPhotos: {
+                Date: "",
+                link: "",
+            },
+            loading: false,
+            currentStudentId: null,
+            valid: false,
+            editedmony: {
+                Requird: 0,
+                paid_up: 0,
+                installment_system: "",
+            },
+            hhhh: false,
+            editednas: {
+                Requird: 100,
+                paid_up: 120,
+                installment_system: "شهريا",
+            },
+            selectedStudent: "",
+            dialogStudentDetails: false,
+            changesMade: false,
+            changesMade2: false,
+            changesMade3: false,
+        };
+    },
+    async created() {
+        await this.fetchStudents();
+        this.years = new Date().getFullYear();
+    },
+    methods: {
+        totalDegrees(student) {
+            const degrees = student.Results[1].Monthly[0].Degrees; // Assuming the first month is the desired one
+            let total = 0;
+            degrees.forEach((degree) => {
+                total += Number(degree.Student_degree); // Ensuring the degree is a number
+            });
+            return total;
+        },
+        percentageTotalDegrees(student) {
+            const totalDegrees = this.totalDegrees(student);
+            const maxDegrees =
+                student.Results[1].Monthly[0].Degrees.length * 100; // Assuming each subject has a max of 100
+            return (totalDegrees / maxDegrees) * 100;
+        },
+        totalDegrees2(student) {
+            const degrees = student.Results[1].Monthly[1].Degrees; // Assuming the first month is the desired one
+            let total = 0;
+            degrees.forEach((degree) => {
+                total += Number(degree.Student_degree); // Ensuring the degree is a number
+            });
+            return total;
+        },
+        percentageTotalDegrees2(student) {
+            const totalDegrees = this.totalDegrees2(student);
+            const maxDegrees =
+                student.Results[1].Monthly[1].Degrees.length * 100; // Assuming each subject has a max of 100
+            return (totalDegrees / maxDegrees) * 100;
+        },
+        totalDegrees3(student) {
+            const degrees = student.Results[1].Monthly[2].Degrees; // Assuming the first month is the desired one
+            let total = 0;
+            degrees.forEach((degree) => {
+                total += Number(degree.Student_degree); // Ensuring the degree is a number
+            });
+            return total;
+        },
+        percentageTotalDegrees3(student) {
+            const totalDegrees = this.totalDegrees3(student);
+            const maxDegrees =
+                student.Results[1].Monthly[2].Degrees.length * 100; // Assuming each subject has a max of 100
+            return (totalDegrees / maxDegrees) * 100;
+        },
+        totalDegrees4(student) {
+            const degrees = student.Results[1].Monthly[3].Degrees; // Assuming the first month is the desired one
+            let total = 0;
+            degrees.forEach((degree) => {
+                total += Number(degree.Student_degree); // Ensuring the degree is a number
+            });
+            return total;
+        },
+        percentageTotalDegrees4(student) {
+            const totalDegrees = this.totalDegrees4(student);
+            const maxDegrees =
+                student.Results[1].Monthly[3].Degrees.length * 100; // Assuming each subject has a max of 100
+            return (totalDegrees / maxDegrees) * 100;
+        },
+        async updateField(section, index, field, value) {
+            if (!this.selectedStudent) {
+                console.error("Error: selectedStudent is null");
+                return;
+            }
+
+            // Update the selected student data
+            this.selectedStudent[section][index][field] = value;
+            this.changesMade = true;
+            // Call updateFirebaseField to update Firestore
+            await this.updateFirebaseField();
+        },
+
+        async updateFirebaseField() {
+            try {
+                const studentDoc = doc(db, "students", this.selectedStudent.id);
+
+                // Update only the necessary fields in Firestore
+                await updateDoc(studentDoc, {
+                    student_information:
+                        this.selectedStudent.student_information,
+                });
+
+                console.log("Document updated successfully");
+            } catch (error) {
+                console.error("Error updating document:", error);
+            }
+        },
+        markChanges() {
+            // Mark changes only, without updating Firebase
+            if (!this.changesMade) {
+                this.changesMade = true;
+                // Optionally, you can also store the original data for comparison
+                this.originalStudentData = JSON.parse(
+                    JSON.stringify(this.selectedStudent)
+                );
+            }
+        },
+        async saveChanges() {
+            try {
+                const studentDoc = doc(db, "students", this.selectedStudent.id);
+                // Update only if changes were marked
+                if (this.changesMade) {
+                    await updateDoc(studentDoc, {
+                        student_information:
+                            this.selectedStudent.student_information,
+                    });
+                    console.log("Document updated successfully");
+                }
+                // Reset changesMade and original data
+                this.changesMade = false;
+                this.originalStudentData = {};
+            } catch (error) {
+                console.error("Error updating document:", error);
+            }
+        },
+        selectMonth(month) {
+            this.selectedMonth = month;
+            // Fetch the data for the selected month
+        },
+        saveChanges2() {
+            this.updateMonthlyDegrees(this.selectedMonthlyDegrees); // Example to update Firebase
+            this.changesMade2 = false;
+        },
+
+        getAlertType(notificationType) {
+            if (notificationType === "سي") {
+                return "error";
+            }
+            switch (notificationType) {
+                case "success":
+                    return "success";
+                case "error":
+                    return "error";
+                case "warning":
+                    return "warning";
+                case "info":
+                    return "info";
+                default:
+                    return "info";
+            }
+        },
+        getIcon(notificationType) {
+            switch (notificationType) {
+                case "success":
+                    return "mdi-check-circle";
+                case "error":
+                case "سي":
+                    return "mdi-alert-circle";
+                case "warning":
+                    return "mdi-alert";
+                case "info":
+                    return "mdi-information";
+                default:
+                    return "mdi-information";
+            }
+        },
+        getIconClass(notificationType) {
+            switch (notificationType) {
+                case "success":
+                    return "green";
+                case "error":
+                case "سي":
+                    return "red";
+                case "warning":
+                    return "orange";
+                case "info":
+                    return "blue";
+                default:
+                    return "blue";
+            }
+        },
+        async fetchStudents() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "students"));
+                this.students = querySnapshot.docs.map((doc) => {
+                    const studentData = doc.data();
+                    const student = {
+                        id: doc.id,
+                        ...studentData,
+                        student_information:
+                            studentData.student_information.map(
+                                (info, index) => {
+                                    if (
+                                        index === 5 &&
+                                        info.birthday &&
+                                        info.birthday.seconds
+                                    ) {
+                                        const date = new Date(
+                                            info.birthday.seconds * 1000
+                                        );
+                                        return {
+                                            ...info,
+                                            birthday: this.formatDate(date),
+                                        };
+                                    }
+                                    return info;
+                                }
+                            ),
+                    };
+
+                    return student;
+                });
+
+                console.log("Fetched students:", this.students_class);
+            } catch (error) {
+                console.error("Error fetching students:", error);
+            }
+        },
+
+        async submit() {
+            if (this.validateForm()) {
+                try {
+                    // Add student data to Firestore
+                    const docRef = await addDoc(collection(db, "students"), {
+                        student_information: this.form.student_information,
+                        Results: this.form.Results,
+                        payments: this.form.payments,
+                        Notifications: this.form.Notifications,
+                        photos: this.form.photos,
+                        year: new Date().getFullYear(),
+                    });
+
+                    // Get the ID of the newly added document
+                    const newStudentId = docRef.id;
+
+                    // Construct the student object to add to the local array
+                    const newStudent = {
+                        id: newStudentId,
+                        student_information: this.form.student_information,
+                        Results: this.form.Results,
+                        payments: this.form.payments,
+                        Notifications: this.form.Notifications,
+                        photos: this.form.photos,
+                        year: this.years,
+                    };
+
+                    // Push the new student to the local array
+                    this.students.push(newStudent);
+
+                    // Reset form fields and close dialog
+                    this.dialog_addstudent = false;
+                    this.handleReset();
+                    await this.fetchStudents();
+                    this.dialogStore.hideAddStudentDialog();
+
+                    console.log("Added new student:", newStudent);
+                } catch (error) {
+                    console.error("Error adding document:", error);
+                }
+            }
+        },
+        openDeleteDialog(studentId) {
+            this.dialog_stu = studentId;
+        },
+        closeDeleteDialog() {
+            this.dialog_stu = null;
+        },
+        async confirmDeleteStudent(studentId) {
+            this.loading = true;
+            try {
+                await this.deleteStudent(studentId);
+            } catch (error) {
+                console.error("Error deleting student:", error);
+            } finally {
+                this.loading = false;
+                this.closeDeleteDialog();
+            }
+        },
+        async deleteStudent(id) {
+            try {
+                await deleteDoc(doc(db, "students", id));
+                this.students = this.students.filter(
+                    (student) => student.id !== id
+                );
+                console.log("Deleted student with id:", id);
+            } catch (error) {
+                console.error("Error deleting document:", error);
+            }
+        },
+        handleReset() {
+            this.form = {
                 student_information: [
                     { student_name: "" },
                     { class: "" },
@@ -2379,334 +2939,6 @@ export default {
                         link: "",
                     },
                 ],
-            },
-
-            errors: {
-                student_name: [],
-                class: [],
-                educational_level: [],
-                gender: [],
-                section: [],
-                birthday: [],
-                Guardian_name: [],
-                Guardian_phone: [],
-                Guardian_email: [],
-                Guardian_password: [],
-                Brothers_in_school: [],
-                brother: [],
-                weekly_Subject_Name: [],
-                weekly_Degree: [],
-                weekly_Data: [],
-                monthly_Certifications_title: [],
-                monthly_Subject_Name: [],
-                monthly_Teacher_Name: [],
-                monthly_Behavior_assessment: [],
-                monthly_Minor_degree: [],
-                monthly_Major_degree: [],
-                monthly_Student_degree: [],
-                payments_Required: [],
-                payments_paid_up: [],
-                payments_installment_system: [],
-                Notifications_Title: [],
-                Notifications_Details: [],
-            },
-            currentStep: "Step 1",
-            progress: 75,
-            classes: [
-                "الصف الثالث الثانوي",
-                "الصف الثاني الثانوي",
-                " الصف أولى ثانوي",
-                "الصف الثالث الاعدادي",
-                "الصف الثاني الاعدادي",
-                "الصف الاول الاعدادي",
-                "الصف السادس الابتدائي",
-                "الصف الخامس الابتدائي",
-                "الصف الرابع الابتدائي",
-                "الصف الثالث الابتدائي",
-                "الصف الثاني الابتدائي",
-                "الصف الاول الابتدائي",
-                "ثانيه روضه",
-                " اولي روضه",
-            ],
-            tempDate: null,
-            formattedDate: "",
-            editDialog: false,
-            editedIndex: -1,
-            editedSubject: {
-                Subject_Name: "",
-                Major_degree: 0,
-                Student_degree: 0,
-                Date: null,
-            },
-            editedNotifications: {
-                NoticeTitle: "",
-                theDescription: "",
-                NotificationType: "",
-            },
-            editedPhotos: {
-                Date: "",
-                link: "",
-            },
-            currentStudentId: null,
-            valid: false,
-            editedmony: {
-                Requird: 0,
-                paid_up: 0,
-                installment_system: "",
-            },
-            hhhh: false,
-            editednas: {
-                Requird: 100,
-                paid_up: 120,
-                installment_system: "شهريا",
-            },
-            selectedStudent: "", // To track the selected student
-            dialogStudentDetails: false,
-            changesMade: false,
-            changesMade2: false,
-            changesMade3: false,
-        };
-    },
-    async created() {
-        await this.fetchStudents();
-    },
-    methods: {
-        async updateField(section, index, field, value) {
-            if (!this.selectedStudent) {
-                console.error("Error: selectedStudent is null");
-                return;
-            }
-
-            // Update the selected student data
-            this.selectedStudent[section][index][field] = value;
-            this.changesMade = true;
-            // Call updateFirebaseField to update Firestore
-            await this.updateFirebaseField();
-        },
-
-        async updateFirebaseField() {
-            try {
-                const studentDoc = doc(db, "students", this.selectedStudent.id);
-
-                // Update only the necessary fields in Firestore
-                await updateDoc(studentDoc, {
-                    student_information:
-                        this.selectedStudent.student_information,
-                });
-
-                console.log("Document updated successfully");
-            } catch (error) {
-                console.error("Error updating document:", error);
-            }
-        },
-        markChanges() {
-            // Mark changes only, without updating Firebase
-            if (!this.changesMade) {
-                this.changesMade = true;
-                // Optionally, you can also store the original data for comparison
-                this.originalStudentData = JSON.parse(
-                    JSON.stringify(this.selectedStudent)
-                );
-            }
-        },
-        async saveChanges() {
-            try {
-                const studentDoc = doc(db, "students", this.selectedStudent.id);
-                // Update only if changes were marked
-                if (this.changesMade) {
-                    await updateDoc(studentDoc, {
-                        student_information:
-                            this.selectedStudent.student_information,
-                    });
-                    console.log("Document updated successfully");
-                }
-                // Reset changesMade and original data
-                this.changesMade = false;
-                this.originalStudentData = {};
-            } catch (error) {
-                console.error("Error updating document:", error);
-            }
-        },
-        selectMonth(month) {
-            this.selectedMonth = month;
-            // Fetch the data for the selected month
-        },
-        saveChanges2() {
-            this.updateMonthlyDegrees(this.selectedMonthlyDegrees); // Example to update Firebase
-            this.changesMade2 = false;
-        },
-
-        getAlertType(notificationType) {
-            if (notificationType === "سي") {
-                return "error";
-            }
-            switch (notificationType) {
-                case "success":
-                    return "success";
-                case "error":
-                    return "error";
-                case "warning":
-                    return "warning";
-                case "info":
-                    return "info";
-                default:
-                    return "info";
-            }
-        },
-        getIcon(notificationType) {
-            switch (notificationType) {
-                case "success":
-                    return "mdi-check-circle";
-                case "error":
-                case "سي":
-                    return "mdi-alert-circle";
-                case "warning":
-                    return "mdi-alert";
-                case "info":
-                    return "mdi-information";
-                default:
-                    return "mdi-information";
-            }
-        },
-        getIconClass(notificationType) {
-            switch (notificationType) {
-                case "success":
-                    return "green";
-                case "error":
-                case "سي":
-                    return "red";
-                case "warning":
-                    return "orange";
-                case "info":
-                    return "blue";
-                default:
-                    return "blue";
-            }
-        },
-        async fetchStudents() {
-            try {
-                const querySnapshot = await getDocs(collection(db, "students"));
-                this.students_class = querySnapshot.docs.map((doc) => {
-                    const studentData = doc.data();
-                    const student = {
-                        id: doc.id,
-                        ...studentData,
-                        student_information:
-                            studentData.student_information.map(
-                                (info, index) => {
-                                    if (
-                                        index === 5 &&
-                                        info.birthday &&
-                                        info.birthday.seconds
-                                    ) {
-                                        const date = new Date(
-                                            info.birthday.seconds * 1000
-                                        );
-                                        return {
-                                            ...info,
-                                            birthday: this.formatDate(date),
-                                        };
-                                    }
-                                    return info;
-                                }
-                            ),
-                    };
-                    return student;
-                });
-                console.log("Fetched students:", this.students_class);
-            } catch (error) {
-                console.error("Error fetching students:", error);
-            }
-        },
-
-        async submit() {
-            if (this.validateForm()) {
-                console.log(this.errors);
-
-                try {
-                    console.log(
-                        "Adding student:",
-                        this.form.student_information,
-                        this.form.Results,
-                        this.form.payments,
-                        this.form.Notifications,
-                        this.form.photos,
-                        this.year
-                    );
-
-                    await addDoc(collection(db, "students"), {
-                        student_information: this.form.student_information,
-                        Results: this.form.Results,
-                        payments: this.form.payments,
-                        Notifications: this.form.Notifications,
-                        photos: this.form.photos,
-                        year: this.year,
-                    });
-
-                    this.dialog_addstudent = false;
-                    this.handleReset();
-                    await this.fetchStudents();
-                    this.dialogStore.hideAddStudentDialog();
-                    console.log(this.formattedDate);
-                    this.form.student_information[5].birthday =
-                        this.formattedDate;
-                } catch (error) {
-                    console.error("Error adding document:", error);
-                }
-            }
-        },
-        async deleteStudent(id) {
-            try {
-                await deleteDoc(doc(db, "students", id));
-                this.students_class = this.students_class.filter(
-                    (student) => student.id !== id
-                );
-                console.log("Deleted student with id:", id);
-            } catch (error) {
-                console.error("Error deleting document:", error);
-            }
-        },
-        handleReset() {
-            this.form = {
-                student_information: [
-                    { student_name: "" },
-                    { class: "" },
-                    { educational_level: "" },
-                    { gender: "" },
-                    { section: "" },
-                    { birthday: "" },
-                ],
-
-                Results: [
-                    {
-                        weekly: [
-                            { Subject_Name: "" },
-                            { Degree: "" },
-                            { Data: "" },
-                        ],
-                    },
-                    {
-                        Monthly: [
-                            { Certifications_title: "" },
-                            {
-                                Degree: [
-                                    { Subject_Name: "" },
-                                    { Teacher_Name: "" },
-                                    { Behavior_assessment: "" },
-                                    { Minor_degree: "" },
-                                    { Major_degree: "" },
-                                    { Student_degree: "" },
-                                ],
-                            },
-                        ],
-                    },
-                ],
-                payments: [
-                    { Required: "" },
-                    { paid_up: "" },
-                    { installment_system: "" },
-                ],
-                Notifications: [{ Title: "" }, { Details: "" }],
             };
         },
         validateForm() {
@@ -2743,7 +2975,7 @@ export default {
                     const querySnapshot = await getDocs(
                         collection(db, "students")
                     );
-                    this.students_class = querySnapshot.docs.map((doc) => ({
+                    this.students = querySnapshot.docs.map((doc) => ({
                         id: doc.id,
                         ...doc.data(),
                         showDetails: false,
@@ -2753,7 +2985,7 @@ export default {
                     const querySnapshot = await getDocs(
                         collection(db, "students")
                     );
-                    this.students_class = querySnapshot.docs
+                    this.students = querySnapshot.docs
                         .map((doc) => ({
                             id: doc.id,
                             ...doc.data(),
@@ -3043,9 +3275,9 @@ export default {
                     await updateDoc(studentRef, studentData);
                     this.dialogAddNotice = false;
                     this.AddNotice = {
-                        NoticeTitle: "",
-                        theDescription: "",
-                        NotificationType: "",
+                        NoticeTitle: this.AddNotice.NoticeTitle,
+                        theDescription: this.AddNotice.theDescription,
+                        NotificationType: this.AddNotice.NotificationType,
                     };
                     await this.fetchStudents();
                 }
@@ -3053,6 +3285,7 @@ export default {
                 console.error("Error adding subject:", error);
             }
         },
+
         async deleteNotification(studentId, NotificatIndex) {
             try {
                 const studentRef = doc(db, "students", studentId);
@@ -3083,15 +3316,7 @@ export default {
                 NotificationType: "",
             };
         },
-        // getCardClass(type) {
-        //     return type === "سئ" ? "red-lighten-4" : "green-lighten-4";
-        // },
-        // getIconClass(type) {
-        //     return type === "سئ" ? "red-lighten-4" : "green-lighten-4";
-        // },
-        // getIcon(type) {
-        //     return type === "سئ" ? "mdi-alert-circle" : "mdi-check-circle";
-        // },
+
         // ul
         editPhotos(studentId, index) {
             this.editedStudentId = studentId;
@@ -3162,22 +3387,27 @@ export default {
                     const studentDoc = await getDoc(studentRef);
                     if (studentDoc.exists()) {
                         const studentData = studentDoc.data();
-
-                        studentData.photos.push({
-                            DatePhoto: this.AddPhoto.Date,
-                            linkphoto: downloadURL,
-                        });
                         // عند تحديث selectedStudent باستخدام بيانات محدثة
                         this.selectedStudent = Object.assign(
                             {},
                             this.selectedStudent,
                             studentData
                         );
+
+                        studentData.photos.push({
+                            DatePhoto: this.AddPhoto.Date,
+                            linkphoto: downloadURL,
+                        });
                         await updateDoc(studentRef, studentData);
                         this.dialogAddPhoto = false;
+
+                        studentData.photos = {
+                            DatePhoto: "",
+                            linkphoto: null,
+                        };
                         this.AddPhoto = {
-                            file: null,
-                            grade: "",
+                            Date: "",
+                            link: null,
                         };
                         await this.fetchStudents();
                     }
@@ -3207,15 +3437,6 @@ export default {
                 console.error("Error deleting subject:", error);
             }
         },
-        // async updateFirebase(studentId, payments) {
-        //     try {
-        //         const studentDoc = doc(db, "students", studentId);
-        //         await updateDoc(studentDoc, { payments });
-        //         console.log("Document updated successfully");
-        //     } catch (error) {
-        //         console.error("Error updating document:", error);
-        //     }
-        // },
 
         async updateGuardian() {
             try {
@@ -3375,6 +3596,29 @@ export default {
                 (student) => student.year === this.year
             );
         },
+        sortedStudents() {
+            // تنفيذ الترتيب بناءً على حالة isSortedAscending
+            const sorted = [...this.students].sort((a, b) => {
+                const nameA = a.student_information[0].student_name
+                    .charAt(0)
+                    .toUpperCase();
+                const nameB = b.student_information[0].student_name
+                    .charAt(0)
+                    .toUpperCase();
+
+                if (this.$parent.isSortedAscending) {
+                    // الترتيب من الألف إلى الياء
+                    if (nameA < nameB) return -1;
+                    if (nameA > nameB) return 1;
+                } else {
+                    // الترتيب من الياء إلى الألف
+                    if (nameA < nameB) return 1;
+                    if (nameA > nameB) return -1;
+                }
+                return 0;
+            });
+            return sorted;
+        },
         selectedMonthlyDegrees() {
             if (!this.selectedStudent) {
                 return [];
@@ -3386,12 +3630,13 @@ export default {
             );
         },
     },
-    mounted() {
+    async mounted() {
         this.searchStudent(); // Fetch all students initially
         this.generateRandomPassword();
         this.fetchStudents();
-        // this.currentStudentId = "9QOVmJbJNRK3NVUhuThC";
-        // console.log(this.selectedStudent.student_information[5].birthday);
+
+        this.students = this.$parent.students_class; // Assuming students_class is passed down from parent
+        await this.sortStudents(); // If sorting is needed on mount
     },
 };
 </script>
@@ -3517,5 +3762,8 @@ export default {
 }
 .notification-card .v-icon:hover {
     color: #1e88e5;
+}
+.v-overlay__scrim {
+    display: none;
 }
 </style>

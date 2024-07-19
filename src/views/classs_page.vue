@@ -21,6 +21,7 @@
                                 style="cursor: pointer"
                                 @click="dialogFilter = true"
                             />
+
                             <font-awesome-icon
                                 :icon="['fas', 'plus']"
                                 @click="dialog = true"
@@ -95,110 +96,336 @@
                                     >
                                 </v-card>
                             </div>
-                        </v-card></v-dialog
-                    >
-                    <v-dialog v-model="dialog_1" width="90%">
-                        <v-card width="100%" class="popup">
-                            <v-card-title
-                                class="d-flex justify-space-between align-center"
+                        </v-card>
+                    </v-dialog>
+                    <v-dialog v-model="dialog_1" max-width="90%">
+                        <v-card style="padding: 30px">
+                            <div
+                                style="
+                                    display: flex;
+                                    justify-content: space-between;
+                                    align-items: center;
+                                    margin-bottom: 20px;
+                                "
                             >
-                                <div
-                                    class="text-h4 ps-2"
-                                    style="color: var(--main-color)"
-                                >
-                                    إضافة إشعارات
+                                <div style="display: flex; align-items: center">
+                                    <v-card-title>
+                                        <span class="headline"
+                                            >إضافة اشعار</span
+                                        >
+                                    </v-card-title>
                                 </div>
                                 <v-btn
-                                    style="color: var(--main-color)"
-                                    icon="mdi-close"
-                                    variant="text"
-                                    @click="dialog_1 = false"
-                                ></v-btn>
-                            </v-card-title>
-                            <form ref="form" @submit.prevent class="ma-auto">
-                                <v-text-field
-                                    type="text"
-                                    label=" عنوان"
-                                    variant="outlined"
-                                    required
-                                ></v-text-field>
-                                <v-textarea
-                                    label="وصف قصير"
-                                    :counter="150"
-                                    variant="outlined"
-                                    required
-                                ></v-textarea>
-                                <v-select
-                                    style="width: 100%"
-                                    :items="type"
-                                    label="أختر نوع الاشعار"
-                                    variant="outlined"
-                                    required
-                                ></v-select>
-
-                                <v-btn
-                                    class="d-flex align-center mt-4 mb-10"
-                                    type="submit"
-                                    color="primary"
+                                    color="blue"
+                                    @click="dialogAddNotice = true"
+                                    >إضافة اشعار</v-btn
                                 >
-                                    إضافة
-                                </v-btn>
-                            </form>
-                        </v-card></v-dialog
+                            </div>
+                            <v-card-text>
+                                <v-row>
+                                    <v-col
+                                        v-for="(
+                                            classRoom, index
+                                        ) in filteredClasses[0].Notifications"
+                                        :key="classRoom.id"
+                                        @click="selectClass(classRoom)"
+                                        cols="12"
+                                        md="4"
+                                    >
+                                        <v-alert
+                                            :type="
+                                                classRoom.NotificationType ===
+                                                'سئ'
+                                                    ? 'error'
+                                                    : classRoom.NotificationType ===
+                                                      'جيد'
+                                                    ? 'success'
+                                                    : 'info'
+                                            "
+                                            class="pa-3 mb-3 notification-card"
+                                            border="left"
+                                            colored-border
+                                        >
+                                            <div
+                                                class="d-flex justify-space-between align-center"
+                                            >
+                                                <span>{{
+                                                    classRoom.NoticeTitle
+                                                }}</span>
+                                                <div>
+                                                    <v-icon
+                                                        small
+                                                        color="white"
+                                                        class="mr-2"
+                                                        @click="
+                                                            editNotification(
+                                                                filteredClasses[0]
+                                                                    .id,
+                                                                index
+                                                            )
+                                                        "
+                                                        >mdi-pencil</v-icon
+                                                    >
+                                                    <v-icon
+                                                        small
+                                                        class="mr-2"
+                                                        color="white"
+                                                        @click="
+                                                            deleteNotification(
+                                                                filteredClasses[0]
+                                                                    .id,
+                                                                index
+                                                            )
+                                                        "
+                                                        >mdi-delete</v-icon
+                                                    >
+                                                </div>
+                                            </div>
+                                            <div>
+                                                {{ classRoom.theDescription }}
+                                            </div>
+                                        </v-alert>
+                                    </v-col>
+                                </v-row>
+                            </v-card-text>
+                            <v-dialog
+                                v-model="dialogAddNotice"
+                                max-width="500px"
+                            >
+                                <v-card>
+                                    <v-card-title>
+                                        <span class="headline"
+                                            >إضافة اشعار جديدة</span
+                                        >
+                                    </v-card-title>
+                                    <v-card-text>
+                                        <v-form ref="addForm">
+                                            <v-text-field
+                                                v-model="
+                                                    newNotification.NoticeTitle
+                                                "
+                                                label="عنوان الاشعار"
+                                                required
+                                            ></v-text-field>
+                                            <v-textarea
+                                                v-model="
+                                                    newNotification.theDescription
+                                                "
+                                                label="الوصف"
+                                                required
+                                            ></v-textarea>
+                                            <v-select
+                                                v-model="
+                                                    newNotification.NotificationType
+                                                "
+                                                label="نوع الاشعار"
+                                                required
+                                                :items="[
+                                                    'سئ',
+                                                    'جيد',
+                                                    'معلومات',
+                                                ]"
+                                            ></v-select>
+                                        </v-form>
+                                    </v-card-text>
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn
+                                            color="blue darken-1"
+                                            text
+                                            @click="dialogAddNotice = false"
+                                            >إلغاء</v-btn
+                                        >
+                                        <v-btn
+                                            color="blue darken-1"
+                                            text
+                                            @click="
+                                                addNotification(
+                                                    filteredClasses[0].id
+                                                )
+                                            "
+                                            >حفظ</v-btn
+                                        >
+                                    </v-card-actions>
+                                </v-card>
+                            </v-dialog>
+                            <!-- <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn
+                                    color="blue darken-1"
+                                    text
+                                    @click="dialogAddNotice = false"
+                                    >إلغاء</v-btn
+                                >
+                                <v-btn
+                                    color="blue darken-1"
+                                    text
+                                    @click="saveNotification"
+                                    >حفظ</v-btn
+                                >
+                            </v-card-actions> -->
+                        </v-card>
+                    </v-dialog>
+                    <v-dialog
+                        v-model="editNotificationDialog"
+                        max-width="500px"
                     >
-
-                    <v-dialog v-model="dialog_2" width="90%">
-                        <v-card width="100%" class="popup">
-                            <v-card-title
-                                class="d-flex justify-space-between align-center"
+                        <v-card>
+                            <v-card-title>
+                                <span class="headline">تعديل الاشعار</span>
+                            </v-card-title>
+                            <v-card-text>
+                                <v-form ref="editForm">
+                                    <v-text-field
+                                        v-model="editedNotification.NoticeTitle"
+                                        label="عنوان الاشعار"
+                                        required
+                                    ></v-text-field>
+                                    <v-textarea
+                                        v-model="
+                                            editedNotification.theDescription
+                                        "
+                                        label="الوصف"
+                                        required
+                                    ></v-textarea>
+                                    <v-select
+                                        v-model="
+                                            editedNotification.NotificationType
+                                        "
+                                        label="نوع الاشعار"
+                                        required
+                                        :items="['سئ', 'جيد', 'معلومات']"
+                                    ></v-select>
+                                </v-form>
+                            </v-card-text>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn
+                                    color="blue darken-1"
+                                    text
+                                    @click="closeNotificationDialogs"
+                                    >إلغاء</v-btn
+                                >
+                                <v-btn
+                                    color="blue darken-1"
+                                    text
+                                    @click="saveNotificationEdit"
+                                    >حفظ</v-btn
+                                >
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+                    <v-dialog v-model="dialog_2" max-width="90%">
+                        <div style="background: white; padding: 53px">
+                            <div
+                                style="
+                                    display: flex;
+                                    justify-content: space-between;
+                                    align-items: center;
+                                    margin-bottom: 20px;
+                                "
                             >
                                 <div
-                                    class="text-h4 ps-2"
-                                    style="color: var(--main-color)"
+                                    style="
+                                        display: flex;
+
+                                        align-items: center;
+                                    "
                                 >
-                                    إضافة صورة
+                                    <h2 style="color: #2196f3">الصور</h2>
                                 </div>
                                 <v-btn
-                                    style="color: var(--main-color)"
-                                    icon="mdi-close"
-                                    variant="text"
-                                    @click="dialog_2 = false"
-                                ></v-btn>
+                                    color="blue"
+                                    @click="dialogAddPhoto = true"
+                                    >اضافه صوره</v-btn
+                                >
+                            </div>
+                            <v-row>
+                                <v-col
+                                    cols="12"
+                                    md="4"
+                                    v-for="(photo, index) in filteredClasses[0]
+                                        .photos"
+                                    :key="index"
+                                >
+                                    <v-card
+                                        class="mb-3 notification-card"
+                                        outlined
+                                    >
+                                        <v-card-title
+                                            class="d-flex align-left"
+                                            style="justify-content: end"
+                                        >
+                                            <div>
+                                                <v-icon
+                                                    small
+                                                    class="mr-2"
+                                                    @click="
+                                                        deletePhotos(
+                                                            filteredClasses[0]
+                                                                .id,
+                                                            index
+                                                        )
+                                                    "
+                                                    >mdi-delete</v-icon
+                                                >
+                                            </div>
+                                        </v-card-title>
+                                        <v-card-text>
+                                            <v-img
+                                                :src="photo.linkphoto"
+                                                aspect-ratio="1"
+                                                class="mb-2"
+                                            ></v-img>
+                                        </v-card-text>
+                                    </v-card>
+                                </v-col>
+                            </v-row>
+                        </div>
+                    </v-dialog>
+
+                    <v-dialog v-model="dialogAddPhoto" max-width="500px">
+                        <v-card>
+                            <v-card-title>
+                                <span class="headline">إضافة صوره جديدة</span>
                             </v-card-title>
-                            <form ref="form" @submit.prevent class="ma-auto">
-                                <v-file-input
-                                    style="width: 100%"
-                                    label="صورة"
-                                    accept="image/*"
-                                    variant="outlined"
-                                    prepend-icon=""
-                                    width="100%"
-                                    prepend-inner-icon="mdi-paperclip"
-                                    required
-                                >
-                                </v-file-input>
-                                <!-- Show progress bar if New.image is truthy (assuming New is a data property) -->
-                                <v-progress-linear
-                                    :value="progress"
-                                    color="blue-grey"
-                                    height="25"
-                                >
-                                    <template v-slot:default="{ value }">
-                                        <strong>{{ Math.ceil(value) }}%</strong>
-                                    </template>
-                                </v-progress-linear>
-                                <br />
-                                <v-img src="" height="200"></v-img>
+                            <v-card-text>
+                                <v-form ref="addForm">
+                                    <v-file-input
+                                        style="width: 100%"
+                                        v-model="AddPhoto.file"
+                                        label="صورة"
+                                        accept="image/*"
+                                        variant="outlined"
+                                        prepend-icon=""
+                                        width="100%"
+                                        prepend-inner-icon="mdi-paperclip"
+                                        required
+                                    ></v-file-input>
+                                    <v-textarea
+                                        v-model="AddPhoto.grade"
+                                        label="وصف الصوره"
+                                        required
+                                    ></v-textarea>
+                                </v-form>
+                            </v-card-text>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
                                 <v-btn
-                                    class="d-flex align-center mt-4 mb-10"
-                                    type="submit"
-                                    color="primary"
+                                    color="blue darken-1"
+                                    text
+                                    @click="dialogAddPhoto = false"
+                                    >إلغاء</v-btn
                                 >
-                                    إضافة
-                                </v-btn>
-                            </form>
-                        </v-card></v-dialog
-                    >
+                                <v-btn
+                                    color="blue darken-1"
+                                    text
+                                    @click="addPhoto(filteredClasses[0].id)"
+                                    >حفظ</v-btn
+                                >
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
                 </v-col>
             </v-row>
             <v-row>
@@ -209,16 +436,18 @@
                         size="x-large"
                         block
                         >الكل</v-btn
-                    > </v-col
-                ><v-col cols="12" md="4" sm="6">
+                    >
+                </v-col>
+                <v-col cols="12" md="4" sm="6">
                     <v-btn
                         style="background: #54aef5; color: white"
                         rounded="xl"
                         size="x-large"
                         block
                         >عربي</v-btn
-                    > </v-col
-                ><v-col cols="12" md="4" sm="6">
+                    >
+                </v-col>
+                <v-col cols="12" md="4" sm="6">
                     <v-btn
                         style="background: #54aef5; color: white"
                         rounded="xl"
@@ -228,77 +457,118 @@
                     >
                 </v-col>
             </v-row>
+            <v-dialog
+                v-model="dialogFilter"
+                max-width="600px"
+                class="custom-dialog"
+            >
+                <transition name="fade">
+                    <v-card>
+                        <v-card-title class="headline">
+                            فلتر الطلابه
+                        </v-card-title>
+                        <v-card-text>
+                            <!-- Filter Options -->
+                            <v-form>
+                                <!-- Alphabetical Order Toggle -->
+                                <v-row class="mb-3">
+                                    <v-col cols="6">
+                                        <v-switch
+                                            v-model="isSortedAscending"
+                                            :label="
+                                                isSortedAscending
+                                                    ? 'ترتيب أبجدي'
+                                                    : 'ترتيب عكسي'
+                                            "
+                                            class="filter-switch"
+                                        />
+                                    </v-col>
+
+                                    <v-col cols="6">
+                                        <v-switch
+                                            v-model="paymentSortActive"
+                                            :label="
+                                                paymentSortActive
+                                                    ? ' اعلي المدفوعات'
+                                                    : 'اقل المدفوعات'
+                                            "
+                                            class="filter-switch"
+                                        />
+                                        <!-- <v-btn
+                                            color="blue darken-1"
+                                            text
+                                            v-model="filters.byPayments"
+                                            @click="togglePaymentsSorting"
+                                            class="filter-switch"
+                                        >
+                                            {{
+                                                paymentSortActive
+                                                    ? "إلغاء الترتيب"
+                                                    : "ترتيب حسب المدفوعات"
+                                            }}
+                                        </v-btn> -->
+                                    </v-col>
+                                </v-row>
+
+                                <!-- Sort by Grades Select -->
+                                <v-row class="mb-3">
+                                    <v-col cols="12">
+                                        <v-select
+                                            v-model="filters.byGrades"
+                                            :items="gradeOptions"
+                                            label="ترتيب حسب الدرجات"
+                                            outlined
+                                            hide-details
+                                        ></v-select>
+                                    </v-col>
+                                </v-row>
+                            </v-form>
+                        </v-card-text>
+                    </v-card>
+                </transition>
+            </v-dialog>
         </v-container>
-        <StudentList :year="year" />
-        <v-dialog v-model="dialogFilter" max-width="400">
-            <v-card>
-                <v-card-title>
-                    <span class="headline">فلتر</span>
-                </v-card-title>
-
-                <v-card-text>
-                    <v-row>
-                        <v-col cols="8"> ترتيب أبجدي </v-col>
-                        <v-col cols="4">
-                            <v-btn
-                                @click="toggleAlphabetical"
-                                :color="alphabetical ? 'success' : 'error'"
-                                icon
-                            >
-                                <v-icon>
-                                    {{
-                                        alphabetical
-                                            ? "mdi-toggle-switch"
-                                            : "mdi-toggle-switch-off"
-                                    }}
-                                </v-icon>
-                            </v-btn>
-                        </v-col>
-                    </v-row>
-
-                    <v-row>
-                        <v-col cols="8"> المدفوعات </v-col>
-                        <v-col cols="4">
-                            <v-btn
-                                @click="togglePayments"
-                                :color="payments ? 'success' : 'error'"
-                                icon
-                            >
-                                <v-icon>
-                                    {{
-                                        payments
-                                            ? "mdi-toggle-switch"
-                                            : "mdi-toggle-switch-off"
-                                    }}
-                                </v-icon>
-                            </v-btn>
-                        </v-col>
-                    </v-row>
-
-                    <v-row>
-                        <v-col>
-                            <v-select
-                                v-model="selectedMonth"
-                                :items="months"
-                                label="ترتيب الأول"
-                            ></v-select>
-                        </v-col>
-                    </v-row>
-                </v-card-text>
-
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="primary" @click="applyFilter">تطبيق</v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
+        <StudentList
+            :year="year"
+            :sortStudents="sortStudentsByYearAndAlphabetically"
+        />
     </div>
 </template>
 
 <script>
 import StudentList from "@/components/StudentList.vue";
 import { useDialogStore } from "@/store/useDialogStore";
+import { reactive } from "vue";
 
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import {
+    collection,
+    doc,
+    getDoc,
+    getDocs,
+    updateDoc,
+    getFirestore,
+    query,
+    where,
+} from "firebase/firestore";
+import { initializeApp } from "@firebase/app";
+import { getStorage } from "firebase/storage";
+import "vue-toastification/dist/index.css"; // Import the CSS file
+
+const firebaseConfig = {
+    apiKey: "AIzaSyBdk3sqIHjXvB2C-O-lvkRgMFpg8pemkno",
+    authDomain: "alseraj--almoner.firebaseapp.com",
+    projectId: "alseraj--almoner",
+    storageBucket: "alseraj--almoner.appspot.com",
+    messagingSenderId: "462211256149",
+    appId: "1:462211256149:web:a03ace3c70b306620169dc",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const storage = getStorage(app);
+
+export { db, storage };
 export default {
     name: "ClassPage",
     components: {
@@ -317,28 +587,308 @@ export default {
     },
     data() {
         return {
-            dialogFilter: false,
+            photos: [
+                {
+                    Date: "",
+                    link: "",
+                },
+            ],
+            paymentSortActive: false,
+            isSortedAscending: true,
+            sortActive: false, // متغير لتتبع حالة الترتيب
+            class_rooms: [],
             dialog: false,
+            newNotification: {
+                NoticeTitle: "",
+                theDescription: "",
+                NotificationType: "",
+            },
+            filters: reactive({
+                alphabetical: false,
+            }),
+            students_class: [],
+            searchQuery: "",
+            dialogAddPhoto: false,
             dialog_1: false,
             dialog_2: false,
-            type: ["جيد", "معلومات", "سيء"],
-            alphabetical: false,
-            payments: false,
-            selectedMonth: null,
-            months: ["الشهر الأول", "الشهر الثاني"],
+            dialogAddNotice: false,
+            editNotificationDialog: false,
+            dialogFilter: false,
+            AddNotice: {
+                NoticeTitle: "",
+                theDescription: "",
+                NotificationType: "",
+            },
+            editedNotification: {
+                NoticeTitle: "",
+                theDescription: "",
+                NotificationType: "",
+            },
+
+            progress: 0,
+            selectedClass: [],
+            students: [],
+            classes: [],
+            AddPhoto: {
+                Date: "",
+                link: "",
+            },
+
+            gradeOptions: ["First Month", "Second Month"],
+            monthOptions: [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December",
+            ],
         };
     },
+    computed: {
+        filteredClasses() {
+            return this.class_rooms.filter(
+                (classs) => classs.grade === this.year
+            );
+        },
+    },
     methods: {
+        async sortStudentsByYearAndAlphabetically() {
+            try {
+                // جلب الطلاب المنتمين إلى السنة المحددة
+                const q = query(
+                    collection(db, "students"),
+                    where("year", "==", this.year)
+                );
+                const querySnapshot = await getDocs(q);
+
+                this.students_class = querySnapshot.docs
+                    .map((doc) => ({
+                        id: doc.id,
+                        ...doc.data(),
+                        showDetails: false,
+                    }))
+                    .sort((a, b) => {
+                        const nameA =
+                            a.student_information[0].student_name.toLowerCase();
+                        const nameB =
+                            b.student_information[0].student_name.toLowerCase();
+
+                        if (this.isSortedAscending) {
+                            return nameA.localeCompare(nameB, "ar", {
+                                sensitivity: "base",
+                            });
+                        } else {
+                            return nameB.localeCompare(nameA, "ar", {
+                                sensitivity: "base",
+                            });
+                        }
+                    });
+
+                console.log(this.students_class);
+            } catch (error) {
+                console.error("Error sorting students:", error);
+            }
+        },
+        toggleSorting() {
+            this.isSortedAscending = !this.isSortedAscending;
+        },
+        toggleSortOrder() {
+            if (this.isSortingActive) {
+                this.isSortedAscending = !this.isSortedAscending;
+                this.sortStudentsByYearAndAlphabetically();
+            }
+        },
+        resetSortOrder() {
+            this.isSortedAscending = !this.isSortedAscending;
+            this.sortStudentsByYearAndAlphabetically();
+        },
+
         toggleAlphabetical() {
             this.alphabetical = !this.alphabetical;
         },
         togglePayments() {
             this.payments = !this.payments;
         },
+        togglePaymentsSorting() {
+            this.paymentSortActive = !this.paymentSortActive;
+        },
         applyFilter() {
             // تطبيق الفلتر بناءً على الخيارات المحددة
             this.dialog = false;
         },
+        applyFilters() {
+            // Handle filter logic here
+            console.log("Filters applied:", this.filters);
+            this.dialogFilter = false;
+        },
+        async fetchClassRooms() {
+            try {
+                const querySnapshot = await getDocs(
+                    collection(db, "class_rooms")
+                );
+                this.class_rooms = querySnapshot.docs.map((doc) => {
+                    const classRoomData = doc.data();
+                    const classRoom = {
+                        id: doc.id,
+                        ...classRoomData,
+                    };
+                    return classRoom;
+                });
+
+                console.log("Fetched class rooms:", this.class_rooms);
+            } catch (error) {
+                console.error("Error fetching class rooms:", error);
+            }
+        },
+        async addNotification(classId) {
+            try {
+                const classRef = doc(db, "class_rooms", classId);
+                const classDoc = await getDoc(classRef);
+                if (classDoc.exists()) {
+                    const classData = classDoc.data();
+                    classData.Notifications.push({
+                        NoticeTitle: this.newNotification.NoticeTitle,
+                        theDescription: this.newNotification.theDescription,
+                        NotificationType: this.newNotification.NotificationType,
+                    });
+                    this.newNotification = Object.assign(
+                        {},
+                        this.newNotification,
+                        classData
+                    );
+
+                    await updateDoc(classRef, classData);
+                    this.dialogAddNotice = false;
+                    this.newNotification = {
+                        NoticeTitle: "",
+                        theDescription: "",
+                        NotificationType: "",
+                    };
+                    await this.fetchClassRooms();
+                } else {
+                    console.error("Class document does not exist.");
+                }
+            } catch (error) {
+                console.error("Error adding notification:", error);
+            }
+        },
+        async deleteNotification(classId, notificationIndex) {
+            try {
+                const classRef = doc(db, "class_rooms", classId);
+                const classDoc = await getDoc(classRef);
+                if (classDoc.exists()) {
+                    const classData = classDoc.data();
+                    classData.Notifications.splice(notificationIndex, 1);
+                    await updateDoc(classRef, {
+                        Notifications: classData.Notifications,
+                    });
+                    await this.fetchClassRooms();
+                }
+            } catch (error) {
+                console.error("Error deleting notification:", error);
+            }
+        },
+        editNotification(classId, index) {
+            this.editedNotification = {
+                ...this.filteredClasses[0].Notifications[index],
+            };
+            this.editedClassId = classId;
+            this.editedIndex = index;
+            console.log(this.editedIndex);
+            this.editNotificationDialog = true;
+        },
+        async saveNotificationEdit() {
+            try {
+                const classRef = doc(db, "class_rooms", this.editedClassId);
+                const classDoc = await getDoc(classRef);
+                if (classDoc.exists()) {
+                    const classData = classDoc.data();
+                    Object.assign(
+                        classData.Notifications[this.editedIndex],
+                        this.editedNotification
+                    );
+                    await updateDoc(classRef, {
+                        Notifications: classData.Notifications,
+                    });
+                    this.closeNotificationDialogs();
+                    await this.fetchClassRooms();
+                }
+            } catch (error) {
+                console.error("Error editing notification:", error);
+            }
+        },
+        selectClass(classRoom) {
+            this.selectedClass = classRoom;
+        },
+        closeNotificationDialogs() {
+            this.editNotificationDialog = false;
+        },
+        // OIJI
+        async addPhoto(classId) {
+            try {
+                if (this.AddPhoto.file) {
+                    const storageRef = ref(
+                        storage,
+                        `photos/${this.AddPhoto.file.name}`
+                    );
+                    await uploadBytes(storageRef, this.AddPhoto.file);
+                    const downloadURL = await getDownloadURL(storageRef);
+
+                    const classRef = doc(db, "class_rooms", classId);
+                    const classDoc = await getDoc(classRef);
+                    if (classDoc.exists()) {
+                        const classData = classDoc.data();
+
+                        // تأكد من أن photos موجودة وهي مصفوفة
+                        if (!Array.isArray(classData.photos)) {
+                            classData.photos = [];
+                        }
+
+                        classData.photos.push({
+                            DatePhoto: this.AddPhoto.Date,
+                            linkphoto: downloadURL,
+                        });
+                        await updateDoc(classRef, { photos: classData.photos });
+
+                        this.dialogAddPhoto = false;
+                        this.AddPhoto = {
+                            Date: "",
+                            link: "",
+                        };
+                        await this.fetchClassRooms();
+                    } else {
+                        console.error("Class document does not exist.");
+                    }
+                }
+            } catch (error) {
+                console.error("Error adding photo:", error);
+            }
+        },
+        async deletePhotos(classId, photoIndex) {
+            try {
+                const classRef = doc(db, "class_rooms", classId);
+                const classDoc = await getDoc(classRef);
+                if (classDoc.exists()) {
+                    const classData = classDoc.data();
+                    classData.photos.splice(photoIndex, 1);
+                    await updateDoc(classRef, { photos: classData.photos });
+                    await this.fetchClassRooms();
+                }
+            } catch (error) {
+                console.error("Error deleting photo:", error);
+            }
+        },
+    },
+    async mounted() {
+        await this.fetchClassRooms();
+        console.log(this.filteredClasses);
     },
 };
 </script>
@@ -358,5 +908,13 @@ form {
     background: #2196f3c4;
     color: white;
     font-size: 23px;
+}
+.custom-dialog .v-dialog {
+    border-radius: 10px; /* Example: Rounded corners */
+    // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Example: Soft shadow */
+}
+
+.custom-dialog .v-card {
+    background-color: #ffffff; /* Example: White background */
 }
 </style>

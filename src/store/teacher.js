@@ -9,6 +9,7 @@ import {
     updateDoc,
     getDocs,
 } from "@firebase/firestore";
+
 import { useSecureDataStore } from "./secureData";
 const firebaseConfig = {
     // Firebase configuration object
@@ -22,7 +23,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-export const useadmin = defineStore("admin", {
+export const useteacher = defineStore("teacher", {
     state: () => ({
         // Reactive state
         dialog: false,
@@ -33,7 +34,7 @@ export const useadmin = defineStore("admin", {
             name: "",
             email: "",
             password: "",
-            expectedUserType: "admin",
+            expectedUserType: "teacher",
             id: "",
             roles: [],
         },
@@ -78,14 +79,14 @@ export const useadmin = defineStore("admin", {
             this.user.password = password; // Update user's password
             return this.user.password;
         },
-        // Add new admin user
-        async add_admin() {
+        // Add new teacher user
+        async add_teacher() {
             try {
                 const secrureDataStore = useSecureDataStore();
 
                 this.loading = true;
                 // Add document to Firestore collection
-                const docRef = await addDoc(collection(db, "users"), {
+                const docRef = await addDoc(collection(db, "teachers"), {
                     name: secrureDataStore.encryptData(
                         this.user.name,
                         "12345a"
@@ -111,7 +112,7 @@ export const useadmin = defineStore("admin", {
                 console.error("Error adding document: ", error);
             }
         },
-        // Fetch admin user data
+        // Fetch teacher user data
         async Get_data() {
             try {
                 const decryption = useSecureDataStore();
@@ -119,10 +120,10 @@ export const useadmin = defineStore("admin", {
                 this.users = []; // Clear users array
 
                 // Retrieve documents from Firestore collection
-                const querySnapshot = await getDocs(collection(db, "users"));
+                const querySnapshot = await getDocs(collection(db, "teachers"));
                 // Loop through documents and filter by userType
                 querySnapshot.forEach((doc) => {
-                    if (doc.data().userType == "admin") {
+                    if (doc.data().userType == "teacher") {
                         const userData = {
                             id: doc.id,
                             email: decryption.decryptData(
@@ -140,9 +141,10 @@ export const useadmin = defineStore("admin", {
 
                             roles: doc.data().roles,
                         };
-                        this.users.push(userData); // Add admin users to array
+                        this.users.push(userData); // Add teacher users to array
                     }
                 });
+                console.log("this.teachers", this.users);
                 this.loading1 = false;
             } catch (error) {
                 console.error("Error retrieving data: ", error);
@@ -152,7 +154,7 @@ export const useadmin = defineStore("admin", {
         async delete_user(user_Id) {
             try {
                 console.log("Deleting user from Firestore:", user_Id);
-                await deleteDoc(doc(db, "users", user_Id)); // Delete document
+                await deleteDoc(doc(db, "teachers", user_Id)); // Delete document
                 const index = this.users.findIndex(
                     (user) => user.id === user_Id
                 );
@@ -176,12 +178,12 @@ export const useadmin = defineStore("admin", {
             this.email_Information = user.email;
             this.roles_Information = user.roles;
         },
-        // Update admin user information
-        async Update_Admin(userId) {
+        // Update teacher user information
+        async Update_teacher(userId) {
             try {
                 const secrureDataStore = useSecureDataStore();
                 this.loading = true;
-                const docRef = doc(db, "users", userId);
+                const docRef = doc(db, "teachers", userId);
                 // Update document in Firestore
                 await updateDoc(docRef, {
                     name: secrureDataStore.encryptData(

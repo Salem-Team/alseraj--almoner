@@ -8,7 +8,9 @@ import {
     doc,
     query,
     orderBy,
+    Timestamp,
 } from "@firebase/firestore";
+import { useSecureDataStore } from "./secureData";
 import { initializeApp } from "@firebase/app";
 import { getFirestore } from "firebase/firestore";
 import {
@@ -46,12 +48,14 @@ export const useNews = defineStore("News", {
         Image_Information: null,
         Time_Condition: "",
         progress: 0,
+        image: "",
         dialog_6: false,
         News: [],
         New: {
             title: "",
             image: null,
             description: "",
+            time: "",
         },
         random: 0,
         loading: false,
@@ -89,6 +93,7 @@ export const useNews = defineStore("News", {
 
             // Delete the file
             deleteObject(desertRef);
+            console.log("Photo deleted");
         },
         alignment(text, align) {
             text.textAlign = align;
@@ -97,19 +102,27 @@ export const useNews = defineStore("News", {
         async Add_News() {
             try {
                 this.loading = true;
+                const secrureDataStore = useSecureDataStore();
                 if (this.New.image) {
                     // Step 1: Upload the image and get the download URL
                     const imageUrl = await this.upload_Image(this.New.image);
 
                     // Get current local time
-                    const currentTime = new Date().toLocaleString();
+                    const currentTime = Timestamp.now();
 
                     // Step 2: Add a document to the "News" collection in Firestore
                     const docRef = await addDoc(collection(db, "News"), {
-                        title: this.New.title,
-                        description: this.New.description,
-                        image: imageUrl,
+                        title: secrureDataStore.encryptData(
+                            this.New.title,
+                            "12343a"
+                        ),
+                        description: secrureDataStore.encryptData(
+                            this.New.description,
+                            "12343a"
+                        ),
                         time: currentTime,
+
+                        image: secrureDataStore.encryptData(imageUrl, "12343a"),
                     });
 
                     // Step 3: Update the newly added document with its own ID
@@ -137,12 +150,29 @@ export const useNews = defineStore("News", {
         async Get_data() {
             try {
                 this.News = [];
+                const decryption = useSecureDataStore();
                 this.loading1 = true;
                 const querySnapshot = await getDocs(
-                    query(collection(db, "News"), orderBy("time", "asc"))
+                    query(collection(db, "News"), orderBy("time", "desc"))
                 );
                 querySnapshot.forEach((doc) => {
-                    this.News.push(doc.data());
+                    const Data = {
+                        id: doc.id,
+                        title: decryption.decryptData(
+                            doc.data().title,
+                            "12343a"
+                        ),
+                        description: decryption.decryptData(
+                            doc.data().description,
+                            "12343a"
+                        ),
+                        image: decryption.decryptData(
+                            doc.data().image,
+                            "12343a"
+                        ),
+                        time: doc.data().time,
+                    };
+                    this.News.push(Data);
                 });
                 console.log("this.News", this.News);
                 this.loading1 = false;
@@ -155,10 +185,27 @@ export const useNews = defineStore("News", {
         async Get_splice() {
             try {
                 this.News = [];
+                const decryption = useSecureDataStore();
                 this.loading1 = true;
                 const querySnapshot = await getDocs(collection(db, "News"));
                 querySnapshot.forEach((doc) => {
-                    this.News.push(doc.data());
+                    const Data = {
+                        id: doc.id,
+                        title: decryption.decryptData(
+                            doc.data().title,
+                            "12343a"
+                        ),
+                        description: decryption.decryptData(
+                            doc.data().description,
+                            "12343a"
+                        ),
+                        image: decryption.decryptData(
+                            doc.data().image,
+                            "12343a"
+                        ),
+                        time: doc.data().time,
+                    };
+                    this.News.push(Data);
                 });
                 this.News = this.News.slice(0, 3);
                 console.log("this.News", this.News);
@@ -212,19 +259,39 @@ export const useNews = defineStore("News", {
             this.Image_Information = New.image;
             this.Time_Condition = New.time;
         },
-
+        // Action method to handle file change event and set image preview
+        onFileChange(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Convert file to a URL that can be used as an image source
+                this.image = URL.createObjectURL(file);
+            } else {
+                this.image = null;
+            }
+        },
         // Action method to update news details in Firestore
         async Update_News(NewId) {
             try {
                 this.loading = true;
-                const currentTime = new Date().toLocaleString();
+                const currentTime = Timestamp.now();
+                const secrureDataStore = useSecureDataStore();
                 const docRef = doc(db, "News", NewId);
-
+                // Step 1: Upload the image and get the download URL
+                const imageUrl = await this.upload_Image(
+                    this.Image_Information
+                );
                 // Step 1: Update the document in Firestore
                 await updateDoc(docRef, {
-                    title: this.Title_Information,
-                    description: this.Description_Information,
+                    title: secrureDataStore.encryptData(
+                        this.Title_Information,
+                        "12343a"
+                    ),
+                    description: secrureDataStore.encryptData(
+                        this.Description_Information,
+                        "12343a"
+                    ),
                     time: currentTime,
+                    image: secrureDataStore.encryptData(imageUrl, "12343a"),
                 });
 
                 // Step 2: Refresh news data

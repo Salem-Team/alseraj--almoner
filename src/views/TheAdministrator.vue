@@ -24,6 +24,10 @@
                 <img src="../assets/admin/developers (1).png" alt="" />
                 <div>إدارة المشرفين</div>
             </v-card>
+            <v-card class="card" link @click="$router.push('/Add_teacher')">
+                <img src="../assets/admin/management.png" alt="" />
+                <div>إدارة المدرسين</div>
+            </v-card>
             <v-card class="card" link @click="$router.push('/Add_News')">
                 <img src="../assets/admin/newspaper.png" alt="newspaper" />
                 <div>الأخبار</div>

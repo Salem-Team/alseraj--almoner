@@ -230,93 +230,44 @@
                         variant="outlined"
                         required
                     ></v-text-field>
-
-                    <v-img
-                        :src="news.Image_Information"
-                        height="400"
-                        width="100%"
-                    ></v-img>
-                    <br />
-                    <div class="d-flex justify-space-between pb-0">
-                        <v-btn-toggle
-                            v-model="formatting"
-                            variant="outlined"
-                            divided
-                            multiple
-                        >
-                            <v-btn>
-                                <v-icon icon="mdi-format-italic"></v-icon>
-                            </v-btn>
-
-                            <v-btn>
-                                <v-icon icon="mdi-format-bold"></v-icon>
-                            </v-btn>
-
-                            <v-btn>
-                                <v-icon icon="mdi-format-underline"></v-icon>
-                            </v-btn>
-
-                            <v-btn>
-                                <div
-                                    class="d-flex align-center flex-column justify-center"
-                                >
-                                    <v-icon
-                                        icon="mdi-format-color-text"
-                                        @click="dialog_7 = true"
-                                    ></v-icon>
-
-                                    <v-sheet
-                                        color="primary"
-                                        height="4"
-                                        width="26"
-                                        tile
-                                    ></v-sheet>
-                                </div>
-                            </v-btn>
-                        </v-btn-toggle>
-
-                        <v-btn-toggle
-                            v-model="alignment"
-                            variant="outlined"
-                            divided
-                        >
-                            <v-btn>
-                                <v-icon
-                                    @click="
-                                        news.alignment(
-                                            news.Description_Information,
-                                            center
-                                        )
-                                    "
-                                    icon="mdi-format-align-center"
-                                ></v-icon>
-                            </v-btn>
-
-                            <v-btn>
-                                <v-icon
-                                    icon="mdi-format-align-left"
-                                    @click="
-                                        news.alignment(
-                                            news.Description_Information,
-                                            left
-                                        )
-                                    "
-                                ></v-icon>
-                            </v-btn>
-
-                            <v-btn>
-                                <v-icon
-                                    icon="mdi-format-align-right"
-                                    @click="
-                                        news.alignment(
-                                            news.Description_Information,
-                                            right
-                                        )
-                                    "
-                                ></v-icon>
-                            </v-btn>
-                        </v-btn-toggle>
+                    <v-file-input
+                        v-model="news.Image_Information"
+                        label="صورة"
+                        accept="image/*"
+                        variant="outlined"
+                        prepend-icon=""
+                        required
+                        prepend-inner-icon="mdi-paperclip"
+                        @change="news.onFileChange"
+                    ></v-file-input>
+                    <div v-if="news.image === ''">
+                        <v-fab
+                            icon="mdi-delete"
+                            location="top right"
+                            size="40"
+                            absolute
+                            style="bottom: -15px; left: 5px"
+                            offset
+                            @click="news.delete_photo(news.Image_Information)"
+                        ></v-fab>
+                        <v-img
+                            :src="news.Image_Information"
+                            height="400"
+                            width="100%"
+                        ></v-img>
                     </div>
+                    <div v-if="news.image != ''">
+                        <v-img
+                            :src="news.image"
+                            height="400"
+                            width="100%"
+                        ></v-img>
+                    </div>
+                    <br />
+                    <ckeditor
+                        v-model="news.Description_Information"
+                        :editor="editor"
+                    ></ckeditor>
                     <v-textarea
                         v-model="news.Description_Information"
                         :rules="[
@@ -379,7 +330,7 @@
                     <div class="title">{{ New.title }}</div>
                     <div class="time">
                         <font-awesome-icon :icon="['fas', 'clock']" />
-                        <div>{{ New.time }}</div>
+                        <div>{{ New.time.toDate().toLocaleString() }}</div>
                     </div>
                     <div class="description">
                         {{ New.description }}
@@ -476,7 +427,37 @@
 import { storeToRefs } from "pinia";
 import { defineComponent } from "vue";
 import { useNews } from "@/store/News.js";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import CKEditor from "@ckeditor/ckeditor5-vue";
 export default defineComponent({
+    data() {
+        return {
+            editor: ClassicEditor,
+        };
+    },
+    components: {
+        ckeditor: CKEditor.component,
+    },
+    mounted() {
+        this.editor.defaultConfig = {
+            toolbar: {
+                items: [
+                    "center",
+                    "heading",
+                    "|",
+                    "bold",
+                    "italic",
+                    "link",
+                    "bulletedList",
+                    "numberedList",
+                    "blockQuote",
+                    "undo",
+                    "redo",
+                    "Special Characters",
+                ],
+            },
+        };
+    },
     setup() {
         const news = useNews();
         news.Get_data();
@@ -484,10 +465,13 @@ export default defineComponent({
         const {
             New,
             News,
+            image,
+            delete_photo,
             alignment,
             dialog_3,
             Add_News,
             dialog,
+            onFileChange,
             loading,
             loading1,
             dialog_1,
@@ -504,7 +488,10 @@ export default defineComponent({
             New,
             Add_News,
             alignment,
+            image,
+            delete_photo,
             loading,
+            onFileChange,
             dialog_3,
             dialog_6,
             loading1,
@@ -523,7 +510,7 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 form {
-    width: 90%;
+    width: 96.5%;
     margin: auto;
 }
 
@@ -640,7 +627,6 @@ form {
     max-width: 33%;
     & > div {
         width: 100%;
-
         position: relative;
     }
     .Top {
