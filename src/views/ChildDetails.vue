@@ -1,653 +1,923 @@
 <template>
     <v-container>
         <v-card>
-            <v-toolbar color="#fff" title="تفاصيل الطالب"> </v-toolbar>
+            <v-tabs v-model="tab_2">
+                <v-tab value="one">الطالب</v-tab>
+                <v-tab value="two">ولي الأمر</v-tab>
+            </v-tabs>
 
-            <div class="d-flex flex-row" style="width: 100%; height: auto">
-                <v-tabs v-model="tab" color="primary" direction="vertical">
-                    <v-tab
-                        prepend-icon="mdi-account"
-                        text="معلومات شخصيه"
-                        value="option-1"
-                    ></v-tab>
-                    <v-tab
-                        prepend-icon="mdi-lock"
-                        text="النتائج الاسبوعيه"
-                        value="option-2"
-                    ></v-tab>
-                    <v-tab
-                        prepend-icon="mdi-access-point"
-                        text="النتائج الشهريه"
-                        value="option-3"
-                    ></v-tab>
-                    <v-tab
-                        prepend-icon="mdi-access-point"
-                        text=" المدفوعات"
-                        value="option-4"
-                    ></v-tab>
-                    <v-tab
-                        prepend-icon="mdi-access-point"
-                        text=" الاشعارات"
-                        value="option-5"
-                    ></v-tab>
-                    <v-tab
-                        prepend-icon="mdi-access-point"
-                        text=" الصور"
-                        value="option-6"
-                    ></v-tab>
-                    <v-tab
-                        prepend-icon="mdi-access-point"
-                        text=" الاحصائيات"
-                        value="option-7"
-                    ></v-tab>
-                </v-tabs>
+            <v-card-text>
+                <v-tabs-window v-model="tab_2">
+                    <v-tabs-window-item value="one">
+                        <v-card>
+                            <v-tabs v-model="tab_5">
+                                <v-tab value="one1"
+                                    ><img
+                                        src="../assets/student/graduated.png"
+                                        alt=""
+                                        width="30px"
+                                /></v-tab>
+                                <v-tab value="two1">
+                                    <img
+                                        src="../assets/student/school.png"
+                                        alt=""
+                                        width="30px"
+                                    />
+                                </v-tab>
+                                <v-tab value="three1">
+                                    <img
+                                        src="../assets/student/academic.png"
+                                        alt=""
+                                        width="30px"
+                                    />
+                                </v-tab>
+                                <v-tab value="four1">
+                                    <img
+                                        src="../assets/student/photo.png"
+                                        alt=""
+                                        width="30px"
+                                    />
+                                </v-tab>
+                            </v-tabs>
 
-                <v-tabs-window
-                    v-model="tab"
-                    style="width: 100%; height: 100% !important"
-                >
-                    <v-tabs-window-item value="option-1">
-                        <v-card
-                            flat
-                            v-if="student"
-                            class="mx-auto my-4"
-                            max-width="90%"
-                        >
-                            <v-card-title
-                                style="
-                                    background: #2980b9;
-                                    border-radius: 20px;
-                                    padding: 24px;
-                                "
-                                class="d-flex flex-column align-center custom-font"
-                            >
-                                <img
-                                    :src="student.photos.url"
-                                    width="200"
-                                    height="200"
-                                    style="
-                                        background-color: #eee;
-                                        border-radius: 50%;
-                                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                                    "
-                                    class="avatar-hover"
-                                />
-                                <h2 class="text-h5 mt-2 mb-1 text-white">
-                                    {{ student.name }}
-                                </h2>
-                                <v-chip color="#fff" text-color="white">{{
-                                    student.gender
-                                }}</v-chip>
-                            </v-card-title>
                             <v-card-text>
-                                <v-container fluid>
-                                    <v-row class="ma-10">
-                                        <v-col
-                                            cols="12"
-                                            sm="6"
-                                            class="d-flex justify-center"
-                                        >
-                                            <v-card
-                                                class="pa-3 mb-3 fixed-card"
-                                                outlined
-                                            >
-                                                <v-card-title
-                                                    class="custom-title custom-font text-center"
-                                                    style="font-size: 20px"
-                                                >
-                                                    العمر
-                                                </v-card-title>
-                                                <v-card-subtitle
-                                                    class="custom-font centered-subtitle"
-                                                    style="font-size: 16px"
-                                                    >{{
-                                                        student.age
-                                                    }}</v-card-subtitle
-                                                >
-                                            </v-card>
-                                        </v-col>
-                                        <v-col
-                                            cols="12"
-                                            sm="6"
-                                            class="d-flex justify-center text-center"
-                                        >
-                                            <v-card
-                                                class="pa-3 mb-3 fixed-card"
-                                                outlined
-                                            >
-                                                <v-card-title
-                                                    class="custom-title custom-font"
-                                                    style="font-size: 20px"
-                                                >
-                                                    تاريخ الميلاد
-                                                </v-card-title>
-                                                <v-card-subtitle
-                                                    class="custom-font centered-subtitle"
-                                                    style="font-size: 16px"
-                                                    >{{
-                                                        student.BithOfDate
-                                                    }}</v-card-subtitle
-                                                >
-                                            </v-card>
-                                        </v-col>
-                                        <v-col
-                                            cols="12"
-                                            sm="6"
-                                            class="d-flex justify-center"
-                                        >
-                                            <v-card
-                                                class="pa-3 mb-3 fixed-card"
-                                                outlined
-                                            >
-                                                <v-card-title
-                                                    class="custom-title custom-font text-center"
-                                                    style="font-size: 20px"
-                                                >
-                                                    المرحلة الدراسية
-                                                </v-card-title>
-                                                <v-card-subtitle
-                                                    class="custom-font centered-subtitle"
-                                                    style="font-size: 16px"
-                                                    >{{
-                                                        student.gradeLevel
-                                                    }}</v-card-subtitle
-                                                >
-                                            </v-card>
-                                        </v-col>
-                                        <v-col
-                                            cols="12"
-                                            sm="6"
-                                            class="d-flex justify-center"
-                                        >
-                                            <v-card
-                                                class="pa-3 mb-3 fixed-card"
-                                                outlined
-                                            >
-                                                <v-card-title
-                                                    class="custom-title custom-font text-center"
-                                                    style="font-size: 20px"
-                                                >
-                                                    السنة الدراسية
-                                                </v-card-title>
-                                                <v-card-subtitle
-                                                    class="custom-font centered-subtitle"
-                                                    style="font-size: 16px"
-                                                    >{{
-                                                        student.schoolYear
-                                                    }}</v-card-subtitle
-                                                >
-                                            </v-card>
-                                        </v-col>
-                                    </v-row>
-                                </v-container>
-                            </v-card-text>
-                        </v-card>
-                        <v-alert type="error" v-else class="custom-font">
-                            لا يوجد بيانات لهذا الطالب
-                        </v-alert>
-                    </v-tabs-window-item>
-
-                    <v-tabs-window-item value="option-2">
-                        <h2 class="ma-2">النتائج الأسبوعية</h2>
-                        <v-card flat>
-                            <v-list>
-                                <v-list-item>
-                                    <v-table>
-                                        <thead>
-                                            <tr>
-                                                <th>المادة</th>
-                                                <th>الدرجة الكبرى</th>
-                                                <th>درجة الطالب</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr
-                                                v-for="(
-                                                    result, index
-                                                ) in student.Results
-                                                    .weeklyResults"
-                                                :key="index"
-                                            >
-                                                <td>
-                                                    {{ result.Subject_Name }}
-                                                </td>
-                                                <td>
-                                                    {{ result.Major_degree }}
-                                                </td>
-                                                <td>
-                                                    {{ result.Student_degree }}
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </v-table>
-                                </v-list-item>
-                            </v-list>
-                        </v-card>
-                    </v-tabs-window-item>
-
-                    <v-tabs-window-item
-                        value="option-3"
-                        style="width: 100% !important"
-                    >
-                        <v-card flat>
-                            <v-row
-                                class="d-flex flex-row align-center justify-space-between"
-                            >
-                                <v-col>
-                                    <h2 class="ma-2">النتائج الشهرية</h2>
-                                </v-col>
-                                <v-col class="d-flex justify-end">
-                                    <v-btn
-                                        color="blue"
-                                        class="ml-5"
-                                        @click="downloadPDF"
-                                    >
-                                        <v-icon left size="25px" class="ml-2"
-                                            >mdi-printer</v-icon
-                                        >
-                                        تحميل الشهادة
-                                    </v-btn>
-                                </v-col>
-                            </v-row>
-
-                            <!-- أزرار اختيار الشهر -->
-                            <v-row>
-                                <v-col
-                                    cols="12"
-                                    class="d-flex justify-center ma-3"
-                                >
-                                    <v-btn
-                                        rounded="xs"
-                                        size="large"
-                                        @click="selectMonth('شهر يناير')"
-                                        >شهر يناير</v-btn
-                                    >
-                                    <v-btn
-                                        rounded="xs"
-                                        size="large"
-                                        @click="selectMonth('شهر فبراير')"
-                                        >شهر فبراير</v-btn
-                                    >
-                                    <v-btn
-                                        rounded="xs"
-                                        size="large"
-                                        @click="selectMonth('شهر مارس')"
-                                        >شهر مارس</v-btn
-                                    >
-                                    <v-btn
-                                        rounded="xs"
-                                        size="large"
-                                        @click="selectMonth('شهر ابرايل')"
-                                        >شهر ابرايل</v-btn
-                                    >
-                                </v-col>
-                            </v-row>
-
-                            <!-- بيانات الطالب -->
-                            <v-row
-                                class="d-flex flex-row align-center justify-space-between ma-5"
-                            >
-                                <v-col>
-                                    <v-col>
-                                        <v-text-title>الاسم:</v-text-title>
-                                        <v-text-title>{{
-                                            student.name
-                                        }}</v-text-title>
-                                    </v-col>
-                                    <v-col>
-                                        <v-text-title
-                                            >المرحلة الدراسية:</v-text-title
-                                        >
-                                        <v-text-title>{{
-                                            student.gradeLevel
-                                        }}</v-text-title>
-                                    </v-col>
-                                    <v-col>
-                                        <v-text-title
-                                            >السنة الدراسية:</v-text-title
-                                        >
-                                        <v-text-title>{{
-                                            student.schoolYear
-                                        }}</v-text-title>
-                                    </v-col>
-                                </v-col>
-                                <v-col class="d-flex flex-column align-end">
-                                    <div
-                                        class="par d-flex flex-column justify-center"
-                                        style="width: 200px; height: 200px"
-                                    >
-                                        <img
-                                            src="../assets/images.jpeg"
-                                            alt="School Logo"
-                                        />
-                                        <p class="ma-2">
-                                            معهد السراج المنير الأزهري
-                                        </p>
-                                    </div>
-                                </v-col>
-                            </v-row>
-
-                            <!-- جدول النتائج -->
-                            <div class="table">
-                                <v-table>
-                                    <thead>
-                                        <tr>
-                                            <th>اسم المادة</th>
-                                            <th>اسم المعلم</th>
-                                            <th>تقييم السلوك</th>
-                                            <th>الدرجة الصغرى</th>
-                                            <th>الدرجة الكبرى</th>
-                                            <th>الدرجة النهائية للطالب</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr
-                                            v-for="(
-                                                degree, index
-                                            ) in selectedMonthlyDegrees"
-                                            :key="index"
-                                        >
-                                            <td>{{ degree.Subject_Name }}</td>
-                                            <td>{{ degree.Teacher_Name }}</td>
-                                            <td>
-                                                {{ degree.Behavior_assessment }}
-                                            </td>
-                                            <td>{{ degree.Minor_degree }}</td>
-                                            <td>{{ degree.Major_degree }}</td>
-                                            <td>{{ degree.Student_degree }}</td>
-                                        </tr>
-                                    </tbody>
-                                </v-table>
-                            </div>
-                        </v-card>
-                    </v-tabs-window-item>
-
-                    <v-tabs-window-item value="option-4">
-                        <div class="container">
-                            <v-card flat class="mx-auto my-4" max-width="90%">
-                                <v-card-title
-                                    class="text-h4 custom-font"
-                                    style="color: #2980b9"
-                                >
-                                    المدفوعات
-                                </v-card-title>
-                                <v-card-subtitle
-                                    class="mb-4 text-h6 custom-title"
-                                >
-                                    ادخل المبلغ واختر نظام الدفع
-                                </v-card-subtitle>
-                                <v-container>
-                                    <v-row>
-                                        <v-col cols="12" md="6">
-                                            <v-text-field
-                                                v-model="totalAmount"
-                                                label="ادخل المبلغ"
-                                                outlined
-                                                dense
-                                                required
-                                                @blur="validateTotalAmount"
-                                            ></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12" md="6">
-                                            <v-select
-                                                v-model="paymentMethod"
-                                                :items="paymentMethods"
-                                                label="اختر نظام الدفع"
-                                                @change="updatePaymentOptions"
-                                                outlined
-                                                dense
-                                            ></v-select>
-                                        </v-col>
-                                    </v-row>
-                                    <v-row
-                                        v-if="paymentMethod === 'نظام التقسيط'"
-                                    >
-                                        <v-col cols="12" md="6">
-                                            <v-select
-                                                v-model="selectedPlan"
-                                                :items="selectPaid"
-                                                label="اختر نظام التقسيط"
-                                                @change="updateCircles"
-                                                outlined
-                                                dense
-                                            ></v-select>
-                                        </v-col>
-                                    </v-row>
-                                </v-container>
-                            </v-card>
-
-                            <div
-                                v-if="
-                                    paymentMethod === 'نظام التقسيط' &&
-                                    selectedPlan
-                                "
-                                class="payment-section"
-                            >
-                                <v-row>
-                                    <div class="timeline-container">
-                                        <div class="timeline">
-                                            <div class="timeline-line"></div>
-                                            <div class="progress_container">
-                                                <div
-                                                    class="progress"
-                                                    :style="{
-                                                        height:
-                                                            (paidAmount /
-                                                                totalAmount) *
-                                                                100 +
-                                                            '%',
-                                                        backgroundColor:
-                                                            '#2980b9',
-                                                    }"
-                                                ></div>
-                                                <span
-                                                    class="progress-label mb-3"
-                                                >
-                                                    <!-- {{ (paidAmount / totalAmount) * 100 }} % -->
-                                                    {{ paidAmount }}
-                                                    مدفوعاتك
-                                                </span>
+                                <v-tabs-window v-model="tab_5">
+                                    <v-tabs-window-item value="one1">
+                                        <div class="title">معلومات الطالب</div>
+                                        <div class="feat">
+                                            <div class="name">
+                                                محمد علي عماد
                                             </div>
-                                            <div
-                                                v-for="month in numberOfMonths"
-                                                :key="month"
-                                                class="timeline-item"
-                                            >
-                                                <div
-                                                    class="timeline-item-content"
-                                                    :style="{
-                                                        backgroundColor:
-                                                            paidAmount >=
-                                                            installmentAmount *
-                                                                month
-                                                                ? '#d8588c'
-                                                                : '#fff',
-                                                        color:
-                                                            paidAmount >=
-                                                            installmentAmount *
-                                                                month
-                                                                ? '#fff'
-                                                                : '#333', // أو أي لون آخر تفضله
-                                                    }"
-                                                >
-                                                    <div
-                                                        class="timeline-item-header"
-                                                    >
-                                                        <span
-                                                            class="month-name"
-                                                            :style="{
-                                                                color:
-                                                                    paidAmount >=
-                                                                    installmentAmount *
-                                                                        month
-                                                                        ? '#fff'
-                                                                        : '#333',
-                                                            }"
-                                                            >شهر
-                                                            {{ month }}</span
-                                                        >
-                                                    </div>
-                                                    <div
-                                                        class="timeline-item-body"
-                                                    >
-                                                        <p>
-                                                            القسط الشهري:
-                                                            {{
-                                                                Math.floor(
-                                                                    installmentAmount
-                                                                )
-                                                            }}
-                                                            جنيه
-                                                        </p>
-                                                    </div>
-                                                </div>
+                                            <div class="gender">ذكر</div>
+                                        </div>
+                                        <div class="feat">
+                                            <div class="educational_level">
+                                                الصف السادس الإبتدائي
                                             </div>
                                         </div>
-                                    </div>
-                                </v-row>
-                                <v-row class="my-4">
-                                    <v-col
-                                        cols="12"
-                                        md="6"
-                                        style="margin: 0 auto"
-                                    >
-                                        <v-text-field
-                                            v-model="amount"
-                                            label="ادخل المبلغ للدفع"
-                                            outlined
-                                            dense
-                                        ></v-text-field>
-                                    </v-col>
-                                </v-row>
-                                <v-row class="my-4">
-                                    <v-col cols="12" md="4">
-                                        <v-card class="pa-4">
+                                        <div class="feat">
+                                            <div class="Class">6/1</div>
+                                        </div>
+                                        <div class="feat">
+                                            <div class="section">لغات</div>
+                                        </div>
+                                        <!-- <v-card
+                                            flat
+                                            v-if="student"
+                                            class="mx-auto my-4"
+                                            max-width="90%"
+                                        >
                                             <v-card-title
-                                                >المبلغ المستحق</v-card-title
+                                                style="
+                                                    background: #2980b9;
+                                                    border-radius: 20px;
+                                                    padding: 24px;
+                                                "
+                                                class="d-flex flex-column align-center custom-font"
                                             >
-                                            <v-card-subtitle
-                                                >{{
-                                                    totalAmount
-                                                }}
-                                                جنيه</v-card-subtitle
-                                            >
+                                                <img
+                                                    :src="student.photos.url"
+                                                    width="200"
+                                                    height="200"
+                                                    style="
+                                                        background-color: #eee;
+                                                        border-radius: 50%;
+                                                        box-shadow: 0 4px 8px
+                                                            rgba(0, 0, 0, 0.1);
+                                                    "
+                                                    class="avatar-hover"
+                                                />
+                                                <h2
+                                                    class="text-h5 mt-2 mb-1 text-white"
+                                                >
+                                                    {{ student.name }}
+                                                </h2>
+                                                <v-chip
+                                                    color="#fff"
+                                                    text-color="white"
+                                                    >{{
+                                                        student.gender
+                                                    }}</v-chip
+                                                >
+                                            </v-card-title>
+                                            <v-card-text>
+                                                <v-container fluid>
+                                                    <v-row class="ma-10">
+                                                        <v-col
+                                                            cols="12"
+                                                            sm="6"
+                                                            class="d-flex justify-center"
+                                                        >
+                                                            <v-card
+                                                                class="pa-3 mb-3 fixed-card"
+                                                                outlined
+                                                            >
+                                                                <v-card-title
+                                                                    class="custom-title custom-font text-center"
+                                                                    style="
+                                                                        font-size: 20px;
+                                                                    "
+                                                                >
+                                                                    العمر
+                                                                </v-card-title>
+                                                                <v-card-subtitle
+                                                                    class="custom-font centered-subtitle"
+                                                                    style="
+                                                                        font-size: 16px;
+                                                                    "
+                                                                    >{{
+                                                                        student.age
+                                                                    }}</v-card-subtitle
+                                                                >
+                                                            </v-card>
+                                                        </v-col>
+                                                        <v-col
+                                                            cols="12"
+                                                            sm="6"
+                                                            class="d-flex justify-center text-center"
+                                                        >
+                                                            <v-card
+                                                                class="pa-3 mb-3 fixed-card"
+                                                                outlined
+                                                            >
+                                                                <v-card-title
+                                                                    class="custom-title custom-font"
+                                                                    style="
+                                                                        font-size: 20px;
+                                                                    "
+                                                                >
+                                                                    تاريخ
+                                                                    الميلاد
+                                                                </v-card-title>
+                                                                <v-card-subtitle
+                                                                    class="custom-font centered-subtitle"
+                                                                    style="
+                                                                        font-size: 16px;
+                                                                    "
+                                                                    >{{
+                                                                        student.BithOfDate
+                                                                    }}</v-card-subtitle
+                                                                >
+                                                            </v-card>
+                                                        </v-col>
+                                                        <v-col
+                                                            cols="12"
+                                                            sm="6"
+                                                            class="d-flex justify-center"
+                                                        >
+                                                            <v-card
+                                                                class="pa-3 mb-3 fixed-card"
+                                                                outlined
+                                                            >
+                                                                <v-card-title
+                                                                    class="custom-title custom-font text-center"
+                                                                    style="
+                                                                        font-size: 20px;
+                                                                    "
+                                                                >
+                                                                    المرحلة
+                                                                    الدراسية
+                                                                </v-card-title>
+                                                                <v-card-subtitle
+                                                                    class="custom-font centered-subtitle"
+                                                                    style="
+                                                                        font-size: 16px;
+                                                                    "
+                                                                    >{{
+                                                                        student.gradeLevel
+                                                                    }}</v-card-subtitle
+                                                                >
+                                                            </v-card>
+                                                        </v-col>
+                                                        <v-col
+                                                            cols="12"
+                                                            sm="6"
+                                                            class="d-flex justify-center"
+                                                        >
+                                                            <v-card
+                                                                class="pa-3 mb-3 fixed-card"
+                                                                outlined
+                                                            >
+                                                                <v-card-title
+                                                                    class="custom-title custom-font text-center"
+                                                                    style="
+                                                                        font-size: 20px;
+                                                                    "
+                                                                >
+                                                                    السنة
+                                                                    الدراسية
+                                                                </v-card-title>
+                                                                <v-card-subtitle
+                                                                    class="custom-font centered-subtitle"
+                                                                    style="
+                                                                        font-size: 16px;
+                                                                    "
+                                                                    >{{
+                                                                        student.schoolYear
+                                                                    }}</v-card-subtitle
+                                                                >
+                                                            </v-card>
+                                                        </v-col>
+                                                    </v-row>
+                                                </v-container>
+                                            </v-card-text>
                                         </v-card>
-                                    </v-col>
-                                    <v-col cols="12" md="4">
-                                        <v-card class="pa-4">
-                                            <v-card-title
-                                                >المبلغ المدفوع</v-card-title
+                                        <v-alert
+                                            type="error"
+                                            v-else
+                                            class="custom-font"
+                                        >
+                                            لا يوجد بيانات لهذا الطالب
+                                        </v-alert> -->
+                                        <v-card>
+                                            <v-toolbar
+                                                color="#fff"
+                                                title="تفاصيل الطالب"
                                             >
-                                            <v-card-subtitle
-                                                >{{
-                                                    paidAmount
-                                                }}
-                                                جنيه</v-card-subtitle
-                                            >
-                                        </v-card>
-                                    </v-col>
-                                    <v-col cols="12" md="4">
-                                        <v-card class="pa-4">
-                                            <v-card-title
-                                                >باقي المبلغ
-                                                المستحق</v-card-title
-                                            >
-                                            <v-card-subtitle
-                                                >{{
-                                                    remainingAmount
-                                                }}
-                                                جنيه</v-card-subtitle
-                                            >
-                                        </v-card>
-                                    </v-col>
-                                </v-row>
-                            </div>
-                        </div>
-                    </v-tabs-window-item>
+                                            </v-toolbar>
 
-                    <v-tabs-window-item value="option-5">
-                        <v-card flat v-if="student">
-                            <h2 class="ma-5">الاشعارات</h2>
-                            <v-list-item
-                                height="200"
-                                v-for="notification in student.Notifications"
-                                :key="notification.id"
-                            >
-                                <v-alert
-                                    class="ma-2"
-                                    :title="notification.Title"
-                                    type="info"
-                                    variant="tonal"
-                                    ><p class="mt-3 rounded-md">
-                                        {{ notification.Details }}
-                                    </p></v-alert
-                                >
-                            </v-list-item>
+                                            <div
+                                                class="d-flex flex-row"
+                                                style="
+                                                    width: 100%;
+                                                    height: auto;
+                                                "
+                                            >
+                                                <v-tabs
+                                                    v-model="tab"
+                                                    color="primary"
+                                                    direction="vertical"
+                                                >
+                                                    <v-tab
+                                                        prepend-icon="mdi-account"
+                                                        text="معلومات شخصيه"
+                                                        value="option-1"
+                                                    ></v-tab>
+                                                    <v-tab
+                                                        prepend-icon="mdi-lock"
+                                                        text="النتائج الاسبوعيه"
+                                                        value="option-2"
+                                                    ></v-tab>
+                                                    <v-tab
+                                                        prepend-icon="mdi-access-point"
+                                                        text="النتائج الشهريه"
+                                                        value="option-3"
+                                                    ></v-tab>
+                                                    <v-tab
+                                                        prepend-icon="mdi-access-point"
+                                                        text=" المدفوعات"
+                                                        value="option-4"
+                                                    ></v-tab>
+                                                    <v-tab
+                                                        prepend-icon="mdi-access-point"
+                                                        text=" الاشعارات"
+                                                        value="option-5"
+                                                    ></v-tab>
+                                                    <v-tab
+                                                        prepend-icon="mdi-access-point"
+                                                        text=" الصور"
+                                                        value="option-6"
+                                                    ></v-tab>
+                                                    <v-tab
+                                                        prepend-icon="mdi-access-point"
+                                                        text=" الاحصائيات"
+                                                        value="option-7"
+                                                    ></v-tab>
+                                                </v-tabs>
+
+                                                <v-tabs-window
+                                                    v-model="tab"
+                                                    style="
+                                                        width: 100%;
+                                                        height: 100% !important;
+                                                    "
+                                                >
+                                                </v-tabs-window>
+                                            </div>
+                                        </v-card>
+                                    </v-tabs-window-item>
+
+                                    <v-tabs-window-item value="two1">
+                                        <h2 class="ma-2">النتائج الأسبوعية</h2>
+                                        <v-card flat>
+                                            <v-list>
+                                                <v-list-item>
+                                                    <v-table>
+                                                        <thead>
+                                                            <tr>
+                                                                <th>المادة</th>
+                                                                <th>
+                                                                    الدرجة
+                                                                    الكبرى
+                                                                </th>
+                                                                <th>
+                                                                    درجة الطالب
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr
+                                                                v-for="(
+                                                                    result,
+                                                                    index
+                                                                ) in student
+                                                                    .Results
+                                                                    .weeklyResults"
+                                                                :key="index"
+                                                            >
+                                                                <td>
+                                                                    {{
+                                                                        result.Subject_Name
+                                                                    }}
+                                                                </td>
+                                                                <td>
+                                                                    {{
+                                                                        result.Major_degree
+                                                                    }}
+                                                                </td>
+                                                                <td>
+                                                                    {{
+                                                                        result.Student_degree
+                                                                    }}
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </v-table>
+                                                </v-list-item>
+                                            </v-list>
+                                        </v-card>
+                                    </v-tabs-window-item>
+
+                                    <v-tabs-window-item
+                                        value="three1"
+                                        style="width: 100% !important"
+                                    >
+                                        <v-card flat>
+                                            <v-row
+                                                class="d-flex flex-row align-center justify-space-between"
+                                            >
+                                                <v-col>
+                                                    <h2 class="ma-2">
+                                                        النتائج الشهرية
+                                                    </h2>
+                                                </v-col>
+                                                <v-col
+                                                    class="d-flex justify-end"
+                                                >
+                                                    <v-btn
+                                                        color="blue"
+                                                        class="ml-5"
+                                                        @click="downloadPDF"
+                                                    >
+                                                        <v-icon
+                                                            left
+                                                            size="25px"
+                                                            class="ml-2"
+                                                            >mdi-printer</v-icon
+                                                        >
+                                                        تحميل الشهادة
+                                                    </v-btn>
+                                                </v-col>
+                                            </v-row>
+
+                                            <!-- أزرار اختيار الشهر -->
+                                            <v-row>
+                                                <v-col
+                                                    cols="12"
+                                                    class="d-flex justify-center ma-3"
+                                                >
+                                                    <v-btn
+                                                        rounded="xs"
+                                                        size="large"
+                                                        @click="
+                                                            selectMonth(
+                                                                'شهر يناير'
+                                                            )
+                                                        "
+                                                        >شهر يناير</v-btn
+                                                    >
+                                                    <v-btn
+                                                        rounded="xs"
+                                                        size="large"
+                                                        @click="
+                                                            selectMonth(
+                                                                'شهر فبراير'
+                                                            )
+                                                        "
+                                                        >شهر فبراير</v-btn
+                                                    >
+                                                    <v-btn
+                                                        rounded="xs"
+                                                        size="large"
+                                                        @click="
+                                                            selectMonth(
+                                                                'شهر مارس'
+                                                            )
+                                                        "
+                                                        >شهر مارس</v-btn
+                                                    >
+                                                    <v-btn
+                                                        rounded="xs"
+                                                        size="large"
+                                                        @click="
+                                                            selectMonth(
+                                                                'شهر ابرايل'
+                                                            )
+                                                        "
+                                                        >شهر ابرايل</v-btn
+                                                    >
+                                                </v-col>
+                                            </v-row>
+
+                                            <!-- بيانات الطالب -->
+                                            <v-row
+                                                class="d-flex flex-row align-center justify-space-between ma-5"
+                                            >
+                                                <v-col>
+                                                    <v-col>
+                                                        <v-text-title
+                                                            >الاسم:</v-text-title
+                                                        >
+                                                        <v-text-title>{{
+                                                            student.name
+                                                        }}</v-text-title>
+                                                    </v-col>
+                                                    <v-col>
+                                                        <v-text-title
+                                                            >المرحلة
+                                                            الدراسية:</v-text-title
+                                                        >
+                                                        <v-text-title>{{
+                                                            student.gradeLevel
+                                                        }}</v-text-title>
+                                                    </v-col>
+                                                    <v-col>
+                                                        <v-text-title
+                                                            >السنة
+                                                            الدراسية:</v-text-title
+                                                        >
+                                                        <v-text-title>{{
+                                                            student.schoolYear
+                                                        }}</v-text-title>
+                                                    </v-col>
+                                                </v-col>
+                                                <v-col
+                                                    class="d-flex flex-column align-end"
+                                                >
+                                                    <div
+                                                        class="par d-flex flex-column justify-center"
+                                                        style="
+                                                            width: 200px;
+                                                            height: 200px;
+                                                        "
+                                                    >
+                                                        <img
+                                                            src="../assets/images.jpeg"
+                                                            alt="School Logo"
+                                                        />
+                                                        <p class="ma-2">
+                                                            معهد السراج المنير
+                                                            الأزهري
+                                                        </p>
+                                                    </div>
+                                                </v-col>
+                                            </v-row>
+
+                                            <!-- جدول النتائج -->
+                                            <div class="table">
+                                                <v-table>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>اسم المادة</th>
+                                                            <th>اسم المعلم</th>
+                                                            <th>
+                                                                تقييم السلوك
+                                                            </th>
+                                                            <th>
+                                                                الدرجة الصغرى
+                                                            </th>
+                                                            <th>
+                                                                الدرجة الكبرى
+                                                            </th>
+                                                            <th>
+                                                                الدرجة النهائية
+                                                                للطالب
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr
+                                                            v-for="(
+                                                                degree, index
+                                                            ) in selectedMonthlyDegrees"
+                                                            :key="index"
+                                                        >
+                                                            <td>
+                                                                {{
+                                                                    degree.Subject_Name
+                                                                }}
+                                                            </td>
+                                                            <td>
+                                                                {{
+                                                                    degree.Teacher_Name
+                                                                }}
+                                                            </td>
+                                                            <td>
+                                                                {{
+                                                                    degree.Behavior_assessment
+                                                                }}
+                                                            </td>
+                                                            <td>
+                                                                {{
+                                                                    degree.Minor_degree
+                                                                }}
+                                                            </td>
+                                                            <td>
+                                                                {{
+                                                                    degree.Major_degree
+                                                                }}
+                                                            </td>
+                                                            <td>
+                                                                {{
+                                                                    degree.Student_degree
+                                                                }}
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </v-table>
+                                            </div>
+                                        </v-card>
+                                    </v-tabs-window-item>
+
+                                    <v-tabs-window-item value="four1">
+                                        <v-card flat v-if="student">
+                                            <v-container fluid>
+                                                <v-row>
+                                                    <v-col cols="12">
+                                                        <v-select
+                                                            v-model="
+                                                                selectedGrade
+                                                            "
+                                                            :items="gradeLevels"
+                                                            label="اختر المرحلة الدراسية"
+                                                            outlined
+                                                            dense
+                                                            class="mb-4"
+                                                        ></v-select>
+                                                    </v-col>
+                                                </v-row>
+                                                <v-row>
+                                                    <v-col
+                                                        v-for="photo in filteredPhotos"
+                                                        :key="photo.link"
+                                                        cols="12"
+                                                        sm="6"
+                                                        md="4"
+                                                        class="d-flex justify-center"
+                                                    >
+                                                        <v-card
+                                                            outlined
+                                                            class="pa-3 mb-3"
+                                                        >
+                                                            <v-img
+                                                                :src="
+                                                                    photo.link
+                                                                "
+                                                                aspect-ratio="1"
+                                                                class="mb-2"
+                                                            ></v-img>
+                                                            <v-card-subtitle
+                                                                class="custom-font"
+                                                                style="
+                                                                    font-size: 16px;
+                                                                "
+                                                            >
+                                                                التاريخ:
+                                                                {{ photo.Date }}
+                                                            </v-card-subtitle>
+                                                        </v-card>
+                                                    </v-col>
+                                                </v-row>
+                                            </v-container>
+                                        </v-card>
+                                        <v-alert type="error" v-else>
+                                            لا يوجد بيانات لهذا الطالب
+                                        </v-alert>
+                                    </v-tabs-window-item>
+                                </v-tabs-window>
+                            </v-card-text>
                         </v-card>
                     </v-tabs-window-item>
 
-                    <v-tabs-window-item value="option-6">
-                        <v-card flat v-if="student">
-                            <v-container fluid>
-                                <v-row>
-                                    <v-col cols="12">
-                                        <v-select
-                                            v-model="selectedGrade"
-                                            :items="gradeLevels"
-                                            label="اختر المرحلة الدراسية"
-                                            outlined
-                                            dense
-                                            class="mb-4"
-                                        ></v-select>
-                                    </v-col>
-                                </v-row>
-                                <v-row>
-                                    <v-col
-                                        v-for="photo in filteredPhotos"
-                                        :key="photo.link"
-                                        cols="12"
-                                        sm="6"
-                                        md="4"
-                                        class="d-flex justify-center"
-                                    >
-                                        <v-card outlined class="pa-3 mb-3">
-                                            <v-img
-                                                :src="photo.link"
-                                                aspect-ratio="1"
-                                                class="mb-2"
-                                            ></v-img>
-                                            <v-card-subtitle
-                                                class="custom-font"
-                                                style="font-size: 16px"
-                                            >
-                                                التاريخ: {{ photo.Date }}
-                                            </v-card-subtitle>
-                                        </v-card>
-                                    </v-col>
-                                </v-row>
-                            </v-container>
-                        </v-card>
-                        <v-alert type="error" v-else>
-                            لا يوجد بيانات لهذا الطالب
-                        </v-alert>
-                    </v-tabs-window-item>
+                    <v-tabs-window-item value="two">
+                        <v-card>
+                            <v-tabs v-model="tab_4">
+                                <v-tab value="one1">
+                                    <img
+                                        src="../assets/student/money.png"
+                                        alt=""
+                                        width="30px"
+                                    />
+                                </v-tab>
+                                <v-tab value="two1">
+                                    <img
+                                        src="../assets/student/notification-bell.png"
+                                        alt=""
+                                        width="30px"
+                                /></v-tab>
+                                <v-tab value="three1">
+                                    <img
+                                        src="../assets/student/analysis.png"
+                                        alt=""
+                                        width="30px"
+                                /></v-tab>
+                            </v-tabs>
 
-                    <v-tabs-window-item value="option-7">
-                        <v-card flat v-if="student">
-                            <v-list-item
-                                v-for="statistic in student.statistics"
-                                :key="statistic.id"
-                            >
-                                <v-list-item-content>
-                                    <v-list-item-title>{{
-                                        statistic.data
-                                    }}</v-list-item-title>
-                                </v-list-item-content>
-                            </v-list-item>
+                            <v-card-text>
+                                <v-tabs-window v-model="tab_4">
+                                    <v-tabs-window-item value="one1">
+                                        <div class="container">
+                                            <v-card
+                                                flat
+                                                class="mx-auto my-4"
+                                                max-width="90%"
+                                            >
+                                                <v-card-title
+                                                    class="text-h4 custom-font"
+                                                    style="color: #2980b9"
+                                                >
+                                                    المدفوعات
+                                                </v-card-title>
+                                                <v-card-subtitle
+                                                    class="mb-4 text-h6 custom-title"
+                                                >
+                                                    ادخل المبلغ واختر نظام الدفع
+                                                </v-card-subtitle>
+                                                <v-container>
+                                                    <v-row>
+                                                        <v-col cols="12" md="6">
+                                                            <v-text-field
+                                                                v-model="
+                                                                    totalAmount
+                                                                "
+                                                                label="ادخل المبلغ"
+                                                                outlined
+                                                                dense
+                                                                required
+                                                                @blur="
+                                                                    validateTotalAmount
+                                                                "
+                                                            ></v-text-field>
+                                                        </v-col>
+                                                        <v-col cols="12" md="6">
+                                                            <v-select
+                                                                v-model="
+                                                                    paymentMethod
+                                                                "
+                                                                :items="
+                                                                    paymentMethods
+                                                                "
+                                                                label="اختر نظام الدفع"
+                                                                @change="
+                                                                    updatePaymentOptions
+                                                                "
+                                                                outlined
+                                                                dense
+                                                            ></v-select>
+                                                        </v-col>
+                                                    </v-row>
+                                                    <v-row
+                                                        v-if="
+                                                            paymentMethod ===
+                                                            'نظام التقسيط'
+                                                        "
+                                                    >
+                                                        <v-col cols="12" md="6">
+                                                            <v-select
+                                                                v-model="
+                                                                    selectedPlan
+                                                                "
+                                                                :items="
+                                                                    selectPaid
+                                                                "
+                                                                label="اختر نظام التقسيط"
+                                                                @change="
+                                                                    updateCircles
+                                                                "
+                                                                outlined
+                                                                dense
+                                                            ></v-select>
+                                                        </v-col>
+                                                    </v-row>
+                                                </v-container>
+                                            </v-card>
+
+                                            <div
+                                                v-if="
+                                                    paymentMethod ===
+                                                        'نظام التقسيط' &&
+                                                    selectedPlan
+                                                "
+                                                class="payment-section"
+                                            >
+                                                <v-row>
+                                                    <div
+                                                        class="timeline-container"
+                                                    >
+                                                        <div class="timeline">
+                                                            <div
+                                                                class="timeline-line"
+                                                            ></div>
+                                                            <div
+                                                                class="progress_container"
+                                                            >
+                                                                <div
+                                                                    class="progress"
+                                                                    :style="{
+                                                                        height:
+                                                                            (paidAmount /
+                                                                                totalAmount) *
+                                                                                100 +
+                                                                            '%',
+                                                                        backgroundColor:
+                                                                            '#2980b9',
+                                                                    }"
+                                                                ></div>
+                                                                <span
+                                                                    class="progress-label mb-3"
+                                                                >
+                                                                    <!-- {{ (paidAmount / totalAmount) * 100 }} % -->
+                                                                    {{
+                                                                        paidAmount
+                                                                    }}
+                                                                    مدفوعاتك
+                                                                </span>
+                                                            </div>
+                                                            <div
+                                                                v-for="month in numberOfMonths"
+                                                                :key="month"
+                                                                class="timeline-item"
+                                                            >
+                                                                <div
+                                                                    class="timeline-item-content"
+                                                                    :style="{
+                                                                        backgroundColor:
+                                                                            paidAmount >=
+                                                                            installmentAmount *
+                                                                                month
+                                                                                ? '#d8588c'
+                                                                                : '#fff',
+                                                                        color:
+                                                                            paidAmount >=
+                                                                            installmentAmount *
+                                                                                month
+                                                                                ? '#fff'
+                                                                                : '#333', // أو أي لون آخر تفضله
+                                                                    }"
+                                                                >
+                                                                    <div
+                                                                        class="timeline-item-header"
+                                                                    >
+                                                                        <span
+                                                                            class="month-name"
+                                                                            :style="{
+                                                                                color:
+                                                                                    paidAmount >=
+                                                                                    installmentAmount *
+                                                                                        month
+                                                                                        ? '#fff'
+                                                                                        : '#333',
+                                                                            }"
+                                                                            >شهر
+                                                                            {{
+                                                                                month
+                                                                            }}</span
+                                                                        >
+                                                                    </div>
+                                                                    <div
+                                                                        class="timeline-item-body"
+                                                                    >
+                                                                        <p>
+                                                                            القسط
+                                                                            الشهري:
+                                                                            {{
+                                                                                Math.floor(
+                                                                                    installmentAmount
+                                                                                )
+                                                                            }}
+                                                                            جنيه
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </v-row>
+                                                <v-row class="my-4">
+                                                    <v-col
+                                                        cols="12"
+                                                        md="6"
+                                                        style="margin: 0 auto"
+                                                    >
+                                                        <v-text-field
+                                                            v-model="amount"
+                                                            label="ادخل المبلغ للدفع"
+                                                            outlined
+                                                            dense
+                                                        ></v-text-field>
+                                                    </v-col>
+                                                </v-row>
+                                                <v-row class="my-4">
+                                                    <v-col cols="12" md="4">
+                                                        <v-card class="pa-4">
+                                                            <v-card-title
+                                                                >المبلغ
+                                                                المستحق</v-card-title
+                                                            >
+                                                            <v-card-subtitle
+                                                                >{{
+                                                                    totalAmount
+                                                                }}
+                                                                جنيه</v-card-subtitle
+                                                            >
+                                                        </v-card>
+                                                    </v-col>
+                                                    <v-col cols="12" md="4">
+                                                        <v-card class="pa-4">
+                                                            <v-card-title
+                                                                >المبلغ
+                                                                المدفوع</v-card-title
+                                                            >
+                                                            <v-card-subtitle
+                                                                >{{
+                                                                    paidAmount
+                                                                }}
+                                                                جنيه</v-card-subtitle
+                                                            >
+                                                        </v-card>
+                                                    </v-col>
+                                                    <v-col cols="12" md="4">
+                                                        <v-card class="pa-4">
+                                                            <v-card-title
+                                                                >باقي المبلغ
+                                                                المستحق</v-card-title
+                                                            >
+                                                            <v-card-subtitle
+                                                                >{{
+                                                                    remainingAmount
+                                                                }}
+                                                                جنيه</v-card-subtitle
+                                                            >
+                                                        </v-card>
+                                                    </v-col>
+                                                </v-row>
+                                            </div>
+                                        </div>
+                                    </v-tabs-window-item>
+
+                                    <v-tabs-window-item value="two1">
+                                        <v-card flat v-if="student">
+                                            <h2 class="ma-5">الاشعارات</h2>
+                                            <v-list-item
+                                                height="200"
+                                                v-for="notification in student.Notifications"
+                                                :key="notification.id"
+                                            >
+                                                <v-alert
+                                                    class="ma-2"
+                                                    :title="notification.Title"
+                                                    type="info"
+                                                    variant="tonal"
+                                                    ><p class="mt-3 rounded-md">
+                                                        {{
+                                                            notification.Details
+                                                        }}
+                                                    </p></v-alert
+                                                >
+                                            </v-list-item>
+                                        </v-card>
+                                    </v-tabs-window-item>
+
+                                    <v-tabs-window-item value="three1">
+                                        <v-card flat v-if="student">
+                                            <v-list-item
+                                                v-for="statistic in student.statistics"
+                                                :key="statistic.id"
+                                            >
+                                                <v-list-item-content>
+                                                    <v-list-item-title>{{
+                                                        statistic.data
+                                                    }}</v-list-item-title>
+                                                </v-list-item-content>
+                                            </v-list-item>
+                                        </v-card>
+                                    </v-tabs-window-item>
+                                </v-tabs-window>
+                            </v-card-text>
                         </v-card>
                     </v-tabs-window-item>
                 </v-tabs-window>
-            </div>
+            </v-card-text>
         </v-card>
     </v-container>
 </template>
@@ -660,6 +930,7 @@ import Amiri_Regular from "@/assets/fonts/Amiri-Regular.js";
 export default {
     data() {
         return {
+            tab_1: 0,
             paymentMethod: null,
             paymentMethods: ["الدفع المباشر", "نظام التقسيط"],
             dialogSuccess: false,
@@ -672,6 +943,9 @@ export default {
             totalAmount: null,
             paidAmount: 0,
             progress: 0,
+            tab_5: null,
+            tab_4: null,
+            tab_2: null,
             tab: "option-1", // تحديد التاب الافتراضي
             selectedGrade: null,
             gradeLevels: ["الصف الأول", "الصف الثاني", "الصف الثالث"],
@@ -1028,7 +1302,7 @@ export default {
     },
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .custom-font {
     font-family: "Cairo", sans-serif;
     font-size: 22px;
@@ -1185,5 +1459,9 @@ export default {
     border-radius: 20px;
     transition: all 0.5s ease-in-out;
     /* text-align: center; */
+}
+.v-window__container {
+    .title {
+    }
 }
 </style>

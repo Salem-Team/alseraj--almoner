@@ -3658,7 +3658,7 @@ export default {
 };
 </script>
 
-<style >
+<style>
 .student-item {
     padding: 10px;
     direction: rtl;

@@ -1,13 +1,18 @@
 <template>
     <div class="main_header">
         <nav>
-            <div class="container">
+            <div>
                 <router-link class="a" to="/">الرئيسية</router-link>
             </div>
-            <div class="container">
+            <div>
                 <router-link class="a" to="/admin">لوحة الاشراف</router-link>
             </div>
-            <div class="container">
+            <div v-if="user">
+                <router-link class="a" to="/Parent_Dashboard"
+                    >الملف الشخصي</router-link
+                >
+            </div>
+            <div>
                 <router-link
                     class="a"
                     v-if="user"
@@ -100,13 +105,16 @@ body {
         }
     }
 }
-.v-container {
+.v-container,
+.container {
     width: 90% !important;
     max-width: 90% !important;
+    margin: 0 auto;
     & > div {
         flex-grow: 1;
     }
 }
+
 a {
     color: var(--main-color);
     font-weight: bold;
