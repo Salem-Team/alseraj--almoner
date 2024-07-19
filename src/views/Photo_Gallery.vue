@@ -699,7 +699,7 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 form {
-    width: 50%;
+    width: 96.5%;
     margin: auto;
 }
 .feat {

@@ -10,7 +10,9 @@ import {
     deleteDoc,
     arrayUnion,
     doc,
+    Timestamp,
 } from "@firebase/firestore";
+import { useSecureDataStore } from "./secureData";
 import { initializeApp } from "@firebase/app";
 import { getFirestore } from "firebase/firestore";
 import {
@@ -45,17 +47,22 @@ export const useJobs = defineStore("job", {
         dialog_1: false,
         dialog_2: false,
         dialog_3: false,
+        dialog_9: false,
         name_Information: "",
         email_Information: "",
         phone_Information: "",
         CV_Information: null,
         applies_Information: [],
+        id_Information: "",
+        Id_Information: "",
         progress: 0,
         Jobs: [],
         Job: {
             title: "",
             description: "",
             applies: [],
+            id: "",
+            time: "",
         },
         Apply: {
             name: "",
@@ -114,19 +121,36 @@ export const useJobs = defineStore("job", {
         // Add application for a job
         async Add_Apply(JobId) {
             try {
+                const secrureDataStore = useSecureDataStore();
                 this.loading = true;
                 if (this.Apply.CV) {
                     // Step 1: Upload CV and get the download URL
                     const CVUrl = await this.upload_CV(this.Apply.CV);
-
+                    const currentTime = Timestamp.now();
                     // Step 2: Prepare data to add to the "Apply" collection
                     const applyData = {
-                        title: this.Title_Information,
-                        name: this.Apply.name,
-                        email: this.Apply.email,
-                        phone: this.Apply.phone,
-                        CV: CVUrl,
-                        description: this.Apply.description,
+                        title: secrureDataStore.encryptData(
+                            this.Title_Information,
+                            "12343a"
+                        ),
+                        name: secrureDataStore.encryptData(
+                            this.Apply.name,
+                            "12343a"
+                        ),
+                        email: secrureDataStore.encryptData(
+                            this.Apply.email,
+                            "12343a"
+                        ),
+                        phone: secrureDataStore.encryptData(
+                            this.Apply.phone,
+                            "12343a"
+                        ),
+                        CV: secrureDataStore.encryptData(CVUrl, "12343a"),
+                        description: secrureDataStore.encryptData(
+                            this.Apply.description,
+                            "12343a"
+                        ),
+                        time: currentTime,
                     };
 
                     // Step 3: Add a document to the "Apply" collection
@@ -150,7 +174,6 @@ export const useJobs = defineStore("job", {
                     });
 
                     // Step 6: Update counter and notifications
-                    const currentTime = new Date().toLocaleString();
                     const Snapshot = await getDocs(collection(db, "counter"));
                     Snapshot.forEach((doc) => {
                         this.counter = doc.data();
@@ -162,7 +185,7 @@ export const useJobs = defineStore("job", {
                         " بالتقديم على وظيفة " +
                         this.Title_Information;
                     const Data = {
-                        text: this.text,
+                        text: secrureDataStore.encryptData(this.text, "12343a"),
                         time: currentTime,
                     };
                     const notRef = await addDoc(
@@ -197,10 +220,64 @@ export const useJobs = defineStore("job", {
                 console.error("Error adding document: ", error);
             }
         },
+        async Delete_Apply(applyId, JobId, CV) {
+            try {
+                this.loading = true;
+
+                // Step 1: Delete the Apply document from the "Apply" collection
+                await deleteDoc(doc(db, "Apply", applyId));
+                console.log(
+                    "Document with ID ",
+                    applyId,
+                    " deleted successfully."
+                );
+
+                // Step 2: Delete the corresponding CV from Firebase Storage
+                await this.delete_CV(CV);
+                console.log("CV deleted successfully.");
+
+                // Step 3: Remove the apply document ID from the corresponding "Jobs" document
+                const jobRef = doc(db, "Jobs", JobId);
+                const jobSnapshot = await getDoc(jobRef);
+
+                if (jobSnapshot.exists()) {
+                    const jobData = jobSnapshot.data();
+                    const updatedApplies = jobData.applies.filter(
+                        (id) => id !== applyId
+                    );
+                    await updateDoc(jobRef, { applies: updatedApplies });
+                    console.log(
+                        "Apply document ID removed from Jobs document."
+                    );
+                } else {
+                    console.log("Jobs document not found.");
+                }
+                // Find the index of the Apply in the Apply array
+                const index = this.Apply.findIndex(
+                    (Apply) => Apply.id === applyId
+                );
+                // If the Apply is found in the Apply array, remove it
+                if (index !== -1) {
+                    this.Apply.splice(index, 1);
+                    console.log("Apply deleted successfully from Apply array");
+                } else {
+                    console.log("Apply not found in Apply array");
+                }
+                // Step 4: Refresh data if needed
+                this.Get_Apply_data();
+                this.Get_data();
+                // Step 5: Perform UI-related operations (if needed)
+                // Close dialog, update UI, etc.
+                this.dialog_9 = false;
+                this.loading = false;
+            } catch (error) {
+                console.error("Error deleting document: ", error);
+                this.loading = false;
+            }
+        },
 
         // Display counter functionality
         async counter_display() {
-            console.log("working");
             if (this.counter.counter === 0) {
                 let bg_error = document.querySelector(".bg-error");
                 bg_error.style.display = "none";
@@ -211,10 +288,17 @@ export const useJobs = defineStore("job", {
         async Add_Jobs() {
             try {
                 this.loading = true;
-                const currentTime = new Date().toLocaleString();
+                const secrureDataStore = useSecureDataStore();
+                const currentTime = Timestamp.now();
                 const docRef = await addDoc(collection(db, "Jobs"), {
-                    title: this.Job.title,
-                    description: this.Job.description,
+                    title: secrureDataStore.encryptData(
+                        this.Job.title,
+                        "12343a"
+                    ),
+                    description: secrureDataStore.encryptData(
+                        this.Job.description,
+                        "12343a"
+                    ),
                     time: currentTime,
                     applies: this.Job.applies,
                 });
@@ -238,10 +322,33 @@ export const useJobs = defineStore("job", {
         async Get_Apply_data() {
             try {
                 this.loading1 = true;
+                const decryption = useSecureDataStore();
                 this.applies = []; // Initialize applies array
                 const querySnapshot = await getDocs(collection(db, "Apply"));
                 querySnapshot.forEach((doc) => {
-                    this.applies.push(doc.data());
+                    const Data = {
+                        id: doc.id,
+                        title: decryption.decryptData(
+                            doc.data().title,
+                            "12343a"
+                        ),
+                        name: decryption.decryptData(doc.data().name, "12343a"),
+                        email: decryption.decryptData(
+                            doc.data().email,
+                            "12343a"
+                        ),
+                        phone: decryption.decryptData(
+                            doc.data().phone,
+                            "12343a"
+                        ),
+                        CV: decryption.decryptData(doc.data().CV, "12343a"),
+                        description: decryption.decryptData(
+                            doc.data().description,
+                            "12343a"
+                        ),
+                        time: doc.data().time,
+                    };
+                    this.applies.push(Data);
                 });
                 console.log("applies", this.applies);
                 this.loading1 = false;
@@ -255,14 +362,20 @@ export const useJobs = defineStore("job", {
             try {
                 this.notifications = []; // Initialize notifications array
                 this.counter = 0;
+                const decryption = useSecureDataStore();
                 const querySnapshot = await getDocs(
                     query(
                         collection(db, "Apply_notifications"),
-                        orderBy("time", "asc")
+                        orderBy("time", "desc")
                     )
                 );
                 querySnapshot.forEach((doc) => {
-                    this.notifications.push(doc.data());
+                    const Data = {
+                        id: doc.id,
+                        text: decryption.decryptData(doc.data().text, "12343a"),
+                        time: doc.data().time,
+                    };
+                    this.notifications.push(Data);
                 });
                 console.log("notifications", this.notifications);
                 this.Get_counter_data();
@@ -299,13 +412,42 @@ export const useJobs = defineStore("job", {
         async Get_applies(job_apply) {
             this.apply = []; // Clear the array before populating with new data
             try {
+                const decryption = useSecureDataStore();
                 for (const index of job_apply) {
                     const docRef = doc(db, "Apply", index);
                     const docSnap = await getDoc(docRef);
 
                     if (docSnap.exists()) {
+                        const Data = {
+                            id: docSnap.id,
+                            title: decryption.decryptData(
+                                docSnap.data().title,
+                                "12343a"
+                            ),
+                            name: decryption.decryptData(
+                                docSnap.data().name,
+                                "12343a"
+                            ),
+                            email: decryption.decryptData(
+                                docSnap.data().email,
+                                "12343a"
+                            ),
+                            phone: decryption.decryptData(
+                                docSnap.data().phone,
+                                "12343a"
+                            ),
+                            CV: decryption.decryptData(
+                                docSnap.data().CV,
+                                "12343a"
+                            ),
+                            description: decryption.decryptData(
+                                docSnap.data().description,
+                                "12343a"
+                            ),
+                            time: docSnap.data().time,
+                        };
                         // Document exists, push data to apply array
-                        this.apply.push(docSnap.data());
+                        this.apply.push(Data);
                     } else {
                         console.error("No such document!");
                     }
@@ -319,13 +461,29 @@ export const useJobs = defineStore("job", {
         // Retrieve all job data
         async Get_data() {
             try {
+                const decryption = useSecureDataStore();
                 this.loading1 = true;
                 this.Jobs = [];
                 const querySnapshot = await getDocs(
-                    query(collection(db, "Jobs"), orderBy("time", "asc"))
+                    query(collection(db, "Jobs"), orderBy("time", "desc"))
                 );
+
                 querySnapshot.forEach((doc) => {
-                    this.Jobs.push(doc.data());
+                    const Data = {
+                        id: doc.id,
+                        title: decryption.decryptData(
+                            doc.data().title,
+                            "12343a"
+                        ),
+                        description: decryption.decryptData(
+                            doc.data().description,
+                            "12343a"
+                        ),
+                        applies: doc.data().applies,
+
+                        time: doc.data().time,
+                    };
+                    this.Jobs.push(Data);
                 });
                 console.log("this.Jobs", this.Jobs);
                 this.loading1 = false;
@@ -337,11 +495,26 @@ export const useJobs = defineStore("job", {
         // Retrieve limited job data (first 3 jobs)
         async Get_splice() {
             try {
+                const decryption = useSecureDataStore();
                 this.loading1 = true;
                 this.Jobs = [];
                 const querySnapshot = await getDocs(collection(db, "Jobs"));
                 querySnapshot.forEach((doc) => {
-                    this.Jobs.push(doc.data());
+                    const Data = {
+                        id: doc.id,
+                        title: decryption.decryptData(
+                            doc.data().title,
+                            "12343a"
+                        ),
+                        description: decryption.decryptData(
+                            doc.data().description,
+                            "12343a"
+                        ),
+                        applies: doc.data().applies,
+
+                        time: doc.data().time,
+                    };
+                    this.Jobs.push(Data);
                 });
                 this.Jobs = this.Jobs.slice(0, 3);
                 console.log("this.Jobs", this.Jobs);
@@ -439,16 +612,33 @@ export const useJobs = defineStore("job", {
             this.Description_Information = Job.description;
             this.applies_Information = Job.applies;
         },
+        // Store job details for displaying in a dialog
+        Apply_Information(Apply) {
+            this.Name_Information = "";
+            this.Email_Information = "";
+            this.CV_Information = null;
+            this.Name_Information = Apply.name;
+            this.id_Information = Apply.id;
+            console.log(Apply.id);
+            this.CV_Information = Apply.CV;
+        },
 
         // Update job details
         async Update_Jobs(JobId) {
             try {
                 this.loading = true;
-                const currentTime = new Date().toLocaleString();
+                const secrureDataStore = useSecureDataStore();
+                const currentTime = Timestamp.now().toDate();
                 const docRef = doc(db, "Jobs", JobId);
                 updateDoc(docRef, {
-                    title: this.Title_Information,
-                    description: this.Description_Information,
+                    title: secrureDataStore.encryptData(
+                        this.Title_Information,
+                        "12343a"
+                    ),
+                    description: secrureDataStore.encryptData(
+                        this.Description_Information,
+                        "12343a"
+                    ),
                     time: currentTime,
                 });
                 this.Get_data();
