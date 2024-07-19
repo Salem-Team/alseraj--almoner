@@ -3277,8 +3277,11 @@ export default {
             const selectedStudent = this.students.find(
                 (selectedStudent) => selectedStudent.id === studentId
             );
+
             if (selectedStudent) {
-                this.editedNotifications = { ...selectedStudent.Notifications };
+                this.editedNotifications = {
+                    ...selectedStudent.Notifications[index],
+                };
                 this.editNotificationsDialog = true;
             }
         },
@@ -3301,11 +3304,7 @@ export default {
                     );
                     await updateDoc(studentRef, studentData);
                     this.dialogAddNotice = false;
-                    this.AddNotice = {
-                        NoticeTitle: this.AddNotice.NoticeTitle,
-                        theDescription: this.AddNotice.theDescription,
-                        NotificationType: this.AddNotice.NotificationType,
-                    };
+
                     await this.fetchStudents();
                 }
             } catch (error) {
