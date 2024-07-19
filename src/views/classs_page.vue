@@ -220,7 +220,11 @@
                                                 "
                                                 label="نوع الاشعار"
                                                 required
-                                                :items="['سئ', 'جيد']"
+                                                :items="[
+                                                    'سئ',
+                                                    'جيد',
+                                                    'معلومات',
+                                                ]"
                                             ></v-select>
                                         </v-form>
                                     </v-card-text>
@@ -290,7 +294,7 @@
                                         "
                                         label="نوع الاشعار"
                                         required
-                                        :items="['سئ', 'جيد']"
+                                        :items="['سئ', 'جيد', 'معلومات']"
                                     ></v-select>
                                 </v-form>
                             </v-card-text>
@@ -469,35 +473,40 @@
                                 <!-- Alphabetical Order Toggle -->
                                 <v-row class="mb-3">
                                     <v-col cols="6">
-                                        <v-btn
-                                            color="blue darken-1"
-                                            text
-                                            v-model="filters.alphabetical"
-                                            @click="toggleSorting"
-                                            class="filter-btn"
-                                        >
-                                            {{
-                                                sortActive
-                                                    ? "إلغاء الترتيب"
-                                                    : "ترتيب الطلاب ابجديا"
-                                            }}
-                                        </v-btn>
+                                        <v-switch
+                                            v-model="isSortedAscending"
+                                            :label="
+                                                isSortedAscending
+                                                    ? 'ترتيب أبجدي'
+                                                    : 'ترتيب عكسي'
+                                            "
+                                            class="filter-switch"
+                                        />
                                     </v-col>
 
                                     <v-col cols="6">
-                                        <v-btn
+                                        <v-switch
+                                            v-model="paymentSortActive"
+                                            :label="
+                                                paymentSortActive
+                                                    ? ' اعلي المدفوعات'
+                                                    : 'اقل المدفوعات'
+                                            "
+                                            class="filter-switch"
+                                        />
+                                        <!-- <v-btn
                                             color="blue darken-1"
                                             text
                                             v-model="filters.byPayments"
                                             @click="togglePaymentsSorting"
-                                            class="filter-btn"
+                                            class="filter-switch"
                                         >
                                             {{
                                                 paymentSortActive
                                                     ? "إلغاء الترتيب"
                                                     : "ترتيب حسب المدفوعات"
                                             }}
-                                        </v-btn>
+                                        </v-btn> -->
                                     </v-col>
                                 </v-row>
 
@@ -529,6 +538,8 @@
 <script>
 import StudentList from "@/components/StudentList.vue";
 import { useDialogStore } from "@/store/useDialogStore";
+import { reactive } from "vue";
+
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import {
     collection,
@@ -583,6 +594,7 @@ export default {
                 },
             ],
             paymentSortActive: false,
+            isSortedAscending: true,
             sortActive: false, // متغير لتتبع حالة الترتيب
             class_rooms: [],
             dialog: false,
@@ -591,6 +603,9 @@ export default {
                 theDescription: "",
                 NotificationType: "",
             },
+            filters: reactive({
+                alphabetical: false,
+            }),
             students_class: [],
             searchQuery: "",
             dialogAddPhoto: false,
@@ -619,12 +634,6 @@ export default {
                 link: "",
             },
 
-            filters: {
-                alphabetical: false,
-                byPayments: false,
-                byGrades: null,
-                month: null,
-            },
             gradeOptions: ["First Month", "Second Month"],
             monthOptions: [
                 "January",
@@ -652,7 +661,7 @@ export default {
     methods: {
         async sortStudentsByYearAndAlphabetically() {
             try {
-                // Fetch students belonging to the specified year
+                // جلب الطلاب المنتمين إلى السنة المحددة
                 const q = query(
                     collection(db, "students"),
                     where("year", "==", this.year)
@@ -670,21 +679,37 @@ export default {
                             a.student_information[0].student_name.toLowerCase();
                         const nameB =
                             b.student_information[0].student_name.toLowerCase();
-                        return nameA.localeCompare(nameB, "ar", {
-                            sensitivity: "base",
-                        });
+
+                        if (this.isSortedAscending) {
+                            return nameA.localeCompare(nameB, "ar", {
+                                sensitivity: "base",
+                            });
+                        } else {
+                            return nameB.localeCompare(nameA, "ar", {
+                                sensitivity: "base",
+                            });
+                        }
                     });
+
                 console.log(this.students_class);
             } catch (error) {
                 console.error("Error sorting students:", error);
             }
         },
         toggleSorting() {
-            this.sortActive = !this.sortActive; // تبديل حالة الترتيب
-            if (this.sortActive) {
-                this.sortStudentsByYearAndAlphabetically(); // تنفيذ ترتيب عند تفعيله
+            this.isSortedAscending = !this.isSortedAscending;
+        },
+        toggleSortOrder() {
+            if (this.isSortingActive) {
+                this.isSortedAscending = !this.isSortedAscending;
+                this.sortStudentsByYearAndAlphabetically();
             }
         },
+        resetSortOrder() {
+            this.isSortedAscending = !this.isSortedAscending;
+            this.sortStudentsByYearAndAlphabetically();
+        },
+
         toggleAlphabetical() {
             this.alphabetical = !this.alphabetical;
         },
@@ -733,21 +758,6 @@ export default {
                         theDescription: this.newNotification.theDescription,
                         NotificationType: this.newNotification.NotificationType,
                     });
-                    // تأكد من أن Notifications موجودة وهي مصفوفة
-                    // if (!Array.isArray(classData.Notifications)) {
-                    //     classData.Notifications = [
-                    //         {
-                    //             NoticeTitle: "",
-                    //             theDescription: "",
-                    //             NotificationType: "",
-                    //         },
-                    //     ];
-                    // }
-                    // classData.Notifications.push({
-                    //     NoticeTitle: this.newNotification.NoticeTitle,
-                    //     theDescription: this.newNotification.theDescription,
-                    //     NotificationType: this.newNotification.NotificationType,
-                    // });
                     this.newNotification = Object.assign(
                         {},
                         this.newNotification,
@@ -901,24 +911,10 @@ form {
 }
 .custom-dialog .v-dialog {
     border-radius: 10px; /* Example: Rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Example: Soft shadow */
+    // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Example: Soft shadow */
 }
 
 .custom-dialog .v-card {
     background-color: #ffffff; /* Example: White background */
-}
-.filter-btn {
-    border: none;
-    border-radius: 30px;
-    padding: 0px 20px;
-    background-color: #5979e6 !important;
-    color: #ffffff;
-    font-weight: bold;
-    text-transform: uppercase;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.filter-btn:hover {
-    background-color: rgba(53, 98, 247, 0.719) !important;
 }
 </style>

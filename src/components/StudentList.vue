@@ -3641,7 +3641,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .student-item {
     padding: 10px;
     direction: rtl;
