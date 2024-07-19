@@ -330,7 +330,7 @@
                     <div class="title">{{ New.title }}</div>
                     <div class="time">
                         <font-awesome-icon :icon="['fas', 'clock']" />
-                        <div>{{ New.time.toDate() }}</div>
+                        <div>{{ New.time.toDate().toLocaleString() }}</div>
                     </div>
                     <div class="description">
                         {{ New.description }}
@@ -510,7 +510,7 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 form {
-    width: 90%;
+    width: 96.5%;
     margin: auto;
 }
 
@@ -627,7 +627,6 @@ form {
     max-width: 33%;
     & > div {
         width: 100%;
-
         position: relative;
     }
     .Top {
