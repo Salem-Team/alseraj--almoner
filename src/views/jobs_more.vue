@@ -19,7 +19,7 @@
                         </div>
                         <div class="time">
                             <font-awesome-icon :icon="['fas', 'clock']" />
-                            <div>{{ Job.time.toDate() }}</div>
+                            <div>{{ Job.time.toDate().toLocaleString() }}</div>
                         </div>
                     </div>
 
@@ -299,7 +299,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 form {
-    width: 90%;
+    width: 96.5%;
     margin: auto;
 }
 

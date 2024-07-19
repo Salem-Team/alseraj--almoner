@@ -10,6 +10,7 @@ import {
     query,
     Timestamp,
 } from "@firebase/firestore";
+import { useSecureDataStore } from "./secureData";
 import { initializeApp } from "@firebase/app";
 import { getFirestore } from "firebase/firestore";
 import {
@@ -102,6 +103,7 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
         async Add_Photos() {
             try {
                 this.loading = true;
+                const secrureDataStore = useSecureDataStore();
                 if (this.Photo.image) {
                     // Step 1: Upload the image and get the download URL
                     const imageUrl = await this.upload_Image(this.Photo.image);
@@ -110,10 +112,14 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
 
                     // Step 2: Add a document to the "Photos" collection in Firestore
                     const docRef = await addDoc(collection(db, "Photos"), {
-                        image: imageUrl,
                         time: currentTime,
-                        type: this.type,
-                        File_type: this.types,
+
+                        image: secrureDataStore.encryptData(imageUrl, "12343a"),
+                        type: secrureDataStore.encryptData(this.type, "12343a"),
+                        File_type: secrureDataStore.encryptData(
+                            this.types,
+                            "12343a"
+                        ),
                     });
 
                     // Step 3: Update the newly added document with its own ID

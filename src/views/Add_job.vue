@@ -118,7 +118,6 @@
                         required
                     ></v-text-field>
                     <div class="card">
-                        <Editor v-model="Job.description"> </Editor>
                         <v-textarea
                             v-model="Job.description"
                             :rules="[
@@ -175,8 +174,6 @@
                     <br />
 
                     <div class="card">
-                        <Editor v-model="jobs.Description_Information">
-                        </Editor>
                         <v-textarea
                             v-model="jobs.Description_Information"
                             :rules="[
@@ -236,7 +233,7 @@
                         </div>
                         <div class="time">
                             <font-awesome-icon :icon="['fas', 'clock']" />
-                            <div>{{ Job.time.toDate() }}</div>
+                            <div>{{ Job.time.toDate().toLocaleString() }}</div>
                         </div>
                     </div>
                     <div class="body">
@@ -271,7 +268,14 @@
                             ></v-btn>
                         </div>
                         <!-- Loop through Job Applications -->
-                        <v-container>
+                        <v-container
+                            style="
+                                direction: ltr !important;
+                                width: 96% !important;
+                                max-width: 96% !important;
+                            "
+                            class="box d-flex align-center justify-space-around"
+                        >
                             <div
                                 class="feat"
                                 v-for="Apply in apply"
@@ -302,12 +306,24 @@
                                             icon="fas fa-envelope"
                                         />
                                         <div>{{ Apply.email }}</div>
-                                        <div>{{ Apply.time.toDate() }}</div>
+                                    </div>
+                                    <div class="time">
+                                        <font-awesome-icon
+                                            icon="fas fa-clock"
+                                        />
+                                        {{
+                                            Apply.time.toDate().toLocaleString()
+                                        }}
+                                    </div>
+                                    <div class="time">
+                                        <font-awesome-icon
+                                            icon="fas fa-phone"
+                                        />
+                                        {{ Apply.phone }}
                                     </div>
                                 </div>
                                 <div class="body">
-                                    <div class="title">{{ Apply.phone }}</div>
-                                    <div class="title">
+                                    <div class="phone">
                                         وصف قصير:<br />
                                         {{ Apply.description }}
                                     </div>
@@ -436,13 +452,8 @@
 <script>
 import { storeToRefs } from "pinia";
 import { defineComponent } from "vue";
-// Advanced Use - Hook into Quill's API for Custom Functionality
-import Editor from "primevue/editor";
 import { useJobs } from "@/store/job.js";
 export default defineComponent({
-    components: {
-        Editor, // Register VueEditor component
-    },
     setup() {
         const jobs = useJobs();
         jobs.Get_data();
@@ -524,7 +535,7 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 form {
-    width: 90%;
+    width: 96.5%;
     margin: auto;
 }
 .bg-error {
@@ -646,6 +657,11 @@ form {
                 list-style-type: square;
                 list-style-position: inside;
             }
+        }
+        .phone {
+            color: var(--therd-color);
+            font-weight: bold;
+            font-size: 16px;
         }
     }
     .footer {
