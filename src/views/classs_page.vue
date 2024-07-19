@@ -431,32 +431,42 @@
             <v-row>
                 <v-col cols="12" md="4" sm="6">
                     <v-btn
-                        style="background: #54aef5; color: white"
+                        :class="{ active: activeButton === 'الكل' }"
+                        :style="buttonStyle('الكل')"
                         rounded="xl"
                         size="x-large"
                         block
-                        >الكل</v-btn
+                        @click="updateSection('الكل')"
                     >
+                        الكل
+                    </v-btn>
                 </v-col>
                 <v-col cols="12" md="4" sm="6">
                     <v-btn
-                        style="background: #54aef5; color: white"
+                        :class="{ active: activeButton === 'عربي' }"
+                        :style="buttonStyle('عربي')"
                         rounded="xl"
                         size="x-large"
                         block
-                        >عربي</v-btn
+                        @click="updateSection('عربي')"
                     >
+                        عربي
+                    </v-btn>
                 </v-col>
                 <v-col cols="12" md="4" sm="6">
                     <v-btn
-                        style="background: #54aef5; color: white"
+                        :class="{ active: activeButton === 'لغات' }"
+                        :style="buttonStyle('لغات')"
                         rounded="xl"
                         size="x-large"
                         block
-                        >لغات</v-btn
+                        @click="updateSection('لغات')"
                     >
+                        لغات
+                    </v-btn>
                 </v-col>
             </v-row>
+
             <v-dialog
                 v-model="dialogFilter"
                 max-width="600px"
@@ -494,19 +504,6 @@
                                             "
                                             class="filter-switch"
                                         />
-                                        <!-- <v-btn
-                                            color="blue darken-1"
-                                            text
-                                            v-model="filters.byPayments"
-                                            @click="togglePaymentsSorting"
-                                            class="filter-switch"
-                                        >
-                                            {{
-                                                paymentSortActive
-                                                    ? "إلغاء الترتيب"
-                                                    : "ترتيب حسب المدفوعات"
-                                            }}
-                                        </v-btn> -->
                                     </v-col>
                                 </v-row>
 
@@ -531,6 +528,7 @@
         <StudentList
             :year="year"
             :sortStudents="sortStudentsByYearAndAlphabetically"
+            :selectedSection="selectedSection"
         />
     </div>
 </template>
@@ -593,6 +591,7 @@ export default {
                     link: "",
                 },
             ],
+            selectedSection: "الكل",
             paymentSortActive: false,
             isSortedAscending: true,
             sortActive: false, // متغير لتتبع حالة الترتيب
@@ -624,7 +623,7 @@ export default {
                 theDescription: "",
                 NotificationType: "",
             },
-
+            activeButton: "الكل",
             progress: 0,
             selectedClass: [],
             students: [],
@@ -709,7 +708,15 @@ export default {
             this.isSortedAscending = !this.isSortedAscending;
             this.sortStudentsByYearAndAlphabetically();
         },
-
+        updateSection(section) {
+            this.activeButton = section;
+            this.selectedSection = section;
+        },
+        buttonStyle(section) {
+            return this.activeButton === section
+                ? { background: "white", color: "#54aef5" }
+                : { background: "#54aef5", color: "white" };
+        },
         toggleAlphabetical() {
             this.alphabetical = !this.alphabetical;
         },

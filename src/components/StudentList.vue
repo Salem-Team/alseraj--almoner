@@ -53,12 +53,25 @@
                             </v-row>
                             <v-row style="margin-right: 70px; margin-top: 0px">
                                 <v-col cols="12">
-                                    <div>
+                                    <div
+                                        style="
+                                            display: flex;
+                                            justify-content: space-between;
+                                            align-items: center;
+                                        "
+                                    >
                                         <h3 style="color: #2196f3">
                                             فصل
                                             {{
                                                 student.student_information[1]
                                                     .class
+                                            }}
+                                        </h3>
+                                        <h3 style="color: #2196f3">
+                                            قسم
+                                            {{
+                                                student.student_information[4]
+                                                    .section
                                             }}
                                         </h3>
                                     </div>
@@ -77,9 +90,11 @@
                                     >
                                         <h3>
                                             {{
-                                                percentageTotalDegrees(
-                                                    student
-                                                ).toFixed(2)
+                                                parseFloat(
+                                                    percentageTotalDegrees(
+                                                        student
+                                                    ).toFixed(1)
+                                                )
                                             }}%
                                         </h3>
                                         <p>الشهر الاول</p>
@@ -98,9 +113,11 @@
                                     >
                                         <h3>
                                             {{
-                                                percentageTotalDegrees2(
-                                                    student
-                                                ).toFixed(2)
+                                                parseFloat(
+                                                    percentageTotalDegrees2(
+                                                        student
+                                                    ).toFixed(1)
+                                                )
                                             }}%
                                         </h3>
                                         <p>الشهر الثاني</p>
@@ -134,9 +151,11 @@
                                     >
                                         <h3>
                                             {{
-                                                percentageTotalDegrees3(
-                                                    student
-                                                ).toFixed(2)
+                                                parseFloat(
+                                                    percentageTotalDegrees3(
+                                                        student
+                                                    ).toFixed(1)
+                                                )
                                             }}%
                                         </h3>
                                         <p>الشهر الاول</p>
@@ -155,9 +174,11 @@
                                     >
                                         <h3>
                                             {{
-                                                percentageTotalDegrees4(
-                                                    student
-                                                ).toFixed(2)
+                                                parseFloat(
+                                                    percentageTotalDegrees4(
+                                                        student
+                                                    ).toFixed(1)
+                                                )
                                             }}%
                                         </h3>
                                         <p>الشهر الثاني</p>
@@ -2112,6 +2133,10 @@ export default {
             required: true,
         },
         sortStudents: Function,
+        selectedSection: {
+            type: String,
+            default: "الكل",
+        },
     },
     setup() {
         const toast = useToast();
@@ -2454,7 +2479,7 @@ export default {
             selectedStudent: "",
             dialogStudentDetails: false,
             changesMade: false,
-            changesMade2: false,
+            changesMade2: true,
             changesMade3: false,
         };
     },
@@ -2561,6 +2586,7 @@ export default {
             try {
                 const studentDoc = doc(db, "students", this.selectedStudent.id);
                 // Update only if changes were marked
+
                 if (this.changesMade) {
                     await updateDoc(studentDoc, {
                         student_information:
@@ -3101,9 +3127,10 @@ export default {
         editSubject(studentId, index) {
             this.editedStudentId = studentId;
             this.editedIndex = index;
-            const student = this.students_class.find(
+            const student = this.students.find(
                 (student) => student.id === studentId
             );
+
             if (student) {
                 this.editedSubject = {
                     ...student.Results[0].weekly[index],
@@ -3247,7 +3274,7 @@ export default {
         editNotifications(studentId, index) {
             this.editedStudentId = studentId;
             this.editedIndex = index;
-            const selectedStudent = this.students_class.find(
+            const selectedStudent = this.students.find(
                 (selectedStudent) => selectedStudent.id === studentId
             );
             if (selectedStudent) {
@@ -3514,7 +3541,7 @@ export default {
 
         async updateMonthlyDegrees(degrees) {
             if (!this.selectedStudent) {
-                console.error("Error: selectedStudent is null");
+                this.console.error("Error: selectedStudent is null");
                 return;
             }
 
@@ -3592,19 +3619,28 @@ export default {
     },
     computed: {
         filteredStudents() {
-            return this.students_class.filter(
-                (student) => student.year === this.year
+            if (this.selectedSection === "الكل") {
+                return this.students.filter(
+                    (student) =>
+                        student.student_information[2].educational_level ===
+                        this.year
+                );
+            }
+            return this.students.filter(
+                (student) =>
+                    student.student_information[2].educational_level ===
+                        this.year &&
+                    student.student_information[4].section ===
+                        this.selectedSection
             );
         },
         sortedStudents() {
-            // تنفيذ الترتيب بناءً على حالة isSortedAscending
-            const sorted = [...this.students].sort((a, b) => {
-                const nameA = a.student_information[0].student_name
-                    .charAt(0)
-                    .toUpperCase();
-                const nameB = b.student_information[0].student_name
-                    .charAt(0)
-                    .toUpperCase();
+            const studentsToSort = this.filteredStudents;
+            const sorted = [...studentsToSort].sort((a, b) => {
+                const nameA =
+                    a.student_information[0].student_name.toUpperCase();
+                const nameB =
+                    b.student_information[0].student_name.toUpperCase();
 
                 if (this.$parent.isSortedAscending) {
                     // الترتيب من الألف إلى الياء
@@ -3630,13 +3666,12 @@ export default {
             );
         },
     },
-    async mounted() {
+    mounted() {
         this.searchStudent(); // Fetch all students initially
         this.generateRandomPassword();
         this.fetchStudents();
 
         this.students = this.$parent.students_class; // Assuming students_class is passed down from parent
-        await this.sortStudents(); // If sorting is needed on mount
     },
 };
 </script>
