@@ -40,112 +40,13 @@
                                             <v-avatar color="info">
                                                 <v-icon
                                                     @click.stop="
-                                                        openDeleteDialog(
+                                                        confirmDeleteStudent(
                                                             student.id
                                                         )
                                                     "
                                                     icon="mdi-delete"
                                                 ></v-icon>
                                             </v-avatar>
-                                            <v-dialog
-                                                v-model="dialog_stu"
-                                                width="90%"
-                                            >
-                                                <template
-                                                    v-if="
-                                                        dialog_stu ===
-                                                        student.id
-                                                    "
-                                                >
-                                                    <v-card
-                                                        width="100%"
-                                                        class="popup"
-                                                    >
-                                                        <div
-                                                            class="d-flex justify-space-between align-center title"
-                                                        >
-                                                            <div
-                                                                style="
-                                                                    color: var(
-                                                                        --main-color
-                                                                    );
-                                                                "
-                                                            >
-                                                                تأكيد الحذف!
-                                                            </div>
-                                                            <v-btn
-                                                                icon="mdi-close"
-                                                                @click="
-                                                                    closeDeleteDialog
-                                                                "
-                                                            ></v-btn>
-                                                        </div>
-                                                        <p
-                                                            style="
-                                                                padding: 20px;
-                                                                color: var(
-                                                                    --therd-color
-                                                                );
-                                                                font-weight: bold;
-                                                            "
-                                                        >
-                                                            هل أنت متأكد من حذفك
-                                                            لهذا الطالب؟
-                                                        </p>
-                                                        <v-card-text>
-                                                            <div
-                                                                class="d-flex align-center"
-                                                            >
-                                                                <v-btn
-                                                                    type="submit"
-                                                                    color="var(--main-color)"
-                                                                    :loading="
-                                                                        loading
-                                                                    "
-                                                                    :disabled="
-                                                                        loading
-                                                                    "
-                                                                    @click="
-                                                                        closeDeleteDialog
-                                                                    "
-                                                                    style="
-                                                                        color: #fff;
-                                                                        font-weight: bold;
-                                                                        width: 48%;
-                                                                        height: 45px;
-                                                                    "
-                                                                >
-                                                                    إلغاء
-                                                                </v-btn>
-                                                                <v-spacer />
-                                                                <v-btn
-                                                                    type="submit"
-                                                                    color="var(--pink-color)"
-                                                                    :loading="
-                                                                        loading
-                                                                    "
-                                                                    :disabled="
-                                                                        loading
-                                                                    "
-                                                                    @click="
-                                                                        confirmDeleteStudent(
-                                                                            student.id
-                                                                        )
-                                                                    "
-                                                                    style="
-                                                                        color: #fff;
-                                                                        font-weight: bold;
-                                                                        width: 48%;
-                                                                        height: 45px;
-                                                                    "
-                                                                >
-                                                                    تأكيد
-                                                                </v-btn>
-                                                            </div>
-                                                        </v-card-text>
-                                                    </v-card>
-                                                </template>
-                                            </v-dialog>
                                         </div>
                                     </div>
                                 </v-col>
@@ -153,7 +54,13 @@
                             <v-row style="margin-right: 70px; margin-top: 0px">
                                 <v-col cols="12">
                                     <div>
-                                        <h3 style="color: #2196f3">فصل 2/1</h3>
+                                        <h3 style="color: #2196f3">
+                                            فصل
+                                            {{
+                                                student.student_information[1]
+                                                    .class
+                                            }}
+                                        </h3>
                                     </div>
                                 </v-col>
                                 <v-col cols="2">
@@ -168,7 +75,13 @@
                                             color: #fff;
                                         "
                                     >
-                                        <h3>93%</h3>
+                                        <h3>
+                                            {{
+                                                percentageTotalDegrees(
+                                                    student
+                                                ).toFixed(2)
+                                            }}%
+                                        </h3>
                                         <p>الشهر الاول</p>
                                     </v-card> </v-col
                                 ><v-col cols="2">
@@ -183,7 +96,13 @@
                                             color: #fff;
                                         "
                                     >
-                                        <h3>99%</h3>
+                                        <h3>
+                                            {{
+                                                percentageTotalDegrees2(
+                                                    student
+                                                ).toFixed(2)
+                                            }}%
+                                        </h3>
                                         <p>الشهر الثاني</p>
                                     </v-card> </v-col
                                 ><v-col cols="2">
@@ -213,7 +132,13 @@
                                             color: #fff;
                                         "
                                     >
-                                        <h3>93%</h3>
+                                        <h3>
+                                            {{
+                                                percentageTotalDegrees3(
+                                                    student
+                                                ).toFixed(2)
+                                            }}%
+                                        </h3>
                                         <p>الشهر الاول</p>
                                     </v-card> </v-col
                                 ><v-col cols="2">
@@ -228,7 +153,13 @@
                                             color: #fff;
                                         "
                                     >
-                                        <h3>93%</h3>
+                                        <h3>
+                                            {{
+                                                percentageTotalDegrees4(
+                                                    student
+                                                ).toFixed(2)
+                                            }}%
+                                        </h3>
                                         <p>الشهر الثاني</p>
                                     </v-card>
                                 </v-col>
@@ -1071,21 +1002,6 @@
                                                                             attrs,
                                                                         }"
                                                                     >
-                                                                        <!-- <v-text-field
-                                                                            v-model="
-                                                                                editedSubject.Date
-                                                                            "
-                                                                            label="تاريخ الميلاد"
-                                                                            prepend-icon="mdi-calendar"
-                                                                            readonly
-                                                                            required
-                                                                            v-bind="
-                                                                                attrs
-                                                                            "
-                                                                            v-on="
-                                                                                on
-                                                                            "
-                                                                        ></v-text-field> -->
                                                                         <v-text-field
                                                                             v-model="
                                                                                 editedSubject.Date
@@ -1731,6 +1647,7 @@
                                                                 :items="[
                                                                     'سئ',
                                                                     'جيد',
+                                                                    'معلومات',
                                                                 ]"
                                                             ></v-select>
                                                         </v-form>
@@ -1796,6 +1713,7 @@
                                                                 :items="[
                                                                     'سئ',
                                                                     'جيد',
+                                                                    'معلومات',
                                                                 ]"
                                                             ></v-select>
                                                         </v-form>
@@ -2234,6 +2152,7 @@ export default {
                 Student_degree: null,
                 Date: null,
             },
+            years: "",
             AddNotice: {
                 NoticeTitle: "",
                 theDescription: "",
@@ -2254,7 +2173,7 @@ export default {
                 student_information: [
                     { student_name: "" },
                     { class: "" },
-                    { educational_level: "" },
+                    { educational_level: this.year },
                     { gender: "" },
                     { section: "" },
                     { birthday: null },
@@ -2443,6 +2362,7 @@ export default {
                         NotificationType: "",
                     },
                 ],
+
                 photos: [
                     {
                         Date: "",
@@ -2540,8 +2460,65 @@ export default {
     },
     async created() {
         await this.fetchStudents();
+        this.years = new Date().getFullYear();
     },
     methods: {
+        totalDegrees(student) {
+            const degrees = student.Results[1].Monthly[0].Degrees; // Assuming the first month is the desired one
+            let total = 0;
+            degrees.forEach((degree) => {
+                total += Number(degree.Student_degree); // Ensuring the degree is a number
+            });
+            return total;
+        },
+        percentageTotalDegrees(student) {
+            const totalDegrees = this.totalDegrees(student);
+            const maxDegrees =
+                student.Results[1].Monthly[0].Degrees.length * 100; // Assuming each subject has a max of 100
+            return (totalDegrees / maxDegrees) * 100;
+        },
+        totalDegrees2(student) {
+            const degrees = student.Results[1].Monthly[1].Degrees; // Assuming the first month is the desired one
+            let total = 0;
+            degrees.forEach((degree) => {
+                total += Number(degree.Student_degree); // Ensuring the degree is a number
+            });
+            return total;
+        },
+        percentageTotalDegrees2(student) {
+            const totalDegrees = this.totalDegrees2(student);
+            const maxDegrees =
+                student.Results[1].Monthly[1].Degrees.length * 100; // Assuming each subject has a max of 100
+            return (totalDegrees / maxDegrees) * 100;
+        },
+        totalDegrees3(student) {
+            const degrees = student.Results[1].Monthly[2].Degrees; // Assuming the first month is the desired one
+            let total = 0;
+            degrees.forEach((degree) => {
+                total += Number(degree.Student_degree); // Ensuring the degree is a number
+            });
+            return total;
+        },
+        percentageTotalDegrees3(student) {
+            const totalDegrees = this.totalDegrees3(student);
+            const maxDegrees =
+                student.Results[1].Monthly[2].Degrees.length * 100; // Assuming each subject has a max of 100
+            return (totalDegrees / maxDegrees) * 100;
+        },
+        totalDegrees4(student) {
+            const degrees = student.Results[1].Monthly[3].Degrees; // Assuming the first month is the desired one
+            let total = 0;
+            degrees.forEach((degree) => {
+                total += Number(degree.Student_degree); // Ensuring the degree is a number
+            });
+            return total;
+        },
+        percentageTotalDegrees4(student) {
+            const totalDegrees = this.totalDegrees4(student);
+            const maxDegrees =
+                student.Results[1].Monthly[3].Degrees.length * 100; // Assuming each subject has a max of 100
+            return (totalDegrees / maxDegrees) * 100;
+        },
         async updateField(section, index, field, value) {
             if (!this.selectedStudent) {
                 console.error("Error: selectedStudent is null");
@@ -2702,7 +2679,7 @@ export default {
                         payments: this.form.payments,
                         Notifications: this.form.Notifications,
                         photos: this.form.photos,
-                        year: this.year,
+                        year: new Date().getFullYear(),
                     });
 
                     // Get the ID of the newly added document
@@ -2716,7 +2693,7 @@ export default {
                         payments: this.form.payments,
                         Notifications: this.form.Notifications,
                         photos: this.form.photos,
-                        year: this.year,
+                        year: this.years,
                     };
 
                     // Push the new student to the local array
@@ -3284,7 +3261,7 @@ export default {
                 const studentDoc = await getDoc(studentRef);
                 if (studentDoc.exists()) {
                     const studentData = studentDoc.data();
-                    studentData.push({
+                    studentData.Notifications.push({
                         NoticeTitle: this.AddNotice.NoticeTitle,
                         theDescription: this.AddNotice.theDescription,
                         NotificationType: this.AddNotice.NotificationType,
@@ -3620,21 +3597,27 @@ export default {
             );
         },
         sortedStudents() {
-            if (this.$parent.sortActive) {
-                // تنفيذ ترتيب الطلاب فقط عندما يكون sortActive مفعلًا
-                const sorted = [...this.students].sort((a, b) => {
-                    const nameA =
-                        a.student_information[0].student_name.toUpperCase();
-                    const nameB =
-                        b.student_information[0].student_name.toUpperCase();
+            // تنفيذ الترتيب بناءً على حالة isSortedAscending
+            const sorted = [...this.students].sort((a, b) => {
+                const nameA = a.student_information[0].student_name
+                    .charAt(0)
+                    .toUpperCase();
+                const nameB = b.student_information[0].student_name
+                    .charAt(0)
+                    .toUpperCase();
+
+                if (this.$parent.isSortedAscending) {
+                    // الترتيب من الألف إلى الياء
                     if (nameA < nameB) return -1;
                     if (nameA > nameB) return 1;
-                    return 0;
-                });
-                return sorted;
-            } else {
-                return this.students; // إذا كان sortActive غير مفعل، عدم التغيير في الترتيب
-            }
+                } else {
+                    // الترتيب من الياء إلى الألف
+                    if (nameA < nameB) return 1;
+                    if (nameA > nameB) return -1;
+                }
+                return 0;
+            });
+            return sorted;
         },
         selectedMonthlyDegrees() {
             if (!this.selectedStudent) {
@@ -3658,7 +3641,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .student-item {
     padding: 10px;
     direction: rtl;

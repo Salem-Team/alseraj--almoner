@@ -326,7 +326,7 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 form {
-    width: 96.5%;
+    width: 90%;
     margin: auto;
 }
 
