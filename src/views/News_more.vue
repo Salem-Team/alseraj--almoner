@@ -1,77 +1,86 @@
 <template>
     <div style="width: 100% !important; margin: auto; padding: 40px 0px">
-        <!-- News Section -->
-        <div class="use">
-            <div class="title">
-                <div class="right">الأخبار</div>
-            </div>
-        </div>
-
-        <!-- News Cards Container -->
-        <v-container class="box d-flex align-center justify-space-around">
-            <!-- News Card Loop -->
-            <v-card
-                class="feat"
-                v-for="New in News"
-                :key="New.id"
-                width="100%"
-                max-width="25%"
-                @click.="news.New_Information(New)"
-                @click="dialog_6 = true"
-            >
-                <!-- Image -->
-                <v-img :src="New.image" height="300" cover></v-img>
-
-                <!-- Title -->
-                <v-card-text
-                    class="card_title d-flex justify-center flex-wrap"
-                    style="z-index: 100"
-                >
-                    {{ New.title }}
-                </v-card-text>
-
-                <!-- Time -->
-                <v-card-subtitle style="margin-top: 20px">
-                    {{ New.time.toDate().toLocaleString() }}
-                </v-card-subtitle>
-
-                <!-- Description -->
-                <v-card-text>
-                    <p style="color: var(--therd-color) !important">
-                        {{ New.description }}
-                    </p>
-                </v-card-text>
-            </v-card>
-            <!-- Display each photo -->
-            <v-dialog v-model="dialog_6" width="90%">
-                <v-card width="100%" class="popup">
-                    <div
-                        class="d-flex justify-space-between align-center title"
-                    >
-                        <div style="color: var(--main-color)">الصور</div>
-                        <v-btn
-                            icon="mdi-close"
-                            @click="dialog_6 = false"
-                        ></v-btn>
+        <Offline_error>
+            <template v-slot:default>
+                <!-- News Section -->
+                <div class="use">
+                    <div class="title">
+                        <div class="right">الأخبار</div>
                     </div>
-                    <v-carousel hide-delimiters>
-                        <v-carousel-item
-                            class="pa-5"
-                            :src="news.Image_Information"
-                            height="400"
-                            cover
-                        ></v-carousel-item>
-                        <v-carousel-item
-                            class="pa-5"
-                            v-for="New in News"
-                            :key="New.id"
-                            :src="New.image"
-                            height="400"
-                            cover
-                        ></v-carousel-item>
-                    </v-carousel> </v-card
-            ></v-dialog>
-        </v-container>
+                </div>
+                <Empty_error v-if="empty === true" :text="text0" />
+                <!-- News Cards Container -->
+                <v-container
+                    class="box d-flex align-center justify-space-around"
+                    v-if="(!loading1, empty === false)"
+                >
+                    <!-- News Card Loop -->
+                    <v-card
+                        class="feat"
+                        v-for="New in News"
+                        :key="New.id"
+                        width="100%"
+                        max-width="25%"
+                        @click.="news.New_Information(New)"
+                        @click="dialog_6 = true"
+                    >
+                        <!-- Image -->
+                        <v-img :src="New.image" height="300" cover></v-img>
+
+                        <!-- Title -->
+                        <v-card-text
+                            class="card_title d-flex justify-center flex-wrap"
+                            style="z-index: 100"
+                        >
+                            {{ New.title }}
+                        </v-card-text>
+
+                        <!-- Time -->
+                        <v-card-subtitle style="margin-top: 20px">
+                            {{ New.time.toDate().toLocaleString() }}
+                        </v-card-subtitle>
+
+                        <!-- Description -->
+                        <v-card-text>
+                            <p style="color: var(--therd-color) !important">
+                                {{ New.description }}
+                            </p>
+                        </v-card-text>
+                    </v-card>
+                    <!-- Display each photo -->
+                    <v-dialog v-model="dialog_6" width="90%">
+                        <v-card width="100%" class="popup">
+                            <div
+                                class="d-flex justify-space-between align-center title"
+                            >
+                                <div style="color: var(--main-color)">
+                                    الصور
+                                </div>
+                                <v-btn
+                                    icon="mdi-close"
+                                    @click="dialog_6 = false"
+                                ></v-btn>
+                            </div>
+                            <v-carousel hide-delimiters>
+                                <v-carousel-item
+                                    class="pa-5"
+                                    :src="news.Image_Information"
+                                    height="400"
+                                    cover
+                                ></v-carousel-item>
+                                <v-carousel-item
+                                    class="pa-5"
+                                    v-for="New in News"
+                                    :key="New.id"
+                                    :src="New.image"
+                                    height="400"
+                                    cover
+                                ></v-carousel-item>
+                            </v-carousel> </v-card
+                    ></v-dialog>
+                </v-container>
+            </template>
+        </Offline_error>
     </div>
 </template>
 
@@ -79,8 +88,14 @@
 import { storeToRefs } from "pinia";
 import { defineComponent } from "vue";
 import { useNews } from "@/store/News.js";
-
+import Offline_error from "@/components/Offline_error.vue";
+import Empty_error from "@/components/Empty_error.vue";
 export default defineComponent({
+    inject: ["Emitter"],
+    components: {
+        Empty_error,
+        Offline_error,
+    },
     setup() {
         // Access the News store
         const news = useNews();
@@ -94,6 +109,8 @@ export default defineComponent({
             loading,
             loading1,
             Get_data,
+            text0,
+            empty,
             News,
             New_Information,
             dialog_6,
@@ -102,6 +119,8 @@ export default defineComponent({
         // Return the necessary reactive properties and methods
         return {
             New,
+            text0,
+            empty,
             dialog_6,
             loading,
             New_Information,

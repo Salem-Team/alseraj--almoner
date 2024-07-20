@@ -16,7 +16,11 @@
             </div>
         </div>
         <!-- Cards Container -->
-        <div class="box d-flex align-center justify-space-around">
+        <Empty_error v-if="empty === true" :text="text0" />
+        <div
+            class="box d-flex align-center justify-space-around"
+            v-if="(!loading1, empty === false)"
+        >
             <!-- Photo Cards Loop -->
             <v-card
                 class="card"
@@ -30,50 +34,46 @@
                 <v-img
                     v-if="photo.File_type == 'صورة'"
                     :src="photo.image"
-                    height="300"
+                    height="200"
                     cover
                 ></v-img>
                 <video
                     v-if="photo.File_type == 'فيديو'"
                     width="320"
-                    height="300"
+                    height="240"
                     controls
                 >
                     <source :src="photo.video" type="video/mp4" />
 
                     Your browser does not support the video tag.
                 </video>
-                <!-- Display each photo -->
-                <v-dialog v-model="dialog_6" width="90%">
-                    <v-card width="100%" class="popup">
-                        <div
-                            class="d-flex justify-space-between align-center title"
-                        >
-                            <div style="color: var(--main-color)">الصور</div>
-                            <v-btn
-                                icon="mdi-close"
-                                @click="dialog_6 = false"
-                            ></v-btn>
-                        </div>
-                        <v-carousel hide-delimiters>
-                            <v-carousel-item
-                                class="pa-5"
-                                :src="photos.Photo_Information"
-                                height="400"
-                                cover
-                            ></v-carousel-item>
-                            <v-carousel-item
-                                class="pa-5"
-                                v-for="photo in Photos"
-                                :key="photo.id"
-                                :src="photo.image"
-                                height="400"
-                                cover
-                            ></v-carousel-item>
-                        </v-carousel> </v-card
-                ></v-dialog>
             </v-card>
         </div>
+        <!-- Display each photo -->
+        <v-dialog v-model="dialog_6" width="90%">
+            <v-card width="100%" class="popup">
+                <div class="d-flex justify-space-between align-center title">
+                    <div style="color: var(--main-color)">الصور</div>
+                    <v-btn icon="mdi-close" @click="dialog_6 = false"></v-btn>
+                </div>
+                <v-carousel hide-delimiters>
+                    <v-carousel-item
+                        class="pa-5"
+                        :src="photos.Photo_Information"
+                        height="400"
+                        cover
+                    ></v-carousel-item>
+                    <div v-for="photo in Photos" :key="photo.id">
+                        <v-carousel-item
+                            v-if="photo.File_type == 'صورة'"
+                            class="pa-5"
+                            :src="photo.image"
+                            height="400"
+                            cover
+                        ></v-carousel-item>
+                    </div>
+                </v-carousel> </v-card
+        ></v-dialog>
         <!-- Load More Button -->
         <div v-if="Photos.length < 4" class="btn">
             <v-btn
@@ -95,8 +95,12 @@
 import { storeToRefs } from "pinia";
 import { defineComponent } from "vue";
 import { usePhoto_Gallery } from "@/store/Photo_Gallery.js";
-
+import Empty_error from "@/components/Empty_error.vue";
 export default defineComponent({
+    inject: ["Emitter"],
+    components: {
+        Empty_error,
+    },
     setup() {
         // Access the Photo Gallery store
         const photos = usePhoto_Gallery();
@@ -108,7 +112,10 @@ export default defineComponent({
         const {
             Photo,
             loading,
+            text0,
+            empty,
             Photos,
+            File_type,
             Add_Photos,
             dialog_6,
             Get_data,
@@ -121,7 +128,10 @@ export default defineComponent({
         // Return the necessary reactive properties and methods
         return {
             Photo,
+            text0,
+            empty,
             dialog_6,
+            File_type,
             loading,
             Photos,
             Add_Photos,

@@ -60,6 +60,12 @@ export const useNews = defineStore("News", {
         random: 0,
         loading: false,
         loading1: false,
+        empty: false,
+        text0: "لا يوجد أخبار",
+        snackbar: false,
+        snackbar2: false,
+        text10: " تم الاضافة بنجاح",
+        text11: " تم الحذف بنجاح",
     }),
     actions: {
         // Action method to upload an image to Firebase Storage
@@ -134,7 +140,7 @@ export const useNews = defineStore("News", {
 
                     // Step 4: Refresh news data
                     this.Get_data();
-
+                    this.snackbar = true;
                     this.loading = false;
                     this.dialog = false;
                 } else {
@@ -175,6 +181,11 @@ export const useNews = defineStore("News", {
                     this.News.push(Data);
                 });
                 console.log("this.News", this.News);
+                if (this.News.length === 0) {
+                    this.empty = true;
+                } else {
+                    this.empty = false;
+                }
                 this.loading1 = false;
             } catch (error) {
                 console.error("Error retrieving data:", error);
@@ -209,6 +220,11 @@ export const useNews = defineStore("News", {
                 });
                 this.News = this.News.slice(0, 3);
                 console.log("this.News", this.News);
+                if (this.News.length === 0) {
+                    this.empty = true;
+                } else {
+                    this.empty = false;
+                }
                 this.loading1 = false;
             } catch (error) {
                 console.error("Error retrieving data:", error);
@@ -240,7 +256,7 @@ export const useNews = defineStore("News", {
                 } else {
                     console.log("New not found in News array");
                 }
-
+                this.snackbar2 = true;
                 // Step 4: Refresh news data
                 this.Get_data();
 

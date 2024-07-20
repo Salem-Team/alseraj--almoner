@@ -60,12 +60,25 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
         Id_Information: "",
         Types: ["trip", "party", "news"],
         Photo: {
+            File_type: "",
             image: null,
             video: null,
         },
         random: 0,
         loading: false,
         loading1: false,
+        empty: false,
+        text0: "لا يوجد صور",
+        empty1: false,
+        text1: "لا يوجد صور رحلات",
+        empty2: false,
+        text2: "لا يوجد صور أخبار",
+        empty3: false,
+        text3: "لا يوجد صور حفلات",
+        snackbar: false,
+        snackbar2: false,
+        text10: " تم الاضافة بنجاح",
+        text11: " تم الحذف بنجاح",
     }),
     actions: {
         // Action method to handle setting File_Name based on type
@@ -131,7 +144,7 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
 
                     // Step 4: Refresh photo data
                     this.Get_data();
-
+                    this.snackbar = true;
                     this.loading = false;
                     this.dialog = false;
                 } else {
@@ -192,6 +205,11 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
                     this.Photos.push(doc.data());
                 });
                 console.log("this.Photos", this.Photos);
+                if (this.Photos.length === 0) {
+                    this.empty = true;
+                } else {
+                    this.empty = false;
+                }
                 this.loading1 = false;
                 // Update type-specific data arrays
                 this.Type_Data();
@@ -211,6 +229,11 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
                 });
                 this.Photos = this.Photos.slice(0, 3);
                 console.log("this.Photos", this.Photos);
+                if (this.Photos.length === 0) {
+                    this.empty = true;
+                } else {
+                    this.empty = false;
+                }
                 this.loading1 = false;
                 // Update type-specific data arrays
                 this.Type_Data();
@@ -260,7 +283,7 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
                 } else {
                     console.log("Photo not found in Photos array");
                 }
-
+                this.snackbar2 = true;
                 // Step 4: Refresh photo data
                 this.Get_data();
 
@@ -272,10 +295,25 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
         show_Data() {
             if (this.photos_show === "trip" || this.tab === "trip") {
                 this.Photos = this.trip;
+                if (this.Photos.length === 0) {
+                    this.empty1 = true;
+                } else {
+                    this.empty1 = false;
+                }
             } else if (this.photos_show === "party" || this.tab === "party") {
                 this.Photos = this.party;
+                if (this.Photos.length === 0) {
+                    this.empty3 = true;
+                } else {
+                    this.empty3 = false;
+                }
             } else if (this.photos_show === "news" || this.tab === "news") {
                 this.Photos = this.news;
+                if (this.Photos.length === 0) {
+                    this.empty2 = true;
+                } else {
+                    this.empty2 = false;
+                }
             } else {
                 this.Get_data();
             }

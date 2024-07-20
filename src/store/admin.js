@@ -28,6 +28,8 @@ export const useadmin = defineStore("admin", {
         dialog: false,
         dialog_1: false,
         dialog_3: false,
+        empty: false,
+        text0: "لا يوجد مشرفين",
         user: {
             // Initial user object
             name: "",
@@ -58,6 +60,10 @@ export const useadmin = defineStore("admin", {
         loading: false, // Loading state
         show_Password: false, // State for showing password
         loading1: false, // Another loading state
+        snackbar: false,
+        snackbar2: false,
+        text10: " تم الاضافة بنجاح",
+        text11: " تم الحذف بنجاح",
     }),
     actions: {
         // Actions section (methods)
@@ -105,6 +111,7 @@ export const useadmin = defineStore("admin", {
                 });
                 console.log("Document written with ID: ", docRef.id);
                 this.Get_data(); // Refresh user data
+                this.snackbar = true;
                 this.dialog = false; // Close dialog
                 this.loading = false; // Stop loading indicator
             } catch (error) {
@@ -143,6 +150,11 @@ export const useadmin = defineStore("admin", {
                         this.users.push(userData); // Add admin users to array
                     }
                 });
+                if (this.users.length === 0) {
+                    this.empty = true;
+                } else {
+                    this.empty = false;
+                }
                 this.loading1 = false;
             } catch (error) {
                 console.error("Error retrieving data: ", error);
@@ -163,6 +175,7 @@ export const useadmin = defineStore("admin", {
                     console.log("User not found in users array");
                 }
                 this.Get_data(); // Refresh user data
+                this.snackbar2 = true;
                 this.dialog_3 = false; // Close dialog
             } catch (error) {
                 console.error("Error deleting user:", error);
