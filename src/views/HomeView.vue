@@ -1,72 +1,85 @@
 <template>
-    <section class="parallax">
-        <h1 id="text">مدرسة السراج المنير</h1>
-        <img
-            style="filter: grayscale(1)"
-            src="../assets/gate-left.png"
-            id="gate-left"
-        />
-        <img
-            style="filter: grayscale(1)"
-            src="../assets/gate-right.png"
-            id="gate-right"
-        />
-        <img
-            style="filter: grayscale(1)"
-            src="../assets/tree-left.png"
-            id="tree-left"
-        />
-        <img
-            style="filter: grayscale(1)"
-            src="../assets/tree-right.png"
-            id="tree-right"
-        />
-        <img
-            style="filter: grayscale(1) !important"
-            src="../assets/grass.png"
-            id="grass"
-        />
-    </section>
     <div visible>
-        <Photo_Gallery_data />
-        <News_data />
-        <Q_A />
-        <job_data />
+        <Offline_error>
+            <template v-slot:default>
+                <section class="parallax">
+                    <h1 id="text">مدرسة السراج المنير</h1>
+                    <img
+                        style="filter: grayscale(1)"
+                        src="../assets/gate-left.png"
+                        id="gate-left"
+                    />
+                    <img
+                        style="filter: grayscale(1)"
+                        src="../assets/gate-right.png"
+                        id="gate-right"
+                    />
+                    <img
+                        style="filter: grayscale(1)"
+                        src="../assets/tree-left.png"
+                        id="tree-left"
+                    />
+                    <img
+                        style="filter: grayscale(1)"
+                        src="../assets/tree-right.png"
+                        id="tree-right"
+                    />
+                    <img
+                        style="filter: grayscale(1) !important"
+                        src="../assets/grass.png"
+                        id="grass"
+                    />
+                </section>
+                <Photo_Gallery_data />
+                <News_data />
+                <Q_A />
+                <job_data />
+                <v-layout class="footer" visible>
+                    <v-footer
+                        class="d-flex flex-column"
+                        style="
+                            width: 100% !important;
+                            margin: auto;
+                            padding: 0px;
+                        "
+                    >
+                        <div
+                            class="d-flex w-100 align-center px-4"
+                            style="background: var(--main-color); color: white"
+                        >
+                            <strong
+                                >تواصل معنا من خلال مواقع التواصل
+                                الاجتماعي</strong
+                            >
+
+                            <v-spacer></v-spacer>
+
+                            <v-btn
+                                v-for="icon in icons"
+                                :key="icon"
+                                :icon="icon"
+                                class="mx-4"
+                                size="small"
+                                variant="plain"
+                            ></v-btn>
+                        </div>
+
+                        <div
+                            class="px-4 py-2 text-center w-100"
+                            style="background: var(--secound-color)"
+                        >
+                            <strong>سالم تيم</strong> -
+                            {{ new Date().getFullYear() }}
+                        </div>
+                    </v-footer>
+                </v-layout>
+            </template>
+        </Offline_error>
     </div>
-    <v-layout class="footer" visible>
-        <v-footer
-            class="d-flex flex-column"
-            style="width: 100% !important; margin: auto; padding: 0px"
-        >
-            <div
-                class="d-flex w-100 align-center px-4"
-                style="background: var(--main-color); color: white"
-            >
-                <strong>تواصل معنا من خلال مواقع التواصل الاجتماعي</strong>
-
-                <v-spacer></v-spacer>
-
-                <v-btn
-                    v-for="icon in icons"
-                    :key="icon"
-                    :icon="icon"
-                    class="mx-4"
-                    size="small"
-                    variant="plain"
-                ></v-btn>
-            </div>
-
-            <div
-                class="px-4 py-2 text-center w-100"
-                style="background: var(--secound-color)"
-            >
-                <strong>سالم تيم</strong> - {{ new Date().getFullYear() }}
-            </div>
-        </v-footer>
-    </v-layout>
 </template>
 
 <script>
+import Offline_error from "@/components/Offline_error.vue";
 import job_data from "../components/job_data.vue";
 import News_data from "../components/News_data.vue";
 import Q_A from "../components/Q_A.vue";
@@ -75,6 +88,7 @@ import { defineComponent } from "vue";
 export default defineComponent({
     components: {
         job_data,
+        Offline_error,
         Q_A,
         News_data,
         Photo_Gallery_data,

@@ -8,123 +8,137 @@
             padding: 40px 0px; /* Padding top and bottom */
         "
     >
-        <!-- Section Title -->
-        <div class="use">
-            <div class="title">
-                <div class="right">معرض الصور</div>
-                <!-- Title in Arabic -->
-            </div>
-        </div>
-        <div class="pr-10 pb-5">
-            <v-btn-toggle
-                v-model="photos.photos_show"
-                variant="outlined"
-                style="
-                    border: 2px solid var(--main-color);
-                    color: var(--main-color);
-                "
-            >
-                <v-btn
-                    value="all"
-                    @click="photos.show_Data"
-                    style="
-                        font-size: 20px !important;
-                        font-weight: 600 !important;
-                    "
-                >
-                    الكل
-                </v-btn>
-                <v-btn
-                    value="trip"
-                    @click="photos.show_Data"
-                    style="
-                        font-size: 20px !important;
-                        font-weight: 600 !important;
-                    "
-                >
-                    رحلات
-                </v-btn>
-                <v-btn
-                    value="news"
-                    @click="photos.show_Data"
-                    style="
-                        font-size: 20px !important;
-                        font-weight: 600 !important;
-                    "
-                >
-                    أخبار
-                </v-btn>
-                <v-btn
-                    value="party"
-                    @click="photos.show_Data"
-                    style="
-                        font-size: 20px !important;
-                        font-weight: 600 !important;
-                    "
-                >
-                    حفلات
-                </v-btn>
-            </v-btn-toggle>
-        </div>
-        <!-- Cards Container -->
-        <div class="box d-flex align-center justify-space-around">
-            <!-- Photo Cards Loop -->
-            <v-card
-                class="card"
-                v-for="photo in Photos"
-                :key="photo.id"
-                width="400px"
-                max-width="25%"
-                @click.="photos.photo_Information(photo)"
-                @click="dialog_6 = true"
-            >
-                <v-img
-                    v-if="photo.File_type == 'صورة'"
-                    :src="photo.image"
-                    height="200"
-                    cover
-                ></v-img>
-                <video
-                    v-if="photo.File_type == 'فيديو'"
-                    width="320"
-                    height="240"
-                    controls
-                >
-                    <source :src="photo.video" type="video/mp4" />
-
-                    Your browser does not support the video tag.
-                </video>
-                <!-- Display each photo -->
-                <v-dialog v-model="dialog_6" width="90%">
-                    <v-card width="100%" class="popup">
-                        <div
-                            class="d-flex justify-space-between align-center title"
+        <Offline_error>
+            <template v-slot:default>
+                <!-- Section Title -->
+                <div class="use">
+                    <div class="title">
+                        <div class="right">معرض الصور</div>
+                        <!-- Title in Arabic -->
+                    </div>
+                </div>
+                <div class="pr-10 pb-5">
+                    <v-btn-toggle
+                        v-model="photos.photos_show"
+                        variant="outlined"
+                        style="
+                            border: 2px solid var(--main-color);
+                            color: var(--main-color);
+                        "
+                    >
+                        <v-btn
+                            value="all"
+                            @click="photos.show_Data"
+                            style="
+                                font-size: 20px !important;
+                                font-weight: 600 !important;
+                            "
                         >
-                            <div style="color: var(--main-color)">الصور</div>
-                            <v-btn
-                                icon="mdi-close"
-                                @click="dialog_6 = false"
-                            ></v-btn>
-                        </div>
-                        <v-carousel hide-delimiters>
-                            <v-carousel-item
-                                class="pa-5"
-                                :src="photos.Photo_Information"
-                                height="400"
-                                cover
-                            ></v-carousel-item>
-                            <v-carousel-item
-                                class="pa-5"
-                                v-for="photo in Photos"
-                                :key="photo.id"
-                                :src="photo.image"
-                                height="400"
-                                cover
-                            ></v-carousel-item>
-                        </v-carousel> </v-card
-                ></v-dialog>
-            </v-card>
-        </div>
+                            الكل
+                        </v-btn>
+                        <v-btn
+                            value="trip"
+                            @click="photos.show_Data"
+                            style="
+                                font-size: 20px !important;
+                                font-weight: 600 !important;
+                            "
+                        >
+                            رحلات
+                        </v-btn>
+                        <v-btn
+                            value="news"
+                            @click="photos.show_Data"
+                            style="
+                                font-size: 20px !important;
+                                font-weight: 600 !important;
+                            "
+                        >
+                            أخبار
+                        </v-btn>
+                        <v-btn
+                            value="party"
+                            @click="photos.show_Data"
+                            style="
+                                font-size: 20px !important;
+                                font-weight: 600 !important;
+                            "
+                        >
+                            حفلات
+                        </v-btn>
+                    </v-btn-toggle>
+                </div>
+                <!-- Cards Container -->
+                <Empty_error v-if="empty === true" :text="text0" />
+                <div
+                    class="box d-flex align-center justify-space-around"
+                    v-if="(!loading1, empty === false)"
+                >
+                    <!-- Photo Cards Loop -->
+                    <v-card
+                        class="card"
+                        v-for="photo in Photos"
+                        :key="photo.id"
+                        width="200px"
+                        max-width="25%"
+                        @click.="photos.photo_Information(photo)"
+                        @click="dialog_6 = true"
+                    >
+                        <v-img
+                            v-if="photo.File_type == 'صورة'"
+                            :src="photo.image"
+                            height="200"
+                            cover
+                        ></v-img>
+                        <video
+                            v-if="photo.File_type == 'فيديو'"
+                            width="320"
+                            height="240"
+                            controls
+                        >
+                            <source :src="photo.video" type="video/mp4" />
+
+                            Your browser does not support the video tag.
+                        </video>
+                        <!-- Display each photo -->
+                        <v-dialog v-model="dialog_6" width="90%">
+                            <v-card width="100%" class="popup">
+                                <div
+                                    class="d-flex justify-space-between align-center title"
+                                >
+                                    <div style="color: var(--main-color)">
+                                        الصور
+                                    </div>
+                                    <v-btn
+                                        icon="mdi-close"
+                                        @click="dialog_6 = false"
+                                    ></v-btn>
+                                </div>
+                                <v-carousel hide-delimiters>
+                                    <v-carousel-item
+                                        class="pa-5"
+                                        :src="photos.Photo_Information"
+                                        height="400"
+                                        cover
+                                    ></v-carousel-item>
+                                    <div
+                                        v-for="photo in Photos"
+                                        :key="photo.id"
+                                    >
+                                        <v-carousel-item
+                                            v-if="photo.File_type == 'صورة'"
+                                            class="pa-5"
+                                            :src="photo.image"
+                                            height="400"
+                                            cover
+                                        ></v-carousel-item>
+                                    </div>
+                                </v-carousel> </v-card
+                        ></v-dialog>
+                    </v-card>
+                </div>
+            </template>
+        </Offline_error>
     </div>
 </template>
 
@@ -132,8 +146,14 @@
 import { storeToRefs } from "pinia";
 import { defineComponent } from "vue";
 import { usePhoto_Gallery } from "@/store/Photo_Gallery.js";
-
+import Offline_error from "@/components/Offline_error.vue";
+import Empty_error from "@/components/Empty_error.vue";
 export default defineComponent({
+    inject: ["Emitter"],
+    components: {
+        Empty_error,
+        Offline_error,
+    },
     setup() {
         // Access the Photo Gallery store
         const photos = usePhoto_Gallery();
@@ -144,6 +164,8 @@ export default defineComponent({
         const {
             Photo,
             loading,
+            text0,
+            empty,
             Photos,
             dialog_6,
             Add_Photos,
@@ -151,6 +173,7 @@ export default defineComponent({
             Get_data,
             loading1,
             show_Data,
+            File_type,
             image,
             photo_Information,
             Photo_Information,
@@ -160,6 +183,8 @@ export default defineComponent({
         return {
             Photo,
             photos_show,
+            text0,
+            empty,
             loading,
             Photos,
             dialog_6,
@@ -167,6 +192,7 @@ export default defineComponent({
             Get_data,
             loading1,
             show_Data,
+            File_type,
             Photo_Information,
             photo_Information,
             image,

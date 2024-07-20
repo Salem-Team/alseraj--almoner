@@ -9,7 +9,11 @@
         </div>
 
         <!-- Container for Job Cards -->
-        <v-container>
+        <Empty_error v-if="empty === true" :text="text0" />
+        <v-container
+            style="direction: ltr !important"
+            v-if="(!loading1, empty === false)"
+        >
             <div class="feat" v-for="Job in Jobs" :key="Job.id">
                 <div>
                     <!-- Job Card Header -->
@@ -274,8 +278,12 @@
 import { storeToRefs } from "pinia";
 import { defineComponent } from "vue";
 import { useJobs } from "@/store/job.js";
-
+import Empty_error from "@/components/Empty_error.vue";
 export default defineComponent({
+    inject: ["Emitter"],
+    components: {
+        Empty_error,
+    },
     setup() {
         const jobs = useJobs();
 
@@ -297,6 +305,8 @@ export default defineComponent({
             Add_Apply,
             Job_Information,
             Get_data,
+            text0,
+            empty,
             Jobs,
             apply,
             loading1,
@@ -307,6 +317,8 @@ export default defineComponent({
             Job,
             loading,
             applies,
+            text0,
+            empty,
             progress,
             Apply,
             upload_CV,

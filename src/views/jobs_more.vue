@@ -1,246 +1,277 @@
 <template>
     <div style="width: 100% !important; margin: auto; padding: 40px 0px">
-        <!-- Header Section -->
-        <div class="use">
-            <div class="title">
-                <div class="right">الوظائف</div>
-            </div>
-        </div>
-
-        <!-- Main Content Container -->
-        <v-container>
-            <!-- Iterate over Jobs -->
-            <div class="feat" v-for="Job in Jobs" :key="Job.id">
-                <div>
-                    <!-- Job Header -->
-                    <div class="header">
-                        <div class="small_container">
-                            <div class="title">{{ Job.title }}</div>
-                        </div>
-                        <div class="time">
-                            <font-awesome-icon :icon="['fas', 'clock']" />
-                            <div>{{ Job.time.toDate().toLocaleString() }}</div>
-                        </div>
-                    </div>
-
-                    <!-- Job Details -->
-                    <div class="body">
-                        <div class="title">متطلبات العمل</div>
-                        <ul>
-                            <li>{{ Job.description }}</li>
-                        </ul>
+        <Offline_error>
+            <template v-slot:default>
+                <!-- Header Section -->
+                <div class="use">
+                    <div class="title">
+                        <div class="right">الوظائف</div>
                     </div>
                 </div>
-
-                <!-- Apply Button -->
-                <div
-                    class="footer"
-                    @click="(jobs.dialog_2 = true), jobs.Job_Information(Job)"
+                <Empty_error v-if="empty2 === true" :text="text0" />
+                <!-- Main Content Container -->
+                <v-container
+                    style="direction: ltr !important"
+                    v-if="(!loading1, empty2 === false)"
                 >
-                    التقديم على الوظيفة
-                </div>
-
-                <!-- Apply Dialog -->
-                <v-dialog v-model="dialog_2" width="90%">
-                    <v-card width="100%" class="popup">
-                        <div
-                            class="d-flex justify-space-between align-center title mb-4"
-                        >
-                            <div style="color: var(--main-color)">
-                                التقديم على الوظيفة
+                    <!-- Iterate over Jobs -->
+                    <div class="feat" v-for="Job in Jobs" :key="Job.id">
+                        <div>
+                            <!-- Job Header -->
+                            <div class="header">
+                                <div class="small_container">
+                                    <div class="title">{{ Job.title }}</div>
+                                </div>
+                                <div class="time">
+                                    <font-awesome-icon
+                                        :icon="['fas', 'clock']"
+                                    />
+                                    <div>
+                                        {{ Job.time.toDate().toLocaleString() }}
+                                    </div>
+                                </div>
                             </div>
-                            <v-btn icon @click="dialog_2 = false">
-                                <v-icon>mdi-close</v-icon>
-                            </v-btn>
+
+                            <!-- Job Details -->
+                            <div class="body">
+                                <div class="title">متطلبات العمل</div>
+                                <ul>
+                                    <li>{{ Job.description }}</li>
+                                </ul>
+                            </div>
                         </div>
 
-                        <!-- Form for Job Application with validation -->
-                        <form
-                            ref="form"
-                            @submit.prevent="
-                                jobs.Add_Apply(jobs.Id_Information)
+                        <!-- Apply Button -->
+                        <div
+                            class="footer"
+                            @click="
+                                (jobs.dialog_2 = true),
+                                    jobs.Job_Information(Job)
                             "
-                            class="ma-auto mt-4"
                         >
-                            <!-- Job Title Input -->
-                            <v-text-field
-                                v-model="jobs.Title_Information"
-                                type="text"
-                                label="الوظيفة"
-                                variant="outlined"
-                                required
-                                :rules="[(v) => !!v || 'يجب إدخال اسم الوظيفة']"
-                            ></v-text-field>
+                            التقديم على الوظيفة
+                        </div>
 
-                            <!-- Name Input -->
-                            <v-text-field
-                                v-model="jobs.Apply.name"
-                                type="text"
-                                label="الاسم"
-                                variant="outlined"
-                                required
-                                :rules="[(v) => !!v || 'يجب إدخال الاسم']"
-                            ></v-text-field>
-
-                            <!-- Email Input -->
-                            <v-text-field
-                                v-model="jobs.Apply.email"
-                                type="email"
-                                label="البريد الالكتروني"
-                                variant="outlined"
-                                required
-                                :rules="[
-                                    (v) => !!v || 'يجب إدخال البريد الإلكتروني',
-                                    (v) =>
-                                        /.+@.+\..+/.test(v) ||
-                                        'البريد الإلكتروني غير صحيح',
-                                ]"
-                            ></v-text-field>
-
-                            <!-- Phone Input -->
-                            <v-text-field
-                                v-model="jobs.Apply.phone"
-                                type="text"
-                                label="التليفون"
-                                variant="outlined"
-                                required
-                                :rules="[
-                                    (v) => !!v || 'يجب إدخال رقم الهاتف',
-                                    (v) =>
-                                        /^\d{10}$/.test(v) || 'الرقم غير صحيح',
-                                ]"
-                            ></v-text-field>
-
-                            <!-- CV File Input -->
-                            <v-file-input
-                                v-model="jobs.Apply.CV"
-                                label="السيرة الذاتية"
-                                variant="outlined"
-                                required
-                                prepend-icon="mdi-paperclip"
-                                @input="jobs.upload_CV"
-                            ></v-file-input>
-
-                            <!-- Progress Bar for CV Upload -->
-                            <v-progress-linear
-                                v-if="jobs.Apply.CV"
-                                :value="jobs.progress"
-                                color="blue-grey"
-                                height="25"
-                            >
-                                <template v-slot:default="{ value }">
-                                    <strong>{{ Math.ceil(value) }}%</strong>
-                                </template>
-                            </v-progress-linear>
-                            <div class="d-flex justify-space-between pb-0">
-                                <v-btn-toggle
-                                    v-model="formatting"
-                                    variant="outlined"
-                                    divided
-                                    multiple
+                        <!-- Apply Dialog -->
+                        <v-dialog v-model="dialog_2" width="90%">
+                            <v-card width="100%" class="popup">
+                                <div
+                                    class="d-flex justify-space-between align-center title mb-4"
                                 >
-                                    <v-btn>
-                                        <v-icon
-                                            icon="mdi-format-italic"
-                                        ></v-icon>
+                                    <div style="color: var(--main-color)">
+                                        التقديم على الوظيفة
+                                    </div>
+                                    <v-btn icon @click="dialog_2 = false">
+                                        <v-icon>mdi-close</v-icon>
                                     </v-btn>
+                                </div>
 
-                                    <v-btn>
-                                        <v-icon icon="mdi-format-bold"></v-icon>
-                                    </v-btn>
+                                <!-- Form for Job Application with validation -->
+                                <form
+                                    ref="form"
+                                    @submit.prevent="
+                                        jobs.Add_Apply(jobs.Id_Information)
+                                    "
+                                    class="ma-auto mt-4"
+                                >
+                                    <!-- Job Title Input -->
+                                    <v-text-field
+                                        v-model="jobs.Title_Information"
+                                        type="text"
+                                        label="الوظيفة"
+                                        variant="outlined"
+                                        required
+                                        :rules="[
+                                            (v) =>
+                                                !!v || 'يجب إدخال اسم الوظيفة',
+                                        ]"
+                                    ></v-text-field>
 
-                                    <v-btn>
-                                        <v-icon
-                                            icon="mdi-format-underline"
-                                        ></v-icon>
-                                    </v-btn>
+                                    <!-- Name Input -->
+                                    <v-text-field
+                                        v-model="jobs.Apply.name"
+                                        type="text"
+                                        label="الاسم"
+                                        variant="outlined"
+                                        required
+                                        :rules="[
+                                            (v) => !!v || 'يجب إدخال الاسم',
+                                        ]"
+                                    ></v-text-field>
 
-                                    <v-btn>
-                                        <div
-                                            class="d-flex align-center flex-column justify-center"
+                                    <!-- Email Input -->
+                                    <v-text-field
+                                        v-model="jobs.Apply.email"
+                                        type="email"
+                                        label="البريد الالكتروني"
+                                        variant="outlined"
+                                        required
+                                        :rules="[
+                                            (v) =>
+                                                !!v ||
+                                                'يجب إدخال البريد الإلكتروني',
+                                            (v) =>
+                                                /.+@.+\..+/.test(v) ||
+                                                'البريد الإلكتروني غير صحيح',
+                                        ]"
+                                    ></v-text-field>
+
+                                    <!-- Phone Input -->
+                                    <v-text-field
+                                        v-model="jobs.Apply.phone"
+                                        type="text"
+                                        label="التليفون"
+                                        variant="outlined"
+                                        required
+                                        :rules="[
+                                            (v) =>
+                                                !!v || 'يجب إدخال رقم الهاتف',
+                                            (v) =>
+                                                /^\d{10}$/.test(v) ||
+                                                'الرقم غير صحيح',
+                                        ]"
+                                    ></v-text-field>
+
+                                    <!-- CV File Input -->
+                                    <v-file-input
+                                        v-model="jobs.Apply.CV"
+                                        label="السيرة الذاتية"
+                                        variant="outlined"
+                                        required
+                                        prepend-icon="mdi-paperclip"
+                                        @input="jobs.upload_CV"
+                                    ></v-file-input>
+
+                                    <!-- Progress Bar for CV Upload -->
+                                    <v-progress-linear
+                                        v-if="jobs.Apply.CV"
+                                        :value="jobs.progress"
+                                        color="blue-grey"
+                                        height="25"
+                                    >
+                                        <template v-slot:default="{ value }">
+                                            <strong
+                                                >{{ Math.ceil(value) }}%</strong
+                                            >
+                                        </template>
+                                    </v-progress-linear>
+                                    <div
+                                        class="d-flex justify-space-between pb-0"
+                                    >
+                                        <v-btn-toggle
+                                            v-model="formatting"
+                                            variant="outlined"
+                                            divided
+                                            multiple
                                         >
-                                            <v-icon
-                                                icon="mdi-format-color-text"
-                                            ></v-icon>
+                                            <v-btn>
+                                                <v-icon
+                                                    icon="mdi-format-italic"
+                                                ></v-icon>
+                                            </v-btn>
 
-                                            <v-sheet
-                                                color="primary"
-                                                height="4"
-                                                width="26"
-                                                tile
-                                            ></v-sheet>
-                                        </div>
+                                            <v-btn>
+                                                <v-icon
+                                                    icon="mdi-format-bold"
+                                                ></v-icon>
+                                            </v-btn>
+
+                                            <v-btn>
+                                                <v-icon
+                                                    icon="mdi-format-underline"
+                                                ></v-icon>
+                                            </v-btn>
+
+                                            <v-btn>
+                                                <div
+                                                    class="d-flex align-center flex-column justify-center"
+                                                >
+                                                    <v-icon
+                                                        icon="mdi-format-color-text"
+                                                    ></v-icon>
+
+                                                    <v-sheet
+                                                        color="primary"
+                                                        height="4"
+                                                        width="26"
+                                                        tile
+                                                    ></v-sheet>
+                                                </div>
+                                            </v-btn>
+                                        </v-btn-toggle>
+
+                                        <v-btn-toggle
+                                            v-model="alignment"
+                                            variant="outlined"
+                                            divided
+                                        >
+                                            <v-btn>
+                                                <v-icon
+                                                    icon="mdi-format-align-center"
+                                                ></v-icon>
+                                            </v-btn>
+
+                                            <v-btn>
+                                                <v-icon
+                                                    icon="mdi-format-align-left"
+                                                ></v-icon>
+                                            </v-btn>
+
+                                            <v-btn>
+                                                <v-icon
+                                                    icon="mdi-format-align-right"
+                                                ></v-icon>
+                                            </v-btn>
+                                        </v-btn-toggle>
+                                    </div>
+                                    <!-- Short Description Textarea -->
+                                    <v-textarea
+                                        v-model="jobs.Apply.description"
+                                        label="وصف قصير"
+                                        variant="outlined"
+                                        required
+                                        rows="4"
+                                        no-resize
+                                        :maxlength="150"
+                                        :rules="[
+                                            (v) => !!v || 'يجب إدخال وصف قصير',
+                                        ]"
+                                    ></v-textarea>
+
+                                    <!-- Slider for Description Length -->
+                                    <v-slider
+                                        v-model="jobs.Apply.description.length"
+                                        :max="150"
+                                        step="1"
+                                        disabled
+                                        thumb-label="always"
+                                    ></v-slider>
+
+                                    <!-- Submit Button -->
+                                    <v-btn
+                                        class="d-flex align-center mt-4 mb-4"
+                                        type="submit"
+                                        :loading="loading"
+                                        :disabled="loading"
+                                        style="
+                                            width: 100%;
+                                            padding: 20px;
+                                            letter-spacing: normal;
+                                            font-weight: bold;
+                                            font-size: 19px;
+                                            background: var(--main-color);
+                                            color: #fff;
+                                        "
+                                    >
+                                        تقديم
                                     </v-btn>
-                                </v-btn-toggle>
-
-                                <v-btn-toggle
-                                    v-model="alignment"
-                                    variant="outlined"
-                                    divided
-                                >
-                                    <v-btn>
-                                        <v-icon
-                                            icon="mdi-format-align-center"
-                                        ></v-icon>
-                                    </v-btn>
-
-                                    <v-btn>
-                                        <v-icon
-                                            icon="mdi-format-align-left"
-                                        ></v-icon>
-                                    </v-btn>
-
-                                    <v-btn>
-                                        <v-icon
-                                            icon="mdi-format-align-right"
-                                        ></v-icon>
-                                    </v-btn>
-                                </v-btn-toggle>
-                            </div>
-                            <!-- Short Description Textarea -->
-                            <v-textarea
-                                v-model="jobs.Apply.description"
-                                label="وصف قصير"
-                                variant="outlined"
-                                required
-                                rows="4"
-                                no-resize
-                                :maxlength="150"
-                                :rules="[(v) => !!v || 'يجب إدخال وصف قصير']"
-                            ></v-textarea>
-
-                            <!-- Slider for Description Length -->
-                            <v-slider
-                                v-model="jobs.Apply.description.length"
-                                :max="150"
-                                step="1"
-                                disabled
-                                thumb-label="always"
-                            ></v-slider>
-
-                            <!-- Submit Button -->
-                            <v-btn
-                                class="d-flex align-center mt-4 mb-4"
-                                type="submit"
-                                :loading="loading"
-                                :disabled="loading"
-                                style="
-                                    width: 100%;
-                                    padding: 20px;
-                                    letter-spacing: normal;
-                                    font-weight: bold;
-                                    font-size: 19px;
-                                    background: var(--main-color);
-                                    color: #fff;
-                                "
-                            >
-                                تقديم
-                            </v-btn>
-                        </form>
-                    </v-card>
-                </v-dialog>
-            </div>
-        </v-container>
+                                </form>
+                            </v-card>
+                        </v-dialog>
+                    </div>
+                </v-container>
+            </template>
+        </Offline_error>
     </div>
 </template>
 
@@ -248,8 +279,14 @@
 import { storeToRefs } from "pinia";
 import { defineComponent } from "vue";
 import { useJobs } from "@/store/job.js";
-
+import Offline_error from "@/components/Offline_error.vue";
+import Empty_error from "@/components/Empty_error.vue";
 export default defineComponent({
+    inject: ["Emitter"],
+    components: {
+        Empty_error,
+        Offline_error,
+    },
     setup() {
         const jobs = useJobs();
         jobs.Get_data();
@@ -261,6 +298,8 @@ export default defineComponent({
             loading,
             applies,
             progress,
+            text0,
+            empty2,
             Apply,
             upload_CV,
             Get_applies,
@@ -280,6 +319,8 @@ export default defineComponent({
             loading,
             applies,
             progress,
+            text0,
+            empty2,
             Apply,
             upload_CV,
             Get_applies,

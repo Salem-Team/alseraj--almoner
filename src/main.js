@@ -31,6 +31,10 @@ const vuetify = createVuetify({
     components,
     directives,
 });
+// Emitter configuration
+import mitt from "mitt";
+const Emitter = mitt();
+
 createApp(App)
     .use(ref)
     .use(pinia)
@@ -38,6 +42,7 @@ createApp(App)
     .use(vuetify)
     .use(router)
     .use(VTooltip)
+    .provide("Emitter", Emitter)
     .use(Toast, { position: "top-right", timeout: 3000 })
     .component("font-awesome-icon", FontAwesomeIcon)
     .mount("#app");

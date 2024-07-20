@@ -80,6 +80,17 @@ export const useJobs = defineStore("job", {
         counter: [],
         loading: false,
         loading1: false,
+        empty: false,
+        empty0: false,
+        empty1: false,
+        empty2: false,
+        text0: "لا يوجد وظائف",
+        text1: "لا يوجد طلبات توظيف ",
+        text2: "لا يوجد إشعارات",
+        snackbar: false,
+        snackbar2: false,
+        text10: " تم الاضافة بنجاح",
+        text11: " تم الحذف بنجاح",
     }),
     actions: {
         // Action methods
@@ -204,7 +215,7 @@ export const useJobs = defineStore("job", {
                     updateDoc(countRef, {
                         counter: this.counter.counter,
                     });
-
+                    this.snackbar = true;
                     this.loading = false;
 
                     // Step 7: Refresh data if needed
@@ -266,6 +277,7 @@ export const useJobs = defineStore("job", {
                 // Step 4: Refresh data if needed
                 this.Get_Apply_data();
                 this.Get_data();
+                this.snackbar2 = true;
                 // Step 5: Perform UI-related operations (if needed)
                 // Close dialog, update UI, etc.
                 this.dialog_9 = false;
@@ -311,6 +323,7 @@ export const useJobs = defineStore("job", {
 
                 console.log("Document written with ID: ", docRef.id);
                 this.Get_data();
+                this.snackbar = true;
                 this.loading = false;
                 this.dialog = false;
             } catch (error) {
@@ -378,6 +391,11 @@ export const useJobs = defineStore("job", {
                     this.notifications.push(Data);
                 });
                 console.log("notifications", this.notifications);
+                if (this.notifications.length === 0) {
+                    this.empty0 = true;
+                } else {
+                    this.empty0 = false;
+                }
                 this.Get_counter_data();
             } catch (error) {
                 console.error("Error retrieving data:", error);
@@ -448,6 +466,11 @@ export const useJobs = defineStore("job", {
                         };
                         // Document exists, push data to apply array
                         this.apply.push(Data);
+                        if (this.apply.length === 0) {
+                            this.empty1 = true;
+                        } else {
+                            this.empty1 = false;
+                        }
                     } else {
                         console.error("No such document!");
                     }
@@ -487,6 +510,11 @@ export const useJobs = defineStore("job", {
                 });
                 console.log("this.Jobs", this.Jobs);
                 this.loading1 = false;
+                if (this.Jobs.length === 0) {
+                    this.empty2 = true;
+                } else {
+                    this.empty2 = false;
+                }
             } catch (error) {
                 console.error("Error adding document: ", error);
             }
@@ -518,6 +546,11 @@ export const useJobs = defineStore("job", {
                 });
                 this.Jobs = this.Jobs.slice(0, 3);
                 console.log("this.Jobs", this.Jobs);
+                if (this.Jobs.length === 0) {
+                    this.empty = true;
+                } else {
+                    this.empty = false;
+                }
                 this.loading1 = false;
             } catch (error) {
                 console.error("Error adding document: ", error);
@@ -593,6 +626,7 @@ export const useJobs = defineStore("job", {
 
                 // Refresh jobs data
                 this.Get_data();
+                this.snackbar2 = true;
                 this.dialog_3 = false;
             } catch (error) {
                 console.error("Error deleting Job:", error);

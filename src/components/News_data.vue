@@ -8,7 +8,11 @@
         </div>
 
         <!-- News Cards Container -->
-        <v-container class="box d-flex align-center justify-space-around">
+        <Empty_error v-if="empty === true" :text="text0" />
+        <v-container
+            class="box d-flex align-center justify-space-around"
+            v-if="(!loading1, empty === false)"
+        >
             <!-- News Card Loop -->
             <v-card
                 class="feat"
@@ -92,8 +96,12 @@
 import { storeToRefs } from "pinia";
 import { defineComponent } from "vue";
 import { useNews } from "@/store/News.js";
-
+import Empty_error from "@/components/Empty_error.vue";
 export default defineComponent({
+    inject: ["Emitter"],
+    components: {
+        Empty_error,
+    },
     setup() {
         // Access the News store
         const news = useNews();
@@ -105,6 +113,8 @@ export default defineComponent({
         const {
             New,
             loading,
+            text0,
+            empty,
             loading1,
             Get_data,
             News,
@@ -115,6 +125,8 @@ export default defineComponent({
         // Return the necessary reactive properties and methods
         return {
             New,
+            text0,
+            empty,
             dialog_6,
             New_Information,
             loading,
