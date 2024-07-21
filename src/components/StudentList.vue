@@ -3597,27 +3597,36 @@ export default {
             );
         },
         sortedStudents() {
-            // تنفيذ الترتيب بناءً على حالة isSortedAscending
-            const sorted = [...this.students].sort((a, b) => {
-                const nameA = a.student_information[0].student_name
-                    .charAt(0)
-                    .toUpperCase();
-                const nameB = b.student_information[0].student_name
-                    .charAt(0)
-                    .toUpperCase();
+            // Ensure students_class is defined and is an array
+            if (!Array.isArray(this.students_class)) {
+                return [];
+            }
 
-                if (this.$parent.isSortedAscending) {
-                    // الترتيب من الألف إلى الياء
-                    if (nameA < nameB) return -1;
-                    if (nameA > nameB) return 1;
-                } else {
-                    // الترتيب من الياء إلى الألف
-                    if (nameA < nameB) return 1;
-                    if (nameA > nameB) return -1;
-                }
-                return 0;
-            });
-            return sorted;
+            return this.students_class
+                .filter(
+                    (student) =>
+                        student.student_information &&
+                        student.student_information.length > 0
+                )
+                .sort((a, b) => {
+                    // Ensure student_information is defined and has at least one element
+                    const nameA =
+                        a.student_information[0]?.student_name?.toLowerCase() ||
+                        "";
+                    const nameB =
+                        b.student_information[0]?.student_name?.toLowerCase() ||
+                        "";
+
+                    if (this.isSortedAscending) {
+                        return nameA.localeCompare(nameB, "ar", {
+                            sensitivity: "base",
+                        });
+                    } else {
+                        return nameB.localeCompare(nameA, "ar", {
+                            sensitivity: "base",
+                        });
+                    }
+                });
         },
         selectedMonthlyDegrees() {
             if (!this.selectedStudent) {

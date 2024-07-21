@@ -21,11 +21,11 @@
                                 style="cursor: pointer"
                                 @click="dialogFilter = true"
                             />
-
                             <font-awesome-icon
                                 :icon="['fas', 'plus']"
                                 @click="dialog = true"
                                 style="cursor: pointer"
+                                v-tooltip="add"
                             />
                         </div>
                     </div>
@@ -48,6 +48,26 @@
                                 ></v-btn>
                             </v-card-title>
                             <div class="cards d-flex justify-space-evenly mb-4">
+                                <v-card
+                                    style="
+                                        background-color: var(
+                                            --secound-color
+                                        ) !important;
+                                        width: 20% !important;
+                                    "
+                                    class="card text-center mt-3"
+                                    prepend-icon="mdi-book-open-variant"
+                                    link
+                                    @click="subject = true"
+                                >
+                                    <v-card-title @click="dialog = false"
+                                        >إضافة مواد</v-card-title
+                                    >
+                                </v-card>
+                                <add-subject
+                                    @closeDialog="closeDialog"
+                                    :localSubject="subject"
+                                />
                                 <v-card
                                     style="
                                         background-color: var(
@@ -315,6 +335,7 @@
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
+
                     <v-dialog v-model="dialog_2" max-width="90%">
                         <div style="background: white; padding: 53px">
                             <div
@@ -554,6 +575,7 @@ import {
 import { initializeApp } from "@firebase/app";
 import { getStorage } from "firebase/storage";
 import "vue-toastification/dist/index.css"; // Import the CSS file
+import addSubject from "@/components/subject/addSubject.vue";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBdk3sqIHjXvB2C-O-lvkRgMFpg8pemkno",
@@ -573,6 +595,7 @@ export default {
     name: "ClassPage",
     components: {
         StudentList,
+        addSubject,
     },
     props: ["year"],
     setup() {
@@ -593,6 +616,7 @@ export default {
                     link: "",
                 },
             ],
+            subject: false,
             paymentSortActive: false,
             isSortedAscending: true,
             sortActive: false, // متغير لتتبع حالة الترتيب
@@ -659,6 +683,18 @@ export default {
         },
     },
     methods: {
+        closeDialog(value) {
+            this.subject = value;
+        },
+        async sortStudentsByPayment() {
+            this.students_class.sort((a, b) => {
+                if (a.payment_status === b.payment_status) {
+                    return 0;
+                }
+                return a.payment_status > b.payment_status ? -1 : 1;
+            });
+        },
+
         async sortStudentsByYearAndAlphabetically() {
             try {
                 // جلب الطلاب المنتمين إلى السنة المحددة
