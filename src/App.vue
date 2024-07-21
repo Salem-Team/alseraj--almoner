@@ -65,7 +65,7 @@ body {
     --pink-color: #d8588c;
 }
 .main_header {
-    padding: 0px 30px;
+    padding: 20px;
     background-color: white;
     -webkit-box-shadow: 0 0 10px #ddd;
     -moz-box-shadow: 0 0 10px #ddd;

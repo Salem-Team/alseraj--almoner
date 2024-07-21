@@ -90,10 +90,7 @@
             <div class="right">
                 <div>
                     <v-breadcrumbs>
-                        <v-breadcrumbs-item
-                            @click="$router.push('/admin')"
-                            link
-                        >
+                        <v-breadcrumbs-item>
                             <img
                                 src="../assets/profile/user.png"
                                 alt=""
@@ -146,7 +143,7 @@
                             alt=""
                             class="pluse"
                         />
-                        <div>أبنائنا</div>
+                        <div>الأبناء</div>
                     </div>
                     <div class="body">
                         <div
@@ -647,10 +644,16 @@ export default {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                background: var(--secound-color);
+                padding: 10px;
+                border-radius: 5px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+                margin-top: 10px;
                 img {
-                    position: absolute;
-                    top: 10px;
-                    left: 10px;
+                    width: 35px;
                 }
                 .name {
                     font-size: 18px;
@@ -662,6 +665,14 @@ export default {
                 color: var(--therd-color);
                 font-weight: bold;
                 font-size: 15px;
+                background: var(--secound-color);
+                padding: 10px;
+                border-radius: 5px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+                margin-top: 10px;
             }
             .class {
                 display: flex;
@@ -669,6 +680,14 @@ export default {
                 gap: 5px;
                 color: var(--pink-color);
                 font-weight: bold;
+                background: var(--secound-color);
+                padding: 10px;
+                border-radius: 5px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+                margin-top: 10px;
             }
         }
     }

@@ -111,7 +111,7 @@ export default {
 
                 querySnapshot.forEach((doc) => {
                     const studentData = doc.data();
-                    const studentInfo = studentData.student_information[0];
+                    const studentInfo = studentData;
                     const monthlyResults = studentData.Results.reduce(
                         (acc, result) => acc.concat(result.Monthly || []),
                         []
@@ -203,7 +203,7 @@ export default {
 
                 querySnapshot.forEach((doc) => {
                     const studentData = doc.data();
-                    const studentInfo = studentData.student_information || [];
+                    const studentInfo = studentData || [];
 
                     studentInfo.forEach((info) => {
                         levels.add(info.class);

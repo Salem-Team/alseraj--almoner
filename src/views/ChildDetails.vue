@@ -44,23 +44,27 @@
                                 <v-tabs-window v-model="tab_5">
                                     <v-tabs-window-item value="one1">
                                         <div class="title">معلومات الطالب</div>
-                                        <div class="feat">
-                                            <div class="name">
-                                                محمد علي عماد
+                                        <div class="box">
+                                            <div class="feat">
+                                                <div class="name">
+                                                    محمد علي عماد
+                                                </div>
+                                                <div class="gender">ذكر</div>
                                             </div>
-                                            <div class="gender">ذكر</div>
-                                        </div>
-                                        <div class="feat">
-                                            <div class="educational_level">
-                                                الصف السادس الإبتدائي
+                                            <div class="feat">
+                                                <div class="educational_level">
+                                                    مرحلة رياض الأطفال الأولي
+                                                </div>
+                                            </div>
+                                            <div class="feat">
+                                                <div class="Class">
+                                                    <div>فصل</div>
+                                                    <div>3/1</div>
+                                                </div>
+                                                <div class="section">لغات</div>
                                             </div>
                                         </div>
-                                        <div class="feat">
-                                            <div class="Class">6/1</div>
-                                        </div>
-                                        <div class="feat">
-                                            <div class="section">لغات</div>
-                                        </div>
+
                                         <!-- <v-card
                                             flat
                                             v-if="student"
@@ -69,7 +73,7 @@
                                         >
                                             <v-card-title
                                                 style="
-                                                    background: #2980b9;
+                                                    background: var(--main-color);
                                                     border-radius: 20px;
                                                     padding: 24px;
                                                 "
@@ -229,77 +233,103 @@
                                         >
                                             لا يوجد بيانات لهذا الطالب
                                         </v-alert> -->
-                                        <v-card>
-                                            <v-toolbar
-                                                color="#fff"
-                                                title="تفاصيل الطالب"
-                                            >
-                                            </v-toolbar>
-
-                                            <div
-                                                class="d-flex flex-row"
-                                                style="
-                                                    width: 100%;
-                                                    height: auto;
-                                                "
-                                            >
-                                                <v-tabs
-                                                    v-model="tab"
-                                                    color="primary"
-                                                    direction="vertical"
-                                                >
-                                                    <v-tab
-                                                        prepend-icon="mdi-account"
-                                                        text="معلومات شخصيه"
-                                                        value="option-1"
-                                                    ></v-tab>
-                                                    <v-tab
-                                                        prepend-icon="mdi-lock"
-                                                        text="النتائج الاسبوعيه"
-                                                        value="option-2"
-                                                    ></v-tab>
-                                                    <v-tab
-                                                        prepend-icon="mdi-access-point"
-                                                        text="النتائج الشهريه"
-                                                        value="option-3"
-                                                    ></v-tab>
-                                                    <v-tab
-                                                        prepend-icon="mdi-access-point"
-                                                        text=" المدفوعات"
-                                                        value="option-4"
-                                                    ></v-tab>
-                                                    <v-tab
-                                                        prepend-icon="mdi-access-point"
-                                                        text=" الاشعارات"
-                                                        value="option-5"
-                                                    ></v-tab>
-                                                    <v-tab
-                                                        prepend-icon="mdi-access-point"
-                                                        text=" الصور"
-                                                        value="option-6"
-                                                    ></v-tab>
-                                                    <v-tab
-                                                        prepend-icon="mdi-access-point"
-                                                        text=" الاحصائيات"
-                                                        value="option-7"
-                                                    ></v-tab>
-                                                </v-tabs>
-
-                                                <v-tabs-window
-                                                    v-model="tab"
-                                                    style="
-                                                        width: 100%;
-                                                        height: 100% !important;
-                                                    "
-                                                >
-                                                </v-tabs-window>
-                                            </div>
-                                        </v-card>
                                     </v-tabs-window-item>
 
-                                    <v-tabs-window-item value="two1">
-                                        <h2 class="ma-2">النتائج الأسبوعية</h2>
-                                        <v-card flat>
+                                    <v-tabs-window-item
+                                        value="two1"
+                                        class="weekly"
+                                    >
+                                        <div class="title">
+                                            التطبيقات الأسبوعية
+                                        </div>
+                                        <div class="contain">
+                                            <div class="feat">
+                                                <div class="header">
+                                                    <div>
+                                                        <div class="sub">
+                                                            علوم
+                                                        </div>
+                                                    </div>
+                                                    <div class="text-center">
+                                                        <v-progress-circular
+                                                            :model-value="80"
+                                                            :rotate="360"
+                                                            :size="80"
+                                                            :width="15"
+                                                            color="var(--main-color)"
+                                                        >
+                                                            <template
+                                                                v-slot:default
+                                                            >
+                                                                80 %
+                                                            </template>
+                                                        </v-progress-circular>
+                                                    </div>
+                                                </div>
+                                                <div class="table">
+                                                    <div class="Row">
+                                                        <div>درجة الطالب</div>
+                                                        <div>80</div>
+                                                    </div>
+                                                    <div class="Row">
+                                                        <div>
+                                                            الدرجة النهائية
+                                                        </div>
+                                                        <div>100</div>
+                                                    </div>
+                                                    <div class="Row">
+                                                        <div>
+                                                            تاريخ الإمتحان
+                                                        </div>
+                                                        <div>100</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="feat">
+                                                <div class="header">
+                                                    <div>
+                                                        <div class="sub">
+                                                            علوم
+                                                        </div>
+                                                    </div>
+                                                    <div class="text-center">
+                                                        <v-progress-circular
+                                                            :model-value="90"
+                                                            :rotate="360"
+                                                            :size="80"
+                                                            :width="15"
+                                                            color="var(--main-color)"
+                                                        >
+                                                            <template
+                                                                v-slot:default
+                                                            >
+                                                                90 %
+                                                            </template>
+                                                        </v-progress-circular>
+                                                    </div>
+                                                </div>
+                                                <div class="table">
+                                                    <div class="Row">
+                                                        <div>درجة الطالب</div>
+                                                        <div>90</div>
+                                                    </div>
+                                                    <div class="Row">
+                                                        <div>
+                                                            الدرجة النهائية
+                                                        </div>
+                                                        <div>100</div>
+                                                    </div>
+                                                    <div class="Row">
+                                                        <div>
+                                                            تاريخ الإمتحان
+                                                        </div>
+                                                        <div>100</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- <h2 class="ma-2">التطبيقات الأسبوعية</h2> -->
+                                        <!-- <v-card flat>
                                             <v-list>
                                                 <v-list-item>
                                                     <v-table>
@@ -345,21 +375,137 @@
                                                     </v-table>
                                                 </v-list-item>
                                             </v-list>
-                                        </v-card>
+                                        </v-card> -->
                                     </v-tabs-window-item>
 
                                     <v-tabs-window-item
                                         value="three1"
                                         style="width: 100% !important"
+                                        class="monthly"
                                     >
-                                        <v-card flat>
+                                        <div class="title">النتائج الشهرية</div>
+                                        <div class="header">
+                                            <v-select
+                                                v-model="selectedMonth"
+                                                label="أختر الشهر"
+                                                :items="[
+                                                    'شهر أكتوبر',
+                                                    'شهر نوفمبر',
+                                                    'الترم الأول',
+                                                    'شهر فبراير',
+                                                    'شهر مارس',
+                                                    'الترم الثاني',
+                                                ]"
+                                            ></v-select>
+                                            <div
+                                                class="download"
+                                                @click="downloadPDF"
+                                            >
+                                                <img
+                                                    src="../assets/student/download-pdf.png"
+                                                    alt=""
+                                                />
+                                                <div>تحميل الشهادة</div>
+                                            </div>
+                                        </div>
+                                        <div class="Certificate">
+                                            <div class="head">
+                                                <div class="right">
+                                                    <div>
+                                                        الإسم : محمود علي عماد
+                                                    </div>
+                                                    <div>
+                                                        المرحلة الدراسية : الصف
+                                                        الخامس الإبتدائي
+                                                    </div>
+                                                    <div>
+                                                        السنةالدراسية : 2023 -
+                                                        2024
+                                                    </div>
+                                                    <div>الفصل : 4 /5</div>
+                                                </div>
+                                                <div class="left">
+                                                    <img
+                                                        src="../assets/images.jpeg"
+                                                        alt="School Logo"
+                                                    />
+                                                    <p class="ma-2">
+                                                        معهد السراج المنير
+                                                        الأزهري
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="body">
+                                                <table>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>المادة</th>
+                                                            <th>المدرس</th>
+                                                            <th>
+                                                                تقييم السلوك
+                                                            </th>
+                                                            <th>
+                                                                الدرجة الصغرى
+                                                            </th>
+                                                            <th>درجة الطالب</th>
+                                                            <th>
+                                                                الدرجة الكبرى
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>الرياضيات</td>
+                                                            <td>أحمد</td>
+                                                            <td>جيد جدا</td>
+                                                            <td>50</td>
+                                                            <td>75</td>
+                                                            <td>100</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>العلوم</td>
+                                                            <td>محمد</td>
+                                                            <td>ممتاز</td>
+                                                            <td>45</td>
+                                                            <td>90</td>
+                                                            <td>100</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                اللغة العربية
+                                                            </td>
+                                                            <td>علي</td>
+                                                            <td>جيد</td>
+                                                            <td>40</td>
+                                                            <td>60</td>
+                                                            <td>100</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>التاريخ</td>
+                                                            <td>خالد</td>
+                                                            <td>مقبول</td>
+                                                            <td>35</td>
+                                                            <td>50</td>
+                                                            <td>100</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>الجغرافيا</td>
+                                                            <td>سعيد</td>
+                                                            <td>جيد جدا</td>
+                                                            <td>30</td>
+                                                            <td>80</td>
+                                                            <td>100</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <!-- <v-card flat>
                                             <v-row
                                                 class="d-flex flex-row align-center justify-space-between"
                                             >
                                                 <v-col>
-                                                    <h2 class="ma-2">
-                                                        النتائج الشهرية
-                                                    </h2>
+                                                    <h2 class="ma-2"></h2>
                                                 </v-col>
                                                 <v-col
                                                     class="d-flex justify-end"
@@ -380,7 +526,6 @@
                                                 </v-col>
                                             </v-row>
 
-                                            <!-- أزرار اختيار الشهر -->
                                             <v-row>
                                                 <v-col
                                                     cols="12"
@@ -429,7 +574,6 @@
                                                 </v-col>
                                             </v-row>
 
-                                            <!-- بيانات الطالب -->
                                             <v-row
                                                 class="d-flex flex-row align-center justify-space-between ma-5"
                                             >
@@ -483,7 +627,6 @@
                                                 </v-col>
                                             </v-row>
 
-                                            <!-- جدول النتائج -->
                                             <div class="table">
                                                 <v-table>
                                                     <thead>
@@ -546,59 +689,57 @@
                                                     </tbody>
                                                 </v-table>
                                             </div>
-                                        </v-card>
+                                        </v-card> -->
                                     </v-tabs-window-item>
 
                                     <v-tabs-window-item value="four1">
                                         <v-card flat v-if="student">
-                                            <v-container fluid>
-                                                <v-row>
-                                                    <v-col cols="12">
-                                                        <v-select
-                                                            v-model="
-                                                                selectedGrade
-                                                            "
-                                                            :items="gradeLevels"
-                                                            label="اختر المرحلة الدراسية"
-                                                            outlined
-                                                            dense
-                                                            class="mb-4"
-                                                        ></v-select>
-                                                    </v-col>
-                                                </v-row>
-                                                <v-row>
-                                                    <v-col
-                                                        v-for="photo in filteredPhotos"
-                                                        :key="photo.link"
-                                                        cols="12"
-                                                        sm="6"
-                                                        md="4"
-                                                        class="d-flex justify-center"
+                                            <div class="title">الصور</div>
+                                            <div class="container_img">
+                                                <div
+                                                    class="img"
+                                                    v-for="photo in filteredPhotos"
+                                                    :key="photo.link"
+                                                >
+                                                    <img
+                                                        :src="photo.link"
+                                                        alt=""
+                                                    />
+                                                    <div class="date">
+                                                        {{ photo.Date }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- <v-row>
+                                                <v-col
+                                                    v-for="photo in filteredPhotos"
+                                                    :key="photo.link"
+                                                    cols="12"
+                                                    sm="6"
+                                                    md="4"
+                                                    class="d-flex justify-center"
+                                                >
+                                                    <v-card
+                                                        outlined
+                                                        class="pa-3 mb-3"
                                                     >
-                                                        <v-card
-                                                            outlined
-                                                            class="pa-3 mb-3"
+                                                        <v-img
+                                                            :src="photo.link"
+                                                            aspect-ratio="1"
+                                                            class="mb-2"
+                                                        ></v-img>
+                                                        <v-card-subtitle
+                                                            class="custom-font"
+                                                            style="
+                                                                font-size: 16px;
+                                                            "
                                                         >
-                                                            <v-img
-                                                                :src="
-                                                                    photo.link
-                                                                "
-                                                                aspect-ratio="1"
-                                                                class="mb-2"
-                                                            ></v-img>
-                                                            <v-card-subtitle
-                                                                class="custom-font"
-                                                                style="
-                                                                    font-size: 16px;
-                                                                "
-                                                            >
-                                                                التاريخ:
-                                                                {{ photo.Date }}
-                                                            </v-card-subtitle>
-                                                        </v-card>
-                                                    </v-col>
-                                                </v-row>
-                                            </v-container>
+                                                            التاريخ:
+                                                            {{ photo.Date }}
+                                                        </v-card-subtitle>
+                                                    </v-card>
+                                                </v-col>
+                                            </v-row> -->
                                         </v-card>
                                         <v-alert type="error" v-else>
                                             لا يوجد بيانات لهذا الطالب
@@ -636,250 +777,305 @@
                             <v-card-text>
                                 <v-tabs-window v-model="tab_4">
                                     <v-tabs-window-item value="one1">
-                                        <div class="container">
-                                            <v-card
-                                                flat
-                                                class="mx-auto my-4"
-                                                max-width="90%"
-                                            >
-                                                <v-card-title
-                                                    class="text-h4 custom-font"
-                                                    style="color: #2980b9"
-                                                >
-                                                    المدفوعات
-                                                </v-card-title>
-                                                <v-card-subtitle
-                                                    class="mb-4 text-h6 custom-title"
-                                                >
-                                                    ادخل المبلغ واختر نظام الدفع
-                                                </v-card-subtitle>
-                                                <v-container>
-                                                    <v-row>
-                                                        <v-col cols="12" md="6">
-                                                            <v-text-field
-                                                                v-model="
-                                                                    totalAmount
-                                                                "
-                                                                label="ادخل المبلغ"
-                                                                outlined
-                                                                dense
-                                                                required
-                                                                @blur="
-                                                                    validateTotalAmount
-                                                                "
-                                                            ></v-text-field>
-                                                        </v-col>
-                                                        <v-col cols="12" md="6">
-                                                            <v-select
-                                                                v-model="
-                                                                    paymentMethod
-                                                                "
-                                                                :items="
-                                                                    paymentMethods
-                                                                "
-                                                                label="اختر نظام الدفع"
-                                                                @change="
-                                                                    updatePaymentOptions
-                                                                "
-                                                                outlined
-                                                                dense
-                                                            ></v-select>
-                                                        </v-col>
-                                                    </v-row>
-                                                    <v-row
-                                                        v-if="
-                                                            paymentMethod ===
-                                                            'نظام التقسيط'
-                                                        "
-                                                    >
-                                                        <v-col cols="12" md="6">
-                                                            <v-select
-                                                                v-model="
-                                                                    selectedPlan
-                                                                "
-                                                                :items="
-                                                                    selectPaid
-                                                                "
-                                                                label="اختر نظام التقسيط"
-                                                                @change="
-                                                                    updateCircles
-                                                                "
-                                                                outlined
-                                                                dense
-                                                            ></v-select>
-                                                        </v-col>
-                                                    </v-row>
-                                                </v-container>
-                                            </v-card>
+                                        <div class="title">المصروفات</div>
+                                        <div class="table">
+                                            <div class="invoice Title">
+                                                <font-awesome-icon
+                                                    :icon="[
+                                                        'fas',
+                                                        'file-invoice-dollar',
+                                                    ]"
+                                                />
 
-                                            <div
-                                                v-if="
-                                                    paymentMethod ===
-                                                        'نظام التقسيط' &&
-                                                    selectedPlan
+                                                <div>فاتورة</div>
+                                            </div>
+                                            <div class="Row">
+                                                <div>المصروفات</div>
+                                                <div>
+                                                    {{ totalAmount || 0 }}
+                                                </div>
+                                            </div>
+                                            <div class="Row">
+                                                <div>نظام الدفع</div>
+                                                <div>
+                                                    {{
+                                                        paymentMethod ||
+                                                        "الدفع المباشر"
+                                                    }}
+                                                </div>
+                                            </div>
+                                            <div class="Row">
+                                                <div>نظام التقسيط</div>
+                                                <div>
+                                                    {{
+                                                        selectedPlan ||
+                                                        "لا يوجد"
+                                                    }}
+                                                </div>
+                                            </div>
+                                            <div class="Row">
+                                                <div>المدفوع</div>
+                                                <div>{{ paidAmount || 0 }}</div>
+                                            </div>
+                                            <div class="Row">
+                                                <div>المتبقي</div>
+                                                <div>
+                                                    {{ remainingAmount || 0 }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="deidline">
+                                            <div class="Title">
+                                                <font-awesome-icon
+                                                    :icon="[
+                                                        'fas',
+                                                        'circle-info',
+                                                    ]"
+                                                />
+                                                <div>
+                                                    تفاصيل المدفوعات والأقساط
+                                                    المستحقة
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <v-row class="details_row">
+                                            <v-text-field
+                                                v-model="totalAmount"
+                                                label="ادخل المبلغ"
+                                                outlined
+                                                dense
+                                                required
+                                                @blur="validateTotalAmount"
+                                            ></v-text-field>
+
+                                            <v-select
+                                                v-model="paymentMethod"
+                                                :items="paymentMethods"
+                                                label="اختر نظام الدفع"
+                                                @change="updatePaymentOptions"
+                                                outlined
+                                                dense
+                                            ></v-select>
+                                        </v-row>
+                                        <v-row
+                                            v-if="
+                                                paymentMethod === 'نظام التقسيط'
+                                            "
+                                            class="details_row"
+                                        >
+                                            <v-select
+                                                v-model="selectedPlan"
+                                                :items="selectPaid"
+                                                label="اختر نظام التقسيط"
+                                                @change="updateCircles"
+                                                outlined
+                                                dense
+                                            ></v-select>
+
+                                            <v-text-field
+                                                @change="
+                                                    createChart([
+                                                        paidAmount,
+                                                        remainingAmount,
+                                                    ])
                                                 "
-                                                class="payment-section"
+                                                v-model="amount"
+                                                label="ادخل المبلغ للدفع"
+                                                outlined
+                                                dense
+                                            ></v-text-field>
+                                        </v-row>
+
+                                        <div
+                                            v-if="
+                                                paymentMethod ===
+                                                    'نظام التقسيط' &&
+                                                selectedPlan
+                                            "
+                                            class="payment-section"
+                                        >
+                                            <v-row
+                                                style="
+                                                    margin: 10px 15px 10px 15px;
+                                                "
                                             >
-                                                <v-row>
-                                                    <div
-                                                        class="timeline-container"
-                                                    >
-                                                        <div class="timeline">
+                                                <div class="timeline-container">
+                                                    <div class="timeline">
+                                                        <div
+                                                            class="timeline-line"
+                                                        ></div>
+                                                        <div
+                                                            class="progress_container"
+                                                        >
                                                             <div
-                                                                class="timeline-line"
+                                                                class="progress"
+                                                                :style="{
+                                                                    height:
+                                                                        (paidAmount /
+                                                                            totalAmount) *
+                                                                            100 +
+                                                                        '%',
+                                                                    backgroundColor:
+                                                                        'var(--main-color)',
+                                                                }"
                                                             ></div>
+                                                            <span
+                                                                class="progress-label mb-3"
+                                                            >
+                                                                {{ paidAmount }}
+                                                                مدفوعاتك
+                                                            </span>
+                                                        </div>
+                                                        <div
+                                                            v-for="month in numberOfMonths"
+                                                            :key="month"
+                                                            class="timeline-item"
+                                                        >
                                                             <div
-                                                                class="progress_container"
+                                                                class="timeline-item-content"
+                                                                :style="{
+                                                                    backgroundColor:
+                                                                        paidAmount >=
+                                                                        installmentAmount *
+                                                                            month
+                                                                            ? '#d8588c'
+                                                                            : '#fff',
+                                                                    color:
+                                                                        paidAmount >=
+                                                                        installmentAmount *
+                                                                            month
+                                                                            ? '#fff'
+                                                                            : '#333', // أو أي لون آخر تفضله
+                                                                }"
                                                             >
                                                                 <div
-                                                                    class="progress"
-                                                                    :style="{
-                                                                        height:
-                                                                            (paidAmount /
-                                                                                totalAmount) *
-                                                                                100 +
-                                                                            '%',
-                                                                        backgroundColor:
-                                                                            '#2980b9',
-                                                                    }"
-                                                                ></div>
-                                                                <span
-                                                                    class="progress-label mb-3"
+                                                                    class="timeline-item-header"
                                                                 >
-                                                                    <!-- {{ (paidAmount / totalAmount) * 100 }} % -->
-                                                                    {{
-                                                                        paidAmount
-                                                                    }}
-                                                                    مدفوعاتك
-                                                                </span>
-                                                            </div>
-                                                            <div
-                                                                v-for="month in numberOfMonths"
-                                                                :key="month"
-                                                                class="timeline-item"
-                                                            >
+                                                                    <span
+                                                                        class="month-name"
+                                                                        :style="{
+                                                                            color:
+                                                                                paidAmount >=
+                                                                                installmentAmount *
+                                                                                    month
+                                                                                    ? '#fff'
+                                                                                    : '#333',
+                                                                        }"
+                                                                    >
+                                                                        {{
+                                                                            month ===
+                                                                            1
+                                                                                ? "شهر نوفمبر"
+                                                                                : month ===
+                                                                                  2
+                                                                                ? "شهر ديسمبر"
+                                                                                : month ===
+                                                                                  3
+                                                                                ? "الترم الأول"
+                                                                                : month ===
+                                                                                  4
+                                                                                ? "شهر فبراير"
+                                                                                : month ===
+                                                                                  5
+                                                                                ? "شهر مارس"
+                                                                                : month
+                                                                        }}</span
+                                                                    >
+                                                                </div>
                                                                 <div
-                                                                    class="timeline-item-content"
-                                                                    :style="{
-                                                                        backgroundColor:
-                                                                            paidAmount >=
-                                                                            installmentAmount *
-                                                                                month
-                                                                                ? '#d8588c'
-                                                                                : '#fff',
-                                                                        color:
-                                                                            paidAmount >=
-                                                                            installmentAmount *
-                                                                                month
-                                                                                ? '#fff'
-                                                                                : '#333', // أو أي لون آخر تفضله
-                                                                    }"
+                                                                    class="timeline-item-body"
                                                                 >
-                                                                    <div
-                                                                        class="timeline-item-header"
-                                                                    >
-                                                                        <span
-                                                                            class="month-name"
-                                                                            :style="{
-                                                                                color:
-                                                                                    paidAmount >=
-                                                                                    installmentAmount *
-                                                                                        month
-                                                                                        ? '#fff'
-                                                                                        : '#333',
-                                                                            }"
-                                                                            >شهر
-                                                                            {{
-                                                                                month
-                                                                            }}</span
-                                                                        >
-                                                                    </div>
-                                                                    <div
-                                                                        class="timeline-item-body"
-                                                                    >
-                                                                        <p>
-                                                                            القسط
-                                                                            الشهري:
-                                                                            {{
-                                                                                Math.floor(
-                                                                                    installmentAmount
-                                                                                )
-                                                                            }}
-                                                                            جنيه
-                                                                        </p>
-                                                                    </div>
+                                                                    <p>
+                                                                        القسط
+                                                                        الشهري :
+                                                                        {{
+                                                                            Math.floor(
+                                                                                installmentAmount
+                                                                            )
+                                                                        }}
+                                                                        جنيه
+                                                                    </p>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </v-row>
-                                                <v-row class="my-4">
-                                                    <v-col
-                                                        cols="12"
-                                                        md="6"
-                                                        style="margin: 0 auto"
-                                                    >
-                                                        <v-text-field
-                                                            v-model="amount"
-                                                            label="ادخل المبلغ للدفع"
-                                                            outlined
-                                                            dense
-                                                        ></v-text-field>
-                                                    </v-col>
-                                                </v-row>
-                                                <v-row class="my-4">
-                                                    <v-col cols="12" md="4">
-                                                        <v-card class="pa-4">
-                                                            <v-card-title
-                                                                >المبلغ
-                                                                المستحق</v-card-title
-                                                            >
-                                                            <v-card-subtitle
-                                                                >{{
-                                                                    totalAmount
-                                                                }}
-                                                                جنيه</v-card-subtitle
-                                                            >
-                                                        </v-card>
-                                                    </v-col>
-                                                    <v-col cols="12" md="4">
-                                                        <v-card class="pa-4">
-                                                            <v-card-title
-                                                                >المبلغ
-                                                                المدفوع</v-card-title
-                                                            >
-                                                            <v-card-subtitle
-                                                                >{{
-                                                                    paidAmount
-                                                                }}
-                                                                جنيه</v-card-subtitle
-                                                            >
-                                                        </v-card>
-                                                    </v-col>
-                                                    <v-col cols="12" md="4">
-                                                        <v-card class="pa-4">
-                                                            <v-card-title
-                                                                >باقي المبلغ
-                                                                المستحق</v-card-title
-                                                            >
-                                                            <v-card-subtitle
-                                                                >{{
-                                                                    remainingAmount
-                                                                }}
-                                                                جنيه</v-card-subtitle
-                                                            >
-                                                        </v-card>
-                                                    </v-col>
-                                                </v-row>
+                                                </div>
+                                            </v-row>
+                                            <div
+                                                class="Title"
+                                                v-show="CreateChart"
+                                                style="margin-top: 55px"
+                                            >
+                                                <font-awesome-icon
+                                                    :icon="['fas', 'chart-pie']"
+                                                />
+                                                <div>إحصائيات</div>
+                                            </div>
+                                            <div
+                                                class="details"
+                                                v-show="CreateChart"
+                                            >
+                                                <div class="myChart">
+                                                    <canvas
+                                                        id="myChart"
+                                                    ></canvas>
+                                                </div>
+                                                <ul>
+                                                    <li class="li">
+                                                        <font-awesome-icon
+                                                            :icon="[
+                                                                'fas',
+                                                                'money-bills',
+                                                            ]"
+                                                        />
+                                                        <div>
+                                                            المصروفات المستحقة
+                                                        </div>
+                                                        <div>
+                                                            <span>{{
+                                                                totalAmount
+                                                            }}</span>
+                                                            جنية
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            المصروفات المدفوعة
+                                                        </div>
+                                                        <div>
+                                                            <span>{{
+                                                                paidAmount
+                                                            }}</span>
+                                                            جنية
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div>
+                                                            المصروفات المتبقية
+                                                        </div>
+                                                        <div>
+                                                            <span>{{
+                                                                remainingAmount
+                                                            }}</span>
+                                                            جنية
+                                                        </div>
+                                                    </li>
+                                                </ul>
                                             </div>
                                         </div>
                                     </v-tabs-window-item>
 
                                     <v-tabs-window-item value="two1">
                                         <v-card flat v-if="student">
-                                            <h2 class="ma-5">الاشعارات</h2>
+                                            <div
+                                                class="title"
+                                                style="margin-bottm: 20px"
+                                            >
+                                                الإشعارات
+                                            </div>
                                             <v-list-item
-                                                height="200"
+                                                style="padding: 0"
                                                 v-for="notification in student.Notifications"
                                                 :key="notification.id"
                                             >
@@ -926,10 +1122,26 @@
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import Amiri_Regular from "@/assets/fonts/Amiri-Regular.js";
+import Chart from "chart.js/auto";
 
 export default {
+    mounted() {
+        this.interval = setInterval(() => {
+            if (this.value === 100) {
+                clearInterval(this.interval);
+                return;
+            }
+            this.value += 10;
+        }, 100);
+    },
+    beforeUnmount() {
+        clearInterval(this.interval);
+    },
     data() {
         return {
+            CreateChart: null,
+            interval: null,
+            value: 0,
             tab_1: 0,
             paymentMethod: null,
             paymentMethods: ["الدفع المباشر", "نظام التقسيط"],
@@ -949,12 +1161,12 @@ export default {
             tab: "option-1", // تحديد التاب الافتراضي
             selectedGrade: null,
             gradeLevels: ["الصف الأول", "الصف الثاني", "الصف الثالث"],
-            selectedMonth: "شهر يناير",
+            selectedMonth: "شهر أكتوبر",
             selectedPlan: null,
-            selectPaid: ["شهر", "شهرين", "3 شهر", "4 شهر", "5 شهر"],
+            selectPaid: ["شهر", "شهرين", "3 شهور", "4 شهور", "5 شهور"],
             amount: 0,
             selectedPaymentPlan: null,
-            paymentPlans: ["شهر", "شهرين", "3 شهر", "4 شهر", "5 شهر"],
+            paymentPlans: ["شهر", "شهرين", "3 شهور", "4 شهور", "5 شهور"],
             steps: [
                 "بدأ ",
                 "الخطوة 1",
@@ -1078,6 +1290,16 @@ export default {
                         Details:
                             "السيد/السيدة [اسم ولي الأمر]، نود إعلامكم بقرار فصل ابنكم/ابنتكم [اسم الطالب] من معهد السراج المنير الأزهري بسبب تكرار المخالفات للوائح والانضباط المدرسي، وذلك اعتبارًا من تاريخ هذا الخطاب.",
                     },
+                    {
+                        Title: "جواب الفصل لولي الأمر",
+                        Details:
+                            "السيد/السيدة [اسم ولي الأمر]، نود إعلامكم بقرار فصل ابنكم/ابنتكم [اسم الطالب] من معهد السراج المنير الأزهري بسبب تكرار المخالفات للوائح والانضباط المدرسي، وذلك اعتبارًا من تاريخ هذا الخطاب.",
+                    },
+                    {
+                        Title: "جواب الفصل لولي الأمر",
+                        Details:
+                            "السيد/السيدة [اسم ولي الأمر]، نود إعلامكم بقرار فصل ابنكم/ابنتكم [اسم الطالب] من معهد السراج المنير الأزهري بسبب تكرار المخالفات للوائح والانضباط المدرسي، وذلك اعتبارًا من تاريخ هذا الخطاب.",
+                    },
                 ],
 
                 photos: [
@@ -1148,9 +1370,9 @@ export default {
             const monthsMap = {
                 شهر: 1,
                 شهرين: 2,
-                "3 شهر": 3,
-                "4 شهر": 4,
-                "5 شهر": 5,
+                "3 شهور": 3,
+                "4 شهور": 4,
+                "5 شهور": 5,
             };
             return Array.from(
                 { length: monthsMap[this.selectedPlan] },
@@ -1162,9 +1384,9 @@ export default {
             const monthsMap = {
                 شهر: 1,
                 شهرين: 2,
-                "3 شهر": 3,
-                "4 شهر": 4,
-                "5 شهر": 5,
+                "3 شهور": 3,
+                "4 شهور": 4,
+                "5 شهور": 5,
             };
             return Math.floor(this.totalAmount / monthsMap[this.selectedPlan]);
         },
@@ -1173,6 +1395,55 @@ export default {
         },
     },
     methods: {
+        createChart(data) {
+            const ctx = document.getElementById("myChart");
+            if (ctx) {
+                // تحقق مما إذا كان هناك مخطط موجود وقم بتدميره
+                if (this.myChart) {
+                    this.myChart.destroy();
+                }
+
+                console.log("start createChart");
+                this.CreateChart = true;
+                this.myChart = new Chart(ctx, {
+                    type: "doughnut",
+                    data: {
+                        datasets: [
+                            {
+                                label: "المصروفات",
+                                data: data,
+                                backgroundColor: ["#336699", "#d8588c"],
+                                hoverOffset: 4,
+                            },
+                        ],
+                    },
+                });
+            } else {
+                console.log("error");
+            }
+        },
+        // createChart() {
+        //     const ctx = document.getElementById("myChart");
+        //     if (ctx) {
+        //         console.log("start createChart");
+        //         this.CreateChart = true;
+        //         new Chart(ctx, {
+        //             type: "doughnut",
+        //             data: {
+        //                 datasets: [
+        //                     {
+        //                         label: "المصروفات",
+        //                         data: ["90", "80"],
+        //                         backgroundColor: ["#336699", "#d8588c"],
+        //                         hoverOffset: 4,
+        //                     },
+        //                 ],
+        //             },
+        //         });
+        //     } else {
+        //         console.log("error");
+        //     }
+        // },
         downloadPDF() {
             const doc = new jsPDF("landscape");
             doc.addFileToVFS("Amiri-Regular.ttf", Amiri_Regular);
@@ -1303,6 +1574,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.v-container {
+    overflow: hidden;
+}
 .custom-font {
     font-family: "Cairo", sans-serif;
     font-size: 22px;
@@ -1327,11 +1601,8 @@ export default {
 }
 
 .timeline-container {
-    margin-top: 20px;
-    width: 90%;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+    width: calc(100% - 110px) !important;
+    margin: 20px !important;
 }
 
 .timeline {
@@ -1353,9 +1624,10 @@ export default {
     width: 5px;
     background-color: #eee;
     left: 8px;
-    top: 0;
     bottom: 0;
     margin: auto;
+    height: calc(100% + 35px);
+    top: 35px;
 }
 
 .timeline-item {
@@ -1375,14 +1647,14 @@ export default {
 .timeline-item-content::before {
     content: "";
     position: absolute;
-    top: 50%;
-    left: -27.2px;
+    bottom: -35px;
+    left: -26.7px;
     transform: translate(-50%, -50%);
     width: 12px;
     height: 12px;
     /* border-radius: 50%; */
     transform: rotate(45deg);
-    background-color: #2980b9;
+    background-color: var(--main-color);
 }
 .timeline-item-content::after {
     content: "";
@@ -1406,7 +1678,7 @@ export default {
 
 .month-name {
     font-weight: bold;
-    color: #2980b9;
+    color: var(--main-color);
 }
 
 .payment-section {
@@ -1418,10 +1690,11 @@ export default {
     position: absolute;
     right: 21px;
     width: 106px;
-    background: #2980b9;
+    background: var(--main-color);
     color: #fff;
     text-align: center;
-    line-height: 36px;
+    padding: 10px;
+    border-radius: 5px;
 }
 .timeline-item-content {
     margin-left: 30px;
@@ -1460,8 +1733,450 @@ export default {
     transition: all 0.5s ease-in-out;
     /* text-align: center; */
 }
+.v-card-text {
+    padding: 0;
+    margin-top: 15px;
+}
 .v-window__container {
     .title {
+        font-size: 22px;
+        font-weight: bold;
+        color: var(--main-color);
+        position: relative;
+        margin: 0 10px 30px;
+        &::before {
+            content: "";
+            position: absolute;
+            bottom: -15px;
+            height: 4px;
+            width: 100%;
+            background: var(--secound-color);
+        }
+    }
+
+    .box {
+        box-shadow: 0 0 10px #ddd;
+        padding: 10px;
+        margin: 0 10px 10px;
+        border-radius: 5px;
+        & > div {
+            width: 100%;
+            background: var(--secound-color);
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .feat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-top: 10px;
+            .name {
+                font-size: 19px;
+                font-weight: bold;
+                color: var(--therd-color);
+            }
+            .gender {
+                color: var(--therd-color);
+                font-weight: bold;
+                font-size: 16px;
+            }
+            .educational_level {
+                font-size: 17px;
+                color: var(--main-color);
+                font-weight: bold;
+            }
+            .Class {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                font-weight: bold;
+                color: var(--pink-color);
+                font-size: 16px;
+            }
+            .section {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                font-weight: bold;
+                color: var(--pink-color);
+                font-size: 16px;
+            }
+        }
+    }
+}
+.weekly {
+    .contain {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        row-gap: 20px;
+        flex-wrap: wrap;
+    }
+    .feat {
+        box-shadow: 0 0 10px #ddd;
+        margin: 0 10px 10px;
+        border-radius: 5px;
+        padding: 10px;
+        width: 48%;
+        flex-grow: 1;
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-radius: 5px;
+            position: relative;
+            margin: 0 auto 30px;
+            background: var(--secound-color);
+            &::before {
+                content: "";
+                position: absolute;
+                bottom: -20px;
+                height: 5px;
+                width: 100%;
+                background: var(--secound-color);
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+            & > div:first-child {
+                display: flex;
+                align-items: center;
+                font-size: 21px;
+                font-weight: bold;
+                color: var(--main-color);
+            }
+        }
+        .table {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+
+            & > div {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                & > div {
+                    display: flex;
+                    align-items: center;
+                    border: 1px solid var(--secound-color);
+                    width: 50%;
+                    justify-content: center;
+                    padding: 10px;
+                    font-size: 16px;
+                    color: var(--therd-color);
+                    font-weight: bold;
+                    text-align: center;
+                }
+            }
+        }
+    }
+}
+.monthly {
+    .header {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        flex-direction: column;
+
+        & > div {
+            width: auto;
+            margin: 0 10px;
+        }
+        .download {
+            height: 56px !important;
+            color: var(--main-color);
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 0 10px #ddd;
+            gap: 10px;
+            font-weight: bold;
+            text-align: center;
+            img {
+                width: 30px;
+            }
+        }
+    }
+    .Certificate {
+        margin: 20px 10px;
+        border: 2px outset var(--therd-color);
+        padding: 20px;
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        .head {
+            justify-content: space-between;
+            display: flex;
+            align-items: center;
+            position: relative;
+            flex-direction: column;
+            gap: 20px;
+            & > div {
+                width: 100%;
+            }
+            &::before {
+                content: "";
+                position: absolute;
+                bottom: -20px;
+                height: 5px;
+                width: 100%;
+                background: var(--secound-color);
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+            .right {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                font-size: 18px;
+                font-weight: bold;
+                color: var(--therd-color);
+            }
+            .left {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                color: var(--main-color);
+                font-weight: bold;
+                img {
+                    border-bottom-left-radius: 50%;
+                    border-bottom-right-radius: 50%;
+                    height: 97px;
+                }
+            }
+        }
+        .body {
+            overflow: auto;
+        }
+    }
+}
+.v-card--variant-elevated {
+    box-shadow: none;
+}
+.v-slide-group__content {
+    justify-content: center !important;
+    justify-content: center;
+}
+.v-progress-circular {
+    margin: 1rem;
+}
+.v-progress-circular {
+    margin: 0 !important;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 35px;
+}
+th,
+td {
+    border: 1px solid #000;
+    padding: 8px;
+    text-align: center;
+    color: var(--therd-color);
+    font-weight: bold;
+}
+th {
+    background-color: var(--secound-color);
+    color: var(--main-color);
+}
+.table {
+    margin: 0 10px;
+
+    .Row {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        & > div {
+            width: 50%;
+            padding: 10px;
+            border: 1px solid var(--secound-color);
+            display: flex;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--therd-color);
+        }
+    }
+}
+.Title {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 20px;
+    color: var(--main-color);
+    font-weight: bold;
+    background: var(--secound-color);
+    padding: 10px;
+    border-radius: 5px;
+    margin: 20px 10px;
+    &.invoice {
+        margin: 20px 0;
+    }
+}
+.v-row {
+    margin: 10px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    & > div {
+        width: 48%;
+    }
+}
+.details {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    justify-content: space-between;
+    margin: 0 10px;
+    .myChart {
+        width: 100px;
+    }
+    ul {
+        width: 100%;
+        list-style: none;
+        position: relative;
+        &::before {
+            content: "";
+            position: absolute;
+            right: -20px;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: var(--secound-color);
+            transform: translateX(-50%);
+        }
+        li {
+            position: relative;
+            margin-right: 20px;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 7px;
+            gap: 10px;
+            & > div {
+                font-weight: bold;
+            }
+            & > div:last-child {
+                color: var(--therd-color);
+                font-size: 12px;
+                text-align: center;
+                span {
+                    font-size: 16px;
+                }
+            }
+            span {
+                font-weight: bold;
+                color: var(--therd-color);
+                font-size: 16px;
+            }
+            svg {
+                position: absolute;
+                width: 15px;
+                height: 15px;
+                right: -20px;
+                top: 50%;
+                transform: translateY(-50%);
+                border-radius: 2px;
+                color: var(--main-color);
+            }
+
+            &:not(.li)::before {
+                content: "";
+                position: absolute;
+                width: 15px;
+                height: 15px;
+                right: -20px;
+                top: 50%;
+                transform: translateY(-50%);
+                border-radius: 2px;
+                background: var(--main-color);
+            }
+
+            &:last-of-type:not(.li) {
+                &::before {
+                    background: var(--pink-color);
+                }
+            }
+        }
+    }
+}
+.container_img {
+    display: flex;
+    flex-wrap: wrap;
+    width: calc(100% - 20px);
+    margin: 10px auto;
+    gap: 10px;
+    .img {
+        width: 32%;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        background: var(--secound-color);
+        border-radius: 5px;
+        img {
+            width: 100%;
+            border-top-right-radius: 5px;
+            border-top-left-radius: 5px;
+        }
+        .date {
+            padding: 10px;
+            border-radius: 5px;
+            color: var(--main-color);
+            font-weight: bold;
+        }
+    }
+}
+@media (max-width: 599px) {
+    .details_row {
+        flex-direction: column;
+        & > div {
+            width: 100%;
+        }
+    }
+    .container_img {
+        flex-direction: column;
+        .img {
+            width: 100%;
+            img {
+                width: 100%;
+            }
+        }
+    }
+}
+@media (min-width: 600px) and (max-width: 768px) {
+}
+@media (min-width: 769px) {
+    .weekly {
+        .contain {
+            row-gap: 10px;
+        }
+    }
+    .monthly {
+        .header {
+            width: 100%;
+            flex-direction: row;
+            gap: 10px;
+            & > div {
+                width: 48%;
+            }
+        }
+        .Certificate {
+            .head {
+                flex-direction: row;
+                & > div {
+                    width: auto;
+                }
+            }
+        }
     }
 }
 </style>

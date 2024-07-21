@@ -31,10 +31,7 @@
                                             >
                                                 {{ index + 1 }}
                                             </v-avatar>
-                                            {{
-                                                student.student_information[0]
-                                                    .student_name
-                                            }}
+                                            {{ student.student_name }}
                                         </h2>
                                         <div>
                                             <v-avatar color="info">
@@ -62,17 +59,11 @@
                                     >
                                         <h3 style="color: #2196f3">
                                             فصل
-                                            {{
-                                                student.student_information[1]
-                                                    .class
-                                            }}
+                                            {{ student.class }}
                                         </h3>
                                         <h3 style="color: #2196f3">
                                             قسم
-                                            {{
-                                                student.student_information[4]
-                                                    .section
-                                            }}
+                                            {{ student.section }}
                                         </h3>
                                     </div>
                                 </v-col>
@@ -385,9 +376,7 @@
                                                 >
                                                     <v-text-field
                                                         v-model="
-                                                            selectedStudent
-                                                                .student_information[0]
-                                                                .student_name
+                                                            selectedStudent.student_name
                                                         "
                                                         style="width: 50%"
                                                         :error-messages="
@@ -421,9 +410,7 @@
                                                         variant="outlined"
                                                         style="width: 50%"
                                                         v-model="
-                                                            selectedStudent
-                                                                .student_information[1]
-                                                                .class
+                                                            selectedStudent.class
                                                         "
                                                         :error-messages="
                                                             errors.class
@@ -442,9 +429,7 @@
                                                 >
                                                     <v-select
                                                         v-model="
-                                                            selectedStudent
-                                                                .student_information[3]
-                                                                .gender
+                                                            selectedStudent.gender
                                                         "
                                                         style="width: 100%"
                                                         :error-messages="
@@ -459,9 +444,7 @@
                                                 </div>
                                                 <v-select
                                                     v-model="
-                                                        selectedStudent
-                                                            .student_information[4]
-                                                            .section
+                                                        selectedStudent.section
                                                     "
                                                     :error-messages="
                                                         errors.section
@@ -491,9 +474,7 @@
                                                     >
                                                         <v-text-field
                                                             v-model="
-                                                                selectedStudent
-                                                                    .student_information[5]
-                                                                    .birthday
+                                                                selectedStudent.birthday
                                                             "
                                                             label="تاريخ الميلاد"
                                                             append-icon="mdi-calendar"
@@ -1208,9 +1189,7 @@
                                                                     >الاسم:</v-text-title
                                                                 >
                                                                 <v-text-title>{{
-                                                                    selectedStudent
-                                                                        .student_information[0]
-                                                                        .student_name
+                                                                    selectedStudent.student_name
                                                                 }}</v-text-title>
                                                             </v-col>
                                                             <v-col>
@@ -1946,10 +1925,7 @@
                                         "
                                     >
                                         <v-text-field
-                                            v-model="
-                                                form.student_information[0]
-                                                    .student_name
-                                            "
+                                            v-model="form.student_name"
                                             style="width: 50%"
                                             :error-messages="
                                                 errors.student_name
@@ -1981,10 +1957,7 @@
                                             ]"
                                             variant="outlined"
                                             style="width: 50%"
-                                            v-model="
-                                                form.student_information[1]
-                                                    .class
-                                            "
+                                            v-model="form.class"
                                             :error-messages="errors.class"
                                             label="الفصل"
                                             required
@@ -1998,10 +1971,7 @@
                                         "
                                     >
                                         <v-select
-                                            v-model="
-                                                form.student_information[3]
-                                                    .gender
-                                            "
+                                            v-model="form.gender"
                                             style="width: 100%"
                                             :error-messages="errors.gender"
                                             label="الجنس"
@@ -2012,9 +1982,7 @@
                                     </div>
 
                                     <v-select
-                                        v-model="
-                                            form.student_information[4].section
-                                        "
+                                        v-model="form.section"
                                         :error-messages="errors.section"
                                         label="القسم"
                                         required
@@ -2104,6 +2072,8 @@ import {
     getFirestore,
     getDoc,
     updateDoc,
+    query,
+    where,
 } from "firebase/firestore";
 const firebaseConfig = {
     apiKey: "AIzaSyBdk3sqIHjXvB2C-O-lvkRgMFpg8pemkno",
@@ -2153,6 +2123,7 @@ export default {
     data() {
         return {
             dialog_stu: false,
+            searchId: "", // متغير لتخزين معرف الطالب الذي تريد البحث عنه
             menuz: false,
             steps: [
                 "معلومات الطالب",
@@ -2198,14 +2169,13 @@ export default {
             searchQuery: "",
             students: [],
             form: {
-                student_information: [
-                    { student_name: "" },
-                    { class: "" },
-                    { educational_level: this.year },
-                    { gender: "" },
-                    { section: "" },
-                    { birthday: null },
-                ],
+                educational_level: this.year,
+                student_name: "",
+                class: "",
+                gender: "",
+                section: "",
+                birthday: null,
+
                 Guardian: [
                     { Guardian_name: "" },
                     { Guardian_phone: "" },
@@ -2428,6 +2398,7 @@ export default {
                 Notifications_Title: [],
                 Notifications_Details: [],
             },
+            selectedClassId: "",
             currentStep: "Step 1",
             progress: 75,
             classes: [
@@ -2566,8 +2537,11 @@ export default {
 
                 // Update only the necessary fields in Firestore
                 await updateDoc(studentDoc, {
-                    student_information:
-                        this.selectedStudent.student_information,
+                    student_name: this.selectedStudent.student_name,
+                    class: this.selectedStudent.class,
+                    gender: this.selectedStudent.gender,
+                    section: this.selectedStudent.section,
+                    birthday: this.selectedStudent.birthday,
                 });
 
                 console.log("Document updated successfully");
@@ -2592,8 +2566,11 @@ export default {
 
                 if (this.changesMade) {
                     await updateDoc(studentDoc, {
-                        student_information:
-                            this.selectedStudent.student_information,
+                        student_name: this.selectedStudent.student_name,
+                        class: this.selectedStudent.class,
+                        gender: this.selectedStudent.gender,
+                        section: this.selectedStudent.section,
+                        birthday: this.selectedStudent.birthday,
                     });
                     console.log("Document updated successfully");
                 }
@@ -2662,83 +2639,106 @@ export default {
         },
         async fetchStudents() {
             try {
-                const querySnapshot = await getDocs(collection(db, "students"));
+                const q = query(
+                    collection(db, "students"),
+                    where("educational_level", "==", this.year)
+                );
+                const querySnapshot = await getDocs(q);
                 this.students = querySnapshot.docs.map((doc) => {
                     const studentData = doc.data();
                     const student = {
                         id: doc.id,
                         ...studentData,
-                        student_information:
-                            studentData.student_information.map(
-                                (info, index) => {
-                                    if (
-                                        index === 5 &&
-                                        info.birthday &&
-                                        info.birthday.seconds
-                                    ) {
-                                        const date = new Date(
-                                            info.birthday.seconds * 1000
-                                        );
-                                        return {
-                                            ...info,
-                                            birthday: this.formatDate(date),
-                                        };
-                                    }
-                                    return info;
-                                }
-                            ),
+                        birthday: this.formatDate(
+                            new Date(studentData.birthday * 1000)
+                        ), // Convert birthday to string if it's a Timestamp
                     };
-
                     return student;
                 });
-
-                console.log("Fetched students:", this.students_class);
+                console.log("Fetched students:", this.students);
             } catch (error) {
                 console.error("Error fetching students:", error);
             }
         },
+
         async submit() {
             if (this.validateForm()) {
                 try {
-                    // Add student data to Firestore
+                    // Ensure the birthday is stored as a formatted string
+                    const formattedBirthday = this.formatDate(
+                        this.form.birthday
+                    );
+
                     const docRef = await addDoc(collection(db, "students"), {
-                        student_information: this.form.student_information,
+                        student_name: this.form.student_name,
+                        class: this.form.class,
+                        gender: this.form.gender,
+                        section: this.form.section,
+                        birthday: this.form.birthday,
+                        Results: this.form.Results,
+                        payments: this.form.payments,
+                        Notifications: this.form.Notifications,
+                        photos: this.form.photos,
+                        educational_level: this.year,
+                        year: new Date().getFullYear(),
+                    });
+
+                    const newStudentId = docRef.id;
+
+                    const newStudent = {
+                        id: newStudentId,
+                        student_name: this.form.student_name,
+                        class: this.form.class,
+                        gender: this.form.gender,
+                        section: this.form.section,
+                        birthday: formattedBirthday,
                         Results: this.form.Results,
                         payments: this.form.payments,
                         Notifications: this.form.Notifications,
                         photos: this.form.photos,
                         year: new Date().getFullYear(),
-                    });
-
-                    // Get the ID of the newly added document
-                    const newStudentId = docRef.id;
-                    // Construct the student object to add to the local array
-                    const newStudent = {
-                        id: newStudentId,
-                        student_information: this.form.student_information,
-                        Results: this.form.Results,
-                        payments: this.form.payments,
-                        Notifications: this.form.Notifications,
-                        photos: this.form.photos,
-                        year: this.years,
                     };
 
-                    // Push the new student to the local array
                     this.students.push(newStudent);
 
-                    // Reset form fields and close dialog
                     this.dialog_addstudent = false;
                     this.formattedDate = "";
+                    this.formattedBirthday = "";
                     this.handleReset();
-                    await this.fetchStudents();
                     this.dialogStore.hideAddStudentDialog();
                     this.$emit("close-dialog");
                     console.log("Added new student:", newStudent);
+
+                    await this.fetchStudents();
                 } catch (error) {
                     console.error("Error adding document:", error);
                 }
             }
         },
+
+        formatDate(date) {
+            const d = new Date(date);
+            const year = d.getFullYear();
+            const month = String(d.getMonth() + 1).padStart(2, "0");
+            const day = String(d.getDate()).padStart(2, "0");
+            return `${year}/${month}/${day}`;
+        },
+        // formatDateh(birthday) {
+        //     if (birthday.seconds) {
+        //         const date = new Date(birthday.seconds * 1000);
+        //         const day = date.getDate();
+        //         const month = date.getMonth() + 1; // Months are zero-based
+        //         const year = date.getFullYear();
+        //         return `${day}/${month}/${year}`;
+        //     } else {
+        //         return birthday; // If it's already formatted
+        //     }
+        // },
+        // Example function to generate a unique ID
+        generateUniqueId() {
+            return "id-" + Math.random().toString(36).substr(2, 9);
+        },
+
         openDeleteDialog(studentId) {
             this.dialog_stu = studentId;
         },
@@ -2769,14 +2769,12 @@ export default {
         },
         handleReset() {
             this.form = {
-                student_information: [
-                    { student_name: "" },
-                    { class: "" },
-                    { educational_level: this.year },
-                    { gender: "" },
-                    { section: "" },
-                    { birthday: null },
-                ],
+                educational_level: this.year,
+                student_name: "",
+                class: "",
+                gender: "",
+                section: "",
+                birthday: "",
                 Guardian: [
                     { Guardian_name: "" },
                     { Guardian_phone: "" },
@@ -2973,25 +2971,25 @@ export default {
             let isValid = true;
             // Clear previous error messages
             // Validation rules
-            if (!this.form.student_information[0].student_name) {
-                this.errors.student_name.push("اسم الطالب مطلوب.");
-                isValid = false;
-            }
-            if (!this.form.student_information[1].class) {
-                this.errors.class.push("الفصل مطلوب.");
-            }
-            if (!this.form.student_information[2].educational_level) {
-                this.errors.educational_level.push("المستوى التعليمي مطلوب.");
-            }
-            if (!this.form.student_information[3].gender) {
-                this.errors.gender.push("الجنس مطلوب.");
-            }
-            if (!this.form.student_information[4].section) {
-                this.errors.section.push("القسم مطلوب.");
-            }
-            if (!this.form.student_information[5].birthday) {
-                this.errors.birthday.push("تاريخ الميلاد مطلوب.");
-            }
+            // if (!this.form.student_information[0].student_name) {
+            //     this.errors.student_name.push("اسم الطالب مطلوب.");
+            //     isValid = false;
+            // }
+            // if (!this.form.student_information[1].class) {
+            //     this.errors.class.push("الفصل مطلوب.");
+            // }
+            // if (!this.form.student_information[2].educational_level) {
+            //     this.errors.educational_level.push("المستوى التعليمي مطلوب.");
+            // }
+            // if (!this.form.student_information[3].gender) {
+            //     this.errors.gender.push("الجنس مطلوب.");
+            // }
+            // if (!this.form.student_information[4].section) {
+            //     this.errors.section.push("القسم مطلوب.");
+            // }
+            // if (!this.form.student_information[5].birthday) {
+            //     this.errors.birthday.push("تاريخ الميلاد مطلوب.");
+            // }
 
             return isValid;
         },
@@ -3020,7 +3018,7 @@ export default {
                             showDetails: false,
                         }))
                         .filter((student) =>
-                            student.student_information[0].student_name
+                            student.student_name
                                 .toLowerCase()
                                 .includes(trimmedQuery)
                         );
@@ -3067,22 +3065,16 @@ export default {
         },
         // l;
         initializeTempDate() {
-            // this.tempDate = this.form.student_information[5].birthday;
-            this.tempDate = this.form.student_information[5].birthday;
+            // this.tempDate = this.form.birthday;
+            this.tempDate = this.form.birthday;
             new Date().toISOString().substr(0, 10);
         },
         confirmDate() {
-            this.form.student_information[5].birthday = this.tempDate;
+            this.form.birthday = this.tempDate;
             this.formattedDate = this.formatDate(this.tempDate);
             this.menu = false;
         },
-        formatDate(date) {
-            const d = new Date(date);
-            const year = d.getFullYear();
-            const month = String(d.getMonth() + 1).padStart(2, "0");
-            const day = String(d.getDate()).padStart(2, "0");
-            return `${year}/${month}/${day}`;
-        },
+
         // ik
         async addSubject(studentId) {
             try {
@@ -3572,7 +3564,7 @@ export default {
         },
     },
     watch: {
-        "form.student_information[5].birthday"(newVal) {
+        "form.birthday"(newVal) {
             this.formattedDate = this.formatDate(newVal);
         },
 
@@ -3588,26 +3580,20 @@ export default {
         filteredStudents() {
             if (this.selectedSection === "الكل") {
                 return this.students.filter(
-                    (student) =>
-                        student.student_information[2].educational_level ===
-                        this.year
+                    (student) => student.educational_level === this.year
                 );
             }
             return this.students.filter(
                 (student) =>
-                    student.student_information[2].educational_level ===
-                        this.year &&
-                    student.student_information[4].section ===
-                        this.selectedSection
+                    student.educational_level === this.year &&
+                    student.section === this.selectedSection
             );
         },
         sortedStudents() {
             const studentsToSort = this.filteredStudents;
             const sorted = [...studentsToSort].sort((a, b) => {
-                const nameA =
-                    a.student_information[0].student_name.toUpperCase();
-                const nameB =
-                    b.student_information[0].student_name.toUpperCase();
+                const nameA = a.student_name.toUpperCase();
+                const nameB = b.student_name.toUpperCase();
 
                 if (this.$parent.isSortedAscending) {
                     // الترتيب من الألف إلى الياء
@@ -3767,7 +3753,7 @@ export default {
 }
 
 .v-overlay__scrim {
-    background: rgb(0 0 0 / 36%) !important;
+    background: rgb(0 0 0 / 26%) !important;
 }
 .v-dialog > .v-overlay__content > .v-card,
 .v-dialog > .v-overlay__content > .v-sheet,
