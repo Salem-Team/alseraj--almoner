@@ -64,6 +64,8 @@ export const useNews = defineStore("News", {
         text0: "لا يوجد أخبار",
         snackbar: false,
         snackbar2: false,
+        snackbar3: false,
+        text12: " تم التعديل بنجاح",
         text10: " تم الاضافة بنجاح",
         text11: " تم الحذف بنجاح",
     }),
@@ -112,7 +114,6 @@ export const useNews = defineStore("News", {
                 if (this.New.image) {
                     // Step 1: Upload the image and get the download URL
                     const imageUrl = await this.upload_Image(this.New.image);
-
                     // Get current local time
                     const currentTime = Timestamp.now();
 
@@ -135,7 +136,6 @@ export const useNews = defineStore("News", {
                     await updateDoc(docRef, {
                         id: docRef.id,
                     });
-
                     console.log("Document written with ID: ", docRef.id);
 
                     // Step 4: Refresh news data
@@ -181,6 +181,7 @@ export const useNews = defineStore("News", {
                     this.News.push(Data);
                 });
                 console.log("this.News", this.News);
+                this.set_description();
                 if (this.News.length === 0) {
                     this.empty = true;
                 } else {
@@ -191,15 +192,23 @@ export const useNews = defineStore("News", {
                 console.error("Error retrieving data:", error);
             }
         },
-
+        async set_description() {
+            this.News.forEach((New) => {
+                console.log("working");
+                document.querySelectorAll(".description").innerHTML =
+                    New.description;
+            });
+        },
         // Action method to get limited news data (first 3 items)
         async Get_splice() {
             try {
                 this.News = [];
                 const decryption = useSecureDataStore();
                 this.loading1 = true;
+
                 const querySnapshot = await getDocs(collection(db, "News"));
                 querySnapshot.forEach((doc) => {
+                    this.set_description(this.Description_Information);
                     const Data = {
                         id: doc.id,
                         title: decryption.decryptData(
@@ -220,6 +229,7 @@ export const useNews = defineStore("News", {
                 });
                 this.News = this.News.slice(0, 3);
                 console.log("this.News", this.News);
+                this.set_description();
                 if (this.News.length === 0) {
                     this.empty = true;
                 } else {
@@ -276,11 +286,14 @@ export const useNews = defineStore("News", {
             this.Time_Condition = New.time;
         },
         // Action method to handle file change event and set image preview
-        onFileChange(event) {
+        async onFileChange(event) {
             const file = event.target.files[0];
             if (file) {
                 // Convert file to a URL that can be used as an image source
                 this.image = URL.createObjectURL(file);
+                // Step 1: Upload the image and get the download URL
+                const imageUrl = await this.upload_Image(this.New.image);
+                this.Image_Information = imageUrl;
             } else {
                 this.image = null;
             }
@@ -292,11 +305,7 @@ export const useNews = defineStore("News", {
                 const currentTime = Timestamp.now();
                 const secrureDataStore = useSecureDataStore();
                 const docRef = doc(db, "News", NewId);
-                // Step 1: Upload the image and get the download URL
-                const imageUrl = await this.upload_Image(
-                    this.Image_Information
-                );
-                // Step 1: Update the document in Firestore
+                // Update the document in Firestore
                 await updateDoc(docRef, {
                     title: secrureDataStore.encryptData(
                         this.Title_Information,
@@ -307,12 +316,14 @@ export const useNews = defineStore("News", {
                         "12343a"
                     ),
                     time: currentTime,
-                    image: secrureDataStore.encryptData(imageUrl, "12343a"),
+                    image: secrureDataStore.encryptData(
+                        this.Image_Information,
+                        "12343a"
+                    ), // Assign the determined image value here
                 });
-
-                // Step 2: Refresh news data
+                // Refresh news data
                 this.Get_data();
-
+                this.snackbar3 = true;
                 this.loading = false;
                 this.dialog_1 = false;
             } catch (error) {

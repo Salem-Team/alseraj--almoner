@@ -62,6 +62,8 @@ export const useadmin = defineStore("admin", {
         loading1: false, // Another loading state
         snackbar: false,
         snackbar2: false,
+        snackbar3: false,
+        text12: " تم التعديل بنجاح",
         text10: " تم الاضافة بنجاح",
         text11: " تم الحذف بنجاح",
     }),
@@ -209,6 +211,7 @@ export const useadmin = defineStore("admin", {
                 });
                 this.Get_data(); // Refresh user data
                 this.loading = false;
+                this.snackbar3 = true;
                 this.dialog_1 = false; // Close dialog
             } catch (error) {
                 console.error("Error updating user:", error);

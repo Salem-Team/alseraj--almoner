@@ -182,7 +182,7 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
 
                     // Step 4: Refresh photo data
                     this.Get_data();
-
+                    this.snackbar = true;
                     this.loading = false;
                     this.dialog = false;
                 } else {
@@ -358,6 +358,7 @@ export const usePhoto_Gallery = defineStore("Photo_Gallery", {
         photo_Information(Photo) {
             this.Photo_Information = Photo.image;
             this.Video_Information = Photo.video;
+            this.File_Information = Photo.File_type;
             this.Id_Information = Photo.id;
             console.log(Photo.id);
         },
