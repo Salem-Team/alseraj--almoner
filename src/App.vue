@@ -105,6 +105,10 @@ body {
         }
     }
 }
+.v-overlay__scrim {
+    background: rgb(0 0 0 / 36%) !important;
+}
+
 .v-container,
 .container {
     width: 90% !important;
