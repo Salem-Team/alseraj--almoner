@@ -2674,7 +2674,7 @@ export default {
                         class: this.form.class,
                         gender: this.form.gender,
                         section: this.form.section,
-                        birthday: this.form.birthday,
+                        birthday: formattedBirthday,
                         Results: this.form.Results,
                         payments: this.form.payments,
                         Notifications: this.form.Notifications,
@@ -2703,7 +2703,6 @@ export default {
 
                     this.dialog_addstudent = false;
                     this.formattedDate = "";
-                    this.formattedBirthday = "";
                     this.handleReset();
                     this.dialogStore.hideAddStudentDialog();
                     this.$emit("close-dialog");
