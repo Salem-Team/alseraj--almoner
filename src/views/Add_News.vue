@@ -135,7 +135,6 @@
                                 prepend-icon=""
                                 required
                                 prepend-inner-icon="mdi-paperclip"
-                                @input="news.upload_Image"
                             >
                             </v-file-input>
                             <!-- Show progress bar if New.image is truthy (assuming New is a data property) -->
@@ -150,87 +149,25 @@
                                 </template>
                             </v-progress-linear>
                             <br />
-                            <div class="d-flex justify-space-between pb-0">
-                                <v-btn-toggle
-                                    v-model="formatting"
-                                    variant="outlined"
-                                    divided
-                                    multiple
-                                >
-                                    <v-btn>
-                                        <v-icon
-                                            icon="mdi-format-italic"
-                                        ></v-icon>
-                                    </v-btn>
-
-                                    <v-btn>
-                                        <v-icon icon="mdi-format-bold"></v-icon>
-                                    </v-btn>
-
-                                    <v-btn>
-                                        <v-icon
-                                            icon="mdi-format-underline"
-                                        ></v-icon>
-                                    </v-btn>
-
-                                    <v-btn>
-                                        <div
-                                            class="d-flex align-center flex-column justify-center"
-                                        >
-                                            <v-icon
-                                                icon="mdi-format-color-text"
-                                            ></v-icon>
-
-                                            <v-sheet
-                                                color="primary"
-                                                height="4"
-                                                width="26"
-                                                tile
-                                            ></v-sheet>
-                                        </div>
-                                    </v-btn>
-                                </v-btn-toggle>
-
-                                <v-btn-toggle
-                                    v-model="alignment"
-                                    variant="outlined"
-                                    divided
-                                >
-                                    <v-btn>
-                                        <v-icon
-                                            icon="mdi-format-align-center"
-                                        ></v-icon>
-                                    </v-btn>
-
-                                    <v-btn>
-                                        <v-icon
-                                            icon="mdi-format-align-left"
-                                        ></v-icon>
-                                    </v-btn>
-
-                                    <v-btn>
-                                        <v-icon
-                                            icon="mdi-format-align-right"
-                                        ></v-icon>
-                                    </v-btn>
-                                </v-btn-toggle>
-                            </div>
-                            <v-textarea
+                            <p>وصف قصير</p>
+                            <ckeditor
                                 v-model="New.description"
-                                :rules="[
-                                    (v) => !!v || 'الرجاء إدخال وصف قصير',
-                                    (v) =>
-                                        (v && v.length <= 150) ||
-                                        'يجب أن يكون الوصف 150 حرفًا كحد أقصى',
-                                ]"
-                                label="وصف قصير"
-                                :counter="150"
-                                rows="4"
-                                no-resize
-                                variant="outlined"
-                                :maxlength="150"
-                                required
-                            ></v-textarea>
+                                id="Description"
+                                :editor="editor"
+                                @input="updateCharCount"
+                                ref="ckeditor"
+                            ></ckeditor>
+                            <p>
+                                عدد الحروف: {{ charCount }} /
+                                {{ maxChars }}
+                                <span
+                                    v-if="charCount >= maxChars"
+                                    style="color: red"
+                                >
+                                    (Maximum characters reached)</span
+                                >
+                            </p>
+
                             <v-btn
                                 class="d-flex align-center mt-4 mb-4"
                                 type="submit"
@@ -278,7 +215,6 @@
                                 required
                             ></v-text-field>
                             <v-file-input
-                                v-model="news.Image_Information"
                                 label="صورة"
                                 accept="image/*"
                                 variant="outlined"
@@ -315,26 +251,24 @@
                                 ></v-img>
                             </div>
                             <br />
+                            <p>وصف قصير</p>
                             <ckeditor
                                 v-model="news.Description_Information"
+                                id="Description"
                                 :editor="editor"
+                                @input="updateCharCount2"
+                                ref="ckeditor"
                             ></ckeditor>
-                            <v-textarea
-                                v-model="news.Description_Information"
-                                :rules="[
-                                    (v) => !!v || 'الرجاء إدخال وصف قصير',
-                                    (v) =>
-                                        (v && v.length <= 150) ||
-                                        'يجب أن يكون الوصف 150 حرفًا كحد أقصى',
-                                ]"
-                                label="وصف قصير"
-                                :counter="150"
-                                required
-                                rows="4"
-                                no-resize
-                                variant="outlined"
-                                :maxlength="150"
-                            ></v-textarea>
+                            <p>
+                                عدد الحروف: {{ charCount }} /
+                                {{ maxChars }}
+                                <span
+                                    v-if="charCount >= maxChars"
+                                    style="color: red"
+                                >
+                                    (Maximum characters reached)</span
+                                >
+                            </p>
                             <v-btn
                                 type="submit"
                                 :loading="loading"
@@ -370,7 +304,8 @@
                             />
                             <font-awesome-icon
                                 :icon="['fas', 'trash']"
-                                @click="news.dialog_3 = true"
+                                @click="news.New_Information(New)"
+                                @click.="news.dialog_3 = true"
                             />
                             <v-img
                                 :src="New.image"
@@ -468,7 +403,12 @@
                         color="var(--pink-color)"
                         :loading="loading"
                         :disabled="loading"
-                        @click="news.delete_New(New.id, New.image)"
+                        @click="
+                            news.delete_New(
+                                news.Id_Information,
+                                news.Image_Information
+                            )
+                        "
                         style="
                             color: #fff;
                             font-weight: bold;
@@ -492,6 +432,11 @@
         :text="text11"
         :snackbar1="snackbar2"
     />
+    <confirm_message
+        v-if="snackbar3 === true"
+        :text="text12"
+        :snackbar1="snackbar3"
+    />
 </template>
 
 <script>
@@ -508,6 +453,8 @@ export default defineComponent({
     data() {
         return {
             editor: ClassicEditor,
+            charCount: 0,
+            maxChars: 150,
         };
     },
     components: {
@@ -520,7 +467,6 @@ export default defineComponent({
         this.editor.defaultConfig = {
             toolbar: {
                 items: [
-                    "center",
                     "heading",
                     "|",
                     "bold",
@@ -531,7 +477,6 @@ export default defineComponent({
                     "blockQuote",
                     "undo",
                     "redo",
-                    "Special Characters",
                 ],
             },
         };
@@ -545,11 +490,14 @@ export default defineComponent({
             News,
             text10,
             text11,
+            text12,
+            snackbar3,
             snackbar,
             snackbar2,
             image,
             text0,
             empty,
+            set_description,
             delete_photo,
             alignment,
             dialog_3,
@@ -564,6 +512,8 @@ export default defineComponent({
             Get_data,
             upload_Image,
             New_Information,
+            Id_Information,
+            Image_Information,
             progress,
         } = storeToRefs(news);
 
@@ -571,9 +521,12 @@ export default defineComponent({
         return {
             New,
             Add_News,
+            set_description,
             alignment,
             text10,
             text11,
+            text12,
+            snackbar3,
             snackbar,
             snackbar2,
             image,
@@ -593,8 +546,66 @@ export default defineComponent({
             dialog,
             dialog_1,
             progress,
+            Id_Information,
+            Image_Information,
             News,
         };
+    },
+    methods: {
+        updateCharCount2() {
+            this.charCount = this.news.Description_Information.length;
+
+            // Limit the text length
+            if (this.charCount > this.maxChars) {
+                this.news.Description_Information =
+                    this.news.Description_Information.substring(
+                        0,
+                        this.maxChars
+                    );
+                this.charCount = this.maxChars;
+                this.$refs.ckeditor.editor.setData(
+                    this.news.Description_Information
+                ); // Update CKEditor content
+            }
+        },
+        updateCharCount() {
+            this.charCount = this.New.description.length;
+
+            // Limit the text length
+            if (this.charCount > this.maxChars) {
+                this.New.description = this.New.description.substring(
+                    0,
+                    this.maxChars
+                );
+                this.charCount = this.maxChars;
+                this.$refs.ckeditor.editor.setData(this.New.description); // Update CKEditor content
+            }
+        },
+    },
+    watch: {
+        "New.description": function (newValue) {
+            if (newValue.length > this.maxChars) {
+                this.New.description = newValue.substring(0, this.maxChars);
+                this.charCount = this.maxChars;
+                this.$refs.ckeditor.editor.setData(this.New.description); // Update CKEditor content
+            } else {
+                this.charCount = newValue.length;
+            }
+        },
+        Description_Information: function (newValue) {
+            if (newValue.length > this.maxChars) {
+                this.Description_Information = newValue.substring(
+                    0,
+                    this.maxChars
+                );
+                this.charCount = this.maxChars;
+                this.$refs.ckeditor.editor.setData(
+                    this.Description_Information
+                ); // Update CKEditor content
+            } else {
+                this.charCount = newValue.length;
+            }
+        },
     },
 });
 </script>

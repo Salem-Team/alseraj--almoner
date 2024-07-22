@@ -89,6 +89,8 @@ export const useJobs = defineStore("job", {
         text2: "لا يوجد إشعارات",
         snackbar: false,
         snackbar2: false,
+        snackbar3: false,
+        text12: " تم التعديل بنجاح",
         text10: " تم الاضافة بنجاح",
         text11: " تم الحذف بنجاح",
     }),
@@ -676,6 +678,7 @@ export const useJobs = defineStore("job", {
                     time: currentTime,
                 });
                 this.Get_data();
+                this.snackbar3 = true;
                 this.loading = false;
                 this.dialog_1 = false;
             } catch (error) {

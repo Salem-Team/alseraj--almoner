@@ -2114,6 +2114,7 @@ const firebaseConfig = {
     appId: "1:462211256149:web:a03ace3c70b306620169dc",
 };
 import { getStorage } from "firebase/storage";
+import { gsap } from "gsap";
 import { useToast } from "vue-toastification";
 import "vue-toastification/dist/index.css"; // Import the CSS file
 import { initializeApp } from "@firebase/app";
@@ -2135,10 +2136,6 @@ export default {
         selectedSection: {
             type: String,
             default: "الكل",
-        },
-        dialog: {
-            type: Boolean,
-            required: true,
         },
     },
     setup() {
@@ -2697,6 +2694,7 @@ export default {
                 console.error("Error fetching students:", error);
             }
         },
+
         async submit() {
             if (this.validateForm()) {
                 try {
@@ -2712,6 +2710,7 @@ export default {
 
                     // Get the ID of the newly added document
                     const newStudentId = docRef.id;
+
                     // Construct the student object to add to the local array
                     const newStudent = {
                         id: newStudentId,
@@ -2728,11 +2727,10 @@ export default {
 
                     // Reset form fields and close dialog
                     this.dialog_addstudent = false;
-                    this.formattedDate = "";
                     this.handleReset();
                     await this.fetchStudents();
                     this.dialogStore.hideAddStudentDialog();
-                    this.$emit("close-dialog");
+
                     console.log("Added new student:", newStudent);
                 } catch (error) {
                     console.error("Error adding document:", error);
@@ -2772,7 +2770,7 @@ export default {
                 student_information: [
                     { student_name: "" },
                     { class: "" },
-                    { educational_level: this.year },
+                    { educational_level: "" },
                     { gender: "" },
                     { section: "" },
                     { birthday: null },
@@ -3279,6 +3277,7 @@ export default {
             const selectedStudent = this.students.find(
                 (selectedStudent) => selectedStudent.id === studentId
             );
+
             if (selectedStudent) {
                 this.editedNotifications = {
                     ...selectedStudent.Notifications[index],
@@ -3305,17 +3304,14 @@ export default {
                     );
                     await updateDoc(studentRef, studentData);
                     this.dialogAddNotice = false;
-                    this.AddNotice = {
-                        NoticeTitle: this.AddNotice.NoticeTitle,
-                        theDescription: this.AddNotice.theDescription,
-                        NotificationType: this.AddNotice.NotificationType,
-                    };
+
                     await this.fetchStudents();
                 }
             } catch (error) {
                 console.error("Error adding subject:", error);
             }
         },
+
         async deleteNotification(studentId, NotificatIndex) {
             try {
                 const studentRef = doc(db, "students", studentId);
@@ -3514,6 +3510,34 @@ export default {
                 }
             }
         },
+        animateSlideChange() {
+            const slides = [
+                this.$refs.slide1,
+                this.$refs.slide2,
+                this.$refs.slide3,
+                this.$refs.slide4,
+                this.$refs.slide5,
+                this.$refs.slide6,
+                this.$refs.slide7,
+            ];
+
+            slides.forEach((slide, index) => {
+                gsap.fromTo(
+                    slide,
+                    {
+                        opacity: 0.5, // البداية من opacity 0.5
+                        x: 100 * (index + 1), // الوضع الأولي للإحداثي y (من الأعلى)
+                    },
+                    {
+                        duration: 0.7,
+                        opacity: 1,
+                        x: 0,
+                        ease: "power2.out", // نوع الانتقال
+                    }
+                );
+            });
+        },
+
         async updateMonthlyDegrees(degrees) {
             if (!this.selectedStudent) {
                 this.console.error("Error: selectedStudent is null");
@@ -3575,7 +3599,15 @@ export default {
         "form.student_information[5].birthday"(newVal) {
             this.formattedDate = this.formatDate(newVal);
         },
-
+        "Guardian[0].Guardian_name": "updateGuardian",
+        "Guardian[1].Guardian_phone": "updateGuardian",
+        "Guardian[2].Guardian_email": "updateGuardian",
+        "Guardian[3].Guardian_password": "updateGuardian",
+        "Guardian[4].Brothers_in_school": "updateGuardian",
+        "Guardian[5].brother": {
+            handler: "updateGuardian",
+            deep: true, // To detect changes in nested array elements
+        },
         selectedMonthlyDegrees: {
             handler() {
                 // Save changes to Firebase
@@ -3765,14 +3797,7 @@ export default {
 .notification-card .v-icon:hover {
     color: #1e88e5;
 }
-
 .v-overlay__scrim {
-    background: rgb(0 0 0 / 36%) !important;
-}
-.v-dialog > .v-overlay__content > .v-card,
-.v-dialog > .v-overlay__content > .v-sheet,
-.v-dialog > .v-overlay__content > form > .v-card,
-.v-dialog > .v-overlay__content > form > .v-sheet {
-    box-shadow: none !important;
+    display: none;
 }
 </style>

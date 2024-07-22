@@ -79,7 +79,7 @@
                         class="card"
                         v-for="photo in Photos"
                         :key="photo.id"
-                        width="200px"
+                        width="400px"
                         max-width="25%"
                         @click.="photos.photo_Information(photo)"
                         @click="dialog_6 = true"
@@ -115,12 +115,18 @@
                                     ></v-btn>
                                 </div>
                                 <v-carousel hide-delimiters>
-                                    <v-carousel-item
-                                        class="pa-5"
-                                        :src="photos.Photo_Information"
-                                        height="400"
-                                        cover
-                                    ></v-carousel-item>
+                                    <div>
+                                        <v-carousel-item
+                                            class="pa-5"
+                                            v-if="
+                                                photos.File_Information ==
+                                                'صورة'
+                                            "
+                                            :src="photos.Photo_Information"
+                                            height="400"
+                                            cover
+                                        ></v-carousel-item>
+                                    </div>
                                     <div
                                         v-for="photo in Photos"
                                         :key="photo.id"
@@ -132,8 +138,7 @@
                                             height="400"
                                             cover
                                         ></v-carousel-item>
-                                    </div>
-                                </v-carousel> </v-card
+                                    </div> </v-carousel></v-card
                         ></v-dialog>
                     </v-card>
                 </div>

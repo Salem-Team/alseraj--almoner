@@ -532,6 +532,11 @@
         :text="text11"
         :snackbar1="snackbar2"
     />
+    <confirm_message
+        v-if="snackbar3 === true"
+        :text="text12"
+        :snackbar1="snackbar3"
+    />
 </template>
 
 <script>
@@ -562,6 +567,8 @@ export default defineComponent({
             dialog_9,
             text10,
             text11,
+            text12,
+            snackbar3,
             snackbar,
             snackbar2,
             text0,
@@ -606,6 +613,8 @@ export default defineComponent({
             loading1,
             text10,
             text11,
+            text12,
+            snackbar3,
             snackbar,
             snackbar2,
             CV_Information,

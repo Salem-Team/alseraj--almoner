@@ -530,8 +530,6 @@
             :year="year"
             :sortStudents="sortStudentsByYearAndAlphabetically"
             :selectedSection="selectedSection"
-            :dialog="dialog"
-            @close-dialog="closeDialog"
         />
     </div>
 </template>
@@ -894,9 +892,6 @@ export default {
             } catch (error) {
                 console.error("Error deleting photo:", error);
             }
-        },
-        closeDialog() {
-            this.dialog = false;
         },
     },
     async mounted() {

@@ -514,7 +514,4 @@ img.pluse {
         align-items: stretch !important;
     }
 }
-.v-overlay__scrim {
-    background: rgb(0 0 0 / 36%) !important;
-}
 </style>
