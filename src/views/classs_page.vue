@@ -60,9 +60,7 @@
                                     link
                                     @click="subject = true"
                                 >
-                                    <v-card-title @click="dialog = false"
-                                        >إضافة مواد</v-card-title
-                                    >
+                                    <v-card-title>إضافة مواد</v-card-title>
                                 </v-card>
                                 <add-subject
                                     @closeDialog="closeDialog"

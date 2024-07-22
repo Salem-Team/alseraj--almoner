@@ -74,7 +74,11 @@
                         </v-col>
                     </v-row>
                 </v-card-text>
-
+                <v-card-actions>
+                    <v-btn color="red" @click="closeSubjectDialog">
+                        إلغاء
+                    </v-btn>
+                </v-card-actions>
                 <!-- Add Subject Dialog -->
                 <v-dialog
                     v-model="dialogAddSUb"
@@ -194,7 +198,6 @@ import {
     writeBatch,
 } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
-
 export default {
     props: ["localSubject"],
     data() {
@@ -233,7 +236,6 @@ export default {
         async addSubject() {
             this.v$.$validate();
             if (this.v$.$error) return;
-
             const newSubject = {
                 title: this.title,
                 maxNumber: this.maxNumber,
@@ -241,7 +243,6 @@ export default {
                 id: uuidv4(),
                 show: true,
             };
-
             try {
                 const classRoomsRef = collection(db, "class_rooms");
                 const q = query(
@@ -249,14 +250,12 @@ export default {
                     where("grade", "==", this.gradeId)
                 );
                 const querySnapshot = await getDocs(q);
-
                 const batch = writeBatch(db);
                 querySnapshot.forEach((doc) => {
                     const subjects = doc.data().subjects || [];
                     subjects.push(newSubject);
                     batch.update(doc.ref, { subjects });
                 });
-
                 await batch.commit();
                 this.closeAddSUbDialog();
                 this.fetchGradeData(); // Refresh the data after adding
@@ -267,6 +266,10 @@ export default {
         openEditNotificationDialog(subjectId, index) {
             this.editedNotification = { ...this.subjects[index] };
             this.editNotificationDialog = true;
+        },
+        closeSubjectDialog() {
+            this.subject = false;
+            this.$emit("closeDialog", false);
         },
         closeEditNotificationDialog() {
             this.editNotificationDialog = false;
@@ -279,7 +282,6 @@ export default {
                     where("grade", "==", this.gradeId)
                 );
                 const querySnapshot = await getDocs(q);
-
                 const batch = writeBatch(db);
                 querySnapshot.forEach((doc) => {
                     const subjects = doc.data().subjects || [];
@@ -291,7 +293,6 @@ export default {
                         batch.update(doc.ref, { subjects });
                     }
                 });
-
                 await batch.commit();
                 this.closeEditNotificationDialog();
                 this.fetchGradeData(); // Refresh the data after editing
@@ -307,7 +308,6 @@ export default {
                     where("grade", "==", this.gradeId)
                 );
                 const querySnapshot = await getDocs(q);
-
                 const batch = writeBatch(db);
                 querySnapshot.forEach((doc) => {
                     let subjects = doc.data().subjects || [];
@@ -316,7 +316,6 @@ export default {
                     );
                     batch.update(doc.ref, { subjects });
                 });
-
                 await batch.commit();
                 this.subjects.splice(index, 1);
             } catch (error) {
@@ -331,7 +330,6 @@ export default {
                     where("grade", "==", this.gradeId)
                 );
                 const querySnapshot = await getDocs(q);
-
                 const data = [];
                 querySnapshot.forEach((doc) => {
                     const subjects = doc.data().subjects || [];
