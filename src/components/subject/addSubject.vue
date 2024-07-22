@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="text-black">
         <!-- Main Dialog -->
         <v-dialog
             v-model="subject"

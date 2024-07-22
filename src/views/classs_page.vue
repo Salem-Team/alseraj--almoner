@@ -66,6 +66,7 @@
                                     @closeDialog="closeDialog"
                                     :localSubject="subject"
                                 />
+
                                 <v-card
                                     style="
                                         background-color: var(
