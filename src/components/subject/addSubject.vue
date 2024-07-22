@@ -95,6 +95,11 @@
                                     v-model="title"
                                     label="عنوان الماده"
                                     required
+                                    :error-messages="
+                                        v$.title.$error
+                                            ? v$.title.$errors[0].$message
+                                            : ''
+                                    "
                                 ></v-text-field>
                                 <v-text-field
                                     v-model="maxNumber"
@@ -102,6 +107,11 @@
                                     type="number"
                                     min="0"
                                     required
+                                    :error-messages="
+                                        v$.maxNumber.$error
+                                            ? v$.maxNumber.$errors[0].$message
+                                            : ''
+                                    "
                                 ></v-text-field>
                                 <v-text-field
                                     v-model="minNumber"
@@ -109,6 +119,11 @@
                                     type="number"
                                     min="0"
                                     required
+                                    :error-messages="
+                                        v$.minNumber.$error
+                                            ? v$.minNumber.$errors[0].$message
+                                            : ''
+                                    "
                                 ></v-text-field>
                             </v-form>
                         </v-card-text>
@@ -146,6 +161,11 @@
                                     v-model="editedNotification.title"
                                     label="عنوان الماده"
                                     required
+                                    :error-messages="
+                                        v$.title.$error
+                                            ? v$.title.$errors[0].$message
+                                            : ''
+                                    "
                                 ></v-text-field>
                                 <v-text-field
                                     type="number"
@@ -153,6 +173,12 @@
                                     v-model="editedNotification.maxNumber"
                                     label="القيمه العظمه"
                                     required
+                                    :error-messages="
+                                        v$.editedNotification.maxNumber.$error
+                                            ? v$.editedNotification.maxNumber
+                                                  .$errors[0].$message
+                                            : ''
+                                    "
                                 ></v-text-field>
                                 <v-text-field
                                     type="number"
@@ -160,6 +186,12 @@
                                     v-model="editedNotification.minNumber"
                                     label="القيمه الصغره"
                                     required
+                                    :error-messages="
+                                        v$.editedNotification.minNumber.$error
+                                            ? v$.editedNotification.minNumber
+                                                  .$errors[0].$message
+                                            : ''
+                                    "
                                 ></v-text-field>
                             </v-form>
                         </v-card-text>
